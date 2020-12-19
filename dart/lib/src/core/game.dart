@@ -36,7 +36,8 @@ abstract class Game {
   GameStatus get gameStatus;
   int get currentPlayerIndex;
   int get round;
-  Game next(GameEvent event, Reader container);
+  Game addMessage(GameMessage msg);
+  Game next(Event event, Reader container);
   Game moveNextRound(Reader container);
   Map<String, dynamic> toJson();
   void register();

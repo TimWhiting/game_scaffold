@@ -60,10 +60,10 @@ class GameStateNotifier<T extends Game> extends StateNotifier<T> {
             }
             return state;
           },
-          message: (_, __, ___) => state.next(event, read) as T,
+          message: (_, __, ___) => state.addMessage(e as GameMessage) as T,
           orElse: () => throw Exception('General Event not implemented yet $e'),
         ),
-        game: (_) => state.next(event, read) as T,
+        game: (e) => state.next(e, read) as T,
       );
     } on GameError catch (err) {
       read(gameErrorProvider).error = err;
