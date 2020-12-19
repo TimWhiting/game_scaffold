@@ -30,12 +30,12 @@ abstract class Player with _$Player {
 
 abstract class Game {
   Game();
-
   KtList<Player> get players;
   DateTime get time;
   KtList<GameMessage> get messages;
   GameStatus get gameStatus;
-  Player get currentPlayer;
+  int get currentPlayerIndex;
+  int get round;
   Game next(GameEvent event, Reader container);
   Game moveNextRound(Reader container);
   Map<String, dynamic> toJson();
@@ -86,11 +86,23 @@ abstract class Game {
     }
     return fromJson(json);
   }
+
+  static void registerGeneralEvents() {
+    eventFromJsonFactory['GeneralEvent'] =
+        (Map<String, dynamic> j) => GeneralEvent.fromJson(j).asGameEvent;
+  }
+}
+
+extension GameX on Game {
+  Player get currentPlayer => players[currentPlayerIndex];
 }
 
 abstract class Event {
-  GameEvent get asGameEvent;
   Map<String, dynamic> toJson();
+}
+
+extension EventX on Event {
+  GameEvent get asGameEvent => this is GameEvent ? this : GameEvent.game(this);
 }
 
 @freezed
@@ -108,8 +120,6 @@ abstract class GameEvent with _$GameEvent implements Event {
   @override
   Map<String, dynamic> toJson() =>
       when(game: (g) => g.toJson(), general: (g) => g.toJson());
-  @override
-  GameEvent get asGameEvent => this;
 }
 
 @freezed

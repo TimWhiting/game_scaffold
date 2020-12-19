@@ -102,6 +102,14 @@ class IOGameClient extends GameClient {
     socket.disconnect();
     socket.dispose();
   }
+
+  static void registerImplementation() {
+    GameClient.registerImplementation(
+      GameLocation.IOServer,
+      (read, address, id, gameCode) => IOGameClient(
+          address: address, read: read, id: id, gameCode: gameCode),
+    );
+  }
 }
 
 class NoServerGameClient extends GameClient {
@@ -144,5 +152,13 @@ class NoServerGameClient extends GameClient {
   void dispose() {
     _ss.cancel();
     print('Disposing game client');
+  }
+
+  static void registerImplementation() {
+    GameClient.registerImplementation(
+      GameLocation.Local,
+      (read, address, id, gameCode) =>
+          NoServerGameClient(read: read, id: id, gameCode: gameCode),
+    );
   }
 }

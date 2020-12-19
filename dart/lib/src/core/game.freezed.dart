@@ -336,26 +336,26 @@ const $GameEvent = _$GameEventTearOff();
 /// @nodoc
 mixin _$GameEvent {
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult game(Event event),
-    @required TResult general(GeneralEvent event),
+  Result when<Result extends Object>({
+    @required Result game(Event event),
+    @required Result general(GeneralEvent event),
   });
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult game(Event event),
-    TResult general(GeneralEvent event),
-    @required TResult orElse(),
+  Result maybeWhen<Result extends Object>({
+    Result game(Event event),
+    Result general(GeneralEvent event),
+    @required Result orElse(),
   });
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult game(_GameEventGame value),
-    @required TResult general(_GameEventGeneral value),
+  Result map<Result extends Object>({
+    @required Result game(_GameEventGame value),
+    @required Result general(_GameEventGeneral value),
   });
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult game(_GameEventGame value),
-    TResult general(_GameEventGeneral value),
-    @required TResult orElse(),
+  Result maybeMap<Result extends Object>({
+    Result game(_GameEventGame value),
+    Result general(_GameEventGeneral value),
+    @required Result orElse(),
   });
 }
 
@@ -434,9 +434,9 @@ class _$_GameEventGame extends _GameEventGame {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult game(Event event),
-    @required TResult general(GeneralEvent event),
+  Result when<Result extends Object>({
+    @required Result game(Event event),
+    @required Result general(GeneralEvent event),
   }) {
     assert(game != null);
     assert(general != null);
@@ -445,10 +445,10 @@ class _$_GameEventGame extends _GameEventGame {
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult game(Event event),
-    TResult general(GeneralEvent event),
-    @required TResult orElse(),
+  Result maybeWhen<Result extends Object>({
+    Result game(Event event),
+    Result general(GeneralEvent event),
+    @required Result orElse(),
   }) {
     assert(orElse != null);
     if (game != null) {
@@ -459,9 +459,9 @@ class _$_GameEventGame extends _GameEventGame {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult game(_GameEventGame value),
-    @required TResult general(_GameEventGeneral value),
+  Result map<Result extends Object>({
+    @required Result game(_GameEventGame value),
+    @required Result general(_GameEventGeneral value),
   }) {
     assert(game != null);
     assert(general != null);
@@ -470,10 +470,10 @@ class _$_GameEventGame extends _GameEventGame {
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult game(_GameEventGame value),
-    TResult general(_GameEventGeneral value),
-    @required TResult orElse(),
+  Result maybeMap<Result extends Object>({
+    Result game(_GameEventGame value),
+    Result general(_GameEventGeneral value),
+    @required Result orElse(),
   }) {
     assert(orElse != null);
     if (game != null) {
@@ -564,9 +564,9 @@ class _$_GameEventGeneral extends _GameEventGeneral {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult game(Event event),
-    @required TResult general(GeneralEvent event),
+  Result when<Result extends Object>({
+    @required Result game(Event event),
+    @required Result general(GeneralEvent event),
   }) {
     assert(game != null);
     assert(general != null);
@@ -575,10 +575,10 @@ class _$_GameEventGeneral extends _GameEventGeneral {
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult game(Event event),
-    TResult general(GeneralEvent event),
-    @required TResult orElse(),
+  Result maybeWhen<Result extends Object>({
+    Result game(Event event),
+    Result general(GeneralEvent event),
+    @required Result orElse(),
   }) {
     assert(orElse != null);
     if (general != null) {
@@ -589,9 +589,9 @@ class _$_GameEventGeneral extends _GameEventGeneral {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult game(_GameEventGame value),
-    @required TResult general(_GameEventGeneral value),
+  Result map<Result extends Object>({
+    @required Result game(_GameEventGame value),
+    @required Result general(_GameEventGeneral value),
   }) {
     assert(game != null);
     assert(general != null);
@@ -600,10 +600,10 @@ class _$_GameEventGeneral extends _GameEventGeneral {
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult game(_GameEventGame value),
-    TResult general(_GameEventGeneral value),
-    @required TResult orElse(),
+  Result maybeMap<Result extends Object>({
+    Result game(_GameEventGame value),
+    Result general(_GameEventGeneral value),
+    @required Result orElse(),
   }) {
     assert(orElse != null);
     if (general != null) {
@@ -681,35 +681,35 @@ const $GeneralEvent = _$GeneralEventTearOff();
 /// @nodoc
 mixin _$GeneralEvent {
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult undo(),
-    @required TResult start(),
-    @required TResult readyNextRound(PlayerID player),
+  Result when<Result extends Object>({
+    @required Result undo(),
+    @required Result start(),
+    @required Result readyNextRound(PlayerID player),
     @required
-        TResult message(String message, PlayerID from, @nullable PlayerID to),
+        Result message(String message, PlayerID from, @nullable PlayerID to),
   });
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult undo(),
-    TResult start(),
-    TResult readyNextRound(PlayerID player),
-    TResult message(String message, PlayerID from, @nullable PlayerID to),
-    @required TResult orElse(),
+  Result maybeWhen<Result extends Object>({
+    Result undo(),
+    Result start(),
+    Result readyNextRound(PlayerID player),
+    Result message(String message, PlayerID from, @nullable PlayerID to),
+    @required Result orElse(),
   });
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult undo(_GeneralEventUndo value),
-    @required TResult start(_GeneralEventStart value),
-    @required TResult readyNextRound(_GeneralReadyNextRoundEvent value),
-    @required TResult message(GameMessage value),
+  Result map<Result extends Object>({
+    @required Result undo(_GeneralEventUndo value),
+    @required Result start(_GeneralEventStart value),
+    @required Result readyNextRound(_GeneralReadyNextRoundEvent value),
+    @required Result message(GameMessage value),
   });
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult undo(_GeneralEventUndo value),
-    TResult start(_GeneralEventStart value),
-    TResult readyNextRound(_GeneralReadyNextRoundEvent value),
-    TResult message(GameMessage value),
-    @required TResult orElse(),
+  Result maybeMap<Result extends Object>({
+    Result undo(_GeneralEventUndo value),
+    Result start(_GeneralEventStart value),
+    Result readyNextRound(_GeneralReadyNextRoundEvent value),
+    Result message(GameMessage value),
+    @required Result orElse(),
   });
   Map<String, dynamic> toJson();
 }
@@ -773,12 +773,12 @@ class _$_GeneralEventUndo extends _GeneralEventUndo {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult undo(),
-    @required TResult start(),
-    @required TResult readyNextRound(PlayerID player),
+  Result when<Result extends Object>({
+    @required Result undo(),
+    @required Result start(),
+    @required Result readyNextRound(PlayerID player),
     @required
-        TResult message(String message, PlayerID from, @nullable PlayerID to),
+        Result message(String message, PlayerID from, @nullable PlayerID to),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -789,12 +789,12 @@ class _$_GeneralEventUndo extends _GeneralEventUndo {
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult undo(),
-    TResult start(),
-    TResult readyNextRound(PlayerID player),
-    TResult message(String message, PlayerID from, @nullable PlayerID to),
-    @required TResult orElse(),
+  Result maybeWhen<Result extends Object>({
+    Result undo(),
+    Result start(),
+    Result readyNextRound(PlayerID player),
+    Result message(String message, PlayerID from, @nullable PlayerID to),
+    @required Result orElse(),
   }) {
     assert(orElse != null);
     if (undo != null) {
@@ -805,11 +805,11 @@ class _$_GeneralEventUndo extends _GeneralEventUndo {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult undo(_GeneralEventUndo value),
-    @required TResult start(_GeneralEventStart value),
-    @required TResult readyNextRound(_GeneralReadyNextRoundEvent value),
-    @required TResult message(GameMessage value),
+  Result map<Result extends Object>({
+    @required Result undo(_GeneralEventUndo value),
+    @required Result start(_GeneralEventStart value),
+    @required Result readyNextRound(_GeneralReadyNextRoundEvent value),
+    @required Result message(GameMessage value),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -820,12 +820,12 @@ class _$_GeneralEventUndo extends _GeneralEventUndo {
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult undo(_GeneralEventUndo value),
-    TResult start(_GeneralEventStart value),
-    TResult readyNextRound(_GeneralReadyNextRoundEvent value),
-    TResult message(GameMessage value),
-    @required TResult orElse(),
+  Result maybeMap<Result extends Object>({
+    Result undo(_GeneralEventUndo value),
+    Result start(_GeneralEventStart value),
+    Result readyNextRound(_GeneralReadyNextRoundEvent value),
+    Result message(GameMessage value),
+    @required Result orElse(),
   }) {
     assert(orElse != null);
     if (undo != null) {
@@ -891,12 +891,12 @@ class _$_GeneralEventStart extends _GeneralEventStart {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult undo(),
-    @required TResult start(),
-    @required TResult readyNextRound(PlayerID player),
+  Result when<Result extends Object>({
+    @required Result undo(),
+    @required Result start(),
+    @required Result readyNextRound(PlayerID player),
     @required
-        TResult message(String message, PlayerID from, @nullable PlayerID to),
+        Result message(String message, PlayerID from, @nullable PlayerID to),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -907,12 +907,12 @@ class _$_GeneralEventStart extends _GeneralEventStart {
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult undo(),
-    TResult start(),
-    TResult readyNextRound(PlayerID player),
-    TResult message(String message, PlayerID from, @nullable PlayerID to),
-    @required TResult orElse(),
+  Result maybeWhen<Result extends Object>({
+    Result undo(),
+    Result start(),
+    Result readyNextRound(PlayerID player),
+    Result message(String message, PlayerID from, @nullable PlayerID to),
+    @required Result orElse(),
   }) {
     assert(orElse != null);
     if (start != null) {
@@ -923,11 +923,11 @@ class _$_GeneralEventStart extends _GeneralEventStart {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult undo(_GeneralEventUndo value),
-    @required TResult start(_GeneralEventStart value),
-    @required TResult readyNextRound(_GeneralReadyNextRoundEvent value),
-    @required TResult message(GameMessage value),
+  Result map<Result extends Object>({
+    @required Result undo(_GeneralEventUndo value),
+    @required Result start(_GeneralEventStart value),
+    @required Result readyNextRound(_GeneralReadyNextRoundEvent value),
+    @required Result message(GameMessage value),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -938,12 +938,12 @@ class _$_GeneralEventStart extends _GeneralEventStart {
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult undo(_GeneralEventUndo value),
-    TResult start(_GeneralEventStart value),
-    TResult readyNextRound(_GeneralReadyNextRoundEvent value),
-    TResult message(GameMessage value),
-    @required TResult orElse(),
+  Result maybeMap<Result extends Object>({
+    Result undo(_GeneralEventUndo value),
+    Result start(_GeneralEventStart value),
+    Result readyNextRound(_GeneralReadyNextRoundEvent value),
+    Result message(GameMessage value),
+    @required Result orElse(),
   }) {
     assert(orElse != null);
     if (start != null) {
@@ -1047,12 +1047,12 @@ class _$_GeneralReadyNextRoundEvent extends _GeneralReadyNextRoundEvent {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult undo(),
-    @required TResult start(),
-    @required TResult readyNextRound(PlayerID player),
+  Result when<Result extends Object>({
+    @required Result undo(),
+    @required Result start(),
+    @required Result readyNextRound(PlayerID player),
     @required
-        TResult message(String message, PlayerID from, @nullable PlayerID to),
+        Result message(String message, PlayerID from, @nullable PlayerID to),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -1063,12 +1063,12 @@ class _$_GeneralReadyNextRoundEvent extends _GeneralReadyNextRoundEvent {
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult undo(),
-    TResult start(),
-    TResult readyNextRound(PlayerID player),
-    TResult message(String message, PlayerID from, @nullable PlayerID to),
-    @required TResult orElse(),
+  Result maybeWhen<Result extends Object>({
+    Result undo(),
+    Result start(),
+    Result readyNextRound(PlayerID player),
+    Result message(String message, PlayerID from, @nullable PlayerID to),
+    @required Result orElse(),
   }) {
     assert(orElse != null);
     if (readyNextRound != null) {
@@ -1079,11 +1079,11 @@ class _$_GeneralReadyNextRoundEvent extends _GeneralReadyNextRoundEvent {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult undo(_GeneralEventUndo value),
-    @required TResult start(_GeneralEventStart value),
-    @required TResult readyNextRound(_GeneralReadyNextRoundEvent value),
-    @required TResult message(GameMessage value),
+  Result map<Result extends Object>({
+    @required Result undo(_GeneralEventUndo value),
+    @required Result start(_GeneralEventStart value),
+    @required Result readyNextRound(_GeneralReadyNextRoundEvent value),
+    @required Result message(GameMessage value),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -1094,12 +1094,12 @@ class _$_GeneralReadyNextRoundEvent extends _GeneralReadyNextRoundEvent {
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult undo(_GeneralEventUndo value),
-    TResult start(_GeneralEventStart value),
-    TResult readyNextRound(_GeneralReadyNextRoundEvent value),
-    TResult message(GameMessage value),
-    @required TResult orElse(),
+  Result maybeMap<Result extends Object>({
+    Result undo(_GeneralEventUndo value),
+    Result start(_GeneralEventStart value),
+    Result readyNextRound(_GeneralReadyNextRoundEvent value),
+    Result message(GameMessage value),
+    @required Result orElse(),
   }) {
     assert(orElse != null);
     if (readyNextRound != null) {
@@ -1235,12 +1235,12 @@ class _$GameMessage extends GameMessage {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult undo(),
-    @required TResult start(),
-    @required TResult readyNextRound(PlayerID player),
+  Result when<Result extends Object>({
+    @required Result undo(),
+    @required Result start(),
+    @required Result readyNextRound(PlayerID player),
     @required
-        TResult message(String message, PlayerID from, @nullable PlayerID to),
+        Result message(String message, PlayerID from, @nullable PlayerID to),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -1251,12 +1251,12 @@ class _$GameMessage extends GameMessage {
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult undo(),
-    TResult start(),
-    TResult readyNextRound(PlayerID player),
-    TResult message(String message, PlayerID from, @nullable PlayerID to),
-    @required TResult orElse(),
+  Result maybeWhen<Result extends Object>({
+    Result undo(),
+    Result start(),
+    Result readyNextRound(PlayerID player),
+    Result message(String message, PlayerID from, @nullable PlayerID to),
+    @required Result orElse(),
   }) {
     assert(orElse != null);
     if (message != null) {
@@ -1267,11 +1267,11 @@ class _$GameMessage extends GameMessage {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult undo(_GeneralEventUndo value),
-    @required TResult start(_GeneralEventStart value),
-    @required TResult readyNextRound(_GeneralReadyNextRoundEvent value),
-    @required TResult message(GameMessage value),
+  Result map<Result extends Object>({
+    @required Result undo(_GeneralEventUndo value),
+    @required Result start(_GeneralEventStart value),
+    @required Result readyNextRound(_GeneralReadyNextRoundEvent value),
+    @required Result message(GameMessage value),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -1282,12 +1282,12 @@ class _$GameMessage extends GameMessage {
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult undo(_GeneralEventUndo value),
-    TResult start(_GeneralEventStart value),
-    TResult readyNextRound(_GeneralReadyNextRoundEvent value),
-    TResult message(GameMessage value),
-    @required TResult orElse(),
+  Result maybeMap<Result extends Object>({
+    Result undo(_GeneralEventUndo value),
+    Result start(_GeneralEventStart value),
+    Result readyNextRound(_GeneralReadyNextRoundEvent value),
+    Result message(GameMessage value),
+    @required Result orElse(),
   }) {
     assert(orElse != null);
     if (message != null) {

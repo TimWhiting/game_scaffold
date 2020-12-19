@@ -17,7 +17,6 @@ dependencies:
   socket_io_client: any
 
 dev_dependencies:
-  pedantic: ^1.9.0
   json_serializable_immutable_collections: any
   freezed: any
   build_runner: any

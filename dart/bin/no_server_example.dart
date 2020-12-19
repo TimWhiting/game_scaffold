@@ -1,6 +1,7 @@
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 
 void main(List<String> arguments) {
+  Game.registerGeneralEvents();
   Game.registerGameType(
     'MyGame',
     name: 'Cool Game',

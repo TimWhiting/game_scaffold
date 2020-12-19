@@ -117,6 +117,14 @@ class IOServerClient extends ServerClient {
   void disconnect() {
     socket.disconnect();
   }
+
+  static void registerImplementation() {
+    ServerClient.registerImplementation(
+      GameLocation.IOServer,
+      (read, address, id) =>
+          IOServerClient(read: read, address: address, id: id),
+    );
+  }
 }
 
 class NoServerClient extends ServerClient {
@@ -142,4 +150,11 @@ class NoServerClient extends ServerClient {
 
   @override
   Future<List<GameInfo>> getGames() async => [];
+
+  static void registerImplementation() {
+    ServerClient.registerImplementation(
+      GameLocation.Local,
+      (read, address, id) => NoServerClient(read: read, id: id),
+    );
+  }
 }
