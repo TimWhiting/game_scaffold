@@ -8,6 +8,9 @@ part of 'reversi.dart';
 
 _$_ReversiGame _$_$_ReversiGameFromJson(Map<String, dynamic> json) {
   return _$_ReversiGame(
+    generic: json['generic'] == null
+        ? null
+        : GenericGame.fromJson(json['generic'] as Map<String, dynamic>),
     players: json['players'] != null
         ? KtList<Player>.from((json['players'] as List).map((e) =>
             e == null ? null : Player.fromJson(e as Map<String, dynamic>)))
@@ -29,6 +32,7 @@ _$_ReversiGame _$_$_ReversiGameFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$_$_ReversiGameToJson(_$_ReversiGame instance) =>
     <String, dynamic>{
+      'generic': instance.generic,
       'players': instance.players?.asList(),
       'time': instance.time?.toIso8601String(),
       'messages': instance.messages?.asList(),

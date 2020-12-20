@@ -175,6 +175,256 @@ abstract class _Player implements Player {
   _$PlayerCopyWith<_Player> get copyWith;
 }
 
+GenericGame _$GenericGameFromJson(Map<String, dynamic> json) {
+  return _GenericGame.fromJson(json);
+}
+
+/// @nodoc
+class _$GenericGameTearOff {
+  const _$GenericGameTearOff();
+
+// ignore: unused_element
+  _GenericGame call(
+      KtList<Player> players,
+      DateTime time,
+      KtList<GameMessage> messages,
+      GameStatus gameStatus,
+      int currentPlayerIndex,
+      int round) {
+    return _GenericGame(
+      players,
+      time,
+      messages,
+      gameStatus,
+      currentPlayerIndex,
+      round,
+    );
+  }
+
+// ignore: unused_element
+  GenericGame fromJson(Map<String, Object> json) {
+    return GenericGame.fromJson(json);
+  }
+}
+
+/// @nodoc
+// ignore: unused_element
+const $GenericGame = _$GenericGameTearOff();
+
+/// @nodoc
+mixin _$GenericGame {
+  KtList<Player> get players;
+  DateTime get time;
+  KtList<GameMessage> get messages;
+  GameStatus get gameStatus;
+  int get currentPlayerIndex;
+  int get round;
+
+  Map<String, dynamic> toJson();
+  $GenericGameCopyWith<GenericGame> get copyWith;
+}
+
+/// @nodoc
+abstract class $GenericGameCopyWith<$Res> {
+  factory $GenericGameCopyWith(
+          GenericGame value, $Res Function(GenericGame) then) =
+      _$GenericGameCopyWithImpl<$Res>;
+  $Res call(
+      {KtList<Player> players,
+      DateTime time,
+      KtList<GameMessage> messages,
+      GameStatus gameStatus,
+      int currentPlayerIndex,
+      int round});
+}
+
+/// @nodoc
+class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
+  _$GenericGameCopyWithImpl(this._value, this._then);
+
+  final GenericGame _value;
+  // ignore: unused_field
+  final $Res Function(GenericGame) _then;
+
+  @override
+  $Res call({
+    Object players = freezed,
+    Object time = freezed,
+    Object messages = freezed,
+    Object gameStatus = freezed,
+    Object currentPlayerIndex = freezed,
+    Object round = freezed,
+  }) {
+    return _then(_value.copyWith(
+      players: players == freezed ? _value.players : players as KtList<Player>,
+      time: time == freezed ? _value.time : time as DateTime,
+      messages: messages == freezed
+          ? _value.messages
+          : messages as KtList<GameMessage>,
+      gameStatus:
+          gameStatus == freezed ? _value.gameStatus : gameStatus as GameStatus,
+      currentPlayerIndex: currentPlayerIndex == freezed
+          ? _value.currentPlayerIndex
+          : currentPlayerIndex as int,
+      round: round == freezed ? _value.round : round as int,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$GenericGameCopyWith<$Res>
+    implements $GenericGameCopyWith<$Res> {
+  factory _$GenericGameCopyWith(
+          _GenericGame value, $Res Function(_GenericGame) then) =
+      __$GenericGameCopyWithImpl<$Res>;
+  @override
+  $Res call(
+      {KtList<Player> players,
+      DateTime time,
+      KtList<GameMessage> messages,
+      GameStatus gameStatus,
+      int currentPlayerIndex,
+      int round});
+}
+
+/// @nodoc
+class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
+    implements _$GenericGameCopyWith<$Res> {
+  __$GenericGameCopyWithImpl(
+      _GenericGame _value, $Res Function(_GenericGame) _then)
+      : super(_value, (v) => _then(v as _GenericGame));
+
+  @override
+  _GenericGame get _value => super._value as _GenericGame;
+
+  @override
+  $Res call({
+    Object players = freezed,
+    Object time = freezed,
+    Object messages = freezed,
+    Object gameStatus = freezed,
+    Object currentPlayerIndex = freezed,
+    Object round = freezed,
+  }) {
+    return _then(_GenericGame(
+      players == freezed ? _value.players : players as KtList<Player>,
+      time == freezed ? _value.time : time as DateTime,
+      messages == freezed ? _value.messages : messages as KtList<GameMessage>,
+      gameStatus == freezed ? _value.gameStatus : gameStatus as GameStatus,
+      currentPlayerIndex == freezed
+          ? _value.currentPlayerIndex
+          : currentPlayerIndex as int,
+      round == freezed ? _value.round : round as int,
+    ));
+  }
+}
+
+@JsonSerializable()
+
+/// @nodoc
+class _$_GenericGame extends _GenericGame {
+  const _$_GenericGame(this.players, this.time, this.messages, this.gameStatus,
+      this.currentPlayerIndex, this.round)
+      : assert(players != null),
+        assert(time != null),
+        assert(messages != null),
+        assert(gameStatus != null),
+        assert(currentPlayerIndex != null),
+        assert(round != null),
+        super._();
+
+  factory _$_GenericGame.fromJson(Map<String, dynamic> json) =>
+      _$_$_GenericGameFromJson(json);
+
+  @override
+  final KtList<Player> players;
+  @override
+  final DateTime time;
+  @override
+  final KtList<GameMessage> messages;
+  @override
+  final GameStatus gameStatus;
+  @override
+  final int currentPlayerIndex;
+  @override
+  final int round;
+
+  @override
+  String toString() {
+    return 'GenericGame(players: $players, time: $time, messages: $messages, gameStatus: $gameStatus, currentPlayerIndex: $currentPlayerIndex, round: $round)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _GenericGame &&
+            (identical(other.players, players) ||
+                const DeepCollectionEquality()
+                    .equals(other.players, players)) &&
+            (identical(other.time, time) ||
+                const DeepCollectionEquality().equals(other.time, time)) &&
+            (identical(other.messages, messages) ||
+                const DeepCollectionEquality()
+                    .equals(other.messages, messages)) &&
+            (identical(other.gameStatus, gameStatus) ||
+                const DeepCollectionEquality()
+                    .equals(other.gameStatus, gameStatus)) &&
+            (identical(other.currentPlayerIndex, currentPlayerIndex) ||
+                const DeepCollectionEquality()
+                    .equals(other.currentPlayerIndex, currentPlayerIndex)) &&
+            (identical(other.round, round) ||
+                const DeepCollectionEquality().equals(other.round, round)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(players) ^
+      const DeepCollectionEquality().hash(time) ^
+      const DeepCollectionEquality().hash(messages) ^
+      const DeepCollectionEquality().hash(gameStatus) ^
+      const DeepCollectionEquality().hash(currentPlayerIndex) ^
+      const DeepCollectionEquality().hash(round);
+
+  @override
+  _$GenericGameCopyWith<_GenericGame> get copyWith =>
+      __$GenericGameCopyWithImpl<_GenericGame>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$_$_GenericGameToJson(this);
+  }
+}
+
+abstract class _GenericGame extends GenericGame {
+  const _GenericGame._() : super._();
+  const factory _GenericGame(
+      KtList<Player> players,
+      DateTime time,
+      KtList<GameMessage> messages,
+      GameStatus gameStatus,
+      int currentPlayerIndex,
+      int round) = _$_GenericGame;
+
+  factory _GenericGame.fromJson(Map<String, dynamic> json) =
+      _$_GenericGame.fromJson;
+
+  @override
+  KtList<Player> get players;
+  @override
+  DateTime get time;
+  @override
+  KtList<GameMessage> get messages;
+  @override
+  GameStatus get gameStatus;
+  @override
+  int get currentPlayerIndex;
+  @override
+  int get round;
+  @override
+  _$GenericGameCopyWith<_GenericGame> get copyWith;
+}
+
 PlayerID _$PlayerIDFromJson(Map<String, dynamic> json) {
   return _PlayerID.fromJson(json);
 }

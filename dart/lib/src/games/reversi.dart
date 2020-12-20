@@ -10,6 +10,7 @@ abstract class ReversiGame with _$ReversiGame implements Game {
   const ReversiGame._();
   static const width = 8;
   const factory ReversiGame({
+    GenericGame generic,
     KtList<Player> players,
     DateTime time,
     KtList<GameMessage> messages,
@@ -32,9 +33,8 @@ abstract class ReversiGame with _$ReversiGame implements Game {
   }
 
   @override
-  Game addMessage(GameMessage msg) {
-    // TODO: implement addMessage
-    throw UnimplementedError();
+  Game copyWithGeneric(GenericGame Function(GenericGame p1) updates) {
+    return copyWith(generic: updates(generic));
   }
 
   @override

@@ -28,16 +28,31 @@ abstract class Player with _$Player {
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 }
 
+@freezed
+abstract class GenericGame with _$GenericGame {
+  const GenericGame._();
+  const factory GenericGame(
+    KtList<Player> players,
+    DateTime time,
+    KtList<GameMessage> messages,
+    GameStatus gameStatus,
+    int currentPlayerIndex,
+    int round,
+  ) = _GenericGame;
+  factory GenericGame.fromJson(Map<String, dynamic> map) =>
+      _$GenericGameFromJson(map);
+
+  Player get currentPlayer => players[currentPlayerIndex];
+  GenericGame addMessage(GameMessage msg) => copyWith(
+        messages: messages.plusElement(msg),
+      );
+}
+
 abstract class Game {
   Game();
-  KtList<Player> get players;
-  DateTime get time;
-  KtList<GameMessage> get messages;
-  GameStatus get gameStatus;
-  int get currentPlayerIndex;
-  int get round;
-  Game addMessage(GameMessage msg);
+  GenericGame get generic;
   Game next(Event event, Reader container);
+  Game copyWithGeneric(GenericGame Function(GenericGame) updates);
   Game moveNextRound(Reader container);
   Map<String, dynamic> toJson();
   void register();
@@ -95,7 +110,13 @@ abstract class Game {
 }
 
 extension GameX on Game {
-  Player get currentPlayer => players[currentPlayerIndex];
+  Player get currentPlayer => generic.currentPlayer;
+  KtList<Player> get players => generic.players;
+  DateTime get time => generic.time;
+  KtList<GameMessage> get messages => generic.messages;
+  GameStatus get gameStatus => generic.gameStatus;
+  int get currentPlayerIndex => generic.currentPlayerIndex;
+  int get round => generic.round;
 }
 
 abstract class Event {
@@ -135,8 +156,6 @@ abstract class GeneralEvent with _$GeneralEvent implements Event {
 
   factory GeneralEvent.fromJson(Map<String, dynamic> map) =>
       _$GeneralEventFromJson(map);
-  @override
-  GameEvent get asGameEvent => GameEvent.general(this);
 }
 
 @freezed
