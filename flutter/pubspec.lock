@@ -107,7 +107,7 @@ packages:
     description:
       path: dart
       ref: HEAD
-      resolved-ref: "6891dae397c222a748527a292c5a8f78377df6d8"
+      resolved-ref: cf6272484f9fcb579d5809f0924d835cb0858299
       url: "https://github.com/TimWhiting/game_scaffold"
     source: git
     version: "0.0.0"
