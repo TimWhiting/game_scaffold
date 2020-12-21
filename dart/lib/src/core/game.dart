@@ -179,7 +179,11 @@ abstract class Event {
 }
 
 extension EventX on Event {
-  GameEvent get asGameEvent => this is GameEvent ? this : GameEvent.game(this);
+  GameEvent get asGameEvent => this is GameEvent
+      ? this
+      : this is GeneralEvent
+          ? GameEvent.general(this)
+          : GameEvent.game(this);
 }
 
 // typedef String = String;
@@ -192,8 +196,11 @@ abstract class GameEvent with _$GameEvent implements Event {
   const factory GameEvent.game(Event event) = _GameEventGame;
   const factory GameEvent.general(GeneralEvent event) = _GameEventGeneral;
   @override
-  Map<String, dynamic> toJson() =>
-      when(game: (g) => g.toJson(), general: (g) => g.toJson());
+  String get type => when(game: (_) => 'game', general: (_) => 'general');
+  @override
+  Map<String, dynamic> toJson() => when(
+      game: (g) => g.toJson()..['type'] = g.type,
+      general: (g) => g.toJson()..['type'] = g.type);
 }
 
 @freezed

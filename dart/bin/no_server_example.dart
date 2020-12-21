@@ -1,13 +1,8 @@
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
+import 'package:game_scaffold_dart/src/games/reversi.dart';
 
 void main(List<String> arguments) {
   Game.registerGeneralEvents();
-  Game.registerGameType(
-    'MyGame',
-    name: 'Cool Game',
-    fromJson: (_) => null,
-    intialState: (_, __, ___) => null,
-    gameEventFromJson: (_) => null,
-  );
+  ReversiGame.register();
   registerNoServerClients();
 }

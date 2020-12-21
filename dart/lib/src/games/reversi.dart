@@ -37,8 +37,7 @@ abstract class ReversiGame with _$ReversiGame implements Game {
     return copyWith(generic: updates(generic));
   }
 
-  @override
-  void register() {
+  static void register() {
     Game.registerGameType(
       'ReversiGame',
       name: 'Reversi',

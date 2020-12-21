@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'game.dart';
 part 'errors.freezed.dart';
 part 'errors.g.dart';
 
