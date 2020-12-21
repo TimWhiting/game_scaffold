@@ -1,6 +1,7 @@
-import 'package:dartz/dartz.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'game.dart';
+part 'errors.freezed.dart';
 part 'errors.g.dart';
 
 @JsonSerializable()
@@ -16,10 +17,15 @@ class GameError implements Exception {
   String toString() => '$person caused error; $message';
 }
 
-extension GameErrorCheckers<T> on Either<GameError, T> {
-  bool get isError => isLeft();
-  GameError get error => fold((l) => l, (r) => null);
+@freezed
+abstract class GameOrError<T> with _$GameOrError {
+  const GameOrError._();
+  const factory GameOrError.game(T game) = _GameOrErrorGame;
+  const factory GameOrError.error(GameError error) = _GameOrErrorError;
+
+  bool get isError => this is _GameOrErrorError;
+  GameError get error => when(error: (e) => e, game: (g) => null);
   String get errorString => isError ? error.message : 'No Error';
-  T get value => getOrElse(null);
-  bool get isOkay => isRight();
+  T get value => when(error: (e) => null, game: (g) => g);
+  bool get isGame => this is _GameOrErrorGame;
 }

@@ -41,37 +41,36 @@ class GameStateNotifier<T extends Game> extends StateNotifier<T> {
   T get gameState => state;
   void handleEvent(GameEvent event) {
     previousStates.add(state);
-    try {
-      state = event.when(
-        general: (e) => e.maybeWhen(
-          undo: () {
-            previousStates.removeLast();
-            return previousStates.removeLast();
-          },
-          start: () => read(gameInitialStateProvider) as T,
-          readyNextRound: (e) {
-            if (readyPlayers.length > 1) {
-              previousStates.remove(state);
-            }
-            readyPlayers.add(e);
-            if (readyPlayers.length == state.players.size) {
-              readyPlayers.clear();
-              return state.moveNextRound(read) as T;
-            }
-            return state;
-          },
-          message: (_, __, ___) =>
-              state.copyWithGeneric((g) => g.addMessage(e as GameMessage)) as T,
-          orElse: () => throw Exception('General Event not implemented yet $e'),
-        ),
-        game: (e) => state.next(e, read) as T,
-      );
-    } on GameError catch (err) {
-      read(gameErrorProvider).error = err;
+    final nextState = event.when(
+      general: (e) => e.maybeWhen(
+        undo: () {
+          previousStates.removeLast();
+          return GameOrError.game(previousStates.removeLast());
+        },
+        start: () => GameOrError.game(read(gameInitialStateProvider) as T),
+        readyNextRound: (e) {
+          if (readyPlayers.length > 1) {
+            previousStates.remove(state);
+          }
+          readyPlayers.add(e);
+          if (readyPlayers.length == state.players.size) {
+            readyPlayers.clear();
+            return GameOrError.game(state.moveNextRound(read) as T);
+          }
+          return GameOrError.game(state);
+        },
+        message: (_, __, ___) => GameOrError.game(state.copyWithGeneric(
+            (g) => g.addMessage(e as GameMessage).updateTime()) as T),
+        orElse: () => GameOrError.error(GameError(
+            'General Event not implemented yet $e', PlayerID('programmer'))),
+      ),
+      game: (e) => state.next(e, read),
+    );
+    if (nextState.isError) {
+      read(gameErrorProvider).error = nextState.error;
       previousStates.removeLast();
-    } on Exception catch (err) {
-      print(err.toString());
-      previousStates.removeLast();
+    } else {
+      state = nextState.value;
     }
   }
 }

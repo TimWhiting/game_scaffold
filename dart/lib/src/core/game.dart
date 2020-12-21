@@ -1,10 +1,18 @@
+import 'package:dartx/dartx.dart';
+import 'package:dartz/dartz.dart' show Either, left, right;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:riverpod/all.dart';
-import 'package:dartx/dartx.dart';
 import 'package:kt_dart/kt.dart' hide nullable;
-export 'package:kt_dart/kt.dart' hide nullable;
+import 'package:riverpod/all.dart';
+
+import 'errors.dart';
+
 export 'package:dartx/dartx.dart';
+export 'package:dartz/dartz.dart' show Either, left, right;
+export 'package:kt_dart/kt.dart' hide nullable;
+
+export 'errors.dart';
+
 part 'game.freezed.dart';
 part 'game.g.dart';
 
@@ -63,32 +71,32 @@ abstract class GenericGame with _$GenericGame {
   GenericGame updateTime() => copyWith(time: DateTime.now());
   GenericGame addMessage(GameMessage msg) => copyWith(
         messages: messages.plusElement(msg),
-      ).updateTime();
+      );
   GenericGame finishRound(KtMap<PlayerID, double> scores) => copyWith(
         allRoundScores:
             allRoundScores.plusElement(players.map((p) => scores[p.id])),
         round: round + 1,
-      ).updateTime();
-  GenericGame updateStatus(GameStatus status) =>
-      copyWith(gameStatus: status).updateTime();
+      );
+  GenericGame updateStatus(GameStatus status) => copyWith(gameStatus: status);
 }
 
 abstract class Game {
   Game();
   GenericGame get generic;
-  Game next(Event event, Reader container);
+  GameOrError next(Event event, Reader container);
   Game copyWithGeneric(GenericGame Function(GenericGame) updates);
   Game moveNextRound(Reader container);
   Map<String, dynamic> toJson();
   void register();
 
-  factory Game.fromJson(Map<String, dynamic> json) {
+  static Game fromJson(Map<String, dynamic> json) {
     final fromJson = fromJsonFactory[json['type']];
     if (fromJson == null) {
       throw UnimplementedError('No game of that type exists ${json['type']}');
     }
     return fromJson(json);
   }
+
   static Map<String, Game Function(Map<String, dynamic>)> fromJsonFactory = {};
   static Map<String, GameEvent Function(Map<String, dynamic>)>
       eventFromJsonFactory = {};

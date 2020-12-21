@@ -23,8 +23,8 @@ abstract class ReversiGame with _$ReversiGame implements Game {
       _$ReversiGameFromJson(map);
 
   @override
-  Game next(Event event, Reader container) {
-    return this;
+  GameOrError next(Event event, Reader container) {
+    return GameOrError<ReversiGame>.game(this);
   }
 
   @override
