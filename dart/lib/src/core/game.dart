@@ -101,7 +101,6 @@ abstract class Game {
   Game copyWithGeneric(GenericGame Function(GenericGame) updates);
   Game moveNextRound(Reader container);
   Map<String, dynamic> toJson();
-  void register();
 
   static Game fromJson(Map<String, dynamic> json) {
     final fromJson = fromJsonFactory[json['type']];
