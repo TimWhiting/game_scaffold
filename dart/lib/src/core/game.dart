@@ -170,8 +170,8 @@ extension EventX on Event {
 }
 
 // typedef String = String;
-//  const String P1 = '0';
-//  const String P2 = '1';
+const String P1 = '0';
+const String P2 = '1';
 
 @freezed
 abstract class GameEvent with _$GameEvent implements Event {
