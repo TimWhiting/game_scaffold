@@ -1,5 +1,4 @@
 import 'package:dartx/dartx.dart';
-import 'package:dartz/dartz.dart' show Either, left, right;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kt_dart/kt.dart' hide nullable;
@@ -8,7 +7,6 @@ import 'package:riverpod/all.dart';
 import 'errors.dart';
 
 export 'package:dartx/dartx.dart';
-export 'package:dartz/dartz.dart' show Either, left, right;
 export 'package:kt_dart/kt.dart' hide nullable;
 
 export 'errors.dart';
@@ -68,6 +66,10 @@ abstract class GenericGame with _$GenericGame {
   bool get gameOver => gameStatus == GameStatus.Finished;
   bool get roundOver => gameStatus == GameStatus.BetweenRounds;
 
+  GenericGame nextPlayer() =>
+      copyWith(currentPlayerIndex: (currentPlayerIndex + 1) % players.size);
+  GenericGame setNextPlayer(PlayerID player) =>
+      copyWith(currentPlayerIndex: players.indexOfFirst((p) => p.id == player));
   GenericGame updateTime() => copyWith(time: DateTime.now());
   GenericGame addMessage(GameMessage msg) => copyWith(
         messages: messages.plusElement(msg),
