@@ -103,14 +103,14 @@ abstract class Game {
   static Map<String, GameEvent Function(Map<String, dynamic>)>
       eventFromJsonFactory = {};
   static Map<String, String> gameNames = {};
-  static Map<String, Game Function(GameConfig, KtList<Player>)> initialStates =
-      {};
+  static Map<String, Game Function(GameConfig, KtList<Player>, Reader)>
+      initialStates = {};
 
   static void registerGameType<T extends Game>(
     String type, {
     @required String name,
     @required T Function(Map<String, dynamic>) fromJson,
-    @required T Function(GameConfig, KtList<Player>) intialState,
+    @required T Function(GameConfig, KtList<Player>, Reader read) intialState,
     @required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
   }) {
     fromJsonFactory[type] = fromJson;
@@ -120,13 +120,13 @@ abstract class Game {
   }
 
   static T initialState<T extends Game>(
-      GameConfig gameConfig, KtList<Player> players) {
+      GameConfig gameConfig, KtList<Player> players, Reader read) {
     final initState = initialStates[gameConfig.gameType];
     if (initState == null) {
       throw UnimplementedError(
           'No game of that type exists in the registry ${gameConfig.gameType}');
     }
-    return initState(gameConfig, players);
+    return initState(gameConfig, players, read);
   }
 
   static GameEvent gameEventFromJson(Map<String, dynamic> json) {

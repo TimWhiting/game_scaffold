@@ -6,7 +6,7 @@ void main(List<String> arguments) {
     'MyGame',
     name: 'Cool Game',
     fromJson: (_) => null,
-    intialState: (_, __) => null,
+    intialState: (_, __, ___) => null,
     gameEventFromJson: (_) => null,
   );
   registerNoServerClients();

@@ -43,7 +43,7 @@ abstract class ReversiGame with _$ReversiGame implements Game {
       'ReversiGame',
       name: 'Reversi',
       fromJson: (json) => ReversiGame.fromJson(json),
-      intialState: (config, players) => ReversiGame(),
+      intialState: (config, players, _) => ReversiGame(),
       gameEventFromJson: (j) => ReversiGameEvent.fromJson(j).asGameEvent,
     );
   }
