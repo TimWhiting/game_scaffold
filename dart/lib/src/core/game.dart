@@ -106,12 +106,12 @@ abstract class Game {
   static Map<String, Game Function(GameConfig, KtList<Player>)> initialStates =
       {};
 
-  static void registerGameType<T extends Game, E extends GameEvent>(
+  static void registerGameType<T extends Game>(
     String type, {
     @required String name,
     @required T Function(Map<String, dynamic>) fromJson,
     @required T Function(GameConfig, KtList<Player>) intialState,
-    @required E Function(Map<String, dynamic>) gameEventFromJson,
+    @required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
   }) {
     fromJsonFactory[type] = fromJson;
     gameNames[type] = name;
