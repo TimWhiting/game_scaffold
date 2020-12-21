@@ -25,7 +25,7 @@ class _$ReversiGameTearOff {
       GameStatus gameStatus,
       int currentPlayerIndex,
       int round,
-      List<PlayerID> board}) {
+      List<String> board}) {
     return _ReversiGame(
       generic: generic,
       players: players,
@@ -57,7 +57,7 @@ mixin _$ReversiGame {
   GameStatus get gameStatus;
   int get currentPlayerIndex;
   int get round;
-  List<PlayerID> get board;
+  List<String> get board;
 
   Map<String, dynamic> toJson();
   $ReversiGameCopyWith<ReversiGame> get copyWith;
@@ -76,7 +76,7 @@ abstract class $ReversiGameCopyWith<$Res> {
       GameStatus gameStatus,
       int currentPlayerIndex,
       int round,
-      List<PlayerID> board});
+      List<String> board});
 
   $GenericGameCopyWith<$Res> get generic;
 }
@@ -113,7 +113,7 @@ class _$ReversiGameCopyWithImpl<$Res> implements $ReversiGameCopyWith<$Res> {
           ? _value.currentPlayerIndex
           : currentPlayerIndex as int,
       round: round == freezed ? _value.round : round as int,
-      board: board == freezed ? _value.board : board as List<PlayerID>,
+      board: board == freezed ? _value.board : board as List<String>,
     ));
   }
 
@@ -143,7 +143,7 @@ abstract class _$ReversiGameCopyWith<$Res>
       GameStatus gameStatus,
       int currentPlayerIndex,
       int round,
-      List<PlayerID> board});
+      List<String> board});
 
   @override
   $GenericGameCopyWith<$Res> get generic;
@@ -183,7 +183,7 @@ class __$ReversiGameCopyWithImpl<$Res> extends _$ReversiGameCopyWithImpl<$Res>
           ? _value.currentPlayerIndex
           : currentPlayerIndex as int,
       round: round == freezed ? _value.round : round as int,
-      board: board == freezed ? _value.board : board as List<PlayerID>,
+      board: board == freezed ? _value.board : board as List<String>,
     ));
   }
 }
@@ -221,7 +221,7 @@ class _$_ReversiGame extends _ReversiGame {
   @override
   final int round;
   @override
-  final List<PlayerID> board;
+  final List<String> board;
 
   @override
   String toString() {
@@ -287,7 +287,7 @@ abstract class _ReversiGame extends ReversiGame {
       GameStatus gameStatus,
       int currentPlayerIndex,
       int round,
-      List<PlayerID> board}) = _$_ReversiGame;
+      List<String> board}) = _$_ReversiGame;
 
   factory _ReversiGame.fromJson(Map<String, dynamic> json) =
       _$_ReversiGame.fromJson;
@@ -307,7 +307,7 @@ abstract class _ReversiGame extends ReversiGame {
   @override
   int get round;
   @override
-  List<PlayerID> get board;
+  List<String> get board;
   @override
   _$ReversiGameCopyWith<_ReversiGame> get copyWith;
 }
@@ -321,7 +321,7 @@ class _$ReversiGameEventTearOff {
   const _$ReversiGameEventTearOff();
 
 // ignore: unused_element
-  _ReversiGameEvent call(PlayerID id, int location) {
+  _ReversiGameEvent call(String id, int location) {
     return _ReversiGameEvent(
       id,
       location,
@@ -340,7 +340,7 @@ const $ReversiGameEvent = _$ReversiGameEventTearOff();
 
 /// @nodoc
 mixin _$ReversiGameEvent {
-  PlayerID get id;
+  String get id;
   int get location;
 
   Map<String, dynamic> toJson();
@@ -352,9 +352,7 @@ abstract class $ReversiGameEventCopyWith<$Res> {
   factory $ReversiGameEventCopyWith(
           ReversiGameEvent value, $Res Function(ReversiGameEvent) then) =
       _$ReversiGameEventCopyWithImpl<$Res>;
-  $Res call({PlayerID id, int location});
-
-  $PlayerIDCopyWith<$Res> get id;
+  $Res call({String id, int location});
 }
 
 /// @nodoc
@@ -372,19 +370,9 @@ class _$ReversiGameEventCopyWithImpl<$Res>
     Object location = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed ? _value.id : id as PlayerID,
+      id: id == freezed ? _value.id : id as String,
       location: location == freezed ? _value.location : location as int,
     ));
-  }
-
-  @override
-  $PlayerIDCopyWith<$Res> get id {
-    if (_value.id == null) {
-      return null;
-    }
-    return $PlayerIDCopyWith<$Res>(_value.id, (value) {
-      return _then(_value.copyWith(id: value));
-    });
   }
 }
 
@@ -395,10 +383,7 @@ abstract class _$ReversiGameEventCopyWith<$Res>
           _ReversiGameEvent value, $Res Function(_ReversiGameEvent) then) =
       __$ReversiGameEventCopyWithImpl<$Res>;
   @override
-  $Res call({PlayerID id, int location});
-
-  @override
-  $PlayerIDCopyWith<$Res> get id;
+  $Res call({String id, int location});
 }
 
 /// @nodoc
@@ -418,7 +403,7 @@ class __$ReversiGameEventCopyWithImpl<$Res>
     Object location = freezed,
   }) {
     return _then(_ReversiGameEvent(
-      id == freezed ? _value.id : id as PlayerID,
+      id == freezed ? _value.id : id as String,
       location == freezed ? _value.location : location as int,
     ));
   }
@@ -436,7 +421,7 @@ class _$_ReversiGameEvent implements _ReversiGameEvent {
       _$_$_ReversiGameEventFromJson(json);
 
   @override
-  final PlayerID id;
+  final String id;
   @override
   final int location;
 
@@ -473,14 +458,14 @@ class _$_ReversiGameEvent implements _ReversiGameEvent {
 }
 
 abstract class _ReversiGameEvent implements ReversiGameEvent {
-  const factory _ReversiGameEvent(PlayerID id, int location) =
+  const factory _ReversiGameEvent(String id, int location) =
       _$_ReversiGameEvent;
 
   factory _ReversiGameEvent.fromJson(Map<String, dynamic> json) =
       _$_ReversiGameEvent.fromJson;
 
   @override
-  PlayerID get id;
+  String get id;
   @override
   int get location;
   @override

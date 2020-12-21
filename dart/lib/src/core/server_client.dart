@@ -11,7 +11,7 @@ import 'providers.dart';
 
 abstract class ServerClient {
   ServerClient(this.read, this.id);
-  final PlayerID id;
+  final String id;
   String gameCode;
   final Reader read;
   void connect();
@@ -24,19 +24,19 @@ abstract class ServerClient {
 
   static void registerImplementation<T extends ServerClient>(
     GameLocation loc,
-    T Function(Reader, String, PlayerID) impl,
+    T Function(Reader, String, String) impl,
   ) {
     clientImplementations[loc] = impl;
   }
 
-  static Map<GameLocation, ServerClient Function(Reader, String, PlayerID)>
+  static Map<GameLocation, ServerClient Function(Reader, String, String)>
       clientImplementations = {};
 
   static ServerClient fromParams({
     GameLocation location,
     Reader read,
     String address,
-    PlayerID id,
+    String id,
   }) {
     final impl = clientImplementations[location];
     if (impl == null) {
@@ -51,7 +51,7 @@ class IOServerClient extends ServerClient {
   IOServerClient({
     Reader read,
     this.address,
-    PlayerID id,
+    String id,
   }) : super(read, id);
 
   @override
@@ -128,7 +128,7 @@ class IOServerClient extends ServerClient {
 }
 
 class NoServerClient extends ServerClient {
-  NoServerClient({Reader read, PlayerID id}) : super(read, id);
+  NoServerClient({Reader read, String id}) : super(read, id);
 
   @override
   void connect() {}

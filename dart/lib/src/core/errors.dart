@@ -12,7 +12,7 @@ class GameError implements Exception {
   Map<String, dynamic> toJson() => _$GameErrorToJson(this);
 
   String message;
-  PlayerID person;
+  String person;
   @override
   String toString() => '$person caused error; $message';
 }

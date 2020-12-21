@@ -11,7 +11,7 @@ import 'providers.dart';
 
 abstract class GameClient {
   GameClient(this.id, this.gameCode, this.read);
-  final PlayerID id;
+  final String id;
   final String gameCode;
   final Reader read;
   void exitGame();
@@ -26,20 +26,19 @@ abstract class GameClient {
 
   static void registerImplementation<T extends GameClient>(
     GameLocation loc,
-    T Function(Reader read, String address, PlayerID id, String gameCode) impl,
+    T Function(Reader read, String address, String id, String gameCode) impl,
   ) {
     clientImplementations[loc] = impl;
   }
 
-  static Map<GameLocation,
-          GameClient Function(Reader, String, PlayerID, String)>
+  static Map<GameLocation, GameClient Function(Reader, String, String, String)>
       clientImplementations = {};
 
   static GameClient fromParams({
     GameLocation location,
     Reader read,
     String address,
-    PlayerID id,
+    String id,
     String gameCode,
   }) {
     final impl = clientImplementations[location];
@@ -53,7 +52,7 @@ abstract class GameClient {
 
 // Clients
 class IOGameClient extends GameClient {
-  IOGameClient({Reader read, this.address, String gameCode, PlayerID id})
+  IOGameClient({Reader read, this.address, String gameCode, String id})
       : socket = IO.io('$address/$gameCode', socketIOOpts),
         super(id, gameCode, read);
   final String address;
@@ -113,7 +112,7 @@ class IOGameClient extends GameClient {
 }
 
 class NoServerGameClient extends GameClient {
-  NoServerGameClient({Reader read, PlayerID id, String gameCode})
+  NoServerGameClient({Reader read, String id, String gameCode})
       : super(id, gameCode, read);
   StreamSubscription<Game> _ss;
   static List<Player> players;

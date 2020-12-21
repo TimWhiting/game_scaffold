@@ -9,9 +9,7 @@ part of 'errors.dart';
 GameError _$GameErrorFromJson(Map<String, dynamic> json) {
   return GameError(
     json['message'] as String,
-    json['person'] == null
-        ? null
-        : PlayerID.fromJson(json['person'] as Map<String, dynamic>),
+    json['person'] as String,
   );
 }
 

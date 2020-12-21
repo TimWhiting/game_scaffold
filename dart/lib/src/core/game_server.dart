@@ -5,8 +5,8 @@ import 'game.dart';
 import 'providers.dart';
 
 final serverPlayersProvider = StateProvider((ref) => listFrom(const [
-      Player(PlayerID('1'), name: 'John'),
-      Player(PlayerID('2'), name: 'Mary'),
+      Player('1', name: 'John'),
+      Player('2', name: 'Mary'),
     ]));
 final gameInitialStateProvider = Provider<Game>((ref) {
   final gameConfig = ref.watch(gameConfigProvider).state;
@@ -35,7 +35,7 @@ class GameStateNotifier<T extends Game> extends StateNotifier<T> {
   GameStateNotifier(this.gameConfig, this.read) : super(null);
   final Reader read;
   final GameConfig gameConfig;
-  final Set<PlayerID> readyPlayers = {};
+  final Set<String> readyPlayers = {};
   List<T> previousStates = [];
 
   T get gameState => state;
@@ -61,8 +61,8 @@ class GameStateNotifier<T extends Game> extends StateNotifier<T> {
         },
         message: (_, __, ___) => GameOrError.game(state.copyWithGeneric(
             (g) => g.addMessage(e as GameMessage).updateTime()) as T),
-        orElse: () => GameOrError.error(GameError(
-            'General Event not implemented yet $e', PlayerID('programmer'))),
+        orElse: () => GameOrError.error(
+            GameError('General Event not implemented yet $e', 'programmer')),
       ),
       game: (e) => state.next(e, read),
     );

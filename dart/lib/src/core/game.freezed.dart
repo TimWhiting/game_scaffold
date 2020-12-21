@@ -17,7 +17,7 @@ class _$PlayerTearOff {
   const _$PlayerTearOff();
 
 // ignore: unused_element
-  _Player call(PlayerID id, {String name = ''}) {
+  _Player call(String id, {String name = ''}) {
     return _Player(
       id,
       name: name,
@@ -36,7 +36,7 @@ const $Player = _$PlayerTearOff();
 
 /// @nodoc
 mixin _$Player {
-  PlayerID get id;
+  String get id;
   String get name;
 
   Map<String, dynamic> toJson();
@@ -47,9 +47,7 @@ mixin _$Player {
 abstract class $PlayerCopyWith<$Res> {
   factory $PlayerCopyWith(Player value, $Res Function(Player) then) =
       _$PlayerCopyWithImpl<$Res>;
-  $Res call({PlayerID id, String name});
-
-  $PlayerIDCopyWith<$Res> get id;
+  $Res call({String id, String name});
 }
 
 /// @nodoc
@@ -66,19 +64,9 @@ class _$PlayerCopyWithImpl<$Res> implements $PlayerCopyWith<$Res> {
     Object name = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed ? _value.id : id as PlayerID,
+      id: id == freezed ? _value.id : id as String,
       name: name == freezed ? _value.name : name as String,
     ));
-  }
-
-  @override
-  $PlayerIDCopyWith<$Res> get id {
-    if (_value.id == null) {
-      return null;
-    }
-    return $PlayerIDCopyWith<$Res>(_value.id, (value) {
-      return _then(_value.copyWith(id: value));
-    });
   }
 }
 
@@ -87,10 +75,7 @@ abstract class _$PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
   factory _$PlayerCopyWith(_Player value, $Res Function(_Player) then) =
       __$PlayerCopyWithImpl<$Res>;
   @override
-  $Res call({PlayerID id, String name});
-
-  @override
-  $PlayerIDCopyWith<$Res> get id;
+  $Res call({String id, String name});
 }
 
 /// @nodoc
@@ -108,7 +93,7 @@ class __$PlayerCopyWithImpl<$Res> extends _$PlayerCopyWithImpl<$Res>
     Object name = freezed,
   }) {
     return _then(_Player(
-      id == freezed ? _value.id : id as PlayerID,
+      id == freezed ? _value.id : id as String,
       name: name == freezed ? _value.name : name as String,
     ));
   }
@@ -126,7 +111,7 @@ class _$_Player implements _Player {
       _$_$_PlayerFromJson(json);
 
   @override
-  final PlayerID id;
+  final String id;
   @JsonKey(defaultValue: '')
   @override
   final String name;
@@ -163,12 +148,12 @@ class _$_Player implements _Player {
 }
 
 abstract class _Player implements Player {
-  const factory _Player(PlayerID id, {String name}) = _$_Player;
+  const factory _Player(String id, {String name}) = _$_Player;
 
   factory _Player.fromJson(Map<String, dynamic> json) = _$_Player.fromJson;
 
   @override
-  PlayerID get id;
+  String get id;
   @override
   String get name;
   @override
@@ -446,141 +431,6 @@ abstract class _GenericGame extends GenericGame {
   int get round;
   @override
   _$GenericGameCopyWith<_GenericGame> get copyWith;
-}
-
-PlayerID _$PlayerIDFromJson(Map<String, dynamic> json) {
-  return _PlayerID.fromJson(json);
-}
-
-/// @nodoc
-class _$PlayerIDTearOff {
-  const _$PlayerIDTearOff();
-
-// ignore: unused_element
-  _PlayerID call(String id) {
-    return _PlayerID(
-      id,
-    );
-  }
-
-// ignore: unused_element
-  PlayerID fromJson(Map<String, Object> json) {
-    return PlayerID.fromJson(json);
-  }
-}
-
-/// @nodoc
-// ignore: unused_element
-const $PlayerID = _$PlayerIDTearOff();
-
-/// @nodoc
-mixin _$PlayerID {
-  String get id;
-
-  Map<String, dynamic> toJson();
-  $PlayerIDCopyWith<PlayerID> get copyWith;
-}
-
-/// @nodoc
-abstract class $PlayerIDCopyWith<$Res> {
-  factory $PlayerIDCopyWith(PlayerID value, $Res Function(PlayerID) then) =
-      _$PlayerIDCopyWithImpl<$Res>;
-  $Res call({String id});
-}
-
-/// @nodoc
-class _$PlayerIDCopyWithImpl<$Res> implements $PlayerIDCopyWith<$Res> {
-  _$PlayerIDCopyWithImpl(this._value, this._then);
-
-  final PlayerID _value;
-  // ignore: unused_field
-  final $Res Function(PlayerID) _then;
-
-  @override
-  $Res call({
-    Object id = freezed,
-  }) {
-    return _then(_value.copyWith(
-      id: id == freezed ? _value.id : id as String,
-    ));
-  }
-}
-
-/// @nodoc
-abstract class _$PlayerIDCopyWith<$Res> implements $PlayerIDCopyWith<$Res> {
-  factory _$PlayerIDCopyWith(_PlayerID value, $Res Function(_PlayerID) then) =
-      __$PlayerIDCopyWithImpl<$Res>;
-  @override
-  $Res call({String id});
-}
-
-/// @nodoc
-class __$PlayerIDCopyWithImpl<$Res> extends _$PlayerIDCopyWithImpl<$Res>
-    implements _$PlayerIDCopyWith<$Res> {
-  __$PlayerIDCopyWithImpl(_PlayerID _value, $Res Function(_PlayerID) _then)
-      : super(_value, (v) => _then(v as _PlayerID));
-
-  @override
-  _PlayerID get _value => super._value as _PlayerID;
-
-  @override
-  $Res call({
-    Object id = freezed,
-  }) {
-    return _then(_PlayerID(
-      id == freezed ? _value.id : id as String,
-    ));
-  }
-}
-
-@JsonSerializable()
-
-/// @nodoc
-class _$_PlayerID implements _PlayerID {
-  const _$_PlayerID(this.id) : assert(id != null);
-
-  factory _$_PlayerID.fromJson(Map<String, dynamic> json) =>
-      _$_$_PlayerIDFromJson(json);
-
-  @override
-  final String id;
-
-  @override
-  String toString() {
-    return 'PlayerID(id: $id)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other is _PlayerID &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)));
-  }
-
-  @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(id);
-
-  @override
-  _$PlayerIDCopyWith<_PlayerID> get copyWith =>
-      __$PlayerIDCopyWithImpl<_PlayerID>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$_$_PlayerIDToJson(this);
-  }
-}
-
-abstract class _PlayerID implements PlayerID {
-  const factory _PlayerID(String id) = _$_PlayerID;
-
-  factory _PlayerID.fromJson(Map<String, dynamic> json) = _$_PlayerID.fromJson;
-
-  @override
-  String get id;
-  @override
-  _$PlayerIDCopyWith<_PlayerID> get copyWith;
 }
 
 /// @nodoc
@@ -925,7 +775,7 @@ class _$GeneralEventTearOff {
   }
 
 // ignore: unused_element
-  _GeneralReadyNextRoundEvent readyNextRound(PlayerID player) {
+  _GeneralReadyNextRoundEvent readyNextRound(String player) {
     return _GeneralReadyNextRoundEvent(
       player,
     );
@@ -933,7 +783,7 @@ class _$GeneralEventTearOff {
 
 // ignore: unused_element
   GameMessage message(String message,
-      {@required PlayerID from, @required @nullable PlayerID to}) {
+      {@required String from, @required @nullable String to}) {
     return GameMessage(
       message,
       from: from,
@@ -957,16 +807,15 @@ mixin _$GeneralEvent {
   Result when<Result extends Object>({
     @required Result undo(),
     @required Result start(),
-    @required Result readyNextRound(PlayerID player),
-    @required
-        Result message(String message, PlayerID from, @nullable PlayerID to),
+    @required Result readyNextRound(String player),
+    @required Result message(String message, String from, @nullable String to),
   });
   @optionalTypeArgs
   Result maybeWhen<Result extends Object>({
     Result undo(),
     Result start(),
-    Result readyNextRound(PlayerID player),
-    Result message(String message, PlayerID from, @nullable PlayerID to),
+    Result readyNextRound(String player),
+    Result message(String message, String from, @nullable String to),
     @required Result orElse(),
   });
   @optionalTypeArgs
@@ -1049,9 +898,8 @@ class _$_GeneralEventUndo extends _GeneralEventUndo {
   Result when<Result extends Object>({
     @required Result undo(),
     @required Result start(),
-    @required Result readyNextRound(PlayerID player),
-    @required
-        Result message(String message, PlayerID from, @nullable PlayerID to),
+    @required Result readyNextRound(String player),
+    @required Result message(String message, String from, @nullable String to),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -1065,8 +913,8 @@ class _$_GeneralEventUndo extends _GeneralEventUndo {
   Result maybeWhen<Result extends Object>({
     Result undo(),
     Result start(),
-    Result readyNextRound(PlayerID player),
-    Result message(String message, PlayerID from, @nullable PlayerID to),
+    Result readyNextRound(String player),
+    Result message(String message, String from, @nullable String to),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1167,9 +1015,8 @@ class _$_GeneralEventStart extends _GeneralEventStart {
   Result when<Result extends Object>({
     @required Result undo(),
     @required Result start(),
-    @required Result readyNextRound(PlayerID player),
-    @required
-        Result message(String message, PlayerID from, @nullable PlayerID to),
+    @required Result readyNextRound(String player),
+    @required Result message(String message, String from, @nullable String to),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -1183,8 +1030,8 @@ class _$_GeneralEventStart extends _GeneralEventStart {
   Result maybeWhen<Result extends Object>({
     Result undo(),
     Result start(),
-    Result readyNextRound(PlayerID player),
-    Result message(String message, PlayerID from, @nullable PlayerID to),
+    Result readyNextRound(String player),
+    Result message(String message, String from, @nullable String to),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1245,9 +1092,7 @@ abstract class _$GeneralReadyNextRoundEventCopyWith<$Res> {
           _GeneralReadyNextRoundEvent value,
           $Res Function(_GeneralReadyNextRoundEvent) then) =
       __$GeneralReadyNextRoundEventCopyWithImpl<$Res>;
-  $Res call({PlayerID player});
-
-  $PlayerIDCopyWith<$Res> get player;
+  $Res call({String player});
 }
 
 /// @nodoc
@@ -1267,18 +1112,8 @@ class __$GeneralReadyNextRoundEventCopyWithImpl<$Res>
     Object player = freezed,
   }) {
     return _then(_GeneralReadyNextRoundEvent(
-      player == freezed ? _value.player : player as PlayerID,
+      player == freezed ? _value.player : player as String,
     ));
-  }
-
-  @override
-  $PlayerIDCopyWith<$Res> get player {
-    if (_value.player == null) {
-      return null;
-    }
-    return $PlayerIDCopyWith<$Res>(_value.player, (value) {
-      return _then(_value.copyWith(player: value));
-    });
   }
 }
 
@@ -1294,7 +1129,7 @@ class _$_GeneralReadyNextRoundEvent extends _GeneralReadyNextRoundEvent {
       _$_$_GeneralReadyNextRoundEventFromJson(json);
 
   @override
-  final PlayerID player;
+  final String player;
 
   @override
   String toString() {
@@ -1323,9 +1158,8 @@ class _$_GeneralReadyNextRoundEvent extends _GeneralReadyNextRoundEvent {
   Result when<Result extends Object>({
     @required Result undo(),
     @required Result start(),
-    @required Result readyNextRound(PlayerID player),
-    @required
-        Result message(String message, PlayerID from, @nullable PlayerID to),
+    @required Result readyNextRound(String player),
+    @required Result message(String message, String from, @nullable String to),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -1339,8 +1173,8 @@ class _$_GeneralReadyNextRoundEvent extends _GeneralReadyNextRoundEvent {
   Result maybeWhen<Result extends Object>({
     Result undo(),
     Result start(),
-    Result readyNextRound(PlayerID player),
-    Result message(String message, PlayerID from, @nullable PlayerID to),
+    Result readyNextRound(String player),
+    Result message(String message, String from, @nullable String to),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1390,13 +1224,13 @@ class _$_GeneralReadyNextRoundEvent extends _GeneralReadyNextRoundEvent {
 
 abstract class _GeneralReadyNextRoundEvent extends GeneralEvent {
   const _GeneralReadyNextRoundEvent._() : super._();
-  const factory _GeneralReadyNextRoundEvent(PlayerID player) =
+  const factory _GeneralReadyNextRoundEvent(String player) =
       _$_GeneralReadyNextRoundEvent;
 
   factory _GeneralReadyNextRoundEvent.fromJson(Map<String, dynamic> json) =
       _$_GeneralReadyNextRoundEvent.fromJson;
 
-  PlayerID get player;
+  String get player;
   _$GeneralReadyNextRoundEventCopyWith<_GeneralReadyNextRoundEvent>
       get copyWith;
 }
@@ -1406,10 +1240,7 @@ abstract class $GameMessageCopyWith<$Res> {
   factory $GameMessageCopyWith(
           GameMessage value, $Res Function(GameMessage) then) =
       _$GameMessageCopyWithImpl<$Res>;
-  $Res call({String message, PlayerID from, @nullable PlayerID to});
-
-  $PlayerIDCopyWith<$Res> get from;
-  $PlayerIDCopyWith<$Res> get to;
+  $Res call({String message, String from, @nullable String to});
 }
 
 /// @nodoc
@@ -1430,29 +1261,9 @@ class _$GameMessageCopyWithImpl<$Res> extends _$GeneralEventCopyWithImpl<$Res>
   }) {
     return _then(GameMessage(
       message == freezed ? _value.message : message as String,
-      from: from == freezed ? _value.from : from as PlayerID,
-      to: to == freezed ? _value.to : to as PlayerID,
+      from: from == freezed ? _value.from : from as String,
+      to: to == freezed ? _value.to : to as String,
     ));
-  }
-
-  @override
-  $PlayerIDCopyWith<$Res> get from {
-    if (_value.from == null) {
-      return null;
-    }
-    return $PlayerIDCopyWith<$Res>(_value.from, (value) {
-      return _then(_value.copyWith(from: value));
-    });
-  }
-
-  @override
-  $PlayerIDCopyWith<$Res> get to {
-    if (_value.to == null) {
-      return null;
-    }
-    return $PlayerIDCopyWith<$Res>(_value.to, (value) {
-      return _then(_value.copyWith(to: value));
-    });
   }
 }
 
@@ -1472,10 +1283,10 @@ class _$GameMessage extends GameMessage {
   @override
   final String message;
   @override
-  final PlayerID from;
+  final String from;
   @override
   @nullable
-  final PlayerID to;
+  final String to;
 
   @override
   String toString() {
@@ -1511,9 +1322,8 @@ class _$GameMessage extends GameMessage {
   Result when<Result extends Object>({
     @required Result undo(),
     @required Result start(),
-    @required Result readyNextRound(PlayerID player),
-    @required
-        Result message(String message, PlayerID from, @nullable PlayerID to),
+    @required Result readyNextRound(String player),
+    @required Result message(String message, String from, @nullable String to),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -1527,8 +1337,8 @@ class _$GameMessage extends GameMessage {
   Result maybeWhen<Result extends Object>({
     Result undo(),
     Result start(),
-    Result readyNextRound(PlayerID player),
-    Result message(String message, PlayerID from, @nullable PlayerID to),
+    Result readyNextRound(String player),
+    Result message(String message, String from, @nullable String to),
     @required Result orElse(),
   }) {
     assert(orElse != null);
@@ -1578,16 +1388,15 @@ class _$GameMessage extends GameMessage {
 abstract class GameMessage extends GeneralEvent {
   const GameMessage._() : super._();
   const factory GameMessage(String message,
-      {@required PlayerID from,
-      @required @nullable PlayerID to}) = _$GameMessage;
+      {@required String from, @required @nullable String to}) = _$GameMessage;
 
   factory GameMessage.fromJson(Map<String, dynamic> json) =
       _$GameMessage.fromJson;
 
   String get message;
-  PlayerID get from;
+  String get from;
   @nullable
-  PlayerID get to;
+  String get to;
   $GameMessageCopyWith<GameMessage> get copyWith;
 }
 

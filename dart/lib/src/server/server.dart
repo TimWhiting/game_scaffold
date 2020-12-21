@@ -22,7 +22,7 @@ final Map<dynamic, dynamic> _serverSocketOpts = <String, dynamic>{
 };
 final Uuid uuid = Uuid();
 
-final Map<PlayerID, Set<String>> clientGames = <PlayerID, Set<String>>{};
+final Map<String, Set<String>> clientGames = <String, Set<String>>{};
 
 class GameServer {
   GameServer(
@@ -41,11 +41,11 @@ class GameServer {
   final IO.Server io;
   final bool debug;
   final String _gameId;
-  final _clients = <PlayerID, IO.Socket>{};
-  final _clientNames = <PlayerID, String>{};
+  final _clients = <String, IO.Socket>{};
+  final _clientNames = <String, String>{};
   final dynamic _socket;
   final List<Game> previousStates = [];
-  final Set<PlayerID> readyPlayers = {};
+  final Set<String> readyPlayers = {};
   final void Function(String) onGameOver;
   final GameStateNotifier gameState;
   final GameErrorNotifier gameError;
@@ -79,7 +79,7 @@ class GameServer {
             .info('Game server namespace $_gameId registering client $data');
 
         final name = data['name'] as String;
-        final id = PlayerID(data['id'] as String);
+        final id = data['id'] as String;
 
         client.on(IOChannel.disconnect.string, (reason) {
           _serverLogger
@@ -167,7 +167,7 @@ class GameServer {
       return;
     }
     _serverLogger.info('Error: $message');
-    _clients[message.person.id]?.emit(IOChannel.error.string, message.message);
+    _clients[message.person]?.emit(IOChannel.error.string, message.message);
   }
 
   dynamic _handleRequest(gameEvent) {

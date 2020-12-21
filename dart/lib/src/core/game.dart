@@ -30,7 +30,7 @@ final Map<NameSet, List<String>> nameSets = {
 
 @freezed
 abstract class Player with _$Player {
-  const factory Player(PlayerID id, {@Default('') String name}) = _Player;
+  const factory Player(String id, {@Default('') String name}) = _Player;
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 }
 
@@ -51,13 +51,13 @@ abstract class GenericGame with _$GenericGame {
 
   Player get currentPlayer => players[currentPlayerIndex];
 
-  KtMap<PlayerID, double> get totalScores =>
+  KtMap<String, double> get totalScores =>
       playerRoundScores.mapValues((entry) => entry.value.sum());
-  KtMap<PlayerID, KtList<double>> get playerRoundScores => KtMap.from({
+  KtMap<String, KtList<double>> get playerRoundScores => KtMap.from({
         for (final p in 0.rangeTo(players.size))
           players[p].id: allRoundScores.map((rs) => rs[p]),
       });
-  KtList<KtMap<PlayerID, double>> get roundPlayerScores =>
+  KtList<KtMap<String, double>> get roundPlayerScores =>
       allRoundScores.map((rs) => KtMap.from(
             {
               for (final i in 0.rangeTo(players.size)) players[i].id: rs[i],
@@ -68,13 +68,13 @@ abstract class GenericGame with _$GenericGame {
 
   GenericGame nextPlayer() =>
       copyWith(currentPlayerIndex: (currentPlayerIndex + 1) % players.size);
-  GenericGame setNextPlayer(PlayerID player) =>
+  GenericGame setNextPlayer(String player) =>
       copyWith(currentPlayerIndex: players.indexOfFirst((p) => p.id == player));
   GenericGame updateTime() => copyWith(time: DateTime.now());
   GenericGame addMessage(GameMessage msg) => copyWith(
         messages: messages.plusElement(msg),
       );
-  GenericGame finishRound(KtMap<PlayerID, double> scores) => copyWith(
+  GenericGame finishRound(KtMap<String, double> scores) => copyWith(
         allRoundScores:
             allRoundScores.plusElement(players.map((p) => scores[p.id])),
         round: round + 1,
@@ -152,10 +152,10 @@ extension GameX on Game {
   GameStatus get gameStatus => generic.gameStatus;
   int get currentPlayerIndex => generic.currentPlayerIndex;
   int get round => generic.round;
-  KtMap<PlayerID, double> get totalScores => generic.totalScores;
-  KtMap<PlayerID, KtList<double>> get playerRoundScores =>
+  KtMap<String, double> get totalScores => generic.totalScores;
+  KtMap<String, KtList<double>> get playerRoundScores =>
       generic.playerRoundScores;
-  KtList<KtMap<PlayerID, double>> get roundPlayerScores =>
+  KtList<KtMap<String, double>> get roundPlayerScores =>
       generic.roundPlayerScores;
   bool get gameOver => generic.gameOver;
   bool get roundOver => generic.roundOver;
@@ -169,14 +169,9 @@ extension EventX on Event {
   GameEvent get asGameEvent => this is GameEvent ? this : GameEvent.game(this);
 }
 
-@freezed
-abstract class PlayerID with _$PlayerID {
-  const factory PlayerID(String id) = _PlayerID;
-  factory PlayerID.fromJson(Map<String, dynamic> map) =>
-      _$PlayerIDFromJson(map);
-  static const P1 = PlayerID('0');
-  static const P2 = PlayerID('1');
-}
+// typedef String = String;
+//  const String P1 = '0';
+//  const String P2 = '1';
 
 @freezed
 abstract class GameEvent with _$GameEvent implements Event {
@@ -193,10 +188,10 @@ abstract class GeneralEvent with _$GeneralEvent implements Event {
   const GeneralEvent._();
   const factory GeneralEvent.undo() = _GeneralEventUndo;
   const factory GeneralEvent.start() = _GeneralEventStart;
-  const factory GeneralEvent.readyNextRound(PlayerID player) =
+  const factory GeneralEvent.readyNextRound(String player) =
       _GeneralReadyNextRoundEvent;
   const factory GeneralEvent.message(String message,
-      {@required PlayerID from, @required @nullable PlayerID to}) = GameMessage;
+      {@required String from, @required @nullable String to}) = GameMessage;
 
   factory GeneralEvent.fromJson(Map<String, dynamic> map) =>
       _$GeneralEventFromJson(map);
@@ -229,10 +224,6 @@ abstract class GameInfo with _$GameInfo {
   ) = _GameInfo;
   factory GameInfo.fromJson(Map<String, dynamic> map) =>
       _$GameInfoFromJson(map);
-}
-
-extension PlayerIDFromString on String {
-  PlayerID get player => PlayerID(this);
 }
 
 extension GameTypeOf on String {

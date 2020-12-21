@@ -2,7 +2,7 @@ import 'package:game_scaffold/game_scaffold.dart';
 import 'package:riverpod/all.dart';
 
 class FirebaseServerClient extends ServerClient {
-  FirebaseServerClient(Reader read, PlayerID id) : super(read, id);
+  FirebaseServerClient(Reader read, String id) : super(read, id);
   @override
   void connect() {
     // TODO: implement connect
@@ -51,7 +51,7 @@ class FirebaseServerClient extends ServerClient {
 }
 
 class FirebaseGameClient extends GameClient {
-  FirebaseGameClient(PlayerID id, String gameCode, Reader read)
+  FirebaseGameClient(String id, String gameCode, Reader read)
       : super(id, gameCode, read);
 
   @override

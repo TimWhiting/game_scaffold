@@ -23,10 +23,7 @@ _$_ReversiGame _$_$_ReversiGameFromJson(Map<String, dynamic> json) {
     gameStatus: _$enumDecodeNullable(_$GameStatusEnumMap, json['gameStatus']),
     currentPlayerIndex: json['currentPlayerIndex'] as int,
     round: json['round'] as int,
-    board: (json['board'] as List)
-        ?.map((e) =>
-            e == null ? null : PlayerID.fromJson(e as Map<String, dynamic>))
-        ?.toList(),
+    board: (json['board'] as List)?.map((e) => e as String)?.toList(),
   );
 }
 
@@ -85,9 +82,7 @@ const _$GameStatusEnumMap = {
 
 _$_ReversiGameEvent _$_$_ReversiGameEventFromJson(Map<String, dynamic> json) {
   return _$_ReversiGameEvent(
-    json['id'] == null
-        ? null
-        : PlayerID.fromJson(json['id'] as Map<String, dynamic>),
+    json['id'] as String,
     json['location'] as int,
   );
 }

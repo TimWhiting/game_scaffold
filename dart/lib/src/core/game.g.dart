@@ -8,9 +8,7 @@ part of 'game.dart';
 
 _$_Player _$_$_PlayerFromJson(Map<String, dynamic> json) {
   return _$_Player(
-    json['id'] == null
-        ? null
-        : PlayerID.fromJson(json['id'] as Map<String, dynamic>),
+    json['id'] as String,
     name: json['name'] as String ?? '',
   );
 }
@@ -97,17 +95,6 @@ const _$GameStatusEnumMap = {
   GameStatus.BetweenRounds: 'BetweenRounds',
 };
 
-_$_PlayerID _$_$_PlayerIDFromJson(Map<String, dynamic> json) {
-  return _$_PlayerID(
-    json['id'] as String,
-  );
-}
-
-Map<String, dynamic> _$_$_PlayerIDToJson(_$_PlayerID instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-    };
-
 _$_GeneralEventUndo _$_$_GeneralEventUndoFromJson(Map<String, dynamic> json) {
   return _$_GeneralEventUndo();
 }
@@ -127,9 +114,7 @@ Map<String, dynamic> _$_$_GeneralEventStartToJson(
 _$_GeneralReadyNextRoundEvent _$_$_GeneralReadyNextRoundEventFromJson(
     Map<String, dynamic> json) {
   return _$_GeneralReadyNextRoundEvent(
-    json['player'] == null
-        ? null
-        : PlayerID.fromJson(json['player'] as Map<String, dynamic>),
+    json['player'] as String,
   );
 }
 
@@ -142,12 +127,8 @@ Map<String, dynamic> _$_$_GeneralReadyNextRoundEventToJson(
 _$GameMessage _$_$GameMessageFromJson(Map<String, dynamic> json) {
   return _$GameMessage(
     json['message'] as String,
-    from: json['from'] == null
-        ? null
-        : PlayerID.fromJson(json['from'] as Map<String, dynamic>),
-    to: json['to'] == null
-        ? null
-        : PlayerID.fromJson(json['to'] as Map<String, dynamic>),
+    from: json['from'] as String,
+    to: json['to'] as String,
   );
 }
 
