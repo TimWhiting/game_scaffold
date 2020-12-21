@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dartx/dartx.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -48,6 +50,16 @@ abstract class GenericGame with _$GenericGame {
   ) = _GenericGame;
   factory GenericGame.fromJson(Map<String, dynamic> map) =>
       _$GenericGameFromJson(map);
+  factory GenericGame.start(KtList<Player> players) => GenericGame(players,
+      KtList.empty(), DateTime.now(), KtList.empty(), GameStatus.Started, 0, 0);
+  factory GenericGame.startRandom(KtList<Player> players) => GenericGame(
+      players,
+      KtList.empty(),
+      DateTime.now(),
+      KtList.empty(),
+      GameStatus.Started,
+      0,
+      Random().nextInt(players.size));
 
   Player get currentPlayer => players[currentPlayerIndex];
 
