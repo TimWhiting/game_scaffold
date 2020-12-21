@@ -174,6 +174,8 @@ abstract class PlayerID with _$PlayerID {
   const factory PlayerID(String id) = _PlayerID;
   factory PlayerID.fromJson(Map<String, dynamic> map) =>
       _$PlayerIDFromJson(map);
+  static const P1 = PlayerID('0');
+  static const P2 = PlayerID('1');
 }
 
 @freezed
