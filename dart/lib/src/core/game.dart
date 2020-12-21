@@ -101,6 +101,7 @@ abstract class Game {
   Game copyWithGeneric(GenericGame Function(GenericGame) updates);
   Game moveNextRound(Reader container);
   Map<String, dynamic> toJson();
+  String get type;
 
   static Game fromJson(Map<String, dynamic> json) {
     final fromJson = fromJsonFactory[json['type']];
@@ -170,12 +171,11 @@ extension GameX on Game {
       generic.roundPlayerScores;
   bool get gameOver => generic.gameOver;
   bool get roundOver => generic.roundOver;
-  String type;
 }
 
 abstract class Event {
   Map<String, dynamic> toJson();
-  String type;
+  String get type;
 }
 
 extension EventX on Event {
