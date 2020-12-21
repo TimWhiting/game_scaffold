@@ -170,10 +170,12 @@ extension GameX on Game {
       generic.roundPlayerScores;
   bool get gameOver => generic.gameOver;
   bool get roundOver => generic.roundOver;
+  String type;
 }
 
 abstract class Event {
   Map<String, dynamic> toJson();
+  String type;
 }
 
 extension EventX on Event {
@@ -206,6 +208,8 @@ abstract class GeneralEvent with _$GeneralEvent implements Event {
 
   factory GeneralEvent.fromJson(Map<String, dynamic> map) =>
       _$GeneralEventFromJson(map);
+  @override
+  String get type => 'GeneralEvent';
 }
 
 @freezed
