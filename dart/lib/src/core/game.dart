@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:riverpod/all.dart';
+import 'package:dartx/dartx.dart';
 import 'package:kt_dart/kt.dart' hide nullable;
 export 'package:kt_dart/kt.dart' hide nullable;
 export 'package:dartx/dartx.dart';
@@ -14,7 +15,6 @@ enum GameStatus {
   Started,
   Finished,
   BetweenRounds,
-  Trading
 }
 
 enum NameSet { Basic }
@@ -33,6 +33,7 @@ abstract class GenericGame with _$GenericGame {
   const GenericGame._();
   const factory GenericGame(
     KtList<Player> players,
+    KtList<KtList<double>> allRoundScores,
     DateTime time,
     KtList<GameMessage> messages,
     GameStatus gameStatus,
@@ -43,9 +44,33 @@ abstract class GenericGame with _$GenericGame {
       _$GenericGameFromJson(map);
 
   Player get currentPlayer => players[currentPlayerIndex];
+
+  KtMap<PlayerID, double> get totalScores =>
+      playerRoundScores.mapValues((entry) => entry.value.sum());
+  KtMap<PlayerID, KtList<double>> get playerRoundScores => KtMap.from({
+        for (final p in 0.rangeTo(players.size))
+          players[p].id: allRoundScores.map((rs) => rs[p]),
+      });
+  KtList<KtMap<PlayerID, double>> get roundPlayerScores =>
+      allRoundScores.map((rs) => KtMap.from(
+            {
+              for (final i in 0.rangeTo(players.size)) players[i].id: rs[i],
+            },
+          ));
+  bool get gameOver => gameStatus == GameStatus.Finished;
+  bool get roundOver => gameStatus == GameStatus.BetweenRounds;
+
+  GenericGame updateTime() => copyWith(time: DateTime.now());
   GenericGame addMessage(GameMessage msg) => copyWith(
         messages: messages.plusElement(msg),
-      );
+      ).updateTime();
+  GenericGame finishRound(KtMap<PlayerID, double> scores) => copyWith(
+        allRoundScores:
+            allRoundScores.plusElement(players.map((p) => scores[p.id])),
+        round: round + 1,
+      ).updateTime();
+  GenericGame updateStatus(GameStatus status) =>
+      copyWith(gameStatus: status).updateTime();
 }
 
 abstract class Game {
@@ -117,6 +142,13 @@ extension GameX on Game {
   GameStatus get gameStatus => generic.gameStatus;
   int get currentPlayerIndex => generic.currentPlayerIndex;
   int get round => generic.round;
+  KtMap<PlayerID, double> get totalScores => generic.totalScores;
+  KtMap<PlayerID, KtList<double>> get playerRoundScores =>
+      generic.playerRoundScores;
+  KtList<KtMap<PlayerID, double>> get roundPlayerScores =>
+      generic.roundPlayerScores;
+  bool get gameOver => generic.gameOver;
+  bool get roundOver => generic.roundOver;
 }
 
 abstract class Event {

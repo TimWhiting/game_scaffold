@@ -81,7 +81,6 @@ const _$GameStatusEnumMap = {
   GameStatus.Started: 'Started',
   GameStatus.Finished: 'Finished',
   GameStatus.BetweenRounds: 'BetweenRounds',
-  GameStatus.Trading: 'Trading',
 };
 
 _$_ReversiGameEvent _$_$_ReversiGameEventFromJson(Map<String, dynamic> json) {

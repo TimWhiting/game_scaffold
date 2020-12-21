@@ -26,6 +26,13 @@ _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
         ? KtList<Player>.from((json['players'] as List).map((e) =>
             e == null ? null : Player.fromJson(e as Map<String, dynamic>)))
         : null,
+    json['allRoundScores'] != null
+        ? KtList<KtList<double>>.from((json['allRoundScores'] as List).map(
+            (e) => e != null
+                ? KtList<double>.from(
+                    (e as List).map((e) => (e as num)?.toDouble()))
+                : null))
+        : null,
     json['time'] == null ? null : DateTime.parse(json['time'] as String),
     json['messages'] != null
         ? KtList<GameMessage>.from((json['messages'] as List).map((e) =>
@@ -40,6 +47,8 @@ _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$_$_GenericGameToJson(_$_GenericGame instance) =>
     <String, dynamic>{
       'players': instance.players?.asList(),
+      'allRoundScores':
+          instance.allRoundScores?.map((e) => e?.asList())?.iter?.toList(),
       'time': instance.time?.toIso8601String(),
       'messages': instance.messages?.asList(),
       'gameStatus': _$GameStatusEnumMap[instance.gameStatus],
@@ -86,7 +95,6 @@ const _$GameStatusEnumMap = {
   GameStatus.Started: 'Started',
   GameStatus.Finished: 'Finished',
   GameStatus.BetweenRounds: 'BetweenRounds',
-  GameStatus.Trading: 'Trading',
 };
 
 _$_PlayerID _$_$_PlayerIDFromJson(Map<String, dynamic> json) {
