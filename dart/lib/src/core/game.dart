@@ -122,7 +122,7 @@ abstract class Game {
     String type, {
     @required String name,
     @required T Function(Map<String, dynamic>) fromJson,
-    @required T Function(GameConfig, KtList<Player>, Reader read) intialState,
+    @required T Function(GameConfig, KtList<Player>, Reader read) initialState,
     @required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
   }) {
     fromJsonFactory[type] = fromJson;
@@ -131,7 +131,7 @@ abstract class Game {
     initialStates[type] = initialState;
   }
 
-  static T initialState<T extends Game>(
+  static Game getInitialState(
       GameConfig gameConfig, KtList<Player> players, Reader read) {
     final initState = initialStates[gameConfig.gameType];
     if (initState == null) {

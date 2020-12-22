@@ -11,7 +11,7 @@ final serverPlayersProvider = StateProvider((ref) => listFrom(const [
 final gameInitialStateProvider = Provider<Game>((ref) {
   final gameConfig = ref.watch(gameConfigProvider).state;
   final players = ref.read(serverPlayersProvider).state;
-  return Game.initialState(gameConfig, players, ref.read);
+  return Game.getInitialState(gameConfig, players, ref.read);
 });
 
 final gameProvider = StateNotifierProvider<GameStateNotifier>((ref) {
