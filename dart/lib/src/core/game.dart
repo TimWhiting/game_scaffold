@@ -66,13 +66,13 @@ abstract class GenericGame with _$GenericGame {
   KtMap<String, double> get totalScores =>
       playerRoundScores.mapValues((entry) => entry.value.sum());
   KtMap<String, KtList<double>> get playerRoundScores => KtMap.from({
-        for (final p in 0.rangeTo(players.size))
+        for (final p in 0.rangeTo(players.size - 1))
           players[p].id: allRoundScores.map((rs) => rs[p]),
       });
   KtList<KtMap<String, double>> get roundPlayerScores =>
       allRoundScores.map((rs) => KtMap.from(
             {
-              for (final i in 0.rangeTo(players.size)) players[i].id: rs[i],
+              for (final i in 0.rangeTo(players.size - 1)) players[i].id: rs[i],
             },
           ));
   bool get gameOver => gameStatus == GameStatus.Finished;
