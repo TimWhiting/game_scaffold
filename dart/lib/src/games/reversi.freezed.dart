@@ -18,23 +18,11 @@ class _$ReversiGameTearOff {
 
 // ignore: unused_element
   _ReversiGame call(
-      {GenericGame generic,
-      KtList<Player> players,
-      DateTime time,
-      KtList<GameMessage> messages,
-      GameStatus gameStatus,
-      int currentPlayerIndex,
-      int round,
-      List<String> board}) {
+      {GenericGame generic, List<String> board, String type = 'Reversi'}) {
     return _ReversiGame(
       generic: generic,
-      players: players,
-      time: time,
-      messages: messages,
-      gameStatus: gameStatus,
-      currentPlayerIndex: currentPlayerIndex,
-      round: round,
       board: board,
+      type: type,
     );
   }
 
@@ -51,13 +39,8 @@ const $ReversiGame = _$ReversiGameTearOff();
 /// @nodoc
 mixin _$ReversiGame {
   GenericGame get generic;
-  KtList<Player> get players;
-  DateTime get time;
-  KtList<GameMessage> get messages;
-  GameStatus get gameStatus;
-  int get currentPlayerIndex;
-  int get round;
   List<String> get board;
+  String get type;
 
   Map<String, dynamic> toJson();
   $ReversiGameCopyWith<ReversiGame> get copyWith;
@@ -68,15 +51,7 @@ abstract class $ReversiGameCopyWith<$Res> {
   factory $ReversiGameCopyWith(
           ReversiGame value, $Res Function(ReversiGame) then) =
       _$ReversiGameCopyWithImpl<$Res>;
-  $Res call(
-      {GenericGame generic,
-      KtList<Player> players,
-      DateTime time,
-      KtList<GameMessage> messages,
-      GameStatus gameStatus,
-      int currentPlayerIndex,
-      int round,
-      List<String> board});
+  $Res call({GenericGame generic, List<String> board, String type});
 
   $GenericGameCopyWith<$Res> get generic;
 }
@@ -92,28 +67,13 @@ class _$ReversiGameCopyWithImpl<$Res> implements $ReversiGameCopyWith<$Res> {
   @override
   $Res call({
     Object generic = freezed,
-    Object players = freezed,
-    Object time = freezed,
-    Object messages = freezed,
-    Object gameStatus = freezed,
-    Object currentPlayerIndex = freezed,
-    Object round = freezed,
     Object board = freezed,
+    Object type = freezed,
   }) {
     return _then(_value.copyWith(
       generic: generic == freezed ? _value.generic : generic as GenericGame,
-      players: players == freezed ? _value.players : players as KtList<Player>,
-      time: time == freezed ? _value.time : time as DateTime,
-      messages: messages == freezed
-          ? _value.messages
-          : messages as KtList<GameMessage>,
-      gameStatus:
-          gameStatus == freezed ? _value.gameStatus : gameStatus as GameStatus,
-      currentPlayerIndex: currentPlayerIndex == freezed
-          ? _value.currentPlayerIndex
-          : currentPlayerIndex as int,
-      round: round == freezed ? _value.round : round as int,
       board: board == freezed ? _value.board : board as List<String>,
+      type: type == freezed ? _value.type : type as String,
     ));
   }
 
@@ -135,15 +95,7 @@ abstract class _$ReversiGameCopyWith<$Res>
           _ReversiGame value, $Res Function(_ReversiGame) then) =
       __$ReversiGameCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {GenericGame generic,
-      KtList<Player> players,
-      DateTime time,
-      KtList<GameMessage> messages,
-      GameStatus gameStatus,
-      int currentPlayerIndex,
-      int round,
-      List<String> board});
+  $Res call({GenericGame generic, List<String> board, String type});
 
   @override
   $GenericGameCopyWith<$Res> get generic;
@@ -162,28 +114,13 @@ class __$ReversiGameCopyWithImpl<$Res> extends _$ReversiGameCopyWithImpl<$Res>
   @override
   $Res call({
     Object generic = freezed,
-    Object players = freezed,
-    Object time = freezed,
-    Object messages = freezed,
-    Object gameStatus = freezed,
-    Object currentPlayerIndex = freezed,
-    Object round = freezed,
     Object board = freezed,
+    Object type = freezed,
   }) {
     return _then(_ReversiGame(
       generic: generic == freezed ? _value.generic : generic as GenericGame,
-      players: players == freezed ? _value.players : players as KtList<Player>,
-      time: time == freezed ? _value.time : time as DateTime,
-      messages: messages == freezed
-          ? _value.messages
-          : messages as KtList<GameMessage>,
-      gameStatus:
-          gameStatus == freezed ? _value.gameStatus : gameStatus as GameStatus,
-      currentPlayerIndex: currentPlayerIndex == freezed
-          ? _value.currentPlayerIndex
-          : currentPlayerIndex as int,
-      round: round == freezed ? _value.round : round as int,
       board: board == freezed ? _value.board : board as List<String>,
+      type: type == freezed ? _value.type : type as String,
     ));
   }
 }
@@ -192,16 +129,9 @@ class __$ReversiGameCopyWithImpl<$Res> extends _$ReversiGameCopyWithImpl<$Res>
 
 /// @nodoc
 class _$_ReversiGame extends _ReversiGame {
-  const _$_ReversiGame(
-      {this.generic,
-      this.players,
-      this.time,
-      this.messages,
-      this.gameStatus,
-      this.currentPlayerIndex,
-      this.round,
-      this.board})
-      : super._();
+  const _$_ReversiGame({this.generic, this.board, this.type = 'Reversi'})
+      : assert(type != null),
+        super._();
 
   factory _$_ReversiGame.fromJson(Map<String, dynamic> json) =>
       _$_$_ReversiGameFromJson(json);
@@ -209,23 +139,14 @@ class _$_ReversiGame extends _ReversiGame {
   @override
   final GenericGame generic;
   @override
-  final KtList<Player> players;
-  @override
-  final DateTime time;
-  @override
-  final KtList<GameMessage> messages;
-  @override
-  final GameStatus gameStatus;
-  @override
-  final int currentPlayerIndex;
-  @override
-  final int round;
-  @override
   final List<String> board;
+  @JsonKey(defaultValue: 'Reversi')
+  @override
+  final String type;
 
   @override
   String toString() {
-    return 'ReversiGame(generic: $generic, players: $players, time: $time, messages: $messages, gameStatus: $gameStatus, currentPlayerIndex: $currentPlayerIndex, round: $round, board: $board)';
+    return 'ReversiGame(generic: $generic, board: $board, type: $type)';
   }
 
   @override
@@ -235,37 +156,18 @@ class _$_ReversiGame extends _ReversiGame {
             (identical(other.generic, generic) ||
                 const DeepCollectionEquality()
                     .equals(other.generic, generic)) &&
-            (identical(other.players, players) ||
-                const DeepCollectionEquality()
-                    .equals(other.players, players)) &&
-            (identical(other.time, time) ||
-                const DeepCollectionEquality().equals(other.time, time)) &&
-            (identical(other.messages, messages) ||
-                const DeepCollectionEquality()
-                    .equals(other.messages, messages)) &&
-            (identical(other.gameStatus, gameStatus) ||
-                const DeepCollectionEquality()
-                    .equals(other.gameStatus, gameStatus)) &&
-            (identical(other.currentPlayerIndex, currentPlayerIndex) ||
-                const DeepCollectionEquality()
-                    .equals(other.currentPlayerIndex, currentPlayerIndex)) &&
-            (identical(other.round, round) ||
-                const DeepCollectionEquality().equals(other.round, round)) &&
             (identical(other.board, board) ||
-                const DeepCollectionEquality().equals(other.board, board)));
+                const DeepCollectionEquality().equals(other.board, board)) &&
+            (identical(other.type, type) ||
+                const DeepCollectionEquality().equals(other.type, type)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(generic) ^
-      const DeepCollectionEquality().hash(players) ^
-      const DeepCollectionEquality().hash(time) ^
-      const DeepCollectionEquality().hash(messages) ^
-      const DeepCollectionEquality().hash(gameStatus) ^
-      const DeepCollectionEquality().hash(currentPlayerIndex) ^
-      const DeepCollectionEquality().hash(round) ^
-      const DeepCollectionEquality().hash(board);
+      const DeepCollectionEquality().hash(board) ^
+      const DeepCollectionEquality().hash(type);
 
   @override
   _$ReversiGameCopyWith<_ReversiGame> get copyWith =>
@@ -280,14 +182,7 @@ class _$_ReversiGame extends _ReversiGame {
 abstract class _ReversiGame extends ReversiGame {
   const _ReversiGame._() : super._();
   const factory _ReversiGame(
-      {GenericGame generic,
-      KtList<Player> players,
-      DateTime time,
-      KtList<GameMessage> messages,
-      GameStatus gameStatus,
-      int currentPlayerIndex,
-      int round,
-      List<String> board}) = _$_ReversiGame;
+      {GenericGame generic, List<String> board, String type}) = _$_ReversiGame;
 
   factory _ReversiGame.fromJson(Map<String, dynamic> json) =
       _$_ReversiGame.fromJson;
@@ -295,19 +190,9 @@ abstract class _ReversiGame extends ReversiGame {
   @override
   GenericGame get generic;
   @override
-  KtList<Player> get players;
-  @override
-  DateTime get time;
-  @override
-  KtList<GameMessage> get messages;
-  @override
-  GameStatus get gameStatus;
-  @override
-  int get currentPlayerIndex;
-  @override
-  int get round;
-  @override
   List<String> get board;
+  @override
+  String get type;
   @override
   _$ReversiGameCopyWith<_ReversiGame> get copyWith;
 }

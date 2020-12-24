@@ -11,13 +11,8 @@ abstract class ReversiGame with _$ReversiGame implements Game {
   static const width = 8;
   const factory ReversiGame({
     GenericGame generic,
-    KtList<Player> players,
-    DateTime time,
-    KtList<GameMessage> messages,
-    GameStatus gameStatus,
-    int currentPlayerIndex,
-    int round,
     List<String> board,
+    @Default('Reversi') String type,
   }) = _ReversiGame;
   factory ReversiGame.fromJson(Map<String, dynamic> map) =>
       _$ReversiGameFromJson(map);
