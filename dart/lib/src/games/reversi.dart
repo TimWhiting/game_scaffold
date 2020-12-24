@@ -26,13 +26,13 @@ abstract class ReversiGame
   }
 
   @override
-  Game moveNextRound(Reader read) {
+  ReversiGame moveNextRound(Reader read) {
     //TODO: reinitialize the board
     return this;
   }
 
   @override
-  Game copyWithGeneric(GenericGame Function(GenericGame p1) updates) {
+  ReversiGame copyWithGeneric(GenericGame Function(GenericGame p1) updates) {
     return copyWith(generic: updates(generic));
   }
 
