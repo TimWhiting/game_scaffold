@@ -261,7 +261,7 @@ packages:
     source: hosted
     version: "0.6.2"
   json_annotation:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: json_annotation
       url: "https://pub.dartlang.org"
@@ -296,7 +296,7 @@ packages:
     source: hosted
     version: "0.8.0"
   logging:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: logging
       url: "https://pub.dartlang.org"
@@ -464,7 +464,7 @@ packages:
     source: hosted
     version: "0.6.0"
   stream:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: stream
       url: "https://pub.dartlang.org"
@@ -520,7 +520,7 @@ packages:
     source: hosted
     version: "1.2.0"
   uuid:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: uuid
       url: "https://pub.dartlang.org"

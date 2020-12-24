@@ -8,13 +8,17 @@ environment:
 
 dependencies:
   path: ^1.7.0
-  riverpod: any
-  freezed_annotation: any
-  kt_dart: any
-  socket_io: any
-  dartz: any
-  dartx: any
-  socket_io_client: any
+  riverpod: ^0.12.1
+  freezed_annotation: ^0.12.0
+  kt_dart: ^0.8.0
+  socket_io: ^0.9.4
+  dartz: ^0.9.2
+  dartx: ^0.5.0
+  json_annotation: ^3.1.1
+  stream: ^2.6.0
+  logging: ^0.11.4
+  socket_io_client: ^0.9.12
+  uuid: ^2.2.2
 
 dev_dependencies:
   json_serializable_immutable_collections: any
