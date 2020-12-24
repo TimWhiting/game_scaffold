@@ -31,7 +31,8 @@ class GameErrorNotifier extends StateNotifier<GameError> {
   GameError get error => state;
 }
 
-class GameStateNotifier<T extends Game> extends StateNotifier<T> {
+class GameStateNotifier<E extends Event, T extends Game<E>>
+    extends StateNotifier<T> {
   GameStateNotifier(this.gameConfig, this.read) : super(null);
   final Reader read;
   final GameConfig gameConfig;

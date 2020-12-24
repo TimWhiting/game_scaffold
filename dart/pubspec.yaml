@@ -1,7 +1,7 @@
 name: game_scaffold_dart
-description: A simple command-line application.
-# version: 1.0.0
-# homepage: https://www.example.com
+description: A scaffold for game projects, taking care of server implementation and some general events
+version: 0.0.1
+homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:
   sdk: ">=2.10.0 <3.0.0"

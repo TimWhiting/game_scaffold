@@ -6,7 +6,9 @@ part 'reversi.freezed.dart';
 part 'reversi.g.dart';
 
 @freezed
-abstract class ReversiGame with _$ReversiGame implements Game {
+abstract class ReversiGame
+    with _$ReversiGame
+    implements Game<ReversiGameEvent> {
   const ReversiGame._();
   static const width = 8;
   const factory ReversiGame({
@@ -18,12 +20,14 @@ abstract class ReversiGame with _$ReversiGame implements Game {
       _$ReversiGameFromJson(map);
 
   @override
-  GameOrError next(Event event, Reader container) {
+  GameOrError next(ReversiGameEvent event, Reader read) {
+    // TODO: implement handling of events
     return GameOrError<ReversiGame>.game(this);
   }
 
   @override
-  Game moveNextRound(Reader container) {
+  Game moveNextRound(Reader read) {
+    //TODO: reinitialize the board
     return this;
   }
 
@@ -50,5 +54,5 @@ abstract class ReversiGameEvent with _$ReversiGameEvent implements Event {
   factory ReversiGameEvent.fromJson(Map<String, dynamic> map) =>
       _$ReversiGameEventFromJson(map);
   @override
-  String get type => 'ReversiGameEvent';
+  String get type => 'ReversiGame';
 }

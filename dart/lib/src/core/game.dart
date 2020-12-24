@@ -94,15 +94,43 @@ abstract class GenericGame with _$GenericGame {
   GenericGame updateStatus(GameStatus status) => copyWith(gameStatus: status);
 }
 
-abstract class Game {
+abstract class Game<E extends Event> {
   Game();
+
+  /// [generic] game holding some commonly used state
   GenericGame get generic;
-  GameOrError next(Event event, Reader container);
+
+  /// This method takes an event and returns the changed game state or an error
+  ///
+  /// Errors are typically for displaying on the UI why the particular player can't make that move.
+  /// So make the error as informative as possible. This method should return a copy of the state if
+  /// undo functionality needs to work. (i.e. the class should be immutable), for high performance you can
+  /// make the changes and just return the changed instance itself, but undo functionality won't work.
+  GameOrError next(E event, Reader read);
+
+  /// Copies the state of the game with generic replaced by the function applying updates to the most recent copy of generic
+  ///
+  /// This method should be implemented as follows for Games created with freezed and a field called generic:
+  ///
+  /// ```dart
+  /// @override
+  /// Game copyWithGeneric(GenericGame Function(GenericGame p1) updates) {
+  ///  return copyWith(generic: updates(generic));
+  ///}
+  /// ```
   Game copyWithGeneric(GenericGame Function(GenericGame) updates);
-  Game moveNextRound(Reader container);
+
+  /// Logic to apply after all players have consented they want to play another round
+  /// to initialize the next round
+  Game moveNextRound(Reader read);
+
+  /// Serializes the state for consumption by the frontend
   Map<String, dynamic> toJson();
+
+  /// Returns the name game type that is registered for serialization
   String get type;
 
+  /// Converts the game from json to the particular type based on the type field
   static Game fromJson(Map<String, dynamic> json) {
     final fromJson = fromJsonFactory[json['type']];
     if (fromJson == null) {
@@ -118,6 +146,7 @@ abstract class Game {
   static Map<String, Game Function(GameConfig, KtList<Player>, Reader)>
       initialStates = {};
 
+  /// Registers a game type with the server
   static void registerGameType<T extends Game>(
     String type, {
     @required String name,
@@ -131,6 +160,7 @@ abstract class Game {
     initialStates[type] = initialState;
   }
 
+  /// Will get the initial state for a particular configuration
   static Game getInitialState(
       GameConfig gameConfig, KtList<Player> players, Reader read) {
     final initState = initialStates[gameConfig.gameType];
@@ -141,6 +171,7 @@ abstract class Game {
     return initState(gameConfig, players, read);
   }
 
+  /// Returns the game event translated from json
   static GameEvent gameEventFromJson(Map<String, dynamic> json) {
     final fromJson = eventFromJsonFactory[json['type']];
     if (fromJson == null) {
@@ -150,6 +181,7 @@ abstract class Game {
     return fromJson(json);
   }
 
+  /// Registers the set of general events
   static void registerGeneralEvents() {
     eventFromJsonFactory['GeneralEvent'] =
         (Map<String, dynamic> j) => GeneralEvent.fromJson(j).asGameEvent;

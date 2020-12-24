@@ -1,4 +1,5 @@
-A simple command-line application.
+A game scaffold library with client and server implementations along with some generic state and events.
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+Users just need to provide an implementation of game logic and register the game with the client and server.
+
+This is a work in progress. PRs are welcome.
