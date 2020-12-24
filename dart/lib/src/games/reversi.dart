@@ -45,6 +45,7 @@ abstract class ReversiGame with _$ReversiGame implements Game {
 
 @freezed
 abstract class ReversiGameEvent with _$ReversiGameEvent implements Event {
+  const ReversiGameEvent._();
   const factory ReversiGameEvent(String id, int location) = _ReversiGameEvent;
   factory ReversiGameEvent.fromJson(Map<String, dynamic> map) =>
       _$ReversiGameEventFromJson(map);

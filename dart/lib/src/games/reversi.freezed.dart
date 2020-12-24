@@ -297,10 +297,11 @@ class __$ReversiGameEventCopyWithImpl<$Res>
 @JsonSerializable()
 
 /// @nodoc
-class _$_ReversiGameEvent implements _ReversiGameEvent {
+class _$_ReversiGameEvent extends _ReversiGameEvent {
   const _$_ReversiGameEvent(this.id, this.location)
       : assert(id != null),
-        assert(location != null);
+        assert(location != null),
+        super._();
 
   factory _$_ReversiGameEvent.fromJson(Map<String, dynamic> json) =>
       _$_$_ReversiGameEventFromJson(json);
@@ -342,7 +343,8 @@ class _$_ReversiGameEvent implements _ReversiGameEvent {
   }
 }
 
-abstract class _ReversiGameEvent implements ReversiGameEvent {
+abstract class _ReversiGameEvent extends ReversiGameEvent {
+  const _ReversiGameEvent._() : super._();
   const factory _ReversiGameEvent(String id, int location) =
       _$_ReversiGameEvent;
 
