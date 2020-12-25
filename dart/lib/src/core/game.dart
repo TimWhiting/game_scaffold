@@ -132,19 +132,21 @@ abstract class Game<E extends Event> {
 
   /// Converts the game from json to the particular type based on the type field
   static Game fromJson(Map<String, dynamic> json) {
-    final fromJson = fromJsonFactory[json['type']];
+    final fromJson = _fromJsonFactory[json['type']];
     if (fromJson == null) {
       throw UnimplementedError('No game of that type exists ${json['type']}');
     }
     return fromJson(json);
   }
 
-  static Map<String, Game Function(Map<String, dynamic>)> fromJsonFactory = {};
-  static Map<String, GameEvent Function(Map<String, dynamic>)>
-      eventFromJsonFactory = {};
-  static Map<String, String> gameNames = {};
-  static Map<String, Game Function(GameConfig, KtList<Player>, Reader)>
-      initialStates = {};
+  /// Some private fields keeping track of information about registered games
+  static final Map<String, Game Function(Map<String, dynamic>)>
+      _fromJsonFactory = {};
+  static final Map<String, GameEvent Function(Map<String, dynamic>)>
+      _eventFromJsonFactory = {};
+  static final Map<String, String> _gameNames = {};
+  static final Map<String, Game Function(GameConfig, KtList<Player>, Reader)>
+      _initialStates = {};
 
   /// Registers a game type with the server
   static void registerGameType<T extends Game>(
@@ -154,16 +156,16 @@ abstract class Game<E extends Event> {
     @required T Function(GameConfig, KtList<Player>, Reader read) initialState,
     @required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
   }) {
-    fromJsonFactory[type] = fromJson;
-    gameNames[type] = name;
-    eventFromJsonFactory[type] = gameEventFromJson;
-    initialStates[type] = initialState;
+    _fromJsonFactory[type] = fromJson;
+    _gameNames[type] = name;
+    _eventFromJsonFactory[type] = gameEventFromJson;
+    _initialStates[type] = initialState;
   }
 
   /// Will get the initial state for a particular configuration
   static Game getInitialState(
       GameConfig gameConfig, KtList<Player> players, Reader read) {
-    final initState = initialStates[gameConfig.gameType];
+    final initState = _initialStates[gameConfig.gameType];
     if (initState == null) {
       throw UnimplementedError(
           'No game of that type exists in the registry ${gameConfig.gameType}');
@@ -173,7 +175,7 @@ abstract class Game<E extends Event> {
 
   /// Returns the game event translated from json
   static GameEvent gameEventFromJson(Map<String, dynamic> json) {
-    final fromJson = eventFromJsonFactory[json['type']];
+    final fromJson = _eventFromJsonFactory[json['type']];
     if (fromJson == null) {
       throw UnimplementedError(
           'No GameEvent of that type exists ${json['type']}');
@@ -183,11 +185,12 @@ abstract class Game<E extends Event> {
 
   /// Registers the set of general events
   static void registerGeneralEvents() {
-    eventFromJsonFactory['GeneralEvent'] =
+    _eventFromJsonFactory['GeneralEvent'] =
         (Map<String, dynamic> j) => GeneralEvent.fromJson(j).asGameEvent;
   }
 }
 
+/// Some extensions on [Game] to more easiliy get some of the [GenericGame] fields
 extension GameX on Game {
   Player get currentPlayer => generic.currentPlayer;
   KtList<Player> get players => generic.players;
@@ -205,11 +208,17 @@ extension GameX on Game {
   bool get roundOver => generic.roundOver;
 }
 
+/// Represents an event of a game
+///
+/// Must associate itself with a particular [type] of game registered to the server
 abstract class Event {
   Map<String, dynamic> toJson();
+
+  /// The game [type] this event is handled by
   String get type;
 }
 
+/// An extension to convert an [Event] to a [GameEvent]
 extension EventX on Event {
   GameEvent get asGameEvent => this is GameEvent
       ? this
@@ -218,10 +227,15 @@ extension EventX on Event {
           : GameEvent.game(this);
 }
 
-// typedef String = String;
+// typedef PlayerID = String; // TODO: Create a typedef when nonfunction-type-aliases becomes available
+/// A default PlayerID for Player 1 in a two player game
 const String P1 = '0';
+
+/// A default PlayerID for Player 2 in a two player game
 const String P2 = '1';
 
+/// An [Event] that represents either a [GeneralEvent] or a user defined [Event]
+/// for a partiular game
 @freezed
 abstract class GameEvent with _$GameEvent implements Event {
   const GameEvent._();
@@ -230,11 +244,16 @@ abstract class GameEvent with _$GameEvent implements Event {
   @override
   String get type => when(game: (_) => 'game', general: (_) => 'general');
   @override
-  Map<String, dynamic> toJson() => when(
-      game: (g) => g.toJson()..['type'] = g.type,
-      general: (g) => g.toJson()..['type'] = g.type);
+  Map<String, dynamic> toJson() =>
+      // Some magic to add in the type information so the [Event] can be deserialized properly
+      when(
+        game: (g) => g.toJson()..['type'] = g.type,
+        general: (g) => g.toJson()..['type'] = g.type,
+      );
 }
 
+/// A [GeneralEvent] that is handled by the general server implementation
+/// rather than handling it differently in each game implementation
 @freezed
 abstract class GeneralEvent with _$GeneralEvent implements Event {
   const GeneralEvent._();
@@ -251,6 +270,10 @@ abstract class GeneralEvent with _$GeneralEvent implements Event {
   String get type => 'GeneralEvent';
 }
 
+/// Some general config parameters for a game of [gameType]
+///
+/// Custom options can be added to the [options] map, but must be in a json
+/// compatible form
 @freezed
 abstract class GameConfig with _$GameConfig {
   const factory GameConfig({
@@ -267,6 +290,14 @@ abstract class GameConfig with _$GameConfig {
       _$GameConfigFromJson(map);
 }
 
+/// An object to provide info about a particular game to the client
+///
+/// Includes
+/// * The game's [gameId] on the server
+/// * The game's [gameType]
+/// * A list of [players] who are part of the game
+/// * The [player]'s id in the game
+/// * Whether the player is the [creator] of the game
 @freezed
 abstract class GameInfo with _$GameInfo {
   const factory GameInfo(
@@ -281,5 +312,6 @@ abstract class GameInfo with _$GameInfo {
 }
 
 extension GameTypeOf on String {
-  String get name => Game.gameNames[this];
+  /// Returns the game's user friendly name based on the game's type identifier
+  String get name => Game._gameNames[this];
 }

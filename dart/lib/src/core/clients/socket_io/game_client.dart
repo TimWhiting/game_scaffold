@@ -60,7 +60,7 @@ class IOGameClient extends GameClient {
 
   static void registerImplementation() {
     GameClient.registerImplementation(
-      GameLocation.IOServer,
+      GameServerLocation.IOServer,
       (read, address, id, gameCode) => IOGameClient(
           address: address, read: read, id: id, gameCode: gameCode),
     );

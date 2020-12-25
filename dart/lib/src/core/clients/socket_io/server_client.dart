@@ -20,12 +20,14 @@ class IOServerClient extends ServerClient {
   void connect() {
     socket = IO.io(address, socketIOOpts);
     socket.on(IOChannel.connection.string,
-        (_) => read(gameStatusProvider(id)).state = GameStatus.NotJoined);
-    socket.on(IOChannel.disconnect.string,
-        (_) => read(gameStatusProvider(id)).state = GameStatus.NotConnected);
+        (_) => read(gameStatusProvider(playerID)).state = GameStatus.NotJoined);
+    socket.on(
+        IOChannel.disconnect.string,
+        (_) =>
+            read(gameStatusProvider(playerID)).state = GameStatus.NotConnected);
     Future.delayed(
         100.milliseconds,
-        () => read(gameStatusProvider(id)).state =
+        () => read(gameStatusProvider(playerID)).state =
             socket.connected ? GameStatus.NotJoined : GameStatus.NotConnected);
   }
 
@@ -37,7 +39,7 @@ class IOServerClient extends ServerClient {
     final gameConfig = read(gameConfigProvider).state;
     print('Creating game $gameConfig');
     final gameCode = await _createGame(gameConfig);
-    read(gameCodeProvider(id)).state = gameCode;
+    read(gameCodeProvider(playerID)).state = gameCode;
   }
 
   Future<String> _createGame(GameConfig config) async {
@@ -48,13 +50,13 @@ class IOServerClient extends ServerClient {
   @override
   Future<bool> deleteGame() async {
     final result = await socket.call(
-        IOChannel.deletegame, read(gameCodeProvider(id)).state);
+        IOChannel.deletegame, read(gameCodeProvider(playerID)).state);
     return result as bool;
   }
 
   @override
   Future<List<GameInfo>> getGames() async {
-    final result = await socket.call(IOChannel.getgames, id);
+    final result = await socket.call(IOChannel.getgames, playerID);
     return (json.decode(result as String) as List<dynamic>)
         .map((v) => GameInfo.fromJson(v as Map<String, dynamic>))
         .toList();
@@ -82,7 +84,7 @@ class IOServerClient extends ServerClient {
 
   static void registerImplementation() {
     ServerClient.registerImplementation(
-      GameLocation.IOServer,
+      GameServerLocation.IOServer,
       (read, address, id) =>
           IOServerClient(read: read, address: address, id: id),
     );

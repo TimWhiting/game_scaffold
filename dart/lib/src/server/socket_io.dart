@@ -13,7 +13,7 @@ import 'package:logging/logging.dart';
 
 import '../core/errors.dart';
 import '../core/game.dart';
-import '../core/game_server.dart';
+import '../core/game_state.dart';
 
 /// Logs server events
 final _serverLogger = Logger('Server');

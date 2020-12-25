@@ -7,10 +7,11 @@ const defaultGamePort = 45912;
 const defaultAddress = 'your game server ip';
 final selectedAddress = StateProvider((ref) => defaultAddress);
 
-enum GameLocation { Local, IOServer, Firebase }
+/// The location of the game server
+enum GameServerLocation { OnDevice, IOServer, Firebase }
 
 final gameLocationProvider =
-    StateProvider<GameLocation>((ref) => GameLocation.IOServer);
+    StateProvider<GameServerLocation>((ref) => GameServerLocation.IOServer);
 final gameServerClientProvider =
     Provider.family<ServerClient, String>((ref, id) {
   final location = ref.watch(gameLocationProvider).state;
@@ -20,7 +21,7 @@ final gameServerClientProvider =
         'Please set the address for the remote server before connecting a game server client');
   }
   final client = ServerClient.fromParams(
-      location: location, read: ref.read, address: address, id: id);
+      location: location, read: ref.read, address: address, playerID: id);
 
   ref.onDispose(client.dispose);
   return client;
