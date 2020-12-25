@@ -1,3 +1,5 @@
+library game_core;
+
 export 'package:riverpod/riverpod.dart';
 export 'core/errors.dart';
 export 'core/game.dart';

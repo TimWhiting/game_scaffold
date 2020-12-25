@@ -6,7 +6,6 @@ import 'package:riverpod/all.dart';
 //ignore: library_prefixes
 import 'package:socket_io/socket_io.dart' as IO;
 import 'package:stream/stream.dart';
-import 'package:uuid/uuid.dart';
 import 'package:dartx/dartx.dart';
 import 'package:logging/logging.dart';
 
@@ -16,126 +15,144 @@ import '../core/game.dart';
 import '../core/providers.dart';
 import '../core/game_server.dart';
 
+/// Logs server events
 final _serverLogger = Logger('Server');
-final Map<dynamic, dynamic> _serverSocketOpts = <String, dynamic>{
+
+/// Options for server socket
+final _serverSocketOpts = <String, dynamic>{
   'transports': ['websocket'],
 };
-final Uuid uuid = Uuid();
 
-final Map<String, Set<String>> clientGames = <String, Set<String>>{};
+/// Keeps track of a set of games that a client is a part of by client id
+final _clientGames = <String, Set<String>>{};
 
 class GameServer {
   GameServer(
-    this.io,
-    this.read,
-    this.onGameOver,
-    this._gameId, {
+    IO.Server _io,
+    this._read,
+    this._gameId,
+    this._onGameOver, {
     this.debug = true,
-  })  : _socket = io.of('/$_gameId'),
-        gameState = read(gameProvider),
-        gameError = read(gameErrorProvider) {
+  })  : _socket = _io.of('/$_gameId'),
+        _gameState = _read(gameProvider),
+        _gameError = _read(gameErrorProvider) {
     initServer();
   }
-  final Reader read;
   final List<Player> players = [];
-  final IO.Server io;
   final bool debug;
-  final String _gameId;
-  final _clients = <String, IO.Socket>{};
-  final _clientNames = <String, String>{};
-  final dynamic _socket;
-  final List<Game> previousStates = [];
-  final Set<String> readyPlayers = {};
-  final void Function(String) onGameOver;
-  final GameStateNotifier gameState;
-  final GameErrorNotifier gameError;
-  void Function() gameStateListenerDisposer;
-  void Function() gameErrorListenerDisposer;
-  Timer gameNotActiveTimer;
-  bool active = false;
   String get id => _gameId;
-  GameConfig get gameConfig => read(gameConfigProvider).state;
+  GameConfig get gameConfig => _read(gameConfigProvider).state;
   String get gameType => gameConfig.gameType;
   KtList<String> get playerNames =>
       players.map((p) => p.name).toImmutableList();
+  bool isClientAdmin(String id) => id == gameConfig.adminId;
+  String getClientName(String id) => _clientNames[id];
+
+  final Reader _read;
+  final String _gameId;
+  final _clients = <String, IO.Socket>{};
+  final _clientNames = <String, String>{};
+  final _socket;
+
+  /// The callback to call when the game ends
+  final void Function(String) _onGameOver;
+
+  /// The notifier for the game state
+  final GameStateNotifier _gameState;
+
+  /// The notifier for errors of the game
+  final GameErrorNotifier _gameError;
+
+  /// Keeps track of how long there has not been an event
+  Timer _gameNotActiveTimer;
+
+  /// Keeps track of how long there has not been an event (i.e. game is active)
+  bool _active = false;
+
+  void Function() _gameStateListenerDisposer;
+  void Function() _gameErrorListenerDisposer;
 
   void initServer() {
-    gameNotActiveTimer = Timer.periodic(2.hours, (timer) {
-      if (!active) {
+    _gameNotActiveTimer = Timer.periodic(2.hours, (timer) {
+      if (!_active) {
         killGame();
         timer.cancel();
       }
     });
-    gameStateListenerDisposer = gameState.addListener(sendUpdates);
-    gameErrorListenerDisposer = gameError.addListener(sendError);
+    _gameStateListenerDisposer = _gameState.addListener(_sendUpdates);
+    _gameErrorListenerDisposer = _gameError.addListener(_sendError);
     _serverLogger.info('Creating Game Server');
     _serverLogger.info('Listening on namespace /$_gameId');
+    _socket.on(IOChannel.connection.string, _handleClientConnection);
+  }
 
-    _socket.on(IOChannel.connection.string, (client) {
-      _serverLogger.info('Game server namespace $_gameId connected to client');
+  void _handleClientConnection(IO.Socket client) {
+    _serverLogger.info('Game server namespace $_gameId connected to client');
+    client.on(
+        IOChannel.register.string, (data) => _handleRegister(client, data));
+    client.on(IOChannel.event.string, _handleRequest);
+    if (_gameState.gameState != null) {
+      _serverLogger.info('Sending first update');
+      _sendUpdates(_gameState.gameState);
+    }
+  }
 
-      client.on(IOChannel.register.string, (data) {
-        _serverLogger
-            .info('Game server namespace $_gameId registering client $data');
+  void _handleRegister(IO.Socket client, Map<String, dynamic> data) {
+    _serverLogger
+        .info('Game server namespace $_gameId registering client $data');
 
-        final name = data['name'] as String;
-        final id = data['id'] as String;
+    final name = data['name'] as String;
+    final id = data['id'] as String;
 
-        client.on(IOChannel.disconnect.string, (reason) {
-          _serverLogger
-              .info('Client disconnected from $_gameId namespace $reason');
-          _clients[id] = null;
-        });
-        // Player rejoining
-        if (_clients.containsKey(id)) {
-          // The player already exists, and is in the game
-          // just update their client data
-          _clients[id] = client as IO.Socket;
-          _clients[id]
-              .emit(IOChannel.gamestate.string, gameState.gameState.toJson());
-          return;
+    client.on(
+        IOChannel.disconnect.string, (data) => _handleDisconnect(client, data));
+    // Player rejoining
+    if (_clients.containsKey(id)) {
+      // The player already exists, and is in the game
+      // just update their client data
+      _clients[id] = client;
+      _clients[id]
+          .emit(IOChannel.gamestate.string, _gameState.gameState?.toJson());
+      return;
+    }
+    if (_clients.length > 12) {
+      client?.emit(IOChannel.error.string, 'Too many players already, sorry');
+    } else {
+      if (gameConfig.customNames) {
+        _serverLogger.info('Creating player with name $name');
+        _clients[id] = client;
+        if (_clientGames[id] == null) {
+          _clientGames[id] = {};
         }
-        if (_clients.length > 12) {
-          (client as IO.Socket)
-              ?.emit(IOChannel.error.string, 'Too many players already, sorry');
-        } else {
-          if (gameConfig.customNames) {
-            _serverLogger.info('Creating player with name $name');
-            _clients[id] = client as IO.Socket;
-            if (clientGames[id] == null) {
-              clientGames[id] = {};
-            }
-            clientGames[id].add(_gameId);
-            _clientNames[id] = name;
-            addPlayer(Player(id, name: name));
-          } else {
-            _serverLogger.info('Creating player with random name');
-            final name = _getRandomPlayer();
-            client.emit(IOChannel.name.string, name);
-            addPlayer(Player(id, name: name));
-            if (clientGames[id] == null) {
-              clientGames[id] = {};
-            }
-            _clients[id] = client as IO.Socket;
-            _clientNames[id] = name;
-            clientGames[id].add(_gameId);
-          }
+        _clientGames[id].add(_gameId);
+        _clientNames[id] = name;
+        _addPlayer(Player(id, name: name));
+      } else {
+        _serverLogger.info('Creating player with random name');
+        final name = _getRandomPlayer();
+        client.emit(IOChannel.name.string, name);
+        _addPlayer(Player(id, name: name));
+        if (_clientGames[id] == null) {
+          _clientGames[id] = {};
         }
-      });
-      client.on(IOChannel.event.string, _handleRequest);
-      if (gameState.gameState != null) {
-        _serverLogger.info('Sending first update');
-        sendUpdates(gameState.gameState);
+        _clients[id] = client;
+        _clientNames[id] = name;
+        _clientGames[id].add(_gameId);
       }
-    });
+    }
   }
 
-  void addPlayer(Player player) {
+  void _handleDisconnect(IO.Socket socket, dynamic reason) {
+    _serverLogger.info('Client disconnected from $_gameId namespace $reason');
+    _clients[id] = null;
+  }
+
+  void _addPlayer(Player player) {
     players.add(player);
-    read(serverPlayersProvider).state = players.toImmutableList();
+    _read(serverPlayersProvider).state = players.toImmutableList();
   }
 
-  void sendUpdates(Game state) {
+  void _sendUpdates(Game state) {
     if (state == null) {
       return;
     }
@@ -148,21 +165,21 @@ class GameServer {
     }
   }
 
-  void killGame() {
-    gameStateListenerDisposer();
-    _serverLogger.info('Killing game');
-    gameState.dispose();
+  void _dispose() {
+    _gameState.dispose();
     for (final client in _clients.values) {
       client?.disconnect();
     }
     _socket.clearListeners();
     for (final c in _clients.keys) {
-      clientGames[c].remove(_gameId);
+      _clientGames[c].remove(_gameId);
     }
-    onGameOver(_gameId);
+    _gameStateListenerDisposer();
+    _gameErrorListenerDisposer();
+    _gameNotActiveTimer.cancel();
   }
 
-  void sendError(GameError message) {
+  void _sendError(GameError message) {
     if (message == null) {
       return;
     }
@@ -173,8 +190,8 @@ class GameServer {
   dynamic _handleRequest(gameEvent) {
     final event = Game.gameEventFromJson(gameEvent as Map<String, dynamic>);
     _serverLogger.info(event);
-    gameState.handleEvent(event);
-    active = true;
+    _gameState.handleEvent(event);
+    _active = true;
   }
 
   String _getRandomPlayer() => (nameSets[gameConfig?.nameSet ?? NameSet.Basic]
@@ -182,14 +199,16 @@ class GameServer {
       .toList()
         ..shuffle())[0];
 
-  bool isClientAdmin(String id) => id == gameConfig.adminId;
-
-  String getClientName(String id) => _clientNames[id];
+  void killGame() {
+    _dispose();
+    _serverLogger.info('Killing game');
+    _onGameOver(_gameId);
+  }
 }
 
 void updateGames(String id, Map<String, GameServer> servers, IO.Socket client) {
   _serverLogger.info('Getting all games for $id');
-  final games = clientGames[id];
+  final games = _clientGames[id];
   final gameInfo = games
       .map(
         (g) => GameInfo(
@@ -248,7 +267,7 @@ Future<void> startServer({bool debug = false}) async {
       final container = ProviderContainer();
       container.read(gameConfigProvider).state = config;
       final server =
-          GameServer(io, container.read, servers.remove, gameid, debug: debug);
+          GameServer(io, container.read, gameid, servers.remove, debug: debug);
 
       servers[server.id] = server;
       client.emit(IOChannel.gamecreated.string, server.id);
@@ -259,7 +278,7 @@ Future<void> startServer({bool debug = false}) async {
       //TODO: Notify the other clients in the game of the game being deleted (probably in the killGame function)
     });
     client.on(IOChannel.getgames.string, (id) {
-      if (clientGames[id] == null) {
+      if (_clientGames[id] == null) {
         client.emit(IOChannel.allgames.string, json.encode([]));
       } else {
         updateGames(id as String, servers, client as IO.Socket);
