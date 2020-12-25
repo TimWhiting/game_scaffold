@@ -3,6 +3,10 @@ import 'dart:async';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+final socketIOOpts = <String, dynamic>{
+  'transports': ['websocket'],
+  'forceNew': true,
+};
 enum IOChannel {
   error,
   gamestate,

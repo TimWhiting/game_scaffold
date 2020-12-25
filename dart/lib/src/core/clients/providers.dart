@@ -1,45 +1,16 @@
-import 'dart:io';
-
-//ignore: library_prefixes
 import 'package:riverpod/all.dart';
 
-import 'game.dart';
-import 'game_client.dart';
-import 'server_client.dart';
-
-enum GameLocation { Local, IOServer, Firebase }
-final socketIOOpts = <String, dynamic>{
-  'transports': ['websocket'],
-  'forceNew': true,
-};
-String get homeDir {
-  if (Platform.isMacOS) {
-    return Platform.environment['HOME'];
-  } else if (Platform.isLinux) {
-    return Platform.environment['HOME'];
-  } else if (Platform.isWindows) {
-    return Platform.environment['UserProfile'];
-  }
-  return Platform.environment['HOME'];
-}
+import '../game.dart';
+import 'clients.dart';
 
 const defaultGamePort = 45912;
 const defaultAddress = 'your game server ip';
 final selectedAddress = StateProvider((ref) => defaultAddress);
-// Player info
-final playerIDProvider = ScopedProvider((ref) => '');
-final playerNameProvider = StateProvider.family<String, String>((ref, _) => '');
 
-// Game config and info
-final gameCodeProvider =
-    StateProvider.family<String, String>((ref, index) => '');
-final gameConfigProvider = StateProvider<GameConfig>((ref) => null);
-final gameNameProvider = Provider<String>(
-    (ref) => ref.watch(gameConfigProvider).state.gameType.name);
+enum GameLocation { Local, IOServer, Firebase }
 
 final gameLocationProvider =
     StateProvider<GameLocation>((ref) => GameLocation.IOServer);
-// Clients
 final gameServerClientProvider =
     Provider.family<ServerClient, String>((ref, id) {
   final location = ref.watch(gameLocationProvider).state;
@@ -54,6 +25,11 @@ final gameServerClientProvider =
   ref.onDispose(client.dispose);
   return client;
 });
+
+// Game code
+final gameCodeProvider =
+    StateProvider.family<String, String>((ref, index) => '');
+// Game client
 final gameClientProvider = Provider.family<GameClient, String>((ref, id) {
   final location = ref.watch(gameLocationProvider).state;
   final gameCode = ref.watch(gameCodeProvider(id)).state;
@@ -84,3 +60,12 @@ final gameStatusProvider = StateProvider.family<GameStatus, String>(
 final gameTurnProvider = Provider.family<bool, String>(
   (ref, id) => ref.watch(gameStateProvider(id)).state.currentPlayer.id == id,
 );
+
+// Game config and info
+final gameConfigProvider = StateProvider<GameConfig>((ref) => null);
+final gameNameProvider = Provider<String>(
+    (ref) => ref.watch(gameConfigProvider).state.gameType.name);
+
+// Player info
+final playerIDProvider = ScopedProvider((ref) => '');
+final playerNameProvider = StateProvider.family<String, String>((ref, _) => '');

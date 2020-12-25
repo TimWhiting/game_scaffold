@@ -1,3 +1,3 @@
 library game_server;
 
-export 'server/server.dart';
+export 'server/socket_io.dart';

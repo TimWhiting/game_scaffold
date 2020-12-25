@@ -1,8 +1,21 @@
+import 'dart:io';
+
 import 'package:kt_dart/kt.dart';
 import 'package:riverpod/all.dart';
+import 'clients/providers.dart';
 import 'errors.dart';
 import 'game.dart';
-import 'providers.dart';
+
+String get homeDir {
+  if (Platform.isMacOS) {
+    return Platform.environment['HOME'];
+  } else if (Platform.isLinux) {
+    return Platform.environment['HOME'];
+  } else if (Platform.isWindows) {
+    return Platform.environment['UserProfile'];
+  }
+  return Platform.environment['HOME'];
+}
 
 final serverPlayersProvider = StateProvider((ref) => listFrom(const [
       Player('1', name: 'John'),

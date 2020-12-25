@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:game_scaffold_dart/src/core/clients/clients.dart';
+import 'package:game_scaffold_dart/src/core/clients/socket_io/channels.dart';
 import 'package:kt_dart/kt.dart';
 import 'package:riverpod/all.dart';
 //ignore: library_prefixes
@@ -9,10 +11,8 @@ import 'package:stream/stream.dart';
 import 'package:dartx/dartx.dart';
 import 'package:logging/logging.dart';
 
-import '../core/comms.dart';
 import '../core/errors.dart';
 import '../core/game.dart';
-import '../core/providers.dart';
 import '../core/game_server.dart';
 
 /// Logs server events
@@ -32,24 +32,42 @@ class GameServer {
     this._read,
     this._gameId,
     this._onGameOver, {
+    this.timeout = const Duration(hours: 2),
     this.debug = true,
   })  : _socket = _io.of('/$_gameId'),
         _gameState = _read(gameProvider),
         _gameError = _read(gameErrorProvider) {
-    initServer();
+    _initServer();
   }
-  final List<Player> players = [];
+
+  /// flag for printing out debug info
   final bool debug;
+
+  /// When to stop a game after [timeout] long of inactivity
+  final Duration timeout;
+
+  /// The game's id
   String get id => _gameId;
+
+  /// Gets [GameConfig] of this game
   GameConfig get gameConfig => _read(gameConfigProvider).state;
+
+  /// Gets the game's type from the config
   String get gameType => gameConfig.gameType;
+
+  /// Returns the list of players involved in the game
   KtList<String> get playerNames =>
-      players.map((p) => p.name).toImmutableList();
+      _players.map((p) => p.name).toImmutableList();
+
+  /// Returns whether the client by [id] is the admin
   bool isClientAdmin(String id) => id == gameConfig.adminId;
+
+  /// Gets the client's name corresponding to [id]
   String getClientName(String id) => _clientNames[id];
 
   final Reader _read;
   final String _gameId;
+  final List<Player> _players = [];
   final _clients = <String, IO.Socket>{};
   final _clientNames = <String, String>{};
   final _socket;
@@ -72,11 +90,10 @@ class GameServer {
   void Function() _gameStateListenerDisposer;
   void Function() _gameErrorListenerDisposer;
 
-  void initServer() {
-    _gameNotActiveTimer = Timer.periodic(2.hours, (timer) {
+  void _initServer() {
+    _gameNotActiveTimer = Timer.periodic(timeout, (timer) {
       if (!_active) {
         killGame();
-        timer.cancel();
       }
     });
     _gameStateListenerDisposer = _gameState.addListener(_sendUpdates);
@@ -148,8 +165,8 @@ class GameServer {
   }
 
   void _addPlayer(Player player) {
-    players.add(player);
-    _read(serverPlayersProvider).state = players.toImmutableList();
+    _players.add(player);
+    _read(serverPlayersProvider).state = _players.toImmutableList();
   }
 
   void _sendUpdates(Game state) {
@@ -166,6 +183,7 @@ class GameServer {
   }
 
   void _dispose() {
+    _gameNotActiveTimer.cancel();
     _gameState.dispose();
     for (final client in _clients.values) {
       client?.disconnect();
@@ -176,7 +194,6 @@ class GameServer {
     }
     _gameStateListenerDisposer();
     _gameErrorListenerDisposer();
-    _gameNotActiveTimer.cancel();
   }
 
   void _sendError(GameError message) {
@@ -206,7 +223,133 @@ class GameServer {
   }
 }
 
-void updateGames(String id, Map<String, GameServer> servers, IO.Socket client) {
+Future<void> startServer({
+  bool debug = false,
+  bool https = false,
+  String pathToPem,
+  String pathToRsa,
+  int port,
+}) async {
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
+  Logger.root.onRecord.listen((record) {
+    print('[${record.level.name}]: ${record.message}');
+  });
+  final io = IO.Server(options: _serverSocketOpts);
+  final servers = <String, GameServer>{};
+  final clients = <IO.Socket>{};
+  io.on(
+    IOChannel.connection.string,
+    (client) => _handleClientConnection(io, client, servers, clients, debug),
+  );
+  final server = StreamServer();
+  if (https) {
+    assert(pathToPem != null);
+    assert(pathToRsa != null);
+
+    final security = SecurityContext()
+      ..useCertificateChain(pathToPem)
+      ..usePrivateKey(pathToRsa);
+    await server.startSecure(
+      security,
+      address: InternetAddress.anyIPv4,
+      port: port ?? defaultGamePort,
+    );
+  } else {
+    await server.start(
+      address: InternetAddress.loopbackIPv4,
+      port: port ?? defaultGamePort,
+    );
+  }
+  io.listen(server, _serverSocketOpts);
+}
+
+void _handleClientConnection(
+  IO.Server io,
+  IO.Socket client,
+  Map<String, GameServer> servers,
+  Set<IO.Socket> clients,
+  bool debug,
+) {
+  _serverLogger.info('Client connected');
+  clients.add(client);
+  client.on(
+    IOChannel.disconnect.string,
+    (reason) => _clientDisconnect(clients, client, reason),
+  );
+  client.on(
+    IOChannel.creategame.string,
+    (config) => _createGame(io, client, servers, config, debug),
+  );
+  client.on(
+    IOChannel.getgames.string,
+    (clientId) => _getGames(client, servers, clientId),
+  );
+  client.on(
+    IOChannel.getgameinfo.string,
+    (id) => _getGameInfo(client, servers, id),
+  );
+
+  client.on(
+    IOChannel.deletegame.string,
+    (id) => _deleteGame(client, servers, id),
+  );
+}
+
+void _getGameInfo(
+    IO.Socket client, Map<String, GameServer> servers, String id) {
+  if (servers.containsKey(id)) {
+    client.emit(IOChannel.gameinfo.string,
+        GameInfo(id, [], '', false, servers[id].gameType).toJson());
+  } else {
+    client.emit(IOChannel.gameinfo.string, '404');
+  }
+}
+
+void _clientDisconnect(
+    Set<IO.Socket> clients, IO.Socket client, dynamic reason) {
+  clients.remove(client);
+  _serverLogger.info('Client disconnected from main room $reason');
+}
+
+void _createGame(
+  IO.Server io,
+  IO.Socket client,
+  Map<String, GameServer> servers,
+  Map<String, dynamic> config,
+  bool debug,
+) {
+  _serverLogger.info('creating game');
+  final gameConfig = GameConfig.fromJson(config);
+  var gameid = '';
+  while (gameid.length != 4 || servers.keys.contains(gameid)) {
+    gameid =
+        'BCDFGHJKLMNPQRSTVWXZ'.characters.shuffled().join('').substring(0, 4);
+  }
+  final container = ProviderContainer();
+  container.read(gameConfigProvider).state = gameConfig;
+  final server =
+      GameServer(io, container.read, gameid, servers.remove, debug: debug);
+
+  servers[server.id] = server;
+  client.emit(IOChannel.gamecreated.string, server.id);
+}
+
+void _deleteGame(IO.Socket client, Map<String, GameServer> servers, String id) {
+  servers[id].killGame();
+  client.emit(IOChannel.gamedeleted.string, true);
+  //TODO: Notify the other clients in the game of the game being deleted (probably in the killGame function)
+}
+
+void _getGames(IO.Socket client, Map<String, GameServer> servers, String id) {
+  if (_clientGames[id] == null) {
+    client.emit(IOChannel.allgames.string, json.encode([]));
+  } else {
+    _updateGames(id, servers, client);
+  }
+}
+
+void _updateGames(
+    String id, Map<String, GameServer> servers, IO.Socket client) {
   _serverLogger.info('Getting all games for $id');
   final games = _clientGames[id];
   final gameInfo = games
@@ -221,75 +364,4 @@ void updateGames(String id, Map<String, GameServer> servers, IO.Socket client) {
       )
       .toList();
   client.emit(IOChannel.allgames.string, json.encode(gameInfo));
-}
-
-Future<void> startServer({bool debug = false}) async {
-  Logger.root.level = Level.ALL; // defaults to Level.INFO
-  Logger.root.onRecord.listen((record) {
-    print('[${record.level.name}]: ${record.message}');
-  });
-  final io = IO.Server(options: _serverSocketOpts);
-  final servers = <String, GameServer>{};
-  final clients = <dynamic>{};
-  io.on(IOChannel.connection.string, (client) {
-    _serverLogger.info('Client connected');
-    clients.add(client);
-    client.on(IOChannel.getgameinfo.string, (id) async {
-      if (servers.containsKey(id)) {
-        client.emit(
-            IOChannel.gameinfo.string,
-            GameInfo(
-              id as String,
-              [],
-              '',
-              false,
-              servers[id].gameType,
-            ).toJson());
-      } else {
-        client.emit(IOChannel.gameinfo.string, '404');
-      }
-    });
-    client.on(IOChannel.disconnect.string, (reason) {
-      clients.remove(client);
-      _serverLogger.info('Client disconnected from main room $reason');
-    });
-    client.on(IOChannel.creategame.string, (data) {
-      _serverLogger.info('creating game');
-      final config = GameConfig.fromJson(data as Map<String, dynamic>);
-      var gameid = '';
-      while (gameid.length != 4 || servers.keys.contains(gameid)) {
-        gameid = 'BCDFGHJKLMNPQRSTVWXZ'
-            .characters
-            .shuffled()
-            .join('')
-            .substring(0, 4);
-      }
-      final container = ProviderContainer();
-      container.read(gameConfigProvider).state = config;
-      final server =
-          GameServer(io, container.read, gameid, servers.remove, debug: debug);
-
-      servers[server.id] = server;
-      client.emit(IOChannel.gamecreated.string, server.id);
-    });
-    client.on(IOChannel.deletegame.string, (data) {
-      servers[data].killGame();
-      client.emit(IOChannel.gamedeleted.string, true);
-      //TODO: Notify the other clients in the game of the game being deleted (probably in the killGame function)
-    });
-    client.on(IOChannel.getgames.string, (id) {
-      if (_clientGames[id] == null) {
-        client.emit(IOChannel.allgames.string, json.encode([]));
-      } else {
-        updateGames(id as String, servers, client as IO.Socket);
-      }
-    });
-  });
-
-  final server = StreamServer();
-  await server.start(
-    address: InternetAddress.loopbackIPv4,
-    port: defaultGamePort,
-  );
-  io.listen(server, _serverSocketOpts);
 }
