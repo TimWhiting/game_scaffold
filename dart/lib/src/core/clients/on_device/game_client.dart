@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:riverpod/all.dart';
 
-import '../../game.dart';
-import '../../game_state.dart';
+import '../../backend.dart';
+import '../../client.dart';
 import '../clients.dart';
 
 /// An implementation of a [GameClient] for a local game on device with no server connection
@@ -53,7 +53,7 @@ class NoServerGameClient extends GameClient {
 
   static void registerImplementation() {
     GameClient.registerImplementation(
-      GameServerLocation.OnDevice,
+      OnDeviceLocation,
       (read, address, id, gameCode) =>
           NoServerGameClient(read: read, id: id, gameCode: gameCode),
     );

@@ -4,7 +4,7 @@ import 'package:riverpod/all.dart';
 
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import '../../game.dart';
+import '../../client.dart';
 import '../providers.dart';
 import '../server_client.dart';
 import 'channels.dart';
@@ -85,7 +85,7 @@ class IOServerClient extends ServerClient {
 
   static void registerImplementation() {
     ServerClient.registerImplementation(
-      GameServerLocation.IOServer,
+      IOServerLocation,
       (read, address, id) =>
           IOServerClient(read: read, address: address, id: id),
     );

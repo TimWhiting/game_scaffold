@@ -1,6 +1,6 @@
 import 'package:riverpod/all.dart';
 
-import '../game.dart';
+import '../core.dart';
 import 'clients.dart';
 
 /// The default port that is used for Game Clients
@@ -13,12 +13,12 @@ const defaultAddress = 'your game server ip';
 final selectedAddress = StateProvider((ref) => defaultAddress);
 
 /// An enum for the location of the game server
-enum GameServerLocation { OnDevice, IOServer, Firebase }
+// enum GameServerLocation { OnDevice, IOServer, Firebase }
+// TODO: Fix this to be a typedef when non-function-type-aliases becomes available
 
 /// The provider that controls the [GameClient] and [ServerClient]
 /// implementation to use
-final gameLocationProvider =
-    StateProvider<GameServerLocation>((ref) => GameServerLocation.IOServer);
+final gameLocationProvider = StateProvider<String>((ref) => IOServerLocation);
 
 /// Provides the [ServerClient] for each client id
 final gameServerClientProvider =

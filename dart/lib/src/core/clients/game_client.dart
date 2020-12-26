@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:riverpod/all.dart';
 
-import '../game.dart';
-import 'providers.dart';
+import '../core.dart';
 
 /// A client with client identifier [id] for a particular game identified by [gameCode]
 abstract class GameClient {
@@ -27,36 +26,35 @@ abstract class GameClient {
   void sendEvent(GameEvent event);
 
   /// Sends a start event to the game server
-  void startGame() => sendEvent(const GeneralEvent.start().asGameEvent);
+  void startGame() => sendEvent(const GenericEvent.start().asGameEvent);
 
   /// Sends an undo event to the game server
-  void undo() => sendEvent(const GeneralEvent.undo().asGameEvent);
+  void undo() => sendEvent(const GenericEvent.undo().asGameEvent);
 
   /// Sends a new round event to the game server
-  void newRound() => sendEvent(GeneralEvent.readyNextRound(id).asGameEvent);
+  void newRound() => sendEvent(GenericEvent.readyNextRound(id).asGameEvent);
 
   /// Sends a message event to the game server
   void sendMessage(String message) =>
-      sendEvent(GeneralEvent.message(message, from: id, to: null).asGameEvent);
+      sendEvent(GenericEvent.message(message, from: id, to: null).asGameEvent);
 
   /// Disposes of the game client
   void dispose();
 
   /// Registers a [GameClient] implementation for the given [GameServerLocation]
   static void registerImplementation<T extends GameClient>(
-    GameServerLocation loc,
+    String loc,
     T Function(Reader read, String address, String id, String gameCode) impl,
   ) {
     _clientImplementations[loc] = impl;
   }
 
-  static final Map<GameServerLocation,
-          GameClient Function(Reader, String, String, String)>
+  static final Map<String, GameClient Function(Reader, String, String, String)>
       _clientImplementations = {};
 
   /// Creates a [GameClient] with the parameters specified
   static GameClient fromParams({
-    GameServerLocation location,
+    String location,
     Reader read,
     String address,
     String id,

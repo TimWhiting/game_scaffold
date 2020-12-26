@@ -1,8 +1,6 @@
 import 'package:riverpod/all.dart';
 
-import '../game.dart';
-
-import 'providers.dart';
+import '../core.dart';
 
 /// A Client that can contact the server to manage games
 ///
@@ -47,19 +45,18 @@ abstract class ServerClient {
 
   /// Registers a particular implementation of [ServerClient] for the given [GameServerLocation]
   static void registerImplementation<T extends ServerClient>(
-    GameServerLocation loc,
+    String loc,
     T Function(Reader, String, String) impl,
   ) {
     _clientImplementations[loc] = impl;
   }
 
-  static final Map<GameServerLocation,
-          ServerClient Function(Reader, String, String)>
+  static final Map<String, ServerClient Function(Reader, String, String)>
       _clientImplementations = {};
 
   /// Creates a [ServerClient] from the [location] [address] and [playerID]
   static ServerClient fromParams({
-    GameServerLocation location,
+    String location,
     Reader read,
     String address,
     String playerID,

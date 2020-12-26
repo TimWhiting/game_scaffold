@@ -1,22 +1,10 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'game.dart';
+part of 'generic.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
-
-_$_Player _$_$_PlayerFromJson(Map<String, dynamic> json) {
-  return _$_Player(
-    json['id'] as String,
-    name: json['name'] as String ?? '',
-  );
-}
-
-Map<String, dynamic> _$_$_PlayerToJson(_$_Player instance) => <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-    };
 
 _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
   return _$_GenericGame(
@@ -95,31 +83,31 @@ const _$GameStatusEnumMap = {
   GameStatus.BetweenRounds: 'BetweenRounds',
 };
 
-_$_GeneralEventUndo _$_$_GeneralEventUndoFromJson(Map<String, dynamic> json) {
-  return _$_GeneralEventUndo();
+_$_GenericEventUndo _$_$_GenericEventUndoFromJson(Map<String, dynamic> json) {
+  return _$_GenericEventUndo();
 }
 
-Map<String, dynamic> _$_$_GeneralEventUndoToJson(
-        _$_GeneralEventUndo instance) =>
+Map<String, dynamic> _$_$_GenericEventUndoToJson(
+        _$_GenericEventUndo instance) =>
     <String, dynamic>{};
 
-_$_GeneralEventStart _$_$_GeneralEventStartFromJson(Map<String, dynamic> json) {
-  return _$_GeneralEventStart();
+_$_GenericEventStart _$_$_GenericEventStartFromJson(Map<String, dynamic> json) {
+  return _$_GenericEventStart();
 }
 
-Map<String, dynamic> _$_$_GeneralEventStartToJson(
-        _$_GeneralEventStart instance) =>
+Map<String, dynamic> _$_$_GenericEventStartToJson(
+        _$_GenericEventStart instance) =>
     <String, dynamic>{};
 
-_$_GeneralReadyNextRoundEvent _$_$_GeneralReadyNextRoundEventFromJson(
+_$_GenericReadyNextRoundEvent _$_$_GenericReadyNextRoundEventFromJson(
     Map<String, dynamic> json) {
-  return _$_GeneralReadyNextRoundEvent(
+  return _$_GenericReadyNextRoundEvent(
     json['player'] as String,
   );
 }
 
-Map<String, dynamic> _$_$_GeneralReadyNextRoundEventToJson(
-        _$_GeneralReadyNextRoundEvent instance) =>
+Map<String, dynamic> _$_$_GenericReadyNextRoundEventToJson(
+        _$_GenericReadyNextRoundEvent instance) =>
     <String, dynamic>{
       'player': instance.player,
     };
@@ -137,48 +125,4 @@ Map<String, dynamic> _$_$GameMessageToJson(_$GameMessage instance) =>
       'message': instance.message,
       'from': instance.from,
       'to': instance.to,
-    };
-
-_$_GameConfig _$_$_GameConfigFromJson(Map<String, dynamic> json) {
-  return _$_GameConfig(
-    nameSet: _$enumDecodeNullable(_$NameSetEnumMap, json['nameSet']),
-    customNames: json['customNames'] as bool ?? false,
-    adminId: json['adminId'] as String,
-    gameType: json['gameType'] as String,
-    rounds: json['rounds'] as int ?? 15,
-    options: json['options'] as Map<String, dynamic>,
-  );
-}
-
-Map<String, dynamic> _$_$_GameConfigToJson(_$_GameConfig instance) =>
-    <String, dynamic>{
-      'nameSet': _$NameSetEnumMap[instance.nameSet],
-      'customNames': instance.customNames,
-      'adminId': instance.adminId,
-      'gameType': instance.gameType,
-      'rounds': instance.rounds,
-      'options': instance.options,
-    };
-
-const _$NameSetEnumMap = {
-  NameSet.Basic: 'Basic',
-};
-
-_$_GameInfo _$_$_GameInfoFromJson(Map<String, dynamic> json) {
-  return _$_GameInfo(
-    json['gameId'] as String,
-    (json['players'] as List)?.map((e) => e as String)?.toList(),
-    json['player'] as String,
-    json['creator'] as bool,
-    json['gameType'] as String,
-  );
-}
-
-Map<String, dynamic> _$_$_GameInfoToJson(_$_GameInfo instance) =>
-    <String, dynamic>{
-      'gameId': instance.gameId,
-      'players': instance.players,
-      'player': instance.player,
-      'creator': instance.creator,
-      'gameType': instance.gameType,
     };

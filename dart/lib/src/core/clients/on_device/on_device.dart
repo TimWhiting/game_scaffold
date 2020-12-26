@@ -9,3 +9,6 @@ void registerOnDeviceClients() {
   NoServerGameClient.registerImplementation();
   NoServerClient.registerImplementation();
 }
+
+/// Location that corresponds to running the game on-device
+const OnDeviceLocation = 'on-device';

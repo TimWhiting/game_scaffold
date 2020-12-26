@@ -9,3 +9,6 @@ void registerIOClients() {
   IOGameClient.registerImplementation();
   IOServerClient.registerImplementation();
 }
+
+/// Location that corresponds to using an io-server for the backend
+const IOServerLocation = 'io-server';

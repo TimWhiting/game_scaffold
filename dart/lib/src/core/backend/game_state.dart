@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:kt_dart/kt.dart';
 import 'package:riverpod/all.dart';
-import 'clients/providers.dart';
-import 'errors.dart';
-import 'game.dart';
+import '../client.dart';
 
 /// Gets the home path based on the operating system, should only be used in server contexts
 String get homeDir {

@@ -1,6 +1,6 @@
 import 'package:riverpod/all.dart';
 
-import '../../game.dart';
+import '../../core.dart';
 import '../clients.dart';
 
 /// An on device implementation of [ServerClient]
@@ -32,7 +32,7 @@ class NoServerClient extends ServerClient {
 
   static void registerImplementation() {
     ServerClient.registerImplementation(
-      GameServerLocation.OnDevice,
+      OnDeviceLocation,
       (read, address, id) => NoServerClient(read: read, id: id),
     );
   }
