@@ -7,6 +7,7 @@ import '../game_client.dart';
 import '../providers.dart';
 import 'channels.dart';
 
+/// The socket IO implementation of [GameClient]
 class IOGameClient extends GameClient {
   IOGameClient({Reader read, this.address, String gameCode, String id})
       : socket = IO.io('$address/$gameCode', socketIOOpts),

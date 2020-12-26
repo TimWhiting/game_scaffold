@@ -2,11 +2,15 @@ import 'dart:async';
 
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:enum_to_string/enum_to_string.dart';
 
+/// Options for a socket io server
 final socketIOOpts = <String, dynamic>{
   'transports': ['websocket'],
   'forceNew': true,
 };
+
+/// The IO Channels used by the socket io implemenations of [GameClient] and [ServerClient]
 enum IOChannel {
   error,
   gamestate,
@@ -27,46 +31,21 @@ enum IOChannel {
 }
 
 extension IOChannelX on IOChannel {
+  /// Retrieves the string for the enum
   String get string {
-    switch (this) {
-      case IOChannel.getgames:
-        return 'getgames';
-      case IOChannel.allgames:
-        return 'allgames';
-      case IOChannel.error:
-        return 'error';
-      case IOChannel.gamestate:
-        return 'gamestate';
-      case IOChannel.event:
-        return 'event';
-      case IOChannel.register:
-        return 'register';
-      case IOChannel.connection:
-        return 'connection';
-      case IOChannel.connect:
-        return 'connect';
-      case IOChannel.creategame:
-        return 'creategame';
-      case IOChannel.deletegame:
-        return 'deletegame';
-      case IOChannel.gameinfo:
-        return 'gameinfo';
-      case IOChannel.getgameinfo:
-        return 'getgameinfo';
-      case IOChannel.gamecreated:
-        return 'gamecreated';
-      case IOChannel.name:
-        return 'name';
-      case IOChannel.disconnect:
-        return 'disconnect';
-      case IOChannel.gamedeleted:
-        return 'gamedeleted';
+    if (this == null) {
+      throw UnimplementedError('Socket IO channel cannot be null');
     }
-    throw UnimplementedError('Invalid IO Channel');
+    return EnumToString.convertToString(this);
   }
 
+  /// Returns the corresponding response [IOChannel] for a particular channel
+  ///
+  /// This allows us to create a asynchronous request/response type API on top
+  /// of the [IO.Socket] stream interface
   IOChannel get responseChannel {
     final error = UnimplementedError('No corresponding response channel');
+
     switch (this) {
       case IOChannel.error:
       case IOChannel.gamestate:
@@ -96,6 +75,8 @@ extension IOChannelX on IOChannel {
 }
 
 extension SocketIOX on IO.Socket {
+  /// Calls [requestChannel] with [request], and receives the corresponding
+  /// response on the [requestChannel.reponseChannel], returning it as a [Future]
   Future<Object> call(IOChannel requestChannel, Object request) {
     final responseChannel = requestChannel.responseChannel;
     final completer = Completer<Object>();

@@ -16,6 +16,8 @@ export 'errors.dart';
 part 'game.freezed.dart';
 part 'game.g.dart';
 
+// TODO: Document this file
+
 enum GameStatus {
   NotConnected,
   NotJoined,

@@ -3,6 +3,9 @@ import 'package:riverpod/all.dart';
 import '../../game.dart';
 import '../clients.dart';
 
+/// An on device implementation of [ServerClient]
+///
+/// Warning implementation not complete or tested yet
 class NoServerClient extends ServerClient {
   NoServerClient({Reader read, String id}) : super(read, id);
 

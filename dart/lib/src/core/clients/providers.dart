@@ -3,15 +3,24 @@ import 'package:riverpod/all.dart';
 import '../game.dart';
 import 'clients.dart';
 
+/// The default port that is used for Game Clients
 const defaultGamePort = 45912;
+
+/// The default address to determine if the address has been set
 const defaultAddress = 'your game server ip';
+
+/// The provider that controls which game server address to connect to
 final selectedAddress = StateProvider((ref) => defaultAddress);
 
-/// The location of the game server
+/// An enum for the location of the game server
 enum GameServerLocation { OnDevice, IOServer, Firebase }
 
+/// The provider that controls the [GameClient] and [ServerClient]
+/// implementation to use
 final gameLocationProvider =
     StateProvider<GameServerLocation>((ref) => GameServerLocation.IOServer);
+
+/// Provides the [ServerClient] for each client id
 final gameServerClientProvider =
     Provider.family<ServerClient, String>((ref, id) {
   final location = ref.watch(gameLocationProvider).state;
@@ -27,10 +36,11 @@ final gameServerClientProvider =
   return client;
 });
 
-// Game code
+/// Provides the game code for each client id
 final gameCodeProvider =
     StateProvider.family<String, String>((ref, index) => '');
-// Game client
+
+/// Provides a [GameClient] for the client with the specified id
 final gameClientProvider = Provider.family<GameClient, String>((ref, id) {
   final location = ref.watch(gameLocationProvider).state;
   final gameCode = ref.watch(gameCodeProvider(id)).state;
@@ -49,24 +59,45 @@ final gameClientProvider = Provider.family<GameClient, String>((ref, id) {
   return client;
 });
 
-// Game info
+/// Provides game info for the currently selected game
 final gameInfoProvider = StateProvider<GameInfo>((ref) => null);
-final gamesProvider = FutureProvider.family<List<GameInfo>, String>(
-    (ref, id) => ref.read(gameServerClientProvider(id)).getGames());
 
-// Game states
-final gameStateProvider = StateProvider.family<Game, String>((ref, id) => null);
-final gameStatusProvider = StateProvider.family<GameStatus, String>(
-    (ref, id) => GameStatus.NotConnected);
-final gameTurnProvider = Provider.family<bool, String>(
-  (ref, id) => ref.watch(gameStateProvider(id)).state.currentPlayer.id == id,
+/// Provides the game info of all games that the client with the specified id
+/// is a part of
+final gamesProvider = FutureProvider.family<List<GameInfo>, String>(
+  (ref, id) => ref.read(gameServerClientProvider(id)).getGames(),
 );
 
-// Game config and info
-final gameConfigProvider = StateProvider<GameConfig>((ref) => null);
-final gameNameProvider = Provider<String>(
-    (ref) => ref.watch(gameConfigProvider).state.gameType.name);
+/// Provides the game state for the current game of the client with specified id
+final gameStateProvider = StateProvider.family<Game, String>((ref, id) => null);
 
-// Player info
+/// Provides the game status for the current game of the client with specified id
+final gameStatusProvider = StateProvider.family<GameStatus, String>(
+  (ref, id) => GameStatus.NotConnected,
+);
+
+/// Provides whether it is the players turn for the current game of the client with the specified id
+final gameTurnProvider = Provider.family<bool, String>(
+  (ref, id) {
+    final currentPlayer =
+        ref.watch(gameStateProvider(id)).state.currentPlayer.id;
+    // Null indicates that all players can go simulataneously
+    return currentPlayer == null || currentPlayer == id;
+  },
+);
+
+/// Provides the way to configure the game for starting
+final gameConfigProvider = StateProvider<GameConfig>((ref) => null);
+
+/// Provides the game type's name for the game specified by [gameConfigProvider]
+final gameNameProvider = Provider<String>(
+  (ref) => ref.watch(gameConfigProvider).state.gameType.name,
+);
+
+/// Provides the player id for a particular section of the widget tree
+///
+/// This is so that a multiplayer game within the same app can be played
 final playerIDProvider = ScopedProvider((ref) => '');
+
+/// Provides the name for the players based on their player id
 final playerNameProvider = StateProvider.family<String, String>((ref, _) => '');

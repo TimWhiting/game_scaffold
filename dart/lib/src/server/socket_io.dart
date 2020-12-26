@@ -223,6 +223,7 @@ class GameServer {
   }
 }
 
+// TODO: Separate this out into another class MultiGameServer and into different file
 Future<void> startServer({
   bool debug = false,
   bool https = false,

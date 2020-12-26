@@ -9,6 +9,7 @@ import '../providers.dart';
 import '../server_client.dart';
 import 'channels.dart';
 
+/// The socket IO implementation of [ServerClient]
 class IOServerClient extends ServerClient {
   IOServerClient({
     Reader read,
