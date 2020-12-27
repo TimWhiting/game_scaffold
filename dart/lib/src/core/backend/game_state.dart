@@ -20,8 +20,8 @@ String get homeDir {
 final serverPlayersProvider = StateProvider(
   (ref) => listFrom(
     const [
-      Player('1', name: 'John'),
-      Player('2', name: 'Mary'),
+      Player(P1, name: 'John'),
+      Player(P2, name: 'Mary'),
     ],
   ),
 );
