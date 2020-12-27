@@ -41,10 +41,10 @@ class NoServerGameClient extends GameClient {
   }
 
   @override
-  void sendEvent(GameEvent event) {
-    final js = event.toJson();
+  void sendEvent(Event event) {
+    final js = event.asGameEvent.toJson();
     print('Sending event $js');
-    read(gameProvider).handleEvent(event);
+    read(gameProvider).handleEvent(event.asGameEvent);
   }
 
   @override

@@ -8,10 +8,7 @@ Future<void> main(List<String> arguments) async {
   Game.registerGeneralEvents();
   TicTacToeGame.register();
   registerOnDeviceClients();
-
-  final container = ProviderContainer();
-
-  Result read<Result>(ProviderBase<Object, Result> p) => container.read(p);
+  final read = ProviderContainer().read;
   read(gameLocationProvider).state = OnDeviceLocation;
   read(gameConfigProvider).state = GameConfig(
     adminId: P1,
@@ -31,17 +28,16 @@ Future<void> main(List<String> arguments) async {
 }
 
 Future<void> loop(Reader read) async {
-  printOptions(read);
-  final command = stdin.readLineSync();
-  print('Command: $command');
+  printStateAndAction(read);
   final player = read(gameProvider).gameState.currentPlayer.id;
   List<int> location;
   do {
+    final command = stdin.readLineSync();
     location = command.split(',').map((n) => int.tryParse(n)).toList();
   } while (location.any((l) => l == null));
 
   read(gameClientProvider(player)).sendEvent(
-    TicTacToeGameEvent(player, location[0] * 3 + location[1]).asGameEvent,
+    TicTacToeGameEvent(player, location[0] * 3 + location[1]),
   );
 
   await Future.delayed(Duration(milliseconds: 100));
@@ -78,7 +74,7 @@ Future<void> loop(Reader read) async {
   }
 }
 
-void printOptions(Reader read) {
+void printStateAndAction(Reader read) {
   print('Player ${read(gameProvider).gameState.currentPlayer.id}\'s turn');
   final gameState = read(gameProvider).gameState as TicTacToeGame;
   String strFor(int index) => gameState.board[index] == P1

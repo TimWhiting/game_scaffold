@@ -47,8 +47,8 @@ class IOGameClient extends GameClient {
   }
 
   @override
-  void sendEvent(GameEvent event) {
-    final js = event.toJson();
+  void sendEvent(Event event) {
+    final js = event.asGameEvent.toJson();
     print('Sending event $js');
     socket.emit(IOChannel.event.string, js);
   }

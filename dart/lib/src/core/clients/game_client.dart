@@ -23,7 +23,7 @@ abstract class GameClient {
   Future<void> register();
 
   /// Sends [event] to the game server
-  void sendEvent(GameEvent event);
+  void sendEvent(Event event);
 
   /// Sends a start event to the game server
   void startGame() => sendEvent(const GenericEvent.start().asGameEvent);
