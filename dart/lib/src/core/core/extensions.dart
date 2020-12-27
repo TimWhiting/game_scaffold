@@ -26,6 +26,9 @@ extension GameX on Game {
   /// Gets the players that are a part of this game
   KtList<Player> get players => generic.players;
 
+  /// Gets the players that are a part of this game
+  KtList<String> get playerIds => generic.players.map((p) => p.id);
+
   /// Gets the [DateTime] that this state was updated
   DateTime get time => generic.time;
 

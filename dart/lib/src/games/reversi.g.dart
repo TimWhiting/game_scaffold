@@ -8,7 +8,9 @@ part of 'reversi.dart';
 
 _$_ReversiGame _$_$_ReversiGameFromJson(Map<String, dynamic> json) {
   return _$_ReversiGame(
-    generic: json['generic'],
+    generic: json['generic'] == null
+        ? null
+        : GenericGame.fromJson(json['generic'] as Map<String, dynamic>),
     board: (json['board'] as List)?.map((e) => e as String)?.toList(),
     type: json['type'] as String ?? 'Reversi',
   );

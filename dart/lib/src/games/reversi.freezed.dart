@@ -52,6 +52,8 @@ abstract class $ReversiGameCopyWith<$Res> {
           ReversiGame value, $Res Function(ReversiGame) then) =
       _$ReversiGameCopyWithImpl<$Res>;
   $Res call({GenericGame generic, List<String> board, String type});
+
+  $GenericGameCopyWith<$Res> get generic;
 }
 
 /// @nodoc
@@ -74,6 +76,16 @@ class _$ReversiGameCopyWithImpl<$Res> implements $ReversiGameCopyWith<$Res> {
       type: type == freezed ? _value.type : type as String,
     ));
   }
+
+  @override
+  $GenericGameCopyWith<$Res> get generic {
+    if (_value.generic == null) {
+      return null;
+    }
+    return $GenericGameCopyWith<$Res>(_value.generic, (value) {
+      return _then(_value.copyWith(generic: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -84,6 +96,9 @@ abstract class _$ReversiGameCopyWith<$Res>
       __$ReversiGameCopyWithImpl<$Res>;
   @override
   $Res call({GenericGame generic, List<String> board, String type});
+
+  @override
+  $GenericGameCopyWith<$Res> get generic;
 }
 
 /// @nodoc
