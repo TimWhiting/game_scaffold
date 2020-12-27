@@ -54,6 +54,22 @@ abstract class Game<E extends Event> {
   /// Returns the name game type that is registered for serialization
   String get type;
 
+  /// Registers a game type with the server
+  static void registerGameType<T extends Game, Q extends Game>(
+    String type, {
+    @required String name,
+    @required Q Function(Map<String, dynamic>) fromJson,
+    @required T Function(GameConfig, KtList<Player>, Reader read) initialState,
+    @required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
+    Q Function(T) toClientView,
+  }) {
+    gameNames[type] = name;
+    _fromJsonFactory[type] = fromJson;
+    _eventFromJsonFactory[type] = gameEventFromJson;
+    _initialStates[type] = initialState;
+    _toClientViews[type] = (toClientView as Game Function(Game)) ?? (g) => g;
+  }
+
   /// Converts the game from json to the particular type based on the type field
   static Game fromJson(Map<String, dynamic> json) {
     final fromJson = _fromJsonFactory[json['type']];
@@ -63,20 +79,8 @@ abstract class Game<E extends Event> {
     return fromJson(json);
   }
 
-  /// Registers a game type with the server
-  static void registerGameType<T extends Game>(
-    String type, {
-    @required String name,
-    @required T Function(Map<String, dynamic>) fromJson,
-    @required T Function(GameConfig, KtList<Player>, Reader read) initialState,
-    @required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
-    // TODO: Add client view transformation to reduce transport size or restrict viewing
-  }) {
-    gameNames[type] = name;
-    _fromJsonFactory[type] = fromJson;
-    _eventFromJsonFactory[type] = gameEventFromJson;
-    _initialStates[type] = initialState;
-  }
+  /// Optionally converts the game from a full game state to a view of the game from the client's perspective
+  static Game toClientView(Game g) => _toClientViews[g.type](g);
 
   /// Will get the initial state for a particular configuration
   static Game getInitialState(
@@ -105,12 +109,23 @@ abstract class Game<E extends Event> {
         (Map<String, dynamic> j) => GenericEvent.fromJson(j).asGameEvent;
   }
 
-  /// Some private fields keeping track of information about registered games
+  /// Some private fields to keep track of information about registered games
+
+  /// Converts the game from json based on the type
   static final Map<String, Game Function(Map<String, dynamic>)>
       _fromJsonFactory = {};
+
+  /// Converts the game to a potentially smaller form for sending over the wire
+  static final Map<String, Game Function(Game)> _toClientViews = {};
+
+  /// Converts the event from json to the event type
   static final Map<String, GameEvent Function(Map<String, dynamic>)>
       _eventFromJsonFactory = {};
+
+  /// Stores the user friendly name of the game based on the type
   static final Map<String, String> gameNames = {};
+
+  /// Stores the function to create the initial state of the game
   static final Map<String, Game Function(GameConfig, KtList<Player>, Reader)>
       _initialStates = {};
 }

@@ -5,5 +5,5 @@ void main(List<String> arguments) {
   Game.registerGeneralEvents();
   ReversiGame.register();
   registerIOClients();
-  startServer();
+  final _ = IOServer();
 }
