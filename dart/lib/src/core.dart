@@ -8,3 +8,4 @@ library game_core;
 export 'package:riverpod/riverpod.dart';
 export 'core/clients/clients.dart';
 export 'core/client.dart';
+export 'core/backend.dart';
