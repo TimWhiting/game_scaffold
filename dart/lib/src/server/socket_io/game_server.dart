@@ -4,7 +4,6 @@ import 'package:kt_dart/kt.dart';
 import 'package:riverpod/all.dart';
 //ignore: library_prefixes
 import 'package:socket_io/socket_io.dart' as IO;
-import 'package:dartx/dartx.dart';
 import 'package:logging/logging.dart';
 
 import '../../core.dart';

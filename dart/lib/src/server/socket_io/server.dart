@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:game_scaffold_dart/src/core/clients/socket_io/channels.dart';
 import 'package:logging/logging.dart';
 import 'package:stream/stream.dart';
 
@@ -9,7 +8,7 @@ import 'package:stream/stream.dart';
 import 'package:socket_io/socket_io.dart' as IO;
 
 import '../../core.dart';
-import '../../core/backend.dart';
+import '../../core/clients/socket_io/channels.dart';
 import 'game_server.dart';
 
 /// Options for server socket

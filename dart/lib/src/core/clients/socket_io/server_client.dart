@@ -5,6 +5,7 @@ import 'package:riverpod/all.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../client.dart';
+import '../../core.dart';
 import '../providers.dart';
 import '../server_client.dart';
 import 'channels.dart';
