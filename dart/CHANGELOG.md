@@ -1,3 +1,7 @@
+## 0.0.2+1
+
+- Fix export
+
 ## 0.0.2
 
 - Documented main APIs, and organized better
