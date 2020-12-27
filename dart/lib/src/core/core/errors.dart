@@ -17,7 +17,7 @@ class GameError implements Exception {
   /// Which [person] (id) caused the error
   String person;
   @override
-  String toString() => '$person caused error; $message';
+  String toString() => 'Player with id: $person caused error: $message';
 }
 
 /// Represents the union type of a game or an error, along with some helper getters to work with them

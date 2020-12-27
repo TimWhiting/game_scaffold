@@ -27,21 +27,46 @@ abstract class TicTacToeGame
     if (!canMove(player, location)) {
       return GameOrError.error(GameError('Location not valid', player));
     }
+
     return GameOrError.game(
-        copyWith(board: (board.toMutableList()..[location] = player).toList()));
+      copyWith(
+        board: (board.toMutableList()..[location] = player).toList(),
+      )._nextPlayerOrEndRound(),
+    );
+  }
+
+  TicTacToeGame _nextPlayerOrEndRound() {
+    var gGame = generic.nextPlayer();
+    if (playerIds.any((p) => isWinner(p)) || board.all((l) => l != null)) {
+      if (round == 2) {
+        gGame = gGame
+            .finishRound(
+              mapFrom({
+                players[0].id: points[players[0].id],
+                players[1].id: points[players[1].id]
+              }),
+            )
+            .updateStatus(GameStatus.Finished);
+      } else {
+        gGame = gGame.updateStatus(GameStatus.BetweenRounds);
+      }
+    }
+    return copyWith(generic: gGame);
   }
 
   bool canMove(String player, int location) {
-    return board[location] == null;
+    return location >= 0 && location < 9 && board[location] == null;
   }
 
   @override
   TicTacToeGame moveNextRound(Reader read) {
     return TicTacToeGame(
-      generic: generic.finishRound(mapFrom({
-        players[0].id: points[players[0].id],
-        players[1].id: points[players[1].id]
-      })),
+      generic: generic.finishRound(
+        mapFrom({
+          players[0].id: points[players[0].id],
+          players[1].id: points[players[1].id]
+        }),
+      ),
       board: listFrom(List.filled(9, null)),
     );
   }
@@ -93,8 +118,8 @@ abstract class TicTacToeGame
 
   static void register() {
     Game.registerGameType(
-      'TicTacToeGame',
-      name: 'tictactoe',
+      'tictactoe',
+      name: 'Tic Tac Toe',
       fromJson: (json) => TicTacToeGame.fromJson(json),
       initialState: (config, players, _) => TicTacToeGame(
         generic: GenericGame.start(players),
@@ -113,5 +138,5 @@ abstract class TicTacToeGameEvent with _$TicTacToeGameEvent implements Event {
   factory TicTacToeGameEvent.fromJson(Map<String, dynamic> map) =>
       _$TicTacToeGameEventFromJson(map);
   @override
-  String get type => 'TicTacToeGame';
+  String get type => 'tictactoe';
 }

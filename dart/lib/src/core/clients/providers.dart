@@ -25,7 +25,7 @@ final gameServerClientProvider =
     Provider.family<ServerClient, String>((ref, id) {
   final location = ref.watch(gameLocationProvider).state;
   final address = ref.watch(selectedAddress).state;
-  if (address == defaultAddress) {
+  if (location == IOServerLocation && address == defaultAddress) {
     throw UnimplementedError(
         'Please set the address for the remote server before connecting a game server client');
   }
@@ -43,9 +43,10 @@ final gameCodeProvider =
 /// Provides a [GameClient] for the client with the specified id
 final gameClientProvider = Provider.family<GameClient, String>((ref, id) {
   final location = ref.watch(gameLocationProvider).state;
+  print('location: $location');
   final gameCode = ref.watch(gameCodeProvider(id)).state;
   final address = ref.watch(selectedAddress).state;
-  if (address == defaultAddress) {
+  if (location == IOServerLocation && address == defaultAddress) {
     throw UnimplementedError(
         'Please set the address for the remote server before connecting a game server client');
   }

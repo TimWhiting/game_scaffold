@@ -96,6 +96,7 @@ abstract class GenericGame with _$GenericGame {
         allRoundScores:
             allRoundScores.plusElement(players.map((p) => scores[p.id])),
         round: round + 1,
+        gameStatus: GameStatus.Started,
       );
 
   /// Returns a copy of the [GenericGame] with the [gameStatus] updated to [status]

@@ -20,7 +20,7 @@ class _$TicTacToeGameTearOff {
   _TicTacToeGame call(
       {@required GenericGame generic,
       @required KtList<String> board,
-      String type = 'Tictactoe'}) {
+      String type = 'tictactoe'}) {
     return _TicTacToeGame(
       generic: generic,
       board: board,
@@ -134,7 +134,7 @@ class __$TicTacToeGameCopyWithImpl<$Res>
 /// @nodoc
 class _$_TicTacToeGame extends _TicTacToeGame {
   const _$_TicTacToeGame(
-      {@required this.generic, @required this.board, this.type = 'Tictactoe'})
+      {@required this.generic, @required this.board, this.type = 'tictactoe'})
       : assert(generic != null),
         assert(board != null),
         assert(type != null),
@@ -147,7 +147,7 @@ class _$_TicTacToeGame extends _TicTacToeGame {
   final GenericGame generic;
   @override
   final KtList<String> board;
-  @JsonKey(defaultValue: 'Tictactoe')
+  @JsonKey(defaultValue: 'tictactoe')
   @override
   final String type;
 

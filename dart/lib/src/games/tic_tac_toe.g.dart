@@ -14,7 +14,7 @@ _$_TicTacToeGame _$_$_TicTacToeGameFromJson(Map<String, dynamic> json) {
     board: json['board'] != null
         ? KtList<String>.from((json['board'] as List).map((e) => e as String))
         : null,
-    type: json['type'] as String ?? 'Tictactoe',
+    type: json['type'] as String ?? 'tictactoe',
   );
 }
 

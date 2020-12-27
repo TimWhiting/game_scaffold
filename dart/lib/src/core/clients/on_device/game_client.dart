@@ -13,7 +13,7 @@ class NoServerGameClient extends GameClient {
   NoServerGameClient({Reader read, String id, String gameCode})
       : super(id, gameCode, read);
   StreamSubscription<Game> _ss;
-  static List<Player> players;
+  static final List<Player> _players = [];
   @override
   void exitGame() {
     read(gameStatusProvider(id)).state = GameStatus.NotJoined;
@@ -21,8 +21,9 @@ class NoServerGameClient extends GameClient {
 
   @override
   Future<void> register() async {
-    players.add(Player(id));
-    read(serverPlayersProvider).state = players.toImmutableList();
+    _players.add(Player(id));
+    print(_players);
+    read(serverPlayersProvider).state = _players.toImmutableList();
     read(gameStatusProvider(id)).state = GameStatus.NotJoined;
     read(playerNameProvider(id)).state = '';
     read(gameStatusProvider(id)).state = GameStatus.NotStarted;
@@ -33,7 +34,8 @@ class NoServerGameClient extends GameClient {
     _ss = read(gameProvider).stream.listen((gameState) {
       read(gameStateProvider(id)).state = gameState;
       read(gameStatusProvider(id)).state = gameState.gameStatus;
-    }, onError: () {
+    }, onError: (e) {
+      print(e);
       // TODO: Do something on error
     });
   }
