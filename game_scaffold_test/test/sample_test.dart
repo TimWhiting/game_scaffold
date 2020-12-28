@@ -16,52 +16,42 @@ void main() {
       Player(P1),
       Player(P2),
     ],
-    events: [
-      null,
-      TicTacToeGameEvent(P1, 0),
-      TicTacToeGameEvent(P2, 0),
-      TicTacToeGameEvent(P2, 1),
-      TicTacToeGameEvent(P2, 2),
-      TicTacToeGameEvent(P1, 3),
-      TicTacToeGameEvent(P2, 2),
-      TicTacToeGameEvent(P1, 6),
-    ],
-    expected: [
-      (game, error) {
-        expect(game.players.size, 2);
-        expect(game.board.all((s) => s == null), true);
-      },
-      (game, error) {
+    test: (tester) {
+      final initialState = tester.game;
+      expect(initialState.players.size, 2);
+      expect(initialState.board.all((s) => s == null), true);
+
+      tester.event(TicTacToeGameEvent(P1, 0), (game, error) {
         expect(game.board.all((s) => s == null), false);
         expect(game.board[0], P1);
-      },
-      (game, error) {
+      });
+      tester.event(TicTacToeGameEvent(P2, 0), (game, error) {
         expect(error, isNotNull);
         expect(game.board[0], P1);
-      },
-      (game, error) {
+      });
+      tester.event(TicTacToeGameEvent(P2, 1), (game, error) {
         expect(error, isNull);
         expect(game.board[1], P2);
-      },
-      (game, error) {
+      });
+      tester.event(TicTacToeGameEvent(P2, 2), (game, error) {
         expect(error, isNotNull);
         expect(game.board[2], null);
-      },
-      (game, error) {
+      });
+      tester.event(TicTacToeGameEvent(P1, 3), (game, error) {
         expect(error, isNull);
         expect(game.board[3], P1);
-      },
-      (game, error) {
+      });
+      tester.event(TicTacToeGameEvent(P2, 2), (game, error) {
         expect(error, isNull);
         expect(game.board[2], P2);
-      },
-      (game, error) {
+      });
+      tester.event(TicTacToeGameEvent(P1, 6), (game, error) {
         expect(error, isNull);
         expect(game.board[6], P1);
         expect(game.isWinner(P1), true);
         expect(game.isLoser(P2), true);
         expect(game.roundOver, true);
-      },
-    ],
+      });
+    },
   );
 }

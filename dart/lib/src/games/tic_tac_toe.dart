@@ -24,6 +24,9 @@ abstract class TicTacToeGame
   }
 
   GameOrError _handleMove(String player, int location) {
+    if (player != currentPlayer.id) {
+      return GameError('Not your turn', player);
+    }
     if (!canMove(player, location)) {
       return GameError('Location not valid', player);
     }
@@ -53,10 +56,7 @@ abstract class TicTacToeGame
   }
 
   bool canMove(String player, int location) {
-    return player == currentPlayer.id &&
-        location >= 0 &&
-        location < 9 &&
-        board[location] == null;
+    return location >= 0 && location < 9 && board[location] == null;
   }
 
   @override
