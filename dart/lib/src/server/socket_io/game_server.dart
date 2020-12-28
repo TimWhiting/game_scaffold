@@ -124,7 +124,7 @@ class GameServer {
           .emit(IOChannel.gamestate.string, _gameState.gameState?.toJson());
       return;
     }
-    if (_clients.length > 12) {
+    if (_clients.length > gameConfig.maxPlayers) {
       client?.emit(IOChannel.error.string, 'Too many players already, sorry');
     } else {
       if (gameConfig.customNames) {
@@ -141,6 +141,9 @@ class GameServer {
         mainServer.addClientToGame(id, _gameId);
         _clients[id] = client;
         _clientNames[id] = name;
+      }
+      if (_players.length == gameConfig.maxPlayers && gameConfig.autoStart) {
+        _gameState.handleEvent(GenericEvent.start().asGameEvent);
       }
     }
   }

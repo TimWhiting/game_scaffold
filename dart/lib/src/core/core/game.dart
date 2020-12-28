@@ -164,6 +164,9 @@ abstract class GameConfig with _$GameConfig {
     String adminId,
     String gameType,
     @Default(15) int rounds,
+    @Default(1) int minPlayers,
+    @Default(10) int maxPlayers,
+    @Default(true) bool autoStart,
 
     /// [options must be json serializable]
     Map<String, dynamic> options,

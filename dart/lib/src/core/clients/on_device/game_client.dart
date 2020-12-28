@@ -29,6 +29,10 @@ class NoServerGameClient extends GameClient {
     read(playerNameProvider(id)).state = '';
     read(gameStatusProvider(id)).state = GameStatus.NotStarted;
     _watchState();
+    final config = read(gameConfigProvider).state;
+    if (_players.length == config.maxPlayers && config.autoStart) {
+      sendEvent(GenericEvent.start());
+    }
   }
 
   void _watchState() {

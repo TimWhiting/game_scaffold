@@ -16,7 +16,9 @@ void testGame<T extends Game>(
       for (final p in players) {
         await read(gameClientProvider(p.id)).register();
       }
-      read(gameClientProvider(players.first.id)).startGame();
+      if (read(gameProvider).gameState.gameStatus != GameStatus.Started) {
+        read(gameClientProvider(players.first.id)).startGame();
+      }
     });
     darttest.test(name + '_Tests', () {
       test(GameTester<T>(read));

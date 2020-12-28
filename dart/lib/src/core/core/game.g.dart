@@ -13,6 +13,9 @@ _$_GameConfig _$_$_GameConfigFromJson(Map<String, dynamic> json) {
     adminId: json['adminId'] as String,
     gameType: json['gameType'] as String,
     rounds: json['rounds'] as int ?? 15,
+    minPlayers: json['minPlayers'] as int ?? 1,
+    maxPlayers: json['maxPlayers'] as int ?? 10,
+    autoStart: json['autoStart'] as bool ?? true,
     options: json['options'] as Map<String, dynamic>,
   );
 }
@@ -24,6 +27,9 @@ Map<String, dynamic> _$_$_GameConfigToJson(_$_GameConfig instance) =>
       'adminId': instance.adminId,
       'gameType': instance.gameType,
       'rounds': instance.rounds,
+      'minPlayers': instance.minPlayers,
+      'maxPlayers': instance.maxPlayers,
+      'autoStart': instance.autoStart,
       'options': instance.options,
     };
 

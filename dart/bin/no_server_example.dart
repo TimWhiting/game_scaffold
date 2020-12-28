@@ -15,11 +15,11 @@ Future<void> main(List<String> arguments) async {
     customNames: false,
     gameType: 'tictactoe',
     rounds: 2,
+    maxPlayers: 2,
   );
   await read(gameServerClientProvider(P1)).createGame();
   await read(gameClientProvider(P1)).register();
   await read(gameClientProvider(P2)).register();
-  read(gameClientProvider(P1)).startGame();
   print(read(gameProvider).gameState.playerIds.asList());
   print(read(gameProvider).gameState.gameStatus);
   while (!read(gameProvider).gameState.gameOver) {

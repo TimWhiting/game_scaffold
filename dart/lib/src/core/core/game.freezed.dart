@@ -23,6 +23,9 @@ class _$GameConfigTearOff {
       String adminId,
       String gameType,
       int rounds = 15,
+      int minPlayers = 1,
+      int maxPlayers = 10,
+      bool autoStart = true,
       Map<String, dynamic> options}) {
     return _GameConfig(
       nameSet: nameSet,
@@ -30,6 +33,9 @@ class _$GameConfigTearOff {
       adminId: adminId,
       gameType: gameType,
       rounds: rounds,
+      minPlayers: minPlayers,
+      maxPlayers: maxPlayers,
+      autoStart: autoStart,
       options: options,
     );
   }
@@ -51,6 +57,9 @@ mixin _$GameConfig {
   String get adminId;
   String get gameType;
   int get rounds;
+  int get minPlayers;
+  int get maxPlayers;
+  bool get autoStart;
 
   /// [options must be json serializable]
   Map<String, dynamic> get options;
@@ -70,6 +79,9 @@ abstract class $GameConfigCopyWith<$Res> {
       String adminId,
       String gameType,
       int rounds,
+      int minPlayers,
+      int maxPlayers,
+      bool autoStart,
       Map<String, dynamic> options});
 }
 
@@ -88,6 +100,9 @@ class _$GameConfigCopyWithImpl<$Res> implements $GameConfigCopyWith<$Res> {
     Object adminId = freezed,
     Object gameType = freezed,
     Object rounds = freezed,
+    Object minPlayers = freezed,
+    Object maxPlayers = freezed,
+    Object autoStart = freezed,
     Object options = freezed,
   }) {
     return _then(_value.copyWith(
@@ -97,6 +112,9 @@ class _$GameConfigCopyWithImpl<$Res> implements $GameConfigCopyWith<$Res> {
       adminId: adminId == freezed ? _value.adminId : adminId as String,
       gameType: gameType == freezed ? _value.gameType : gameType as String,
       rounds: rounds == freezed ? _value.rounds : rounds as int,
+      minPlayers: minPlayers == freezed ? _value.minPlayers : minPlayers as int,
+      maxPlayers: maxPlayers == freezed ? _value.maxPlayers : maxPlayers as int,
+      autoStart: autoStart == freezed ? _value.autoStart : autoStart as bool,
       options:
           options == freezed ? _value.options : options as Map<String, dynamic>,
     ));
@@ -115,6 +133,9 @@ abstract class _$GameConfigCopyWith<$Res> implements $GameConfigCopyWith<$Res> {
       String adminId,
       String gameType,
       int rounds,
+      int minPlayers,
+      int maxPlayers,
+      bool autoStart,
       Map<String, dynamic> options});
 }
 
@@ -135,6 +156,9 @@ class __$GameConfigCopyWithImpl<$Res> extends _$GameConfigCopyWithImpl<$Res>
     Object adminId = freezed,
     Object gameType = freezed,
     Object rounds = freezed,
+    Object minPlayers = freezed,
+    Object maxPlayers = freezed,
+    Object autoStart = freezed,
     Object options = freezed,
   }) {
     return _then(_GameConfig(
@@ -144,6 +168,9 @@ class __$GameConfigCopyWithImpl<$Res> extends _$GameConfigCopyWithImpl<$Res>
       adminId: adminId == freezed ? _value.adminId : adminId as String,
       gameType: gameType == freezed ? _value.gameType : gameType as String,
       rounds: rounds == freezed ? _value.rounds : rounds as int,
+      minPlayers: minPlayers == freezed ? _value.minPlayers : minPlayers as int,
+      maxPlayers: maxPlayers == freezed ? _value.maxPlayers : maxPlayers as int,
+      autoStart: autoStart == freezed ? _value.autoStart : autoStart as bool,
       options:
           options == freezed ? _value.options : options as Map<String, dynamic>,
     ));
@@ -160,9 +187,15 @@ class _$_GameConfig implements _GameConfig {
       this.adminId,
       this.gameType,
       this.rounds = 15,
+      this.minPlayers = 1,
+      this.maxPlayers = 10,
+      this.autoStart = true,
       this.options})
       : assert(customNames != null),
-        assert(rounds != null);
+        assert(rounds != null),
+        assert(minPlayers != null),
+        assert(maxPlayers != null),
+        assert(autoStart != null);
 
   factory _$_GameConfig.fromJson(Map<String, dynamic> json) =>
       _$_$_GameConfigFromJson(json);
@@ -179,6 +212,15 @@ class _$_GameConfig implements _GameConfig {
   @JsonKey(defaultValue: 15)
   @override
   final int rounds;
+  @JsonKey(defaultValue: 1)
+  @override
+  final int minPlayers;
+  @JsonKey(defaultValue: 10)
+  @override
+  final int maxPlayers;
+  @JsonKey(defaultValue: true)
+  @override
+  final bool autoStart;
   @override
 
   /// [options must be json serializable]
@@ -186,7 +228,7 @@ class _$_GameConfig implements _GameConfig {
 
   @override
   String toString() {
-    return 'GameConfig(nameSet: $nameSet, customNames: $customNames, adminId: $adminId, gameType: $gameType, rounds: $rounds, options: $options)';
+    return 'GameConfig(nameSet: $nameSet, customNames: $customNames, adminId: $adminId, gameType: $gameType, rounds: $rounds, minPlayers: $minPlayers, maxPlayers: $maxPlayers, autoStart: $autoStart, options: $options)';
   }
 
   @override
@@ -207,6 +249,15 @@ class _$_GameConfig implements _GameConfig {
                     .equals(other.gameType, gameType)) &&
             (identical(other.rounds, rounds) ||
                 const DeepCollectionEquality().equals(other.rounds, rounds)) &&
+            (identical(other.minPlayers, minPlayers) ||
+                const DeepCollectionEquality()
+                    .equals(other.minPlayers, minPlayers)) &&
+            (identical(other.maxPlayers, maxPlayers) ||
+                const DeepCollectionEquality()
+                    .equals(other.maxPlayers, maxPlayers)) &&
+            (identical(other.autoStart, autoStart) ||
+                const DeepCollectionEquality()
+                    .equals(other.autoStart, autoStart)) &&
             (identical(other.options, options) ||
                 const DeepCollectionEquality().equals(other.options, options)));
   }
@@ -219,6 +270,9 @@ class _$_GameConfig implements _GameConfig {
       const DeepCollectionEquality().hash(adminId) ^
       const DeepCollectionEquality().hash(gameType) ^
       const DeepCollectionEquality().hash(rounds) ^
+      const DeepCollectionEquality().hash(minPlayers) ^
+      const DeepCollectionEquality().hash(maxPlayers) ^
+      const DeepCollectionEquality().hash(autoStart) ^
       const DeepCollectionEquality().hash(options);
 
   @override
@@ -238,6 +292,9 @@ abstract class _GameConfig implements GameConfig {
       String adminId,
       String gameType,
       int rounds,
+      int minPlayers,
+      int maxPlayers,
+      bool autoStart,
       Map<String, dynamic> options}) = _$_GameConfig;
 
   factory _GameConfig.fromJson(Map<String, dynamic> json) =
@@ -253,6 +310,12 @@ abstract class _GameConfig implements GameConfig {
   String get gameType;
   @override
   int get rounds;
+  @override
+  int get minPlayers;
+  @override
+  int get maxPlayers;
+  @override
+  bool get autoStart;
   @override
 
   /// [options must be json serializable]

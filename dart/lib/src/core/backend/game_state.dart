@@ -19,12 +19,7 @@ String get homeDir {
 
 /// Keeps track of the players involved in the game on the server (or on the client) in the case of a local game
 final serverPlayersProvider = StateProvider(
-  (ref) => listFrom(
-    const [
-      Player(P1, name: 'John'),
-      Player(P2, name: 'Mary'),
-    ],
-  ),
+  (ref) => listFrom([]),
 );
 
 /// Provides the initial state of the game based on the [GameConfig] from [gameConfigProvider] and list of players from [serverPlayersProvider]
