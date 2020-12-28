@@ -1,7 +1,7 @@
 name: game_scaffold_test
 description: A simple command-line application.
-# version: 1.0.0
-# homepage: https://www.example.com
+version: 0.0.1
+homepage: https://www.github.com/TimWhiting/game_scaffold
 
 environment:
   sdk: ">=2.10.0 <3.0.0"
@@ -9,6 +9,7 @@ environment:
 dependencies:
   game_scaffold_dart: ^0.0.3
   test: any
+  meta: any
 
 dev_dependencies:
   pedantic: ^1.9.0
