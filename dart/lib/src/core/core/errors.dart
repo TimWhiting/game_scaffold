@@ -26,7 +26,7 @@ abstract class GameOrError<T extends Game> with _$GameOrError {
   String get errorString => isError ? error.message : 'No Error';
 
   /// Returns the game value or null
-  T get value => when(error: (m, p) => null, game: (g) => g);
+  T get value => when(error: (m, p) => null, game: (g) => g as T);
 
   /// Returns whether this instance is a game
   bool get isGame => this is GameValue;
@@ -34,7 +34,7 @@ abstract class GameOrError<T extends Game> with _$GameOrError {
       _$GameOrErrorFromJson(json);
 }
 
-extension GameOrErrorGameX on Game {
+extension GameOrErrorGameX<E extends Event> on Game<E> {
   GameOrError get gameValue => GameValue(this);
 }
 

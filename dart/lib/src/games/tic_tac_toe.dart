@@ -53,7 +53,10 @@ abstract class TicTacToeGame
   }
 
   bool canMove(String player, int location) {
-    return location >= 0 && location < 9 && board[location] == null;
+    return player == currentPlayer.id &&
+        location >= 0 &&
+        location < 9 &&
+        board[location] == null;
   }
 
   @override
