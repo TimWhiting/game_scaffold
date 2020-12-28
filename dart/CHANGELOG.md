@@ -1,3 +1,7 @@
+## 0.0.3
+
+- Some updates for min / max players
+
 ## 0.0.2+3
 
 - Export games for testing
