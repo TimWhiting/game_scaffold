@@ -1,3 +1,7 @@
+## 0.0.2+3
+
+- Export games for testing
+
 ## 0.0.2+2
 
 - Fix exports
