@@ -19,7 +19,7 @@ void testGame<T extends Game>(
       }
       read(gameClientProvider(players.first.id)).startGame();
     });
-    test(name + 'tests', () {
+    test(name + '_Tests', () {
       for (final index in 0.rangeTo(events.length - 1)) {
         if (events[index] != null) {
           read(gameProvider).handleEvent(events[index].asGameEvent);
