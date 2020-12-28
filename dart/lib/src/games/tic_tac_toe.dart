@@ -25,14 +25,12 @@ abstract class TicTacToeGame
 
   GameOrError _handleMove(String player, int location) {
     if (!canMove(player, location)) {
-      return GameOrError.error(GameError('Location not valid', player));
+      return GameError('Location not valid', player);
     }
 
-    return GameOrError.game(
-      copyWith(
-        board: (board.toMutableList()..[location] = player).toList(),
-      )._nextPlayerOrEndRound(),
-    );
+    return copyWith(
+      board: (board.toMutableList()..[location] = player).toList(),
+    )._nextPlayerOrEndRound().gameValue;
   }
 
   TicTacToeGame _nextPlayerOrEndRound() {
