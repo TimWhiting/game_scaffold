@@ -30,7 +30,7 @@ void testGame<T extends Game>(
       }
     });
     darttest.test(name + '_Tests', () {
-      test(GameTester<T>(read));
+      test(GameTester<T>(read, players));
     });
   });
 }
@@ -41,8 +41,9 @@ void testGame<T extends Game>(
 /// and check the properties you want
 class GameTester<T extends Game> {
   final Reader _read;
+  final List<Player> _players;
 
-  GameTester(this._read);
+  GameTester(this._read, this._players);
 
   /// Event lets you test the [outcome] of an [event]
   ///
@@ -75,4 +76,13 @@ class GameTester<T extends Game> {
   ///
   /// If testing the outcome of an event prefer using [event]
   GameError get error => _read(gameErrorProvider).error;
+
+  /// Advances to the next round, and checks the [expectation] of the game after
+  /// the round has advanced
+  void nextRound(Function(T) expectation) {
+    for (final p in _players) {
+      _read(gameClientProvider(p.id)).newRound();
+    }
+    expectation(game);
+  }
 }
