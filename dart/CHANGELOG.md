@@ -1,3 +1,7 @@
+## 0.0.3+1
+
+- Fix some socket-io errors
+
 ## 0.0.3
 
 - Some updates for min / max players

@@ -92,14 +92,22 @@ class GameServer {
     _gameErrorListenerDisposer = _gameError.addListener(_sendError);
     _serverLogger.info('Creating Game Server');
     _serverLogger.info('Listening on namespace /$_gameId');
-    _socket.on(IOChannel.connection.string, _handleClientConnection);
+    _socket.on(
+      IOChannel.connection.string,
+      (client) => _handleClientConnection(client),
+    );
   }
 
   void _handleClientConnection(IO.Socket client) {
     _serverLogger.info('Game server namespace $_gameId connected to client');
     client.on(
-        IOChannel.register.string, (data) => _handleRegister(client, data));
-    client.on(IOChannel.event.string, _handleRequest);
+      IOChannel.register.string,
+      (data) => _handleRegister(client, data),
+    );
+    client.on(
+      IOChannel.event.string,
+      (data) => _handleRequest(data),
+    );
     if (_gameState.gameState != null) {
       _serverLogger.info('Sending first update');
       _sendUpdates(_gameState.gameState);
@@ -114,7 +122,9 @@ class GameServer {
     final id = data['id'] as String;
 
     client.on(
-        IOChannel.disconnect.string, (data) => _handleDisconnect(client, data));
+      IOChannel.disconnect.string,
+      (data) => _handleDisconnect(client, data),
+    );
     // Player rejoining
     if (_clients.containsKey(id)) {
       // The player already exists, and is in the game

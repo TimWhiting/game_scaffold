@@ -41,7 +41,10 @@ class IOServer {
       print('[${record.level.name}]: ${record.message}');
     });
 
-    io.on(IOChannel.connection.string, _handleClientConnection);
+    io.on(
+      IOChannel.connection.string,
+      (client) => _handleClientConnection(client),
+    );
     final server = StreamServer();
     if (https) {
       assert(pathToPem != null);
