@@ -105,7 +105,7 @@ abstract class Game<E extends Event> {
 
   /// Registers the set of general events
   static void registerGeneralEvents() {
-    _eventFromJsonFactory['GeneralEvent'] =
+    _eventFromJsonFactory['GenericEvent'] =
         (Map<String, dynamic> j) => GenericEvent.fromJson(j).asGameEvent;
   }
 

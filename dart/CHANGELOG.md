@@ -1,3 +1,7 @@
+## 0.0.3+2
+
+- Fix issue with GenericEvent
+
 ## 0.0.3+1
 
 - Fix some socket-io errors
