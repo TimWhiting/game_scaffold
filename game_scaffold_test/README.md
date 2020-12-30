@@ -60,6 +60,12 @@ void main() {
         expect(game.isLoser(P2), true);
         expect(game.roundOver, true);
       });
+      tester.nextRound((game) {
+        expect(game.playerRoundScores[P1], listOf(1));
+        expect(game.playerRoundScores[P2], listOf(0));
+        expect(game.totalScores[P1], 1);
+        expect(game.totalScores[P2], 0);
+      });
     },
   );
 }

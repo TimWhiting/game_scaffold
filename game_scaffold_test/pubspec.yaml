@@ -1,6 +1,6 @@
 name: game_scaffold_test
 description: A simple command-line application.
-version: 0.0.2
+version: 0.0.2+1
 homepage: https://www.github.com/TimWhiting/game_scaffold
 
 environment:
