@@ -1,3 +1,7 @@
+## 0.0.3+3
+
+- Add another helper method to GenericGame to updateScores by itself, and made the scores in moveNextRound optional
+
 ## 0.0.3+2
 
 - Fix issue with GenericEvent

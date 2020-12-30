@@ -90,13 +90,21 @@ abstract class GenericGame with _$GenericGame {
         messages: messages.plusElement(msg),
       );
 
-  /// Returns a copy of the [GenericGame] with the [round] incremented
-  /// and the players' [scores] added to [allRoundScores]
-  GenericGame finishRound(KtMap<String, double> scores) => copyWith(
+  /// Returns a copy of the [GenericGame] with the [round] incremented,
+  /// [gameStatus] set to [GameStatus.Started] and optionally the
+  /// players' [scores] added to [allRoundScores]
+  GenericGame finishRound([KtMap<String, double> scores]) => scores != null
+      ? updateScores(scores).copyWith(
+          round: round + 1,
+          gameStatus: GameStatus.Started,
+        )
+      : copyWith(round: round + 1, gameStatus: GameStatus.Started);
+
+  /// Returns a copy of the [GenericGame] with the [scores] added to
+  /// [allRoundScores]
+  GenericGame updateScores(KtMap<String, double> scores) => copyWith(
         allRoundScores:
             allRoundScores.plusElement(players.map((p) => scores[p.id])),
-        round: round + 1,
-        gameStatus: GameStatus.Started,
       );
 
   /// Returns a copy of the [GenericGame] with the [gameStatus] updated to [status]
