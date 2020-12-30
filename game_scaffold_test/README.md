@@ -17,7 +17,7 @@ void main() {
   TicTacToeGame.register();
 
   testGame<TicTacToeGame>(
-    'TicTacToe',
+    'TicTacToe', 
     config: GameConfig(
         gameType: 'tictactoe', rounds: 3, customNames: false, maxPlayers: 2),
     players: [
