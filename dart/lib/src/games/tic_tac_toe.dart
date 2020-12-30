@@ -19,11 +19,11 @@ abstract class TicTacToeGame
       _$TicTacToeGameFromJson(map);
 
   @override
-  GameOrError next(TicTacToeGameEvent event, Reader read) {
+  GameOrError<TicTacToeGame> next(TicTacToeGameEvent event, Reader read) {
     return _handleMove(event.player, event.location);
   }
 
-  GameOrError _handleMove(String player, int location) {
+  GameOrError<TicTacToeGame> _handleMove(String player, int location) {
     if (player != currentPlayer.id) {
       return GameError('Not your turn', player);
     }
@@ -33,7 +33,7 @@ abstract class TicTacToeGame
 
     return copyWith(
       board: (board.toMutableList()..[location] = player).toList(),
-    )._nextPlayerOrEndRound().gameValue;
+    )._nextPlayerOrEndRound().gameValue();
   }
 
   TicTacToeGame _nextPlayerOrEndRound() {

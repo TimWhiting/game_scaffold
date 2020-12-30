@@ -35,7 +35,7 @@ abstract class GameOrError<T extends Game> with _$GameOrError {
 }
 
 extension GameOrErrorGameX<E extends Event> on Game<E> {
-  GameOrError get gameValue => GameValue(this);
+  GameOrError<G> gameValue<G extends Game<E>>() => GameValue(this);
 }
 
 class GameConverter<T extends Game>
