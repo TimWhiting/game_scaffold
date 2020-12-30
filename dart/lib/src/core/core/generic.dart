@@ -5,6 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'events.dart';
 import 'game.dart';
 import 'player.dart';
+import 'extensions.dart';
 part 'generic.freezed.dart';
 part 'generic.g.dart';
 
@@ -109,6 +110,12 @@ abstract class GenericGame with _$GenericGame {
 
   /// Returns a copy of the [GenericGame] with the [gameStatus] updated to [status]
   GenericGame updateStatus(GameStatus status) => copyWith(gameStatus: status);
+
+  /// Shuffles the player list, and resets the [currentPlayerIndex] to the first
+  GenericGame shufflePlayers() => copyWith(
+        players: players.shuffled,
+        currentPlayerIndex: 0,
+      );
 }
 
 /// A [GenericEvent] that is handled by the Generic server implementation

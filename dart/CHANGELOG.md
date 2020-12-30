@@ -1,3 +1,7 @@
+## 0.0.3+5
+
+- Fix some errors from the last update, and also change `playerIds` to `playerIDs`.
+  
 ## 0.0.3+4
 
 - Make `gameValue` extension more strongly typed -- now a method

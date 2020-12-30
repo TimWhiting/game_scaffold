@@ -89,9 +89,9 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
       general: (e) => e.maybeWhen(
         undo: () {
           _previousStates.removeLast();
-          return _previousStates.removeLast().gameValue;
+          return _previousStates.removeLast().gameValue();
         },
-        start: () => read(gameInitialStateProvider).gameValue,
+        start: () => read(gameInitialStateProvider).gameValue(),
         readyNextRound: (e) {
           if (_readyPlayers.length > 1) {
             _previousStates.remove(state);
@@ -99,13 +99,13 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
           _readyPlayers.add(e);
           if (_readyPlayers.length == state.players.size) {
             _readyPlayers.clear();
-            return state.moveNextRound(read).gameValue;
+            return state.moveNextRound(read).gameValue();
           }
-          return state.gameValue;
+          return state.gameValue();
         },
         message: (_, __, ___) => state
             .copyWithGeneric((g) => g.addMessage(e as GameMessage).updateTime())
-            .gameValue,
+            .gameValue(),
         orElse: () =>
             GameError('General Event not implemented yet $e', 'programmer'),
       ),

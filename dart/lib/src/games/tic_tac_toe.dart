@@ -38,7 +38,7 @@ abstract class TicTacToeGame
 
   TicTacToeGame _nextPlayerOrEndRound() {
     var gGame = generic.nextPlayer();
-    if (playerIds.any((p) => isWinner(p)) || board.all((l) => l != null)) {
+    if (playerIDs.any((p) => isWinner(p)) || board.all((l) => l != null)) {
       if (round == 2) {
         gGame = gGame
             .finishRound(
@@ -80,7 +80,7 @@ abstract class TicTacToeGame
   KtMap<String, double> get points {
     return mapFrom(
       {
-        for (final p in playerIds.iter)
+        for (final p in playerIDs.iter)
           p: isWinner(p)
               ? 1
               : isLoser(p)
@@ -110,7 +110,7 @@ abstract class TicTacToeGame
   }
 
   bool isLoser(String playerID) {
-    if (isWinner(playerIds.first((id) => id != playerID))) {
+    if (isWinner(playerIDs.first((id) => id != playerID))) {
       return true;
     } else {
       return false;

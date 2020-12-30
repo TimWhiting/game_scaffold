@@ -21,7 +21,7 @@ Future<void> main(List<String> arguments) async {
   await read(gameClientProvider(P1)).register();
   await read(gameClientProvider(P2)).register();
 
-  print(read(gameProvider).gameState.playerIds.asList());
+  print(read(gameProvider).gameState.playerIDs.asList());
   print(read(gameProvider).gameState.gameStatus);
   while (!read(gameProvider).gameState.gameOver) {
     await loop(read);

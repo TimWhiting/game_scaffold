@@ -20,14 +20,20 @@ extension EventX on Event {
 
 /// Some extensions on [Game] to more easiliy get some of the [GenericGame] fields
 extension GameX on Game {
+  /// Gets the current player's index
+  int get currentPlayerIndex => generic.currentPlayerIndex;
+
   /// Gets the current [Player] or null if the game is not turn based
   Player get currentPlayer => generic.currentPlayer;
+
+  /// Gets the current Player ID
+  String get currentPlayerID => generic.currentPlayer.id;
 
   /// Gets the players that are a part of this game
   KtList<Player> get players => generic.players;
 
   /// Gets the players that are a part of this game
-  KtList<String> get playerIds => generic.players.map((p) => p.id);
+  KtList<String> get playerIDs => generic.players.map((p) => p.id);
 
   /// Gets the [DateTime] that this state was updated
   DateTime get time => generic.time;
@@ -37,9 +43,6 @@ extension GameX on Game {
 
   /// Gets the [GameStatus] of the game
   GameStatus get gameStatus => generic.gameStatus;
-
-  /// Gets the current player's index
-  int get currentPlayerIndex => generic.currentPlayerIndex;
 
   /// Gets the current round number
   int get round => generic.round;
@@ -60,4 +63,10 @@ extension GameX on Game {
 
   /// Gets whether the round is over
   bool get roundOver => generic.roundOver;
+}
+
+extension GameKtListExtensions<T> on KtList<T> {
+  /// Gets a copy of this list with the elements shuffled
+  KtList<T> get shuffled =>
+      (toMutableList().asList()..shuffle()).toImmutableList();
 }
