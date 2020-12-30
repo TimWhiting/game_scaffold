@@ -1,3 +1,7 @@
+## 0.0.3+4
+
+- Make `gameValue` extension more strongly typed -- now a method
+
 ## 0.0.3+3
 
 - Add another helper method to GenericGame to updateScores by itself, and made the scores in moveNextRound optional
