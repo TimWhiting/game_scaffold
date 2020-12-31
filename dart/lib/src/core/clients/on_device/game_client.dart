@@ -33,6 +33,15 @@ class NoServerGameClient extends GameClient {
     if (_players.length == config.maxPlayers && config.autoStart) {
       sendEvent(GenericEvent.start());
     }
+    for (final pID in _players) {
+      read(gameLobbyProvider(pID.id)).state = GameInfo(
+        gameCode,
+        _players.map((p) => p.name),
+        pID.name,
+        false,
+        config.gameType,
+      );
+    }
   }
 
   void _watchState() {

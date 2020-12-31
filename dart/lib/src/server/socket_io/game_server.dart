@@ -98,6 +98,14 @@ class GameServer {
     );
   }
 
+  GameInfo gameInfo(String id) => GameInfo(
+        _gameId,
+        _players.map((p) => p.name),
+        _clientNames[id],
+        isClientAdmin(id),
+        gameType,
+      );
+
   void _handleClientConnection(IO.Socket client) {
     _serverLogger.info('Game server namespace $_gameId connected to client');
     client.on(
@@ -151,6 +159,9 @@ class GameServer {
         mainServer.addClientToGame(id, _gameId);
         _clients[id] = client;
         _clientNames[id] = name;
+      }
+      for (final client in _clients.entries) {
+        client.value?.emit(IOChannel.lobby.string, gameInfo(id));
       }
       if (_players.length == gameConfig.maxPlayers && gameConfig.autoStart) {
         _gameState.handleEvent(GenericEvent.start().asGameEvent);
@@ -231,4 +242,7 @@ class GameServer {
       client?.emit(IOChannel.gamedeleted.string, true);
     }
   }
+
+  String clientID(IO.Socket client) =>
+      _clients.entries.firstWhere((c) => c.value == client).key;
 }

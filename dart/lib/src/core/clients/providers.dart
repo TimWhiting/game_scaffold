@@ -65,6 +65,10 @@ final gameClientProvider = Provider.family<GameClient, String>((ref, id) {
 final gameInfoProvider =
     StateProvider.family<GameInfo, String>((ref, id) => null);
 
+/// Provides game lobby info in the form of [GameInfo] for the lobby
+final gameLobbyProvider =
+    StateProvider.family<GameInfo, String>((ref, id) => null);
+
 /// Provides the game info of all games that the client with the specified id
 /// is a part of
 final gamesProvider = FutureProvider.family<List<GameInfo>, String>(

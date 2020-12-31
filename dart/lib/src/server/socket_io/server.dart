@@ -98,7 +98,7 @@ class IOServer {
   void _getGameInfo(IO.Socket client, String id) {
     if (servers.containsKey(id)) {
       client.emit(IOChannel.gameinfo.string,
-          GameInfo(id, [], '', false, servers[id].gameType).toJson());
+          servers[id].gameInfo(servers[id].clientID(client)));
     } else {
       client.emit(IOChannel.gameinfo.string, '404');
     }

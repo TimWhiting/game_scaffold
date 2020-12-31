@@ -28,6 +28,7 @@ enum IOChannel {
   disconnect,
   getgames,
   allgames,
+  lobby,
 }
 
 extension IOChannelX on IOChannel {
@@ -47,6 +48,7 @@ extension IOChannelX on IOChannel {
     final error = UnimplementedError('No corresponding response channel');
 
     switch (this) {
+      case IOChannel.lobby:
       case IOChannel.error:
       case IOChannel.gamestate:
       case IOChannel.event:

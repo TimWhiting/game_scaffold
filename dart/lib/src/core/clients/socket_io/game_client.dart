@@ -21,6 +21,7 @@ class IOGameClient extends GameClient {
   void exitGame() {
     socket.off(IOChannel.error.string);
     socket.off(IOChannel.gamestate.string);
+    socket.off(IOChannel.lobby.string);
     read(gameStatusProvider(id)).state = GameStatus.NotJoined;
   }
 
@@ -29,14 +30,23 @@ class IOGameClient extends GameClient {
     read(gameStatusProvider(id)).state = GameStatus.NotJoined;
     final assignedName = await socket.call(IOChannel.register,
         {'name': read(playerNameProvider(id)).state, 'id': id});
+
     read(playerNameProvider(id)).state = assignedName as String;
     read(gameStatusProvider(id)).state = GameStatus.NotStarted;
     _watchState();
   }
 
+  void _onLobby(Map<String, dynamic> lobby) {
+    socket.on(IOChannel.lobby.string, (data) {
+      final gameInfo = GameInfo.fromJson(data);
+      read(gameLobbyProvider(id)).state = gameInfo;
+    });
+  }
+
   void _watchState() {
     socket.on(IOChannel.gamestate.string, (data) {
       final gameState = Game.fromJson(data as Map<String, dynamic>);
+      socket.off(IOChannel.lobby.string, _onLobby);
       print(data);
       read(gameStateProvider(id)).state = gameState;
       read(gameStatusProvider(id)).state = gameState.gameStatus;
