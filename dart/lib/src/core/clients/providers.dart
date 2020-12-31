@@ -10,7 +10,8 @@ const defaultGamePort = 45912;
 const defaultAddress = 'your game server ip';
 
 /// The provider that controls which game server address to connect to
-final selectedAddress = StateProvider.family((ref, id) => defaultAddress);
+final selectedAddress =
+    StateProvider.family<String, String>((ref, id) => defaultAddress);
 
 /// An enum for the location of the game server
 // enum GameServerLocation { OnDevice, IOServer, Firebase }

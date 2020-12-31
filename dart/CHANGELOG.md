@@ -1,3 +1,7 @@
+## 0.0.3+7
+
+- Fix typing issue
+
 ## 0.0.3+6
 
 - Update more providers to be uniquely identified and refactor to make backend providers more clearly separate
