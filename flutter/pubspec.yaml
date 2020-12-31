@@ -10,10 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_riverpod: any
-  hooks_riverpod: any
-
-  game_scaffold_dart: any
+  riverpod: ^0.12.1
+  flutter_riverpod: ^0.12.1
+  hooks_riverpod: ^0.12.1
+  game_scaffold_dart: ^0.0.3
 
 dev_dependencies:
   flutter_test:
