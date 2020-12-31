@@ -168,7 +168,7 @@ abstract class GameConfig with _$GameConfig {
     @Default(10) int maxPlayers,
     @Default(true) bool autoStart,
 
-    /// [options must be json serializable]
+    /// [options] must be json serializable
     Map<String, dynamic> options,
   }) = _GameConfig;
   factory GameConfig.fromJson(Map<String, dynamic> map) =>

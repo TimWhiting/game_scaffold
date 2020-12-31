@@ -289,8 +289,6 @@ GenericEvent _$GenericEventFromJson(Map<String, dynamic> json) {
       return _GenericEventStart.fromJson(json);
     case 'readyNextRound':
       return _GenericReadyNextRoundEvent.fromJson(json);
-    case 'addPlayer':
-      return _GenericEventAddPlayer.fromJson(json);
     case 'message':
       return GameMessage.fromJson(json);
 
@@ -316,13 +314,6 @@ class _$GenericEventTearOff {
 // ignore: unused_element
   _GenericReadyNextRoundEvent readyNextRound(String player) {
     return _GenericReadyNextRoundEvent(
-      player,
-    );
-  }
-
-// ignore: unused_element
-  _GenericEventAddPlayer addPlayer(Player player) {
-    return _GenericEventAddPlayer(
       player,
     );
   }
@@ -354,7 +345,6 @@ mixin _$GenericEvent {
     @required Result undo(),
     @required Result start(),
     @required Result readyNextRound(String player),
-    @required Result addPlayer(Player player),
     @required Result message(String message, String from, @nullable String to),
   });
   @optionalTypeArgs
@@ -362,7 +352,6 @@ mixin _$GenericEvent {
     Result undo(),
     Result start(),
     Result readyNextRound(String player),
-    Result addPlayer(Player player),
     Result message(String message, String from, @nullable String to),
     @required Result orElse(),
   });
@@ -371,7 +360,6 @@ mixin _$GenericEvent {
     @required Result undo(_GenericEventUndo value),
     @required Result start(_GenericEventStart value),
     @required Result readyNextRound(_GenericReadyNextRoundEvent value),
-    @required Result addPlayer(_GenericEventAddPlayer value),
     @required Result message(GameMessage value),
   });
   @optionalTypeArgs
@@ -379,7 +367,6 @@ mixin _$GenericEvent {
     Result undo(_GenericEventUndo value),
     Result start(_GenericEventStart value),
     Result readyNextRound(_GenericReadyNextRoundEvent value),
-    Result addPlayer(_GenericEventAddPlayer value),
     Result message(GameMessage value),
     @required Result orElse(),
   });
@@ -449,13 +436,11 @@ class _$_GenericEventUndo extends _GenericEventUndo {
     @required Result undo(),
     @required Result start(),
     @required Result readyNextRound(String player),
-    @required Result addPlayer(Player player),
     @required Result message(String message, String from, @nullable String to),
   }) {
     assert(undo != null);
     assert(start != null);
     assert(readyNextRound != null);
-    assert(addPlayer != null);
     assert(message != null);
     return undo();
   }
@@ -466,7 +451,6 @@ class _$_GenericEventUndo extends _GenericEventUndo {
     Result undo(),
     Result start(),
     Result readyNextRound(String player),
-    Result addPlayer(Player player),
     Result message(String message, String from, @nullable String to),
     @required Result orElse(),
   }) {
@@ -483,13 +467,11 @@ class _$_GenericEventUndo extends _GenericEventUndo {
     @required Result undo(_GenericEventUndo value),
     @required Result start(_GenericEventStart value),
     @required Result readyNextRound(_GenericReadyNextRoundEvent value),
-    @required Result addPlayer(_GenericEventAddPlayer value),
     @required Result message(GameMessage value),
   }) {
     assert(undo != null);
     assert(start != null);
     assert(readyNextRound != null);
-    assert(addPlayer != null);
     assert(message != null);
     return undo(this);
   }
@@ -500,7 +482,6 @@ class _$_GenericEventUndo extends _GenericEventUndo {
     Result undo(_GenericEventUndo value),
     Result start(_GenericEventStart value),
     Result readyNextRound(_GenericReadyNextRoundEvent value),
-    Result addPlayer(_GenericEventAddPlayer value),
     Result message(GameMessage value),
     @required Result orElse(),
   }) {
@@ -572,13 +553,11 @@ class _$_GenericEventStart extends _GenericEventStart {
     @required Result undo(),
     @required Result start(),
     @required Result readyNextRound(String player),
-    @required Result addPlayer(Player player),
     @required Result message(String message, String from, @nullable String to),
   }) {
     assert(undo != null);
     assert(start != null);
     assert(readyNextRound != null);
-    assert(addPlayer != null);
     assert(message != null);
     return start();
   }
@@ -589,7 +568,6 @@ class _$_GenericEventStart extends _GenericEventStart {
     Result undo(),
     Result start(),
     Result readyNextRound(String player),
-    Result addPlayer(Player player),
     Result message(String message, String from, @nullable String to),
     @required Result orElse(),
   }) {
@@ -606,13 +584,11 @@ class _$_GenericEventStart extends _GenericEventStart {
     @required Result undo(_GenericEventUndo value),
     @required Result start(_GenericEventStart value),
     @required Result readyNextRound(_GenericReadyNextRoundEvent value),
-    @required Result addPlayer(_GenericEventAddPlayer value),
     @required Result message(GameMessage value),
   }) {
     assert(undo != null);
     assert(start != null);
     assert(readyNextRound != null);
-    assert(addPlayer != null);
     assert(message != null);
     return start(this);
   }
@@ -623,7 +599,6 @@ class _$_GenericEventStart extends _GenericEventStart {
     Result undo(_GenericEventUndo value),
     Result start(_GenericEventStart value),
     Result readyNextRound(_GenericReadyNextRoundEvent value),
-    Result addPlayer(_GenericEventAddPlayer value),
     Result message(GameMessage value),
     @required Result orElse(),
   }) {
@@ -721,13 +696,11 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
     @required Result undo(),
     @required Result start(),
     @required Result readyNextRound(String player),
-    @required Result addPlayer(Player player),
     @required Result message(String message, String from, @nullable String to),
   }) {
     assert(undo != null);
     assert(start != null);
     assert(readyNextRound != null);
-    assert(addPlayer != null);
     assert(message != null);
     return readyNextRound(player);
   }
@@ -738,7 +711,6 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
     Result undo(),
     Result start(),
     Result readyNextRound(String player),
-    Result addPlayer(Player player),
     Result message(String message, String from, @nullable String to),
     @required Result orElse(),
   }) {
@@ -755,13 +727,11 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
     @required Result undo(_GenericEventUndo value),
     @required Result start(_GenericEventStart value),
     @required Result readyNextRound(_GenericReadyNextRoundEvent value),
-    @required Result addPlayer(_GenericEventAddPlayer value),
     @required Result message(GameMessage value),
   }) {
     assert(undo != null);
     assert(start != null);
     assert(readyNextRound != null);
-    assert(addPlayer != null);
     assert(message != null);
     return readyNextRound(this);
   }
@@ -772,7 +742,6 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
     Result undo(_GenericEventUndo value),
     Result start(_GenericEventStart value),
     Result readyNextRound(_GenericReadyNextRoundEvent value),
-    Result addPlayer(_GenericEventAddPlayer value),
     Result message(GameMessage value),
     @required Result orElse(),
   }) {
@@ -801,170 +770,6 @@ abstract class _GenericReadyNextRoundEvent extends GenericEvent {
   String get player;
   _$GenericReadyNextRoundEventCopyWith<_GenericReadyNextRoundEvent>
       get copyWith;
-}
-
-/// @nodoc
-abstract class _$GenericEventAddPlayerCopyWith<$Res> {
-  factory _$GenericEventAddPlayerCopyWith(_GenericEventAddPlayer value,
-          $Res Function(_GenericEventAddPlayer) then) =
-      __$GenericEventAddPlayerCopyWithImpl<$Res>;
-  $Res call({Player player});
-
-  $PlayerCopyWith<$Res> get player;
-}
-
-/// @nodoc
-class __$GenericEventAddPlayerCopyWithImpl<$Res>
-    extends _$GenericEventCopyWithImpl<$Res>
-    implements _$GenericEventAddPlayerCopyWith<$Res> {
-  __$GenericEventAddPlayerCopyWithImpl(_GenericEventAddPlayer _value,
-      $Res Function(_GenericEventAddPlayer) _then)
-      : super(_value, (v) => _then(v as _GenericEventAddPlayer));
-
-  @override
-  _GenericEventAddPlayer get _value => super._value as _GenericEventAddPlayer;
-
-  @override
-  $Res call({
-    Object player = freezed,
-  }) {
-    return _then(_GenericEventAddPlayer(
-      player == freezed ? _value.player : player as Player,
-    ));
-  }
-
-  @override
-  $PlayerCopyWith<$Res> get player {
-    if (_value.player == null) {
-      return null;
-    }
-    return $PlayerCopyWith<$Res>(_value.player, (value) {
-      return _then(_value.copyWith(player: value));
-    });
-  }
-}
-
-@JsonSerializable()
-
-/// @nodoc
-class _$_GenericEventAddPlayer extends _GenericEventAddPlayer {
-  const _$_GenericEventAddPlayer(this.player)
-      : assert(player != null),
-        super._();
-
-  factory _$_GenericEventAddPlayer.fromJson(Map<String, dynamic> json) =>
-      _$_$_GenericEventAddPlayerFromJson(json);
-
-  @override
-  final Player player;
-
-  @override
-  String toString() {
-    return 'GenericEvent.addPlayer(player: $player)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other is _GenericEventAddPlayer &&
-            (identical(other.player, player) ||
-                const DeepCollectionEquality().equals(other.player, player)));
-  }
-
-  @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(player);
-
-  @override
-  _$GenericEventAddPlayerCopyWith<_GenericEventAddPlayer> get copyWith =>
-      __$GenericEventAddPlayerCopyWithImpl<_GenericEventAddPlayer>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result undo(),
-    @required Result start(),
-    @required Result readyNextRound(String player),
-    @required Result addPlayer(Player player),
-    @required Result message(String message, String from, @nullable String to),
-  }) {
-    assert(undo != null);
-    assert(start != null);
-    assert(readyNextRound != null);
-    assert(addPlayer != null);
-    assert(message != null);
-    return addPlayer(player);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result undo(),
-    Result start(),
-    Result readyNextRound(String player),
-    Result addPlayer(Player player),
-    Result message(String message, String from, @nullable String to),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (addPlayer != null) {
-      return addPlayer(player);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result undo(_GenericEventUndo value),
-    @required Result start(_GenericEventStart value),
-    @required Result readyNextRound(_GenericReadyNextRoundEvent value),
-    @required Result addPlayer(_GenericEventAddPlayer value),
-    @required Result message(GameMessage value),
-  }) {
-    assert(undo != null);
-    assert(start != null);
-    assert(readyNextRound != null);
-    assert(addPlayer != null);
-    assert(message != null);
-    return addPlayer(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result undo(_GenericEventUndo value),
-    Result start(_GenericEventStart value),
-    Result readyNextRound(_GenericReadyNextRoundEvent value),
-    Result addPlayer(_GenericEventAddPlayer value),
-    Result message(GameMessage value),
-    @required Result orElse(),
-  }) {
-    assert(orElse != null);
-    if (addPlayer != null) {
-      return addPlayer(this);
-    }
-    return orElse();
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$_$_GenericEventAddPlayerToJson(this)
-      ..['runtimeType'] = 'addPlayer';
-  }
-}
-
-abstract class _GenericEventAddPlayer extends GenericEvent {
-  const _GenericEventAddPlayer._() : super._();
-  const factory _GenericEventAddPlayer(Player player) =
-      _$_GenericEventAddPlayer;
-
-  factory _GenericEventAddPlayer.fromJson(Map<String, dynamic> json) =
-      _$_GenericEventAddPlayer.fromJson;
-
-  Player get player;
-  _$GenericEventAddPlayerCopyWith<_GenericEventAddPlayer> get copyWith;
 }
 
 /// @nodoc
@@ -1055,13 +860,11 @@ class _$GameMessage extends GameMessage {
     @required Result undo(),
     @required Result start(),
     @required Result readyNextRound(String player),
-    @required Result addPlayer(Player player),
     @required Result message(String message, String from, @nullable String to),
   }) {
     assert(undo != null);
     assert(start != null);
     assert(readyNextRound != null);
-    assert(addPlayer != null);
     assert(message != null);
     return message(this.message, from, to);
   }
@@ -1072,7 +875,6 @@ class _$GameMessage extends GameMessage {
     Result undo(),
     Result start(),
     Result readyNextRound(String player),
-    Result addPlayer(Player player),
     Result message(String message, String from, @nullable String to),
     @required Result orElse(),
   }) {
@@ -1089,13 +891,11 @@ class _$GameMessage extends GameMessage {
     @required Result undo(_GenericEventUndo value),
     @required Result start(_GenericEventStart value),
     @required Result readyNextRound(_GenericReadyNextRoundEvent value),
-    @required Result addPlayer(_GenericEventAddPlayer value),
     @required Result message(GameMessage value),
   }) {
     assert(undo != null);
     assert(start != null);
     assert(readyNextRound != null);
-    assert(addPlayer != null);
     assert(message != null);
     return message(this);
   }
@@ -1106,7 +906,6 @@ class _$GameMessage extends GameMessage {
     Result undo(_GenericEventUndo value),
     Result start(_GenericEventStart value),
     Result readyNextRound(_GenericReadyNextRoundEvent value),
-    Result addPlayer(_GenericEventAddPlayer value),
     Result message(GameMessage value),
     @required Result orElse(),
   }) {

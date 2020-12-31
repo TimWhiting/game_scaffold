@@ -41,12 +41,12 @@ abstract class GameClient {
   /// Disposes of the game client
   void dispose();
 
-  /// Registers a [GameClient] implementation for the given [GameServerLocation]
+  /// Registers a [GameClient] implementation for the given [location]
   static void registerImplementation<T extends GameClient>(
-    String loc,
+    String location,
     T Function(Reader read, String address, String id, String gameCode) impl,
   ) {
-    _clientImplementations[loc] = impl;
+    _clientImplementations[location] = impl;
   }
 
   static final Map<String, GameClient Function(Reader, String, String, String)>

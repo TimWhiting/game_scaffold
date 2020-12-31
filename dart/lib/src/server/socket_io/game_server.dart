@@ -160,9 +160,7 @@ class GameServer {
         _clients[id] = client;
         _clientNames[id] = name;
       }
-      for (final client in _clients.entries) {
-        client.value?.emit(IOChannel.lobby.string, gameInfo(id));
-      }
+
       if (_players.length == gameConfig.maxPlayers && gameConfig.autoStart) {
         _gameState.handleEvent(GenericEvent.start().asGameEvent);
       }
@@ -177,6 +175,9 @@ class GameServer {
   void _addPlayer(Player player) {
     _players.add(player);
     _read(backendPlayersProvider).state = _players.toImmutableList();
+    for (final client in _clients.entries) {
+      client.value?.emit(IOChannel.lobby.string, gameInfo(id).toJson());
+    }
   }
 
   void _sendUpdates(Game state) {

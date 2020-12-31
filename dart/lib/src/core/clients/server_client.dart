@@ -43,12 +43,12 @@ abstract class ServerClient {
   /// Disconnects from the server
   void disconnect();
 
-  /// Registers a particular implementation of [ServerClient] for the given [GameServerLocation]
+  /// Registers a particular implementation of [ServerClient] for the given [location]
   static void registerImplementation<T extends ServerClient>(
-    String loc,
+    String location,
     T Function(Reader, String, String) impl,
   ) {
-    _clientImplementations[loc] = impl;
+    _clientImplementations[location] = impl;
   }
 
   static final Map<String, ServerClient Function(Reader, String, String)>

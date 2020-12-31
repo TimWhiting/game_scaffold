@@ -1,5 +1,9 @@
 ## 0.0.3+8
 
+- Fix some game info logic & publish API documentation
+  
+## 0.0.3+8
+
 - Add in some lobby logic
 
 ## 0.0.3+7

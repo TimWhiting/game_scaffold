@@ -25,7 +25,7 @@ final backendPlayersProvider = StateProvider<KtList<Player>>(
 /// Keeps track
 final backendGameConfigProvider = StateProvider<GameConfig>((ref) => null);
 
-/// Provides the initial state of the game based on the [GameConfig] from [gameConfigProvider] and list of players from [serverPlayersProvider]
+/// Provides the initial state of the game based on the [GameConfig] from [gameConfigProvider] and list of players from [backendPlayersProvider]
 final gameInitialStateProvider = Provider<Game>((ref) {
   final gameConfig = ref.watch(backendGameConfigProvider).state;
   final players = ref.read(backendPlayersProvider).state;

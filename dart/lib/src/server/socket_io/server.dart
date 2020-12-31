@@ -98,7 +98,7 @@ class IOServer {
   void _getGameInfo(IO.Socket client, String id) {
     if (servers.containsKey(id)) {
       client.emit(IOChannel.gameinfo.string,
-          servers[id].gameInfo(servers[id].clientID(client)));
+          servers[id].gameInfo(servers[id].clientID(client)).toJson());
     } else {
       client.emit(IOChannel.gameinfo.string, '404');
     }
@@ -145,17 +145,8 @@ class IOServer {
   void _updateGames(String id, IO.Socket client) {
     logger.info('Getting all games for $id');
     final games = _clientGames[id];
-    final gameInfo = games
-        .map(
-          (g) => GameInfo(
-            g,
-            servers[g].playerNames.asList(),
-            servers[g].getClientName(id),
-            servers[g].isClientAdmin(id),
-            servers[g].gameType,
-          ).toJson(),
-        )
-        .toList();
+    final gameInfo =
+        games.map((g) => servers[g].gameInfo(id).toJson()).toList();
     client.emit(IOChannel.allgames.string, json.encode(gameInfo));
   }
 

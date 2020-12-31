@@ -112,21 +112,6 @@ Map<String, dynamic> _$_$_GenericReadyNextRoundEventToJson(
       'player': instance.player,
     };
 
-_$_GenericEventAddPlayer _$_$_GenericEventAddPlayerFromJson(
-    Map<String, dynamic> json) {
-  return _$_GenericEventAddPlayer(
-    json['player'] == null
-        ? null
-        : Player.fromJson(json['player'] as Map<String, dynamic>),
-  );
-}
-
-Map<String, dynamic> _$_$_GenericEventAddPlayerToJson(
-        _$_GenericEventAddPlayer instance) =>
-    <String, dynamic>{
-      'player': instance.player,
-    };
-
 _$GameMessage _$_$GameMessageFromJson(Map<String, dynamic> json) {
   return _$GameMessage(
     json['message'] as String,

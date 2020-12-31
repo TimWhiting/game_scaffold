@@ -61,7 +61,7 @@ mixin _$GameConfig {
   int get maxPlayers;
   bool get autoStart;
 
-  /// [options must be json serializable]
+  /// [options] must be json serializable
   Map<String, dynamic> get options;
 
   Map<String, dynamic> toJson();
@@ -223,7 +223,7 @@ class _$_GameConfig implements _GameConfig {
   final bool autoStart;
   @override
 
-  /// [options must be json serializable]
+  /// [options] must be json serializable
   final Map<String, dynamic> options;
 
   @override
@@ -318,7 +318,7 @@ abstract class _GameConfig implements GameConfig {
   bool get autoStart;
   @override
 
-  /// [options must be json serializable]
+  /// [options] must be json serializable
   Map<String, dynamic> get options;
   @override
   _$GameConfigCopyWith<_GameConfig> get copyWith;
