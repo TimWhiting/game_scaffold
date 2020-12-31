@@ -100,8 +100,8 @@ class GameServer {
 
   GameInfo gameInfo(String id) => GameInfo(
         _gameId,
-        _players.map((p) => p.name),
-        _clientNames[id],
+        _players.map((p) => p.name).toList(),
+        _clientNames[id] ?? '',
         isClientAdmin(id),
         gameType,
       );

@@ -46,7 +46,7 @@ class IOGameClient extends GameClient {
   void _watchState() {
     socket.on(IOChannel.gamestate.string, (data) {
       final gameState = Game.fromJson(data as Map<String, dynamic>);
-      socket.off(IOChannel.lobby.string, _onLobby);
+      socket.off(IOChannel.lobby.string);
       print(data);
       read(gameStateProvider(id)).state = gameState;
       read(gameStatusProvider(id)).state = gameState.gameStatus;
@@ -54,6 +54,7 @@ class IOGameClient extends GameClient {
     socket.on(IOChannel.error.string, (data) {
       //TODO: Display errors
     });
+    socket.on(IOChannel.lobby.string, (d) => _onLobby(d));
   }
 
   @override

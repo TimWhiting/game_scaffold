@@ -1,3 +1,11 @@
+## 0.0.3+13
+
+- Fix type error
+  
+## 0.0.3+10
+
+- Fix name error
+  
 ## 0.0.3+9
 
 - Fix some game info logic & publish API documentation

@@ -109,10 +109,12 @@ final playerIDProvider = ScopedProvider((ref) => '');
 
 /// Provides the name for the players based on their player id
 final playerNameProvider = StateProvider.family<String, String>(
-  (ref, id) => ref
-      .watch(gameStateProvider(id))
-      .state
-      .players
-      .first((p) => p.id == id)
-      .name,
+  (ref, id) =>
+      ref
+          .watch(gameStateProvider(id))
+          .state
+          ?.players
+          ?.first((p) => p.id == id)
+          ?.name ??
+      '',
 );
