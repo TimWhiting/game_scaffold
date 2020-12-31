@@ -10,7 +10,7 @@ Future<void> main(List<String> arguments) async {
   registerOnDeviceClients();
   final read = ProviderContainer().read;
   read(gameLocationProvider).state = OnDeviceLocation;
-  read(gameConfigProvider).state = GameConfig(
+  read(backendGameConfigProvider).state = GameConfig(
     adminId: P1,
     customNames: false,
     gameType: 'tictactoe',

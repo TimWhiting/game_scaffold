@@ -24,12 +24,12 @@ class NoServerGameClient extends GameClient {
   Future<void> register() async {
     _players.add(Player(id));
     print(_players);
-    read(serverPlayersProvider).state = _players.toImmutableList();
+    read(backendPlayersProvider).state = _players.toImmutableList();
     read(gameStatusProvider(id)).state = GameStatus.NotJoined;
     read(playerNameProvider(id)).state = '';
     read(gameStatusProvider(id)).state = GameStatus.NotStarted;
     _watchState();
-    final config = read(gameConfigProvider).state;
+    final config = read(backendGameConfigProvider).state;
     if (_players.length == config.maxPlayers && config.autoStart) {
       sendEvent(GenericEvent.start());
     }

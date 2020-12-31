@@ -1,6 +1,8 @@
 import 'package:game_scaffold/game_scaffold.dart';
 import 'package:riverpod/all.dart';
 
+const firebaseLocation = 'firebase-server';
+
 class FirebaseServerClient extends ServerClient {
   FirebaseServerClient(Reader read, String id) : super(read, id);
   @override
@@ -44,7 +46,7 @@ class FirebaseServerClient extends ServerClient {
 
   static void registerImplementation() {
     ServerClient.registerImplementation(
-      GameLocation.Firebase,
+      firebaseLocation,
       (reader, address, id) => FirebaseServerClient(reader, id),
     );
   }
@@ -71,13 +73,13 @@ class FirebaseGameClient extends GameClient {
   }
 
   @override
-  void sendEvent(GameEvent event) {
+  void sendEvent(Event event) {
     // TODO: implement sendEvent
   }
 
   static void registerImplementation() {
     GameClient.registerImplementation(
-      GameLocation.Firebase,
+      firebaseLocation,
       (read, address, id, gameCode) => FirebaseGameClient(id, gameCode, read),
     );
   }

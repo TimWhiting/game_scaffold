@@ -121,7 +121,7 @@ class IOServer {
           'BCDFGHJKLMNPQRSTVWXZ'.characters.shuffled().join('').substring(0, 4);
     }
     final container = ProviderContainer();
-    container.read(gameConfigProvider).state = gameConfig;
+    container.read(backendGameConfigProvider).state = gameConfig;
     final server = GameServer(io, this, container.read, gameid, servers.remove,
         debug: debug);
 

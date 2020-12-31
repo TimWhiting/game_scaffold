@@ -42,7 +42,7 @@ class GameServer {
   String get id => _gameId;
 
   /// Gets [GameConfig] of this game
-  GameConfig get gameConfig => _read(gameConfigProvider).state;
+  GameConfig get gameConfig => _read(backendGameConfigProvider).state;
 
   /// Gets the game's type from the config
   String get gameType => gameConfig.gameType;
@@ -165,7 +165,7 @@ class GameServer {
 
   void _addPlayer(Player player) {
     _players.add(player);
-    _read(serverPlayersProvider).state = _players.toImmutableList();
+    _read(backendPlayersProvider).state = _players.toImmutableList();
   }
 
   void _sendUpdates(Game state) {

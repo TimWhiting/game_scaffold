@@ -1,3 +1,7 @@
+## 0.0.3+6
+
+- Update more providers to be uniquely identified and refactor to make backend providers more clearly separate
+
 ## 0.0.3+5
 
 - Fix some errors from the last update, and also change `playerIds` to `playerIDs`.

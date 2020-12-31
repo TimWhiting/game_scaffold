@@ -12,10 +12,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  game_scaffold_dart:
-    git:
-      url: https://github.com/TimWhiting/game_scaffold
-      path: dart
+  flutter_riverpod: any
+  game_scaffold_dart: any
 
 dev_dependencies:
   flutter_test:

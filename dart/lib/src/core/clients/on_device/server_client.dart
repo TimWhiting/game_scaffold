@@ -1,3 +1,4 @@
+import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 import 'package:riverpod/all.dart';
 
 import '../../core.dart';
@@ -13,7 +14,10 @@ class NoServerClient extends ServerClient {
   void connect() {}
 
   @override
-  Future<void> createGame() async {}
+  Future<void> createGame() async {
+    read(backendGameConfigProvider).state =
+        read(gameConfigProvider(playerID)).state;
+  }
 
   @override
   Future<bool> deleteGame() async => true;

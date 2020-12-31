@@ -10,7 +10,7 @@ const defaultGamePort = 45912;
 const defaultAddress = 'your game server ip';
 
 /// The provider that controls which game server address to connect to
-final selectedAddress = StateProvider((ref) => defaultAddress);
+final selectedAddress = StateProvider.family((ref, id) => defaultAddress);
 
 /// An enum for the location of the game server
 // enum GameServerLocation { OnDevice, IOServer, Firebase }
@@ -24,7 +24,7 @@ final gameLocationProvider = StateProvider<String>((ref) => IOServerLocation);
 final gameServerClientProvider =
     Provider.family<ServerClient, String>((ref, id) {
   final location = ref.watch(gameLocationProvider).state;
-  final address = ref.watch(selectedAddress).state;
+  final address = ref.watch(selectedAddress(id)).state;
   if (location == IOServerLocation && address == defaultAddress) {
     throw UnimplementedError(
         'Please set the address for the remote server before connecting a game server client');
@@ -45,7 +45,7 @@ final gameClientProvider = Provider.family<GameClient, String>((ref, id) {
   final location = ref.watch(gameLocationProvider).state;
   print('location: $location');
   final gameCode = ref.watch(gameCodeProvider(id)).state;
-  final address = ref.watch(selectedAddress).state;
+  final address = ref.watch(selectedAddress(id)).state;
   if (location == IOServerLocation && address == defaultAddress) {
     throw UnimplementedError(
         'Please set the address for the remote server before connecting a game server client');
@@ -61,7 +61,8 @@ final gameClientProvider = Provider.family<GameClient, String>((ref, id) {
 });
 
 /// Provides game info for the currently selected game
-final gameInfoProvider = StateProvider<GameInfo>((ref) => null);
+final gameInfoProvider =
+    StateProvider.family<GameInfo, String>((ref, id) => null);
 
 /// Provides the game info of all games that the client with the specified id
 /// is a part of
@@ -88,11 +89,12 @@ final gameTurnProvider = Provider.family<bool, String>(
 );
 
 /// Provides the way to configure the game for starting
-final gameConfigProvider = StateProvider<GameConfig>((ref) => null);
+final gameConfigProvider =
+    StateProvider.family<GameConfig, String>((ref, id) => null);
 
 /// Provides the game type's name for the game specified by [gameConfigProvider]
-final gameNameProvider = Provider<String>(
-  (ref) => ref.watch(gameConfigProvider).state.gameType.name,
+final gameNameProvider = Provider.family<String, String>(
+  (ref, id) => ref.watch(gameConfigProvider(id)).state.gameType.name,
 );
 
 /// Provides the player id for a particular section of the widget tree
@@ -101,4 +103,11 @@ final gameNameProvider = Provider<String>(
 final playerIDProvider = ScopedProvider((ref) => '');
 
 /// Provides the name for the players based on their player id
-final playerNameProvider = StateProvider.family<String, String>((ref, _) => '');
+final playerNameProvider = StateProvider.family<String, String>(
+  (ref, id) => ref
+      .watch(gameStateProvider(id))
+      .state
+      .players
+      .first((p) => p.id == id)
+      .name,
+);

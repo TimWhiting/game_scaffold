@@ -38,7 +38,7 @@ class IOServerClient extends ServerClient {
 
   @override
   Future<void> createGame() async {
-    final gameConfig = read(gameConfigProvider).state;
+    final gameConfig = read(gameConfigProvider(playerID)).state;
     print('Creating game $gameConfig');
     final gameCode = await _createGame(gameConfig);
     read(gameCodeProvider(playerID)).state = gameCode;
@@ -67,7 +67,7 @@ class IOServerClient extends ServerClient {
   @override
   Future<void> getGameInfo(String gameId) async {
     final result = await socket.call(IOChannel.getgameinfo, gameId);
-    read(gameInfoProvider).state = result == '404'
+    read(gameInfoProvider(playerID)).state = result == '404'
         ? null
         : GameInfo.fromJson(result as Map<String, dynamic>);
   }
