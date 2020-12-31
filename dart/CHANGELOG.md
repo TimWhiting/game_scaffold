@@ -1,3 +1,7 @@
+## 0.0.3+8
+
+- Add in some lobby logic
+
 ## 0.0.3+7
 
 - Fix typing issue
