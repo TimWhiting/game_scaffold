@@ -13,6 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_riverpod: any
+  hooks_riverpod: any
+
   game_scaffold_dart: any
 
 dev_dependencies:

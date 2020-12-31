@@ -97,6 +97,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_hooks:
+    dependency: transitive
+    description:
+      name: flutter_hooks
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.15.0"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -122,7 +129,14 @@ packages:
       name: game_scaffold_dart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.3+5"
+    version: "0.0.3+6"
+  hooks_riverpod:
+    dependency: "direct main"
+    description:
+      name: hooks_riverpod
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.12.1"
   http:
     dependency: transitive
     description:
@@ -319,4 +333,4 @@ packages:
     version: "2.1.0-nullsafety.5"
 sdks:
   dart: ">=2.12.0-0.0 <3.0.0"
-  flutter: ">=1.17.0"
+  flutter: ">=1.20.0 <2.0.0"
