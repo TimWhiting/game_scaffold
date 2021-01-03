@@ -20,6 +20,8 @@ extension BuildContextGameScaffoldX on BuildContext {
 
   /// Server information
   GameInfo currentGameInfo(String id) => read(gameInfoProvider(id)).state;
+  GameInfo lobbyInfo(String id) => read(gameLobbyProvider(id)).state;
+
   Future<List<GameInfo>> gameInfos(String id) => read(gamesProvider(id).future);
 
   /// Game setup information
@@ -54,6 +56,7 @@ extension WidgetsReaderGameScaffoldX on ScopedReader {
 
   /// Server information
   GameInfo get currentGameInfo => this(gameInfoProvider(id)).state;
+  GameInfo get lobbyInfo => this(gameLobbyProvider(id)).state;
   Future<List<GameInfo>> get gameInfos => this(gamesProvider(id).future);
 
   /// Game setup information
