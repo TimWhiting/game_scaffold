@@ -40,10 +40,10 @@ extension IOChannelX on IOChannel {
     return EnumToString.convertToString(this);
   }
 
-  /// Returns the corresponding response [IOChannel] for a particular channel
+  /// Returns the corresponding response `IOChannel` for a particular channel
   ///
   /// This allows us to create a asynchronous request/response type API on top
-  /// of the [IO.Socket] stream interface
+  /// of the `IO.Socket` stream interface
   IOChannel get responseChannel {
     final error = UnimplementedError('No corresponding response channel');
 
@@ -77,8 +77,8 @@ extension IOChannelX on IOChannel {
 }
 
 extension SocketIOX on IO.Socket {
-  /// Calls [requestChannel] with [request], and receives the corresponding
-  /// response on the [requestChannel.reponseChannel], returning it as a [Future]
+  /// Calls `requestChannel` with `request`, and receives the corresponding
+  /// response on the `requestChannel.reponseChannel`, returning it as a `Future`
   Future<Object> call(IOChannel requestChannel, Object request) {
     final responseChannel = requestChannel.responseChannel;
     final completer = Completer<Object>();

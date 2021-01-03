@@ -1,3 +1,7 @@
+## 0.0.3+15
+
+- Add lobby provider and more tests
+
 ## 0.0.3+14
 
 - Fix type error

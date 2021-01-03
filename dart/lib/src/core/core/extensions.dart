@@ -8,9 +8,9 @@ extension GameTypeOf on String {
   String get name => Game.gameNames[this];
 }
 
-/// An extension to convert an [Event] to a [GameEvent]
+/// An extension to convert an `Event` to a `GameEvent`
 extension EventX on Event {
-  /// Converts an [Event] to a [GameEvent] if it isn't already a [GameEvent]
+  /// Converts an `Event` to a `GameEvent` if it isn't already a `GameEvent`
   GameEvent get asGameEvent => this is GameEvent
       ? this
       : this is GenericEvent
@@ -18,7 +18,7 @@ extension EventX on Event {
           : GameEvent.game(this);
 }
 
-/// Some extensions on [Game] to more easiliy get some of the [GenericGame] fields
+/// Some extensions on `Game` to more easiliy get some of the `GenericGame` fields
 extension GameX on Game {
   /// Gets the current player's index
   int get currentPlayerIndex => generic.currentPlayerIndex;
@@ -35,13 +35,13 @@ extension GameX on Game {
   /// Gets the players that are a part of this game
   KtList<String> get playerIDs => generic.players.map((p) => p.id);
 
-  /// Gets the [DateTime] that this state was updated
+  /// Gets the `DateTime` that this state was updated
   DateTime get time => generic.time;
 
-  /// Gets the list of [GameMessage]s that have been exchanged this game
+  /// Gets the list of `GameMessage`s that have been exchanged this game
   KtList<GameMessage> get messages => generic.messages;
 
-  /// Gets the [GameStatus] of the game
+  /// Gets the status of the game
   GameStatus get gameStatus => generic.gameStatus;
 
   /// Gets the current round number
