@@ -19,7 +19,6 @@ final Map<NameSet, List<String>> nameSets = {
 };
 
 /// Represents the basic details of a player in a game
-
 @freezed
 abstract class Player with _$Player {
   /// Represents the basic details of a player in a game

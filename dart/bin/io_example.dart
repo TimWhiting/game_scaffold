@@ -1,9 +1,9 @@
 import 'package:game_scaffold_dart/server.dart';
-import 'package:game_scaffold_dart/src/games/reversi.dart';
+import 'package:game_scaffold_dart/games.dart';
 
 void main(List<String> arguments) {
   Game.registerGeneralEvents();
-  ReversiGame.register();
+  TicTacToeGame.register();
   registerIOClients();
   final _ = IOServer();
 }

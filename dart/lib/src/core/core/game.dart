@@ -159,10 +159,10 @@ enum GameStatus {
 @freezed
 abstract class GameConfig with _$GameConfig {
   const factory GameConfig({
-    NameSet nameSet,
-    @Default(false) bool customNames,
     String adminId,
     String gameType,
+    @Default(NameSet.Basic) NameSet nameSet,
+    @Default(false) bool customNames,
     @Default(15) int rounds,
     @Default(1) int minPlayers,
     @Default(10) int maxPlayers,

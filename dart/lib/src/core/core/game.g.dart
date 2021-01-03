@@ -8,10 +8,11 @@ part of 'game.dart';
 
 _$_GameConfig _$_$_GameConfigFromJson(Map<String, dynamic> json) {
   return _$_GameConfig(
-    nameSet: _$enumDecodeNullable(_$NameSetEnumMap, json['nameSet']),
-    customNames: json['customNames'] as bool ?? false,
     adminId: json['adminId'] as String,
     gameType: json['gameType'] as String,
+    nameSet: _$enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ??
+        NameSet.Basic,
+    customNames: json['customNames'] as bool ?? false,
     rounds: json['rounds'] as int ?? 15,
     minPlayers: json['minPlayers'] as int ?? 1,
     maxPlayers: json['maxPlayers'] as int ?? 10,
@@ -22,10 +23,10 @@ _$_GameConfig _$_$_GameConfigFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$_$_GameConfigToJson(_$_GameConfig instance) =>
     <String, dynamic>{
-      'nameSet': _$NameSetEnumMap[instance.nameSet],
-      'customNames': instance.customNames,
       'adminId': instance.adminId,
       'gameType': instance.gameType,
+      'nameSet': _$NameSetEnumMap[instance.nameSet],
+      'customNames': instance.customNames,
       'rounds': instance.rounds,
       'minPlayers': instance.minPlayers,
       'maxPlayers': instance.maxPlayers,

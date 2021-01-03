@@ -1,6 +1,6 @@
 name: game_scaffold_dart
 description: A scaffold for game projects, taking care of server implementation and some general events
-version: 0.0.3+13
+version: 0.0.3+14
 homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:
@@ -21,6 +21,8 @@ dependencies:
   enum_to_string: ^1.0.14
 
 dev_dependencies:
-  json_serializable_immutable_collections: any
-  freezed: any
+  json_serializable_immutable_collections: 0.4.2
+  freezed: 0.12.2
   build_runner: any
+  test: any
+  game_scaffold_test: any

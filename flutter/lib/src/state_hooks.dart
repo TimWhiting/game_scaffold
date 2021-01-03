@@ -83,6 +83,7 @@ GameClient useGameClient(String id) => useProvider(gameClientProvider(id));
 /// Server information
 GameInfo useCurrentGameInfo(String id) =>
     useProvider(gameInfoProvider(id)).state;
+GameInfo useLobbyInfo(String id) => useProvider(gameLobbyProvider(id)).state;
 Future<List<GameInfo>> useGameInfos(String id) =>
     useProvider(gamesProvider(id).future);
 
