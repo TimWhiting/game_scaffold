@@ -1,3 +1,7 @@
+## 0.0.3
+
+- Update to work with latest game_scaffold_dart
+
 ## 0.0.2+1
 
 - Update documentation and test to use `tester.nextRound`
