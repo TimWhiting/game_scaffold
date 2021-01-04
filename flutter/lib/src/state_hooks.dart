@@ -14,9 +14,8 @@ extension BuildContextGameScaffoldX on BuildContext {
       read(gameLocationProvider).state = implementation;
   String get clientImplementation => read(gameLocationProvider).state;
 
-  /// Clients
-  ServerClient serverClient(String id) => read(serverClientProvider(id));
-  GameClient gameClient(String id) => read(gameClientProvider(id));
+  /// Client
+  GameServerClient gameClient(String id) => read(gameServerClientProvider(id));
 
   /// Server information
   GameInfo currentGameInfo(String id) => read(gameInfoProvider(id)).state;
@@ -50,9 +49,8 @@ extension WidgetsReaderGameScaffoldX on ScopedReader {
       this(gameLocationProvider).state = implementation;
   String get clientImplementation => this(gameLocationProvider).state;
 
-  /// Clients
-  ServerClient get serverClient => this(serverClientProvider(id));
-  GameClient get gameClient => this(gameClientProvider(id));
+  /// Client
+  GameServerClient get gameClient => this(gameServerClientProvider(id));
 
   /// Server information
   GameInfo get currentGameInfo => this(gameInfoProvider(id)).state;
@@ -78,7 +76,7 @@ String usePlayerID() => useProvider(playerIDProvider);
 /// Setup parameters
 String useAddress(String id) => useProvider(selectedAddress(id)).state;
 
-/// Clients
+/// Client
 GameServerClient useGameClient(String id) =>
     useProvider(gameServerClientProvider(id));
 
