@@ -22,8 +22,7 @@ final selectedAddress =
 final gameLocationProvider = StateProvider<String>((ref) => IOServerLocation);
 
 /// Provides the [ServerClient] for each client id
-final gameServerClientProvider =
-    Provider.family<ServerClient, String>((ref, id) {
+final _serverClientProvider = Provider.family<ServerClient, String>((ref, id) {
   final location = ref.watch(gameLocationProvider).state;
   final address = ref.watch(selectedAddress(id)).state;
   if (location == IOServerLocation && address == defaultAddress) {
@@ -37,14 +36,25 @@ final gameServerClientProvider =
   return client;
 });
 
+/// Provides a [GameServerClient] that communicates with the game server and handles game events
+final gameServerClientProvider = Provider.family<GameServerClient, String>(
+  (ref, id) {
+    final client = GameServerClient(
+      ref.read,
+      ref.watch(_gameClientProvider(id)),
+      ref.watch(_serverClientProvider(id)),
+    );
+    return client;
+  },
+);
+
 /// Provides the game code for each client id
 final gameCodeProvider =
     StateProvider.family<String, String>((ref, index) => '');
 
 /// Provides a [GameClient] for the client with the specified id
-final gameClientProvider = Provider.family<GameClient, String>((ref, id) {
+final _gameClientProvider = Provider.family<GameClient, String>((ref, id) {
   final location = ref.watch(gameLocationProvider).state;
-  print('location: $location');
   final gameCode = ref.watch(gameCodeProvider(id)).state;
   final address = ref.watch(selectedAddress(id)).state;
   if (location == IOServerLocation && address == defaultAddress) {

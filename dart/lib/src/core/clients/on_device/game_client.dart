@@ -36,7 +36,7 @@ class NoServerGameClient extends GameClient {
     for (final pID in _players) {
       read(gameLobbyProvider(pID.id)).state = GameInfo(
         gameCode,
-        _players.map((p) => p.name),
+        _players.map((p) => p.name).toList(),
         pID.name,
         false,
         config.gameType,

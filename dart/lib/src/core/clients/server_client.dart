@@ -1,29 +1,23 @@
+import 'package:logging/logging.dart';
 import 'package:riverpod/all.dart';
 
 import '../core.dart';
 
 /// A Client that can contact the server to manage games
 ///
-/// Can
+/// The client can
 /// * Start
 /// * Delete
 /// * Get Game Info
 /// * Get List of Games that [playerID] is a part of
-///
-///
 abstract class ServerClient {
-  ServerClient(this.read, this.playerID);
+  ServerClient(this.read, this.playerID) : logger = Logger('ServerClient');
 
   /// The id of the client
   final String playerID;
 
-  /// The gameCode for the game that was created
-  String gameCode;
-
   final Reader read;
-
-  /// Connects this client to the server
-  void connect();
+  final Logger logger;
 
   /// Creates a game on the server
   Future<void> createGame();
@@ -37,11 +31,8 @@ abstract class ServerClient {
   /// Gets info about a particular game from the server
   Future<void> getGameInfo(String gameId);
 
-  /// Disposes of the [ServerClient]
+  /// Disposes of the [ServerClient] (i.e. disconnects from the server)
   void dispose();
-
-  /// Disconnects from the server
-  void disconnect();
 
   /// Registers a particular implementation of [ServerClient] for the given [location]
   static void registerImplementation<T extends ServerClient>(

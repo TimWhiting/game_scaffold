@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:logging/logging.dart';
 import 'package:riverpod/all.dart';
 
 // ignore: library_prefixes
@@ -16,10 +17,7 @@ class IOServerClient extends ServerClient {
     Reader read,
     this.address,
     String id,
-  }) : super(read, id);
-
-  @override
-  void connect() {
+  }) : super(read, id) {
     socket = IO.io(address, socketIOOpts);
     socket.on(IOChannel.connection.string,
         (_) => read(gameStatusProvider(playerID)).state = GameStatus.NotJoined);
@@ -31,6 +29,7 @@ class IOServerClient extends ServerClient {
         100.milliseconds,
         () => read(gameStatusProvider(playerID)).state =
             socket.connected ? GameStatus.NotJoined : GameStatus.NotConnected);
+    logger.info('Created ServerClient');
   }
 
   final String address;
@@ -39,7 +38,7 @@ class IOServerClient extends ServerClient {
   @override
   Future<void> createGame() async {
     final gameConfig = read(gameConfigProvider(playerID)).state;
-    print('Creating game $gameConfig');
+    logger.fine('Creating game $gameConfig');
     final gameCode = await _createGame(gameConfig);
     read(gameCodeProvider(playerID)).state = gameCode;
   }
@@ -74,14 +73,9 @@ class IOServerClient extends ServerClient {
 
   @override
   void dispose() {
-    print('Disposing server client');
+    logger.info('Dispose');
     socket.disconnect();
     socket.dispose();
-  }
-
-  @override
-  void disconnect() {
-    socket.disconnect();
   }
 
   static void registerImplementation() {

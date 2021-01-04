@@ -11,9 +11,6 @@ class NoServerClient extends ServerClient {
   NoServerClient({Reader read, String id}) : super(read, id);
 
   @override
-  void connect() {}
-
-  @override
   Future<void> createGame() async {
     read(backendGameConfigProvider).state =
         read(gameConfigProvider(playerID)).state;
@@ -21,9 +18,6 @@ class NoServerClient extends ServerClient {
 
   @override
   Future<bool> deleteGame() async => true;
-
-  @override
-  void disconnect() {}
 
   @override
   void dispose() {}

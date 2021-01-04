@@ -1,18 +1,21 @@
 import 'dart:async';
 
+import 'package:logging/logging.dart';
 import 'package:riverpod/all.dart';
 
 import '../core.dart';
 
-/// A client with client identifier [id] for a particular game identified by [gameCode]
+/// A client for a particular game identified by [gameCode]
 abstract class GameClient {
-  GameClient(this.id, this.gameCode, this.read);
+  GameClient(this.id, this.gameCode, this.read)
+      : logger = Logger('GameClient $gameCode');
 
   /// The client's [id]
   final String id;
 
   /// The [gameCode] of the game the client has joined
   final String gameCode;
+  final Logger logger;
 
   final Reader read;
 

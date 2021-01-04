@@ -12,7 +12,9 @@ import 'channels.dart';
 class IOGameClient extends GameClient {
   IOGameClient({Reader read, this.address, String gameCode, String id})
       : socket = IO.io('$address/$gameCode', socketIOOpts),
-        super(id, gameCode, read);
+        super(id, gameCode, read) {
+    logger.info('Created Game Client $gameCode');
+  }
   final String address;
 
   final IO.Socket socket;
@@ -23,6 +25,7 @@ class IOGameClient extends GameClient {
     socket.off(IOChannel.gamestate.string);
     socket.off(IOChannel.lobby.string);
     read(gameStatusProvider(id)).state = GameStatus.NotJoined;
+    socket.disconnect();
   }
 
   @override
@@ -47,7 +50,7 @@ class IOGameClient extends GameClient {
     socket.on(IOChannel.gamestate.string, (data) {
       final gameState = Game.fromJson(data as Map<String, dynamic>);
       socket.off(IOChannel.lobby.string);
-      print(data);
+      logger.fine(data);
       read(gameStateProvider(id)).state = gameState;
       read(gameStatusProvider(id)).state = gameState.gameStatus;
     });
@@ -60,13 +63,13 @@ class IOGameClient extends GameClient {
   @override
   void sendEvent(Event event) {
     final js = event.asGameEvent.toJson();
-    print('Sending event $js');
+    logger.info('Sending event $js');
     socket.emit(IOChannel.event.string, js);
   }
 
   @override
   void dispose() {
-    print('Disposing game client');
+    logger.info('Dispose');
     socket.disconnect();
     socket.dispose();
   }

@@ -128,6 +128,7 @@ class GameServer {
 
     final name = data['name'] as String;
     final id = data['id'] as String;
+    print('Client registered');
 
     client.on(
       IOChannel.disconnect.string,
@@ -200,7 +201,7 @@ class GameServer {
     _gameStateListenerDisposer();
     _gameErrorListenerDisposer();
     _gameState.dispose();
-    for (final client in _clients.values) {
+    for (final client in [..._clients.values]) {
       client?.disconnect();
     }
     _socket.clearListeners();
@@ -238,9 +239,12 @@ class GameServer {
 
   /// Note: only notify users that the game was killed if the killing was manually
   /// done so that it doesn't kick clients out of the game at the end of the game
-  void notifyKilled() {
+  void notifyKilled(IO.Socket client) {
     for (final client in _clients.values) {
       client?.emit(IOChannel.gamedeleted.string, true);
+    }
+    if (!_clients.values.contains(client)) {
+      client.emit(IOChannel.gamedeleted.string, true);
     }
   }
 

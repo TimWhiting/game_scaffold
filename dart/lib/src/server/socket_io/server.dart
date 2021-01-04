@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -36,15 +37,6 @@ class IOServer {
     this.pathToRsa,
     this.port,
   }) {
-    Logger.root.level = Level.ALL; // defaults to Level.INFO
-    Logger.root.onRecord.listen((record) {
-      print('[${record.level.name}]: ${record.message}');
-    });
-
-    io.on(
-      IOChannel.connection.string,
-      (client) => _handleClientConnection(client),
-    );
     final server = StreamServer();
     if (https) {
       assert(pathToPem != null);
@@ -65,6 +57,18 @@ class IOServer {
       );
     }
     io.listen(server, _serverSocketOpts);
+    io.on(
+      IOChannel.connection.string,
+      (client) => _handleClientConnection(client),
+    );
+    Logger.root.clearListeners();
+    Logger.root.level = Level.FINE; // defaults to Level.INFO
+    Logger.root.onRecord.listen((record) {
+      if (record.loggerName.startsWith('socket_io')) {
+        return;
+      }
+      print('[${record.level.name}]: ${record.loggerName} ${record.message}');
+    });
   }
 
   void _handleClientConnection(
@@ -106,14 +110,14 @@ class IOServer {
 
   void _clientDisconnect(IO.Socket client, dynamic reason) {
     clients.remove(client);
-    logger.info('Client disconnected from main room $reason');
+    logger.info('Client disconnected');
   }
 
   void _createGame(
     IO.Socket client,
     Map<String, dynamic> config,
   ) {
-    logger.info('creating game');
+    logger.fine('Creating game');
     final gameConfig = GameConfig.fromJson(config);
     var gameid = '';
     while (gameid.length != 4 || servers.keys.contains(gameid)) {
@@ -124,13 +128,14 @@ class IOServer {
     container.read(backendGameConfigProvider).state = gameConfig;
     final server = GameServer(io, this, container.read, gameid, servers.remove,
         debug: debug);
-
     servers[server.id] = server;
     client.emit(IOChannel.gamecreated.string, server.id);
   }
 
-  void _deleteGame(IO.Socket client, String id) {
-    servers[id].notifyKilled();
+  Future<void> _deleteGame(IO.Socket client, String id) async {
+    logger.info('Deleting game $id');
+    servers[id].notifyKilled(client);
+    await Future.delayed(2.seconds);
     servers[id].killGame();
   }
 
@@ -158,6 +163,6 @@ class IOServer {
   }
 
   void removeClientFromGame(String id, String gameId) {
-    _clientGames[id].remove(gameId);
+    _clientGames[id]?.remove(gameId);
   }
 }

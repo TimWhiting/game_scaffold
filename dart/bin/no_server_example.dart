@@ -10,7 +10,7 @@ Future<void> main(List<String> arguments) async {
   registerOnDeviceClients();
   final read = ProviderContainer().read;
   read(gameLocationProvider).state = OnDeviceLocation;
-  read(backendGameConfigProvider).state = GameConfig(
+  read(gameConfigProvider(P1)).state = GameConfig(
     adminId: P1,
     customNames: false,
     gameType: 'tictactoe',
@@ -18,8 +18,8 @@ Future<void> main(List<String> arguments) async {
     maxPlayers: 2,
   );
   await read(gameServerClientProvider(P1)).createGame();
-  await read(gameClientProvider(P1)).register();
-  await read(gameClientProvider(P2)).register();
+  await read(gameServerClientProvider(P1)).register();
+  await read(gameServerClientProvider(P2)).register();
 
   print(read(gameProvider).gameState.playerIDs.asList());
   print(read(gameProvider).gameState.gameStatus);
@@ -37,7 +37,7 @@ Future<void> loop(Reader read) async {
     location = command.split(',').map((n) => int.tryParse(n)).toList();
   } while (location.any((l) => l == null));
 
-  read(gameClientProvider(player)).sendEvent(
+  read(gameServerClientProvider(player)).sendEvent(
     TicTacToeGameEvent(player, location[0] * 3 + location[1]),
   );
 
@@ -64,8 +64,8 @@ Future<void> loop(Reader read) async {
     }
     print('');
     if (gameState.roundOver) {
-      await read(gameClientProvider(P1)).newRound();
-      await read(gameClientProvider(P2)).newRound();
+      await read(gameServerClientProvider(P1)).newRound();
+      await read(gameServerClientProvider(P2)).newRound();
     } else {
       print('Finished');
       print('Player 0: ${gameState.totalScores[P1]}');
