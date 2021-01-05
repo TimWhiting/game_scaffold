@@ -1,3 +1,8 @@
+## 0.0.4+2
+
+- Add new provider extensions
+- Changed the name of an extension that clashes
+  
 ## 0.0.4+1
 
 - Add `GameConfig` to `moveNextRound`

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:game_scaffold_dart/src/core/clients/socket_io/channels.dart';
 import 'package:kt_dart/kt.dart';
-import 'package:riverpod/all.dart';
 //ignore: library_prefixes
 import 'package:socket_io/socket_io.dart' as IO;
 import 'package:logging/logging.dart';

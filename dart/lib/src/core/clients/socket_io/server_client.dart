@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:logging/logging.dart';
 import 'package:riverpod/all.dart';
 
 // ignore: library_prefixes
@@ -20,12 +19,12 @@ class IOServerClient extends ServerClient {
   }) : super(read, playerID) {
     socket = IO.io(address, socketIOOpts);
     socket.on(IOChannel.connection.string,
-        (_) => read.game(playerID).gameStatus = GameStatus.NotJoined);
+        (_) => read.gameFor(playerID).gameStatus = GameStatus.NotJoined);
     socket.on(IOChannel.disconnect.string,
-        (_) => read.game(playerID).gameStatus = GameStatus.NotConnected);
+        (_) => read.gameFor(playerID).gameStatus = GameStatus.NotConnected);
     Future.delayed(
         100.milliseconds,
-        () => read.game(playerID).gameStatus =
+        () => read.gameFor(playerID).gameStatus =
             socket.connected ? GameStatus.NotJoined : GameStatus.NotConnected);
     logger.info('Created ServerClient');
   }
@@ -35,10 +34,10 @@ class IOServerClient extends ServerClient {
 
   @override
   Future<void> createGame() async {
-    final gameConfig = read.game(playerID).gameConfig;
+    final gameConfig = read.gameFor(playerID).gameConfig;
     logger.fine('Creating game $gameConfig');
     final gameCode = await _createGame(gameConfig);
-    read.game(playerID).gameCode = gameCode;
+    read.gameFor(playerID).gameCode = gameCode;
   }
 
   Future<String> _createGame(GameConfig config) async {
@@ -48,8 +47,8 @@ class IOServerClient extends ServerClient {
 
   @override
   Future<bool> deleteGame() async {
-    final result =
-        await socket.call(IOChannel.deletegame, read.game(playerID).gameCode);
+    final result = await socket.call(
+        IOChannel.deletegame, read.gameFor(playerID).gameCode);
     return result as bool;
   }
 
@@ -64,7 +63,7 @@ class IOServerClient extends ServerClient {
   @override
   Future<void> getGameInfo(String gameId) async {
     final result = await socket.call(IOChannel.getgameinfo, gameId);
-    read.game(playerID).currentGameInfo = result == '404'
+    read.gameFor(playerID).currentGameInfo = result == '404'
         ? null
         : GameInfo.fromJson(result as Map<String, dynamic>);
   }

@@ -12,34 +12,66 @@ extension BuildContextGameScaffoldX on BuildContext {
   set clientImplementation(String implementation) =>
       read(gameLocationProvider).state = implementation;
   String get clientImplementation => read(gameLocationProvider).state;
-
   GameProvider gameProvider(String id) => read(playerGameProvider(id));
 
   /// Client
-  GameServerClient gameClient(GameProvider g) =>
-      read(g.gameServerClientProvider);
+  GameServerClient gameClient(String id) =>
+      read(gameProvider(id).gameServerClientProvider);
 
   /// Server information
-  GameInfo currentGameInfo(GameProvider g) => read(g.gameInfoProvider).state;
-  GameInfo lobbyInfo(GameProvider g) => read(g.gameLobbyProvider).state;
+  GameInfo currentGameInfo(String id) =>
+      read(gameProvider(id).gameInfoProvider).state;
+  GameInfo lobbyInfo(String id) =>
+      read(gameProvider(id).gameLobbyProvider).state;
 
-  Future<List<GameInfo>> gameInfos(GameProvider g) =>
-      read(g.gamesProvider.future);
+  Future<List<GameInfo>> gameInfos(String id) =>
+      read(gameProvider(id).gamesProvider.future);
 
   /// Game setup information
-  GameConfig gameConfig(GameProvider g) => read(g.gameConfigProvider).state;
-  void setGameConfig(GameConfig config, GameProvider g) =>
-      read(g.gameConfigProvider).state = config;
-  String gameCode(GameProvider g) => read(g.gameCodeProvider).state;
-  void setGameCode(GameProvider g, String code) =>
-      read(g.gameCodeProvider).state = code;
+  GameConfig gameConfig(String id) =>
+      read(gameProvider(id).gameConfigProvider).state;
+  void setGameConfig(GameConfig config, String id) =>
+      read(gameProvider(id).gameConfigProvider).state = config;
+  String gameCode(String id) => read(gameProvider(id).gameCodeProvider).state;
+  void setGameCode(String id, String code) =>
+      read(gameProvider(id).gameCodeProvider).state = code;
 
   /// Game information
-  Game gameState(GameProvider g) => read(g.gameStateProvider).state;
-  GameStatus gameStatus(GameProvider g) => read(g.gameStatusProvider).state;
-  bool gameTurn(GameProvider g) => read(g.gameTurnProvider);
-  String gameName(GameProvider g) => read(g.gameNameProvider);
-  String playerName(GameProvider g) => read(g.playerNameProvider).state;
+  Game gameState(String id) => read(gameProvider(id).gameStateProvider).state;
+  GameError gameError(String id) =>
+      read(gameProvider(id).gameErrorProvider).state;
+  GameStatus gameStatus(String id) =>
+      read(gameProvider(id).gameStatusProvider).state;
+  bool gameTurn(String id) => read(gameProvider(id).gameTurnProvider);
+  String gameName(String id) => read(gameProvider(id).gameNameProvider);
+  String playerName(String id) =>
+      read(gameProvider(id).playerNameProvider).state;
+}
+
+extension GameProviderHooksX on GameProvider {
+  /// Client
+  GameServerClient get useGameClient => useProvider(gameServerClientProvider);
+
+  /// Server information
+  GameInfo get useCurrentGameInfo => useProvider(gameInfoProvider).state;
+  GameInfo get useLobbyInfo => useProvider(gameLobbyProvider).state;
+
+  Future<List<GameInfo>> get useGameInfos => useProvider(gamesProvider.future);
+
+  /// Game setup information
+  GameConfig get useGameConfig => useProvider(gameConfigProvider).state;
+  set gameConfig(GameConfig config) =>
+      useProvider(gameConfigProvider).state = config;
+  String get useGameCode => useProvider(gameCodeProvider).state;
+  set gameCode(String code) => useProvider(gameCodeProvider).state = code;
+
+  /// Game information
+  Game get useGameState => useProvider(gameStateProvider).state;
+  GameError get useGameError => useProvider(gameErrorProvider).state;
+  GameStatus get useGameStatus => useProvider(gameStatusProvider).state;
+  bool get useGameTurn => useProvider(gameTurnProvider);
+  String get useGameName => useProvider(gameNameProvider);
+  String get usePlayerName => useProvider(playerNameProvider).state;
 }
 
 String usePlayerID() => useProvider(playerIDProvider);
@@ -67,6 +99,8 @@ String useGameCode(GameProvider g) => useProvider(g.gameCodeProvider).state;
 
 /// Game information
 Game useGameState(GameProvider g) => useProvider(g.gameStateProvider).state;
+GameError useGameError(GameProvider g) =>
+    useProvider(g.gameErrorProvider).state;
 GameStatus useGameStatus(GameProvider g) =>
     useProvider(g.gameStatusProvider).state;
 bool useGameTurn(GameProvider g) => useProvider(g.gameTurnProvider);

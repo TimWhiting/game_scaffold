@@ -216,7 +216,8 @@ extension GameReaderX on Reader {
   set address(String address) => this(selectedAddress).state = address;
   String get address => this(selectedAddress).state;
 
-  GameReader game(String id) => GameReader(this, this(playerGameProvider(id)));
+  GameReader gameFor(String id) =>
+      GameReader(this, this(playerGameProvider(id)));
 
   /// Setup parameters
   set clientImplementation(String implementation) =>
@@ -246,6 +247,8 @@ extension GameReaderGameX on GameReader {
   /// Game information
   Game get gameState => this(game._gameStateProvider).state;
   set gameState(Game g) => this(game._gameStateProvider).state = g;
+  StateController<Game> get gameStateController =>
+      this(game._gameStateProvider);
   GameError get gameError => this(game._gameErrorProvider).state;
   set gameError(GameError error) => this(game._gameErrorProvider).state = error;
   GameStatus get gameStatus => this(game._gameStatusProvider).state;

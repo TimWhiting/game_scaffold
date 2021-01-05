@@ -5,10 +5,6 @@ const firebaseLocation = 'firebase-server';
 
 class FirebaseServerClient extends ServerClient {
   FirebaseServerClient(Reader read, String id) : super(read, id);
-  @override
-  void connect() {
-    // TODO: implement connect
-  }
 
   @override
   Future<void> createGame() {
@@ -23,10 +19,6 @@ class FirebaseServerClient extends ServerClient {
   }
 
   @override
-  void disconnect() {
-    // TODO: implement disconnect
-  }
-
   @override
   void dispose() {
     // TODO: implement dispose

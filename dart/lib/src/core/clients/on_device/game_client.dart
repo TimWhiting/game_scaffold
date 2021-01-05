@@ -17,23 +17,23 @@ class NoServerGameClient extends GameClient {
   StreamSubscription<GameError> _se;
   @override
   void exitGame() {
-    read.game(id).gameStatus = GameStatus.NotJoined;
+    read.gameFor(id).gameStatus = GameStatus.NotJoined;
   }
 
   KtList<Player> get _players => read.backendGame(gameCode).players;
   @override
   Future<void> register() async {
     read.backendGame(gameCode).players = _players.plusElement(Player(id));
-    read.game(id).gameStatus = GameStatus.NotJoined;
-    read.game(id).playerName = '';
-    read.game(id).gameStatus = GameStatus.NotStarted;
+    read.gameFor(id).gameStatus = GameStatus.NotJoined;
+    read.gameFor(id).playerName = '';
+    read.gameFor(id).gameStatus = GameStatus.NotStarted;
     _watchState();
     final config = read.backendGame(gameCode).gameConfig;
     if (_players.size == config.maxPlayers && config.autoStart) {
       sendEvent(GenericEvent.start());
     }
     for (final pID in _players.iter) {
-      read.game(pID.id).lobbyInfo = GameInfo(
+      read.gameFor(pID.id).lobbyInfo = GameInfo(
         gameCode,
         _players.map((p) => p.name).asList(),
         pID.name,
@@ -45,14 +45,14 @@ class NoServerGameClient extends GameClient {
 
   void _watchState() {
     _ss = read.backendGame(gameCode).gameNotifier.stream.listen((gameState) {
-      read.game(id).gameState = gameState;
-      read.game(id).gameStatus = gameState.gameStatus;
+      read.gameFor(id).gameState = gameState;
+      read.gameFor(id).gameStatus = gameState.gameStatus;
     }, onError: (e) {
       print(e);
       // TODO: Do something on error
     });
     _se = read.backendGame(gameCode).errorNotifier.stream.listen((gameError) {
-      read.game(id).gameError = gameError;
+      read.gameFor(id).gameError = gameError;
     });
   }
 

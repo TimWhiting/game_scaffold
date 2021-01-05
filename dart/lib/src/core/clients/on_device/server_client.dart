@@ -13,12 +13,13 @@ class NoServerClient extends ServerClient {
   @override
   Future<void> createGame() async {
     final gameCode = generateGameID([]);
-    read.game(playerID).gameCode = gameCode;
-    read.backendGame(gameCode).gameConfig = read.game(playerID).gameConfig;
+    read.gameFor(playerID).gameCode = gameCode;
+    read.backendGame(gameCode).gameConfig = read.gameFor(playerID).gameConfig;
   }
 
   @override
-  Future<bool> deleteGame() async => games.remove(read.game(playerID).gameCode);
+  Future<bool> deleteGame() async =>
+      games.remove(read.gameFor(playerID).gameCode);
 
   @override
   void dispose() {}

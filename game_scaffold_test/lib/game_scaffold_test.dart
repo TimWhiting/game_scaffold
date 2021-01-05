@@ -21,14 +21,14 @@ void testGame<T extends Game>(
     String code;
     darttest.setUp(() async {
       read(gameLocationProvider).state = OnDeviceLocation;
-      read.game(players.first.id).gameConfig = config;
-      code = await read.game(players.first.id).gameClient.createGame();
+      read.gameFor(players.first.id).gameConfig = config;
+      code = await read.gameFor(players.first.id).gameClient.createGame();
       for (final p in players) {
-        read.game(p.id).gameCode = code;
-        await read.game(p.id).gameClient.register();
+        read.gameFor(p.id).gameCode = code;
+        await read.gameFor(p.id).gameClient.register();
       }
       if (read.backendGame(code).gameState?.gameStatus != GameStatus.Started) {
-        read.game(players.first.id).gameClient.startGame();
+        read.gameFor(players.first.id).gameClient.startGame();
       }
     });
     darttest.test(name + '_Tests', () {
@@ -84,7 +84,7 @@ class GameTester<T extends Game> {
   /// the round has advanced
   void nextRound(Function(T) expectation) {
     for (final p in _players) {
-      _read.game(p.id).gameClient.newRound();
+      _read.gameFor(p.id).gameClient.newRound();
     }
     expectation(game);
   }
