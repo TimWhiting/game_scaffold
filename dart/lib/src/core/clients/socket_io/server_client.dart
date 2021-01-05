@@ -16,18 +16,16 @@ class IOServerClient extends ServerClient {
   IOServerClient({
     Reader read,
     this.address,
-    String id,
-  }) : super(read, id) {
+    String playerID,
+  }) : super(read, playerID) {
     socket = IO.io(address, socketIOOpts);
     socket.on(IOChannel.connection.string,
-        (_) => read(gameStatusProvider(playerID)).state = GameStatus.NotJoined);
-    socket.on(
-        IOChannel.disconnect.string,
-        (_) =>
-            read(gameStatusProvider(playerID)).state = GameStatus.NotConnected);
+        (_) => read.game(playerID).gameStatus = GameStatus.NotJoined);
+    socket.on(IOChannel.disconnect.string,
+        (_) => read.game(playerID).gameStatus = GameStatus.NotConnected);
     Future.delayed(
         100.milliseconds,
-        () => read(gameStatusProvider(playerID)).state =
+        () => read.game(playerID).gameStatus =
             socket.connected ? GameStatus.NotJoined : GameStatus.NotConnected);
     logger.info('Created ServerClient');
   }
@@ -37,10 +35,10 @@ class IOServerClient extends ServerClient {
 
   @override
   Future<void> createGame() async {
-    final gameConfig = read(gameConfigProvider(playerID)).state;
+    final gameConfig = read.game(playerID).gameConfig;
     logger.fine('Creating game $gameConfig');
     final gameCode = await _createGame(gameConfig);
-    read(gameCodeProvider(playerID)).state = gameCode;
+    read.game(playerID).gameCode = gameCode;
   }
 
   Future<String> _createGame(GameConfig config) async {
@@ -50,8 +48,8 @@ class IOServerClient extends ServerClient {
 
   @override
   Future<bool> deleteGame() async {
-    final result = await socket.call(
-        IOChannel.deletegame, read(gameCodeProvider(playerID)).state);
+    final result =
+        await socket.call(IOChannel.deletegame, read.game(playerID).gameCode);
     return result as bool;
   }
 
@@ -66,7 +64,7 @@ class IOServerClient extends ServerClient {
   @override
   Future<void> getGameInfo(String gameId) async {
     final result = await socket.call(IOChannel.getgameinfo, gameId);
-    read(gameInfoProvider(playerID)).state = result == '404'
+    read.game(playerID).currentGameInfo = result == '404'
         ? null
         : GameInfo.fromJson(result as Map<String, dynamic>);
   }
@@ -82,7 +80,7 @@ class IOServerClient extends ServerClient {
     ServerClient.registerImplementation(
       IOServerLocation,
       (read, address, id) =>
-          IOServerClient(read: read, address: address, id: id),
+          IOServerClient(read: read, address: address, playerID: id),
     );
   }
 }

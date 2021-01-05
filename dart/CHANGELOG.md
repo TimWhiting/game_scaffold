@@ -1,5 +1,9 @@
 ## 0.0.3+16
 
+- Add some extensions to Reader
+
+## 0.0.3+16
+
 - Merge GameClient and ServerClient into GameServerClient which provides a nice interface to both functionalities
   
 ## 0.0.3+15

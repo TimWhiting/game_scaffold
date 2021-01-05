@@ -1,3 +1,6 @@
+import 'package:riverpod/all.dart';
+
+import '../client.dart';
 import 'events.dart';
 import 'game.dart';
 import 'generic.dart';

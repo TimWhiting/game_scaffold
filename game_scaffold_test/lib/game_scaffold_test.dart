@@ -25,7 +25,8 @@ void testGame<T extends Game>(
       for (final p in players) {
         await read(gameServerClientProvider(p.id)).register();
       }
-      if (read(gameProvider).gameState?.gameStatus != GameStatus.Started) {
+      if (read(backendGameProvider).gameState?.gameStatus !=
+          GameStatus.Started) {
         read(gameServerClientProvider(players.first.id)).startGame();
       }
     });
@@ -56,13 +57,13 @@ class GameTester<T extends Game> {
   /// ```
   void event(Event event, Function(T, GameError) outcome) {
     if (event != null) {
-      _read(gameProvider).handleEvent(event.asGameEvent);
+      _read(backendGameProvider).handleEvent(event.asGameEvent);
     }
 
-    final T game = _read(gameProvider).gameState;
-    final error = _read(gameErrorProvider).error;
+    final T game = _read(backendGameProvider).gameState;
+    final error = _read(backendGameErrorProvider).error;
     if (error != null) {
-      _read(gameErrorProvider).clearError();
+      _read(backendGameErrorProvider).clearError();
     }
     outcome(game, error);
   }
@@ -70,12 +71,12 @@ class GameTester<T extends Game> {
   /// Returns the current game state
   ///
   /// If testing the outcome of an event prefer using [event]
-  T get game => _read(gameProvider).gameState;
+  T get game => _read(backendGameProvider).gameState;
 
   /// Returns the current error state
   ///
   /// If testing the outcome of an event prefer using [event]
-  GameError get error => _read(gameErrorProvider).error;
+  GameError get error => _read(backendGameErrorProvider).error;
 
   /// Advances to the next round, and checks the [expectation] of the game after
   /// the round has advanced

@@ -14,29 +14,28 @@ class NoServerGameClient extends GameClient {
   NoServerGameClient({Reader read, String id, String gameCode})
       : super(id, gameCode, read);
   StreamSubscription<Game> _ss;
-  static final List<Player> _players = [];
+  StreamSubscription<GameError> _se;
   @override
   void exitGame() {
-    read(gameStatusProvider(id)).state = GameStatus.NotJoined;
+    read.game(id).gameStatus = GameStatus.NotJoined;
   }
 
+  KtList<Player> get _players => read.backendGame(gameCode).players;
   @override
   Future<void> register() async {
-    _players.add(Player(id));
-    print(_players);
-    read(backendPlayersProvider).state = _players.toImmutableList();
-    read(gameStatusProvider(id)).state = GameStatus.NotJoined;
-    read(playerNameProvider(id)).state = '';
-    read(gameStatusProvider(id)).state = GameStatus.NotStarted;
+    read.backendGame(gameCode).players = _players.plusElement(Player(id));
+    read.game(id).gameStatus = GameStatus.NotJoined;
+    read.game(id).playerName = '';
+    read.game(id).gameStatus = GameStatus.NotStarted;
     _watchState();
-    final config = read(backendGameConfigProvider).state;
-    if (_players.length == config.maxPlayers && config.autoStart) {
+    final config = read.backendGame(gameCode).gameConfig;
+    if (_players.size == config.maxPlayers && config.autoStart) {
       sendEvent(GenericEvent.start());
     }
-    for (final pID in _players) {
-      read(gameLobbyProvider(pID.id)).state = GameInfo(
+    for (final pID in _players.iter) {
+      read.game(pID.id).lobbyInfo = GameInfo(
         gameCode,
-        _players.map((p) => p.name).toList(),
+        _players.map((p) => p.name).asList(),
         pID.name,
         false,
         config.gameType,
@@ -45,12 +44,15 @@ class NoServerGameClient extends GameClient {
   }
 
   void _watchState() {
-    _ss = read(gameProvider).stream.listen((gameState) {
-      read(gameStateProvider(id)).state = gameState;
-      read(gameStatusProvider(id)).state = gameState.gameStatus;
+    _ss = read.backendGame(gameCode).gameNotifier.stream.listen((gameState) {
+      read.game(id).gameState = gameState;
+      read.game(id).gameStatus = gameState.gameStatus;
     }, onError: (e) {
       print(e);
       // TODO: Do something on error
+    });
+    _se = read.backendGame(gameCode).errorNotifier.stream.listen((gameError) {
+      read.game(id).gameError = gameError;
     });
   }
 
@@ -58,12 +60,13 @@ class NoServerGameClient extends GameClient {
   void sendEvent(Event event) {
     final js = event.asGameEvent.toJson();
     print('Sending event $js');
-    read(gameProvider).handleEvent(event.asGameEvent);
+    read.backendGame(gameCode).handleEvent(event.asGameEvent);
   }
 
   @override
   void dispose() {
-    _ss.cancel();
+    _ss?.cancel();
+    _se?.cancel();
     print('Disposing game client');
   }
 

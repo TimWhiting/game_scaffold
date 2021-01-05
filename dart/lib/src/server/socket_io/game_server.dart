@@ -20,8 +20,8 @@ class GameServer {
     this.timeout = const Duration(hours: 2),
     this.debug = true,
   })  : _socket = _io.of('/$_gameId'),
-        _gameState = _read(gameProvider),
-        _gameError = _read(gameErrorProvider),
+        _gameState = _read.gameNotifier,
+        _gameError = _read.errorNotifier,
         _serverLogger = Logger('GameServer $_gameId') {
     _initServer();
   }
@@ -42,7 +42,7 @@ class GameServer {
   String get id => _gameId;
 
   /// Gets [GameConfig] of this game
-  GameConfig get gameConfig => _read(backendGameConfigProvider).state;
+  GameConfig get gameConfig => _read.gameConfig;
 
   /// Gets the game's type from the config
   String get gameType => gameConfig.gameType;
@@ -57,7 +57,7 @@ class GameServer {
   /// Gets the client's name corresponding to [id]
   String getClientName(String id) => _clientNames[id];
 
-  final Reader _read;
+  final BackendGameReader _read;
   final String _gameId;
   final List<Player> _players = [];
   final _clients = <String, IO.Socket>{};
@@ -175,7 +175,7 @@ class GameServer {
 
   void _addPlayer(Player player) {
     _players.add(player);
-    _read(backendPlayersProvider).state = _players.toImmutableList();
+    _read.players = _players.toImmutableList();
     for (final client in _clients.entries) {
       client.value?.emit(IOChannel.lobby.string, gameInfo(id).toJson());
     }
@@ -215,7 +215,7 @@ class GameServer {
       return;
     }
     _serverLogger.info('Error: $message');
-    _clients[message.person]?.emit(IOChannel.error.string, message.message);
+    _clients[message.person]?.emit(IOChannel.error.string, message.toJson());
   }
 
   dynamic _handleRequest(gameEvent) {

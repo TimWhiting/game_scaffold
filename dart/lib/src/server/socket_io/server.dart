@@ -119,14 +119,11 @@ class IOServer {
   ) {
     logger.fine('Creating game');
     final gameConfig = GameConfig.fromJson(config);
-    var gameid = '';
-    while (gameid.length != 4 || servers.keys.contains(gameid)) {
-      gameid =
-          'BCDFGHJKLMNPQRSTVWXZ'.characters.shuffled().join('').substring(0, 4);
-    }
+    final gameid = generateGameID(servers.keys.toList());
     final container = ProviderContainer();
-    container.read(backendGameConfigProvider).state = gameConfig;
-    final server = GameServer(io, this, container.read, gameid, servers.remove,
+    container.read.backendGame(gameid).gameConfig = gameConfig;
+    final server = GameServer(
+        io, this, container.read.backendGame(gameid), gameid, servers.remove,
         debug: debug);
     servers[server.id] = server;
     client.emit(IOChannel.gamecreated.string, server.id);

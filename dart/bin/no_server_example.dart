@@ -8,50 +8,53 @@ Future<void> main(List<String> arguments) async {
   Game.registerGeneralEvents();
   TicTacToeGame.register();
   registerOnDeviceClients();
-  final read = ProviderContainer().read;
-  read(gameLocationProvider).state = OnDeviceLocation;
-  read(gameConfigProvider(P1)).state = GameConfig(
+  final Reader read = ProviderContainer().read;
+  read.clientImplementation = OnDeviceLocation;
+  final p1Reader = read.game(P1);
+  p1Reader.gameConfig = GameConfig(
     adminId: P1,
     customNames: false,
     gameType: 'tictactoe',
     rounds: 2,
     maxPlayers: 2,
   );
-  await read(gameServerClientProvider(P1)).createGame();
-  await read(gameServerClientProvider(P1)).register();
-  await read(gameServerClientProvider(P2)).register();
 
-  print(read(gameProvider).gameState.playerIDs.asList());
-  print(read(gameProvider).gameState.gameStatus);
-  while (!read(gameProvider).gameState.gameOver) {
-    await loop(read);
+  final code = await p1Reader.gameClient.createGame();
+  await p1Reader.gameClient.register();
+  read.game(P2).gameCode = code;
+  await read.game(P2).gameClient.register();
+
+  print(read.backendGame(code).gameState.playerIDs.asList());
+  print(read.backendGame(code).gameState.gameStatus);
+  while (!read.backendGame(code).gameState.gameOver) {
+    await loop(read, code);
   }
 }
 
-Future<void> loop(Reader read) async {
-  printStateAndAction(read);
-  final player = read(gameProvider).gameState.currentPlayer.id;
+Future<void> loop(Reader read, String code) async {
+  printStateAndAction(read, code);
+  final player = read.backendGame(code).gameState.currentPlayer.id;
   List<int> location;
   do {
     final command = stdin.readLineSync();
     location = command.split(',').map((n) => int.tryParse(n)).toList();
   } while (location.any((l) => l == null));
 
-  read(gameServerClientProvider(player)).sendEvent(
-    TicTacToeGameEvent(player, location[0] * 3 + location[1]),
-  );
+  read.game(player).gameClient.sendEvent(
+        TicTacToeGameEvent(player, location[0] * 3 + location[1]),
+      );
 
   await Future.delayed(Duration(milliseconds: 100));
-  final error = read(gameErrorProvider).error;
+  final error = read.backendGame(code).gameError;
   if (error != null) {
     print('');
     print('!!!!!!!!!!!');
     print(error);
     print('!!!!!!!!!!!');
     print('');
-    read(gameErrorProvider).clearError();
+    read.backendGame(code).clearError();
   }
-  final gameState = read(gameProvider).gameState as TicTacToeGame;
+  final gameState = read.backendGame(code).gameState as TicTacToeGame;
   print(gameState.gameStatus);
   if (gameState.gameOver || gameState.roundOver) {
     print('Round Over');
@@ -64,8 +67,8 @@ Future<void> loop(Reader read) async {
     }
     print('');
     if (gameState.roundOver) {
-      await read(gameServerClientProvider(P1)).newRound();
-      await read(gameServerClientProvider(P2)).newRound();
+      await read.game(P1).gameClient.newRound();
+      await read.game(P2).gameClient.newRound();
     } else {
       print('Finished');
       print('Player 0: ${gameState.totalScores[P1]}');
@@ -75,9 +78,9 @@ Future<void> loop(Reader read) async {
   }
 }
 
-void printStateAndAction(Reader read) {
-  print('Player ${read(gameProvider).gameState.currentPlayer.id}\'s turn');
-  final gameState = read(gameProvider).gameState as TicTacToeGame;
+void printStateAndAction(Reader read, String code) {
+  print('Player ${read.backendGame(code).gameState.currentPlayer.id}\'s turn');
+  final gameState = read.backendGame(code).gameState as TicTacToeGame;
   String strFor(int index) => gameState.board[index] == P1
       ? 'X'
       : gameState.board[index] == P2

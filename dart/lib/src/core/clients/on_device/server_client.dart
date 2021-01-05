@@ -8,22 +8,25 @@ import '../clients.dart';
 ///
 /// Warning implementation not complete or tested yet
 class NoServerClient extends ServerClient {
-  NoServerClient({Reader read, String id}) : super(read, id);
-
+  NoServerClient({Reader read, String playerID}) : super(read, playerID);
+  static final games = <String>[];
   @override
   Future<void> createGame() async {
-    read(backendGameConfigProvider).state =
-        read(gameConfigProvider(playerID)).state;
+    final gameCode = generateGameID([]);
+    read.game(playerID).gameCode = gameCode;
+    read.backendGame(gameCode).gameConfig = read.game(playerID).gameConfig;
   }
 
   @override
-  Future<bool> deleteGame() async => true;
+  Future<bool> deleteGame() async => games.remove(read.game(playerID).gameCode);
 
   @override
   void dispose() {}
 
   @override
-  Future<void> getGameInfo(String gameId) async {}
+  Future<void> getGameInfo(String gameId) async {
+    // return read.backendGame(gameId).game
+  }
 
   @override
   Future<List<GameInfo>> getGames() async => [];
@@ -31,7 +34,7 @@ class NoServerClient extends ServerClient {
   static void registerImplementation() {
     ServerClient.registerImplementation(
       OnDeviceLocation,
-      (read, address, id) => NoServerClient(read: read, id: id),
+      (read, address, id) => NoServerClient(read: read, playerID: id),
     );
   }
 }

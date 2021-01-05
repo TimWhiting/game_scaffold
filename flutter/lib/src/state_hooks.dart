@@ -28,6 +28,8 @@ extension BuildContextGameScaffoldX on BuildContext {
   void setGameConfig(GameConfig config, String id) =>
       read(gameConfigProvider(id)).state = config;
   String gameCode(String id) => read(gameCodeProvider(id)).state;
+  void setGameCode(String id, String code) =>
+      read(gameCodeProvider(id)).state = code;
 
   /// Game information
   Game gameState(String id) => read(gameStateProvider(id)).state;
@@ -62,6 +64,7 @@ extension WidgetsReaderGameScaffoldX on ScopedReader {
   set gameConfig(GameConfig config) =>
       this(gameConfigProvider(id)).state = config;
   String get gameCode => this(gameCodeProvider(id)).state;
+  set gameCode(String code) => this(gameCodeProvider(id)).state = code;
 
   /// Game information
   Game get gameState => this(gameStateProvider(id)).state;
