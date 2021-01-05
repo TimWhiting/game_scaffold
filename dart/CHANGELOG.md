@@ -1,3 +1,7 @@
+## 0.0.4+1
+
+- Add `GameConfig` to `moveNextRound`
+  
 ## 0.0.4
 
 - Change some scoping of Providers

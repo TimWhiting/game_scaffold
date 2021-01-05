@@ -124,7 +124,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
           _readyPlayers.add(e);
           if (_readyPlayers.length == state.players.size) {
             _readyPlayers.clear();
-            return state.moveNextRound(read).gameValue();
+            return state.moveNextRound(gameConfig, read).gameValue();
           }
           return state.gameValue();
         },

@@ -46,7 +46,7 @@ abstract class Game<E extends Event> {
 
   /// Logic to apply after all players have consented they want to play another round
   /// to initialize the next round
-  Game moveNextRound(Reader read);
+  Game moveNextRound(GameConfig config, Reader read);
 
   /// Serializes the state for consumption by the frontend
   Map<String, dynamic> toJson();

@@ -60,7 +60,7 @@ abstract class TicTacToeGame
   }
 
   @override
-  TicTacToeGame moveNextRound(Reader read) {
+  TicTacToeGame moveNextRound(GameConfig config, Reader read) {
     return TicTacToeGame(
       generic: generic.finishRound(
         mapFrom({
