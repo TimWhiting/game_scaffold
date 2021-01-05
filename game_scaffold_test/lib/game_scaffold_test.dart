@@ -17,21 +17,22 @@ void testGame<T extends Game>(
   @required void Function(GameTester<T>) test,
 }) {
   darttest.group(name, () {
-    final read = ProviderContainer().read;
+    final Reader read = ProviderContainer().read;
+    String code;
     darttest.setUp(() async {
       read(gameLocationProvider).state = OnDeviceLocation;
-      read(gameConfigProvider(P1)).state = config;
-      await read(gameServerClientProvider(players.first.id)).createGame();
+      read.game(players.first.id).gameConfig = config;
+      code = await read.game(players.first.id).gameClient.createGame();
       for (final p in players) {
-        await read(gameServerClientProvider(p.id)).register();
+        read.game(p.id).gameCode = code;
+        await read.game(p.id).gameClient.register();
       }
-      if (read(backendGameProvider).gameState?.gameStatus !=
-          GameStatus.Started) {
-        read(gameServerClientProvider(players.first.id)).startGame();
+      if (read.backendGame(code).gameState?.gameStatus != GameStatus.Started) {
+        read.game(players.first.id).gameClient.startGame();
       }
     });
     darttest.test(name + '_Tests', () {
-      test(GameTester<T>(read, players));
+      test(GameTester<T>(read, players, code));
     });
   });
 }
@@ -43,8 +44,9 @@ void testGame<T extends Game>(
 class GameTester<T extends Game> {
   final Reader _read;
   final List<Player> _players;
+  final String code;
 
-  GameTester(this._read, this._players);
+  GameTester(this._read, this._players, this.code);
 
   /// Event lets you test the [outcome] of an [event]
   ///
@@ -57,13 +59,13 @@ class GameTester<T extends Game> {
   /// ```
   void event(Event event, Function(T, GameError) outcome) {
     if (event != null) {
-      _read(backendGameProvider).handleEvent(event.asGameEvent);
+      _read.backendGame(code).handleEvent(event.asGameEvent);
     }
 
-    final T game = _read(backendGameProvider).gameState;
-    final error = _read(backendGameErrorProvider).error;
+    final T game = _read.backendGame(code).gameState;
+    final error = _read.backendGame(code).gameError;
     if (error != null) {
-      _read(backendGameErrorProvider).clearError();
+      _read.backendGame(code).clearError();
     }
     outcome(game, error);
   }
@@ -71,18 +73,18 @@ class GameTester<T extends Game> {
   /// Returns the current game state
   ///
   /// If testing the outcome of an event prefer using [event]
-  T get game => _read(backendGameProvider).gameState;
+  T get game => _read.backendGame(code).gameState;
 
   /// Returns the current error state
   ///
   /// If testing the outcome of an event prefer using [event]
-  GameError get error => _read(backendGameErrorProvider).error;
+  GameError get error => _read.backendGame(code).gameError;
 
   /// Advances to the next round, and checks the [expectation] of the game after
   /// the round has advanced
   void nextRound(Function(T) expectation) {
     for (final p in _players) {
-      _read(gameServerClientProvider(p.id)).newRound();
+      _read.game(p.id).gameClient.newRound();
     }
     expectation(game);
   }

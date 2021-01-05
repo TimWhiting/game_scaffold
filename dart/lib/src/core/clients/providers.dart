@@ -20,10 +20,16 @@ final selectedAddress = StateProvider<String>((ref) => defaultAddress);
 /// implementation to use
 final gameLocationProvider = StateProvider<String>((ref) => IOServerLocation);
 
+/// Provides an encapsulation of many providers related to a Game without having
+/// to have each of them be a `family` provider.
 final playerGameProvider =
     Provider.family<GameProvider, String>((ref, id) => GameProvider(id));
 
+/// Provides an encapsulation of many providers without having to have each of
+/// them be a `family` provider.
 class GameProvider {
+  // TODO: Replace most of these providers with using final late after switching
+  // to Dart 2.12
   GameProvider(this.id) {
     _gameCodeProvider = StateProvider((ref) => '');
     _gameInfoProvider = StateProvider((ref) => null);
@@ -68,45 +74,83 @@ class GameProvider {
   /// Provides the game code for each client id
   StateProvider<String> _gameCodeProvider;
 
+  /// Provides the game code for each client id
+  StateProvider<String> get gameCodeProvider => _gameCodeProvider;
+
   /// Provides the [ServerClient] for each client id
   Provider<ServerClient> _serverClientProvider;
-
-  /// Provides a [GameServerClient] that communicates with the game server and handles game events
-  Provider<GameServerClient> _gameServerClientProvider;
 
   /// Provides a [GameClient] for the client with the specified id
   Provider<GameClient> _gameClientProvider;
 
+  /// Provides a [GameServerClient] that communicates with the game server and handles game events
+  Provider<GameServerClient> _gameServerClientProvider;
+
+  /// Provides a [GameServerClient] that communicates with the game server and handles game events
+  Provider<GameServerClient> get gameServerClientProvider =>
+      _gameServerClientProvider;
+
   /// Provides game info for the currently selected game
   StateProvider<GameInfo> _gameInfoProvider;
 
+  /// Provides game info for the currently selected game
+  StateProvider<GameInfo> get gameInfoProvider => _gameInfoProvider;
+
   /// Provides game lobby info in the form of [GameInfo] for the lobby
   StateProvider<GameInfo> _gameLobbyProvider;
+
+  /// Provides game lobby info in the form of [GameInfo] for the lobby
+  StateProvider<GameInfo> get gameLobbyProvider => _gameLobbyProvider;
 
   /// Provides the game info of all games that the client with the specified id
   /// is a part of
   FutureProvider<List<GameInfo>> _gamesProvider;
 
+  /// Provides the game info of all games that the client with the specified id
+  /// is a part of
+  FutureProvider<List<GameInfo>> get gamesProvider => _gamesProvider;
+
   /// Provides the game state for the current game of the client with specified id
   StateProvider<Game> _gameStateProvider;
+
+  /// Provides the game state for the current game of the client with specified id
+  StateProvider<Game> get gameStateProvider => _gameStateProvider;
 
   /// Provides the game error for the current game of the client with specified id
   StateProvider<GameError> _gameErrorProvider;
 
+  /// Provides the game error for the current game of the client with specified id
+  StateProvider<GameError> get gameErrorProvider => _gameErrorProvider;
+
   /// Provides the game status for the current game of the client with specified id
   StateProvider<GameStatus> _gameStatusProvider;
+
+  /// Provides the game status for the current game of the client with specified id
+  StateProvider<GameStatus> get gameStatusProvider => _gameStatusProvider;
 
   /// Provides whether it is the players turn for the current game of the client with the specified id
   Provider<bool> _gameTurnProvider;
 
+  /// Provides whether it is the players turn for the current game of the client with the specified id
+  Provider<bool> get gameTurnProvider => _gameTurnProvider;
+
   /// Provides the way to configure the game for starting
   StateProvider<GameConfig> _gameConfigProvider;
+
+  /// Provides the way to configure the game for starting
+  StateProvider<GameConfig> get gameConfigProvider => _gameConfigProvider;
 
   /// Provides the game type's name for the game specified by [gameConfigProvider]
   Provider<String> _gameNameProvider;
 
+  /// Provides the game type's name for the game specified by [gameConfigProvider]
+  Provider<String> get gameNameProvider => _gameNameProvider;
+
   /// Provides the name for the players based on their player id
   StateProvider<String> _playerNameProvider;
+
+  /// Provides the name for the players based on their player id
+  StateProvider<String> get playerNameProvider => _playerNameProvider;
 
   ServerClient _serverClientImpl(ProviderReference ref) {
     final location = ref.watch(gameLocationProvider).state;

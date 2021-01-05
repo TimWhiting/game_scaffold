@@ -5,100 +5,70 @@ import 'package:hooks_riverpod/all.dart';
 
 extension BuildContextGameScaffoldX on BuildContext {
   /// Setup parameters
-  void setAddress(String address, String id) =>
-      read(selectedAddress(id)).state = address;
-  String address(String id) => read(selectedAddress(id)).state;
+  void setAddress(String address) => read(selectedAddress).state = address;
+  String get address => read(selectedAddress).state;
 
   /// Setup parameters
   set clientImplementation(String implementation) =>
       read(gameLocationProvider).state = implementation;
   String get clientImplementation => read(gameLocationProvider).state;
 
-  /// Client
-  GameServerClient gameClient(String id) => read(gameServerClientProvider(id));
-
-  /// Server information
-  GameInfo currentGameInfo(String id) => read(gameInfoProvider(id)).state;
-  GameInfo lobbyInfo(String id) => read(gameLobbyProvider(id)).state;
-
-  Future<List<GameInfo>> gameInfos(String id) => read(gamesProvider(id).future);
-
-  /// Game setup information
-  GameConfig gameConfig(String id) => read(gameConfigProvider(id)).state;
-  void setGameConfig(GameConfig config, String id) =>
-      read(gameConfigProvider(id)).state = config;
-  String gameCode(String id) => read(gameCodeProvider(id)).state;
-  void setGameCode(String id, String code) =>
-      read(gameCodeProvider(id)).state = code;
-
-  /// Game information
-  Game gameState(String id) => read(gameStateProvider(id)).state;
-  GameStatus gameStatus(String id) => read(gameStatusProvider(id)).state;
-  bool gameTurn(String id) => read(gameTurnProvider(id));
-  String gameName(String id) => read(gameNameProvider(id));
-  String playerName(String id) => read(playerNameProvider(id)).state;
-}
-
-extension WidgetsReaderGameScaffoldX on ScopedReader {
-  String get id => this(playerIDProvider);
-
-  /// Setup parameters
-  set address(String address) => this(selectedAddress(id)).state = address;
-  String get address => this(selectedAddress(id)).state;
-
-  /// Setup parameters
-  set clientImplementation(String implementation) =>
-      this(gameLocationProvider).state = implementation;
-  String get clientImplementation => this(gameLocationProvider).state;
+  GameProvider gameProvider(String id) => read(playerGameProvider(id));
 
   /// Client
-  GameServerClient get gameClient => this(gameServerClientProvider(id));
+  GameServerClient gameClient(GameProvider g) =>
+      read(g.gameServerClientProvider);
 
   /// Server information
-  GameInfo get currentGameInfo => this(gameInfoProvider(id)).state;
-  GameInfo get lobbyInfo => this(gameLobbyProvider(id)).state;
-  Future<List<GameInfo>> get gameInfos => this(gamesProvider(id).future);
+  GameInfo currentGameInfo(GameProvider g) => read(g.gameInfoProvider).state;
+  GameInfo lobbyInfo(GameProvider g) => read(g.gameLobbyProvider).state;
+
+  Future<List<GameInfo>> gameInfos(GameProvider g) =>
+      read(g.gamesProvider.future);
 
   /// Game setup information
-  GameConfig get gameConfig => this(gameConfigProvider(id)).state;
-  set gameConfig(GameConfig config) =>
-      this(gameConfigProvider(id)).state = config;
-  String get gameCode => this(gameCodeProvider(id)).state;
-  set gameCode(String code) => this(gameCodeProvider(id)).state = code;
+  GameConfig gameConfig(GameProvider g) => read(g.gameConfigProvider).state;
+  void setGameConfig(GameConfig config, GameProvider g) =>
+      read(g.gameConfigProvider).state = config;
+  String gameCode(GameProvider g) => read(g.gameCodeProvider).state;
+  void setGameCode(GameProvider g, String code) =>
+      read(g.gameCodeProvider).state = code;
 
   /// Game information
-  Game get gameState => this(gameStateProvider(id)).state;
-  GameStatus get gameStatus => this(gameStatusProvider(id)).state;
-  bool get gameTurn => this(gameTurnProvider(id));
-  String get gameName => this(gameNameProvider(id));
-  String get playerName => this(playerNameProvider(id)).state;
+  Game gameState(GameProvider g) => read(g.gameStateProvider).state;
+  GameStatus gameStatus(GameProvider g) => read(g.gameStatusProvider).state;
+  bool gameTurn(GameProvider g) => read(g.gameTurnProvider);
+  String gameName(GameProvider g) => read(g.gameNameProvider);
+  String playerName(GameProvider g) => read(g.playerNameProvider).state;
 }
 
 String usePlayerID() => useProvider(playerIDProvider);
 
 /// Setup parameters
-String useAddress(String id) => useProvider(selectedAddress(id)).state;
+String useAddress(String id) => useProvider(selectedAddress).state;
+
+GameProvider useGameProvider(String id) => useProvider(playerGameProvider(id));
 
 /// Client
-GameServerClient useGameClient(String id) =>
-    useProvider(gameServerClientProvider(id));
+GameServerClient useGameClient(GameProvider g) =>
+    useProvider(g.gameServerClientProvider);
 
 /// Server information
-GameInfo useCurrentGameInfo(String id) =>
-    useProvider(gameInfoProvider(id)).state;
-GameInfo useLobbyInfo(String id) => useProvider(gameLobbyProvider(id)).state;
-Future<List<GameInfo>> useGameInfos(String id) =>
-    useProvider(gamesProvider(id).future);
+GameInfo useCurrentGameInfo(GameProvider g) =>
+    useProvider(g.gameInfoProvider).state;
+GameInfo useLobbyInfo(GameProvider g) => useProvider(g.gameLobbyProvider).state;
+Future<List<GameInfo>> useGameInfos(GameProvider g) =>
+    useProvider(g.gamesProvider.future);
 
 /// Game setup information
-GameConfig useGameConfig(String id) =>
-    useProvider(gameConfigProvider(id)).state;
-String useGameCode(String id) => useProvider(gameCodeProvider(id)).state;
+GameConfig useGameConfig(GameProvider g) =>
+    useProvider(g.gameConfigProvider).state;
+String useGameCode(GameProvider g) => useProvider(g.gameCodeProvider).state;
 
 /// Game information
-Game useGameState(String id) => useProvider(gameStateProvider(id)).state;
-GameStatus useGameStatus(String id) =>
-    useProvider(gameStatusProvider(id)).state;
-bool useGameTurn(String id) => useProvider(gameTurnProvider(id));
-String useGameName(String id) => useProvider(gameNameProvider(id));
-String usePlayerName(String id) => useProvider(playerNameProvider(id)).state;
+Game useGameState(GameProvider g) => useProvider(g.gameStateProvider).state;
+GameStatus useGameStatus(GameProvider g) =>
+    useProvider(g.gameStatusProvider).state;
+bool useGameTurn(GameProvider g) => useProvider(g.gameTurnProvider);
+String useGameName(GameProvider g) => useProvider(g.gameNameProvider);
+String usePlayerName(GameProvider g) => useProvider(g.playerNameProvider).state;

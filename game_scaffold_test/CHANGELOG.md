@@ -1,3 +1,7 @@
+## 0.0.4
+
+- Change some scoping of Providers
+
 ## 0.0.3
 
 - Update to work with latest game_scaffold_dart
