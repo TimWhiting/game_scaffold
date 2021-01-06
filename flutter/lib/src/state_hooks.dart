@@ -8,7 +8,8 @@ extension BuildContextGameScaffoldX on BuildContext {
   set address(String address) => read(selectedAddress).state = address;
   String get address => read(selectedAddress).state;
   set singleGameConfig(GameConfig config) =>
-      read(singleConfigProvider).config = config;
+      read(singleConfigProvider).state = config;
+  GameConfig get singleGameConfig => read(singleConfigProvider).state;
 
   /// Setup parameters
   set clientImplementation(String implementation) =>
