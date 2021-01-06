@@ -171,7 +171,7 @@ packages:
       name: game_scaffold_dart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4+1"
+    version: "0.1.0"
   glob:
     dependency: transitive
     description:

@@ -5,8 +5,10 @@ import 'package:hooks_riverpod/all.dart';
 
 extension BuildContextGameScaffoldX on BuildContext {
   /// Setup parameters
-  void setAddress(String address) => read(selectedAddress).state = address;
+  set address(String address) => read(selectedAddress).state = address;
   String get address => read(selectedAddress).state;
+  set singleGameConfig(GameConfig config) =>
+      read(singleConfigProvider).config = config;
 
   /// Setup parameters
   set clientImplementation(String implementation) =>

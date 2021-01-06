@@ -3,12 +3,12 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kt_dart/kt.dart' hide nullable;
 import 'package:riverpod/all.dart';
 
+import '../backend/game_state.dart';
 import 'errors.dart';
 import 'extensions.dart';
 import 'events.dart';
 import 'generic.dart';
 import 'player.dart';
-
 export 'package:dartx/dartx.dart';
 export 'package:kt_dart/kt.dart' hide nullable;
 
@@ -30,7 +30,7 @@ abstract class Game<E extends Event> {
   /// So make the error as informative as possible. This method should return a copy of the state if
   /// undo functionality needs to work. (i.e. the class should be immutable), for high performance you can
   /// make the changes and just return the changed instance itself, but undo functionality won't work.
-  GameOrError next(E event, Reader read);
+  GameOrError next(E event, Reader read, BackendGameReader backendReader);
 
   /// Copies the state of the game with generic replaced by the function applying updates to the most recent copy of generic
   ///
@@ -46,7 +46,8 @@ abstract class Game<E extends Event> {
 
   /// Logic to apply after all players have consented they want to play another round
   /// to initialize the next round
-  Game moveNextRound(GameConfig config, Reader read);
+  Game moveNextRound(
+      GameConfig config, Reader read, BackendGameReader backendReader);
 
   /// Serializes the state for consumption by the frontend
   Map<String, dynamic> toJson();
@@ -59,7 +60,9 @@ abstract class Game<E extends Event> {
     String type, {
     @required String name,
     @required Q Function(Map<String, dynamic>) fromJson,
-    @required T Function(GameConfig, KtList<Player>, Reader read) initialState,
+    @required
+        T Function(GameConfig, KtList<Player>, Reader, BackendGameReader)
+            initialState,
     @required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
     Q Function(T) toClientView,
   }) {
@@ -83,14 +86,14 @@ abstract class Game<E extends Event> {
   static Game toClientView(Game g) => _toClientViews[g.type](g);
 
   /// Will get the initial state for a particular configuration
-  static Game getInitialState(
-      GameConfig gameConfig, KtList<Player> players, Reader read) {
+  static Game getInitialState(GameConfig gameConfig, KtList<Player> players,
+      Reader read, BackendGameReader backendReader) {
     final initState = _initialStates[gameConfig.gameType];
     if (initState == null) {
       throw UnimplementedError(
           'No game of that type exists in the registry ${gameConfig.gameType}');
     }
-    return initState(gameConfig, players, read);
+    return initState(gameConfig, players, read, backendReader);
   }
 
   /// Returns the game event translated from json
@@ -126,7 +129,8 @@ abstract class Game<E extends Event> {
   static final Map<String, String> gameNames = {};
 
   /// Stores the function to create the initial state of the game
-  static final Map<String, Game Function(GameConfig, KtList<Player>, Reader)>
+  static final Map<String,
+          Game Function(GameConfig, KtList<Player>, Reader, BackendGameReader)>
       _initialStates = {};
 }
 

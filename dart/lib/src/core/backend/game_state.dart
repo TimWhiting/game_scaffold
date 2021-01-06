@@ -16,16 +16,32 @@ String get homeDir {
   return Platform.environment['HOME'];
 }
 
-final backendGamesProvider = Provider.family<BackendProvider, String>(
-    (ref, code) => BackendProvider(code));
+final backendGameCodesProvider =
+    StateProvider<KtList<String>>((ref) => listOf());
+final backendGamesProvider =
+    Provider.family<BackendProvider, String>((ref, code) {
+  final bp = BackendProvider(ref.read, code);
+  ref.onDispose(bp.dispose);
+  return bp;
+});
 
 class BackendProvider {
-  BackendProvider(this.code) {
+  BackendProvider(this.read, this.code) {
+    read(backendGameCodesProvider).state =
+        read(backendGameCodesProvider).state.plusElement(code);
     initialStateProvider = Provider<Game>(_initialStateImpl);
     gameStateProvider =
         StateNotifierProvider<GameStateNotifier>(_gameStateNotifier);
   }
+
+  /// The game [code] that uniquely identifies the providers in this BackendProvider
   final String code;
+  final Reader read;
+
+  void dispose() {
+    read(backendGameCodesProvider).state =
+        read(backendGameCodesProvider).state.minusElement(code);
+  }
 
   /// Provides the initial state of the game
   ///
@@ -50,7 +66,8 @@ class BackendProvider {
   Game _initialStateImpl(ProviderReference ref) {
     final gameConfig = ref.watch(configProvider).state;
     final players = ref.watch(playersProvider).state;
-    return Game.getInitialState(gameConfig, players, ref.read);
+    return Game.getInitialState(
+        gameConfig, players, ref.read, ref.read.backendGame(code));
   }
 
   GameStateNotifier _gameStateNotifier(ProviderReference ref) {
@@ -123,7 +140,9 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
           _readyPlayers.add(e);
           if (_readyPlayers.length == state.players.size) {
             _readyPlayers.clear();
-            return state.moveNextRound(gameConfig, read).gameValue();
+            return state
+                .moveNextRound(gameConfig, read, read.backendGame(code))
+                .gameValue();
           }
           return state.gameValue();
         },
@@ -133,7 +152,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
         orElse: () =>
             GameError('General Event not implemented yet $e', 'programmer'),
       ),
-      game: (e) => state.next(e, read),
+      game: (e) => state.next(e, read, read.backendGame(code)),
     );
     if (nextState.isError) {
       read.backendGame(code).gameError = nextState.error;

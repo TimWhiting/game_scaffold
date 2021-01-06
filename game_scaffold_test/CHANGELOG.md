@@ -1,3 +1,7 @@
+## 0.1.0
+
+- First more stable release
+
 ## 0.0.4+1
 
 - Change some scoping of Providers

@@ -1,3 +1,7 @@
+## 0.1.0
+
+- First release that is more certain
+  
 ## 0.0.4+1
 
 - Updates to some providers

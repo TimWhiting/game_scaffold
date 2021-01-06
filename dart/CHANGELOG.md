@@ -1,3 +1,7 @@
+## 0.1.0
+
+- First release that is more certain
+
 ## 0.0.4+2
 
 - Add new provider extensions

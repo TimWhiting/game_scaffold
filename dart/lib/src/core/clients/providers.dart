@@ -22,15 +22,22 @@ final gameLocationProvider = StateProvider<String>((ref) => IOServerLocation);
 
 /// Provides an encapsulation of many providers related to a Game without having
 /// to have each of them be a `family` provider.
-final playerGameProvider =
-    Provider.family<GameProvider, String>((ref, id) => GameProvider(id));
+final playerGameProvider = Provider.family<GameProvider, String>((ref, id) {
+  final gp = GameProvider(ref.read, id);
+  ref.onDispose(gp.dispose);
+  return gp;
+});
+final playerIDsProvider =
+    StateProvider<KtList<String>>((ref) => listFrom(<String>[]));
 
 /// Provides an encapsulation of many providers without having to have each of
 /// them be a `family` provider.
 class GameProvider {
   // TODO: Replace most of these providers with using final late after switching
   // to Dart 2.12
-  GameProvider(this.id) {
+  GameProvider(this.read, this.id) {
+    read(playerIDsProvider).state =
+        read(playerIDsProvider).state.plusElement(id);
     _gameCodeProvider = StateProvider((ref) => '');
     _gameInfoProvider = StateProvider((ref) => null);
     _gameLobbyProvider = StateProvider((ref) => null);
@@ -69,7 +76,9 @@ class GameProvider {
     );
   }
 
+  /// The playerID associated with the providers in this GameProvider
   final String id;
+  final Reader read;
 
   /// Provides the game code for each client id
   StateProvider<String> _gameCodeProvider;
@@ -192,6 +201,11 @@ class GameProvider {
     ref.onDispose(client.dispose);
     return client;
   }
+
+  void dispose() {
+    read(playerIDsProvider).state =
+        read(playerIDsProvider).state.minusElement(id);
+  }
 }
 
 /// Provides the player id for a particular section of the widget tree
@@ -223,6 +237,9 @@ extension GameReaderX on Reader {
   set clientImplementation(String implementation) =>
       this(gameLocationProvider).state = implementation;
   String get clientImplementation => this(gameLocationProvider).state;
+  set gameConfig(GameConfig config) =>
+      this(singleConfigProvider).config = config;
+  KtList<String> get playerIDs => this(playerIDsProvider).state;
 }
 
 extension GameReaderGameX on GameReader {
@@ -258,4 +275,20 @@ extension GameReaderGameX on GameReader {
   String get gameName => this(game._gameNameProvider);
   String get playerName => this(game._playerNameProvider).state;
   set playerName(String name) => this(game._playerNameProvider).state = name;
+}
+
+/// Allows one config to write all players' configs
+final singleConfigProvider =
+    Provider<GameConfigManager>((ref) => GameConfigManager(ref.read));
+
+class GameConfigManager {
+  const GameConfigManager(this.read);
+
+  final Reader read;
+
+  set config(GameConfig config) {
+    for (final client in read.playerIDs.iter) {
+      read.gameFor(client).gameConfig = config;
+    }
+  }
 }
