@@ -30,7 +30,7 @@ abstract class Game<E extends Event> {
   /// So make the error as informative as possible. This method should return a copy of the state if
   /// undo functionality needs to work. (i.e. the class should be immutable), for high performance you can
   /// make the changes and just return the changed instance itself, but undo functionality won't work.
-  GameOrError next(E event, Reader read, BackendGameReader backendReader);
+  GameOrError next(E event, BackendGameReader backendReader);
 
   /// Copies the state of the game with generic replaced by the function applying updates to the most recent copy of generic
   ///
@@ -46,8 +46,7 @@ abstract class Game<E extends Event> {
 
   /// Logic to apply after all players have consented they want to play another round
   /// to initialize the next round
-  Game moveNextRound(
-      GameConfig config, Reader read, BackendGameReader backendReader);
+  Game moveNextRound(GameConfig config, BackendGameReader backendReader);
 
   /// Serializes the state for consumption by the frontend
   Map<String, dynamic> toJson();
@@ -61,8 +60,7 @@ abstract class Game<E extends Event> {
     @required String name,
     @required Q Function(Map<String, dynamic>) fromJson,
     @required
-        T Function(GameConfig, KtList<Player>, Reader, BackendGameReader)
-            initialState,
+        T Function(GameConfig, KtList<Player>, BackendGameReader) initialState,
     @required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
     Q Function(T) toClientView,
   }) {
@@ -87,13 +85,13 @@ abstract class Game<E extends Event> {
 
   /// Will get the initial state for a particular configuration
   static Game getInitialState(GameConfig gameConfig, KtList<Player> players,
-      Reader read, BackendGameReader backendReader) {
+      BackendGameReader backendReader) {
     final initState = _initialStates[gameConfig.gameType];
     if (initState == null) {
       throw UnimplementedError(
           'No game of that type exists in the registry ${gameConfig.gameType}');
     }
-    return initState(gameConfig, players, read, backendReader);
+    return initState(gameConfig, players, backendReader);
   }
 
   /// Returns the game event translated from json
@@ -130,7 +128,7 @@ abstract class Game<E extends Event> {
 
   /// Stores the function to create the initial state of the game
   static final Map<String,
-          Game Function(GameConfig, KtList<Player>, Reader, BackendGameReader)>
+          Game Function(GameConfig, KtList<Player>, BackendGameReader)>
       _initialStates = {};
 }
 

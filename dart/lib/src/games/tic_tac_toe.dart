@@ -20,7 +20,7 @@ abstract class TicTacToeGame
 
   @override
   GameOrError<TicTacToeGame> next(
-      TicTacToeGameEvent event, Reader read, BackendGameReader backendReader) {
+      TicTacToeGameEvent event, BackendGameReader backendReader) {
     return _handleMove(event.player, event.location);
   }
 
@@ -62,7 +62,7 @@ abstract class TicTacToeGame
 
   @override
   TicTacToeGame moveNextRound(
-      GameConfig config, Reader read, BackendGameReader backendReader) {
+      GameConfig config, BackendGameReader backendReader) {
     return TicTacToeGame(
       generic: generic.finishRound(
         mapFrom({
@@ -124,7 +124,7 @@ abstract class TicTacToeGame
       'tictactoe',
       name: 'Tic Tac Toe',
       fromJson: (json) => TicTacToeGame.fromJson(json),
-      initialState: (config, players, _, __) => TicTacToeGame(
+      initialState: (config, players, _) => TicTacToeGame(
         generic: GenericGame.start(players),
         board: listFrom(List.filled(9, null)),
       ),

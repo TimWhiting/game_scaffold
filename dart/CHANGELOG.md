@@ -1,3 +1,7 @@
+## 0.1.3
+
+- Remove reader from methods containing BackendGameReader
+
 ## 0.1.2
 
 - Change single config provider to make it overridable

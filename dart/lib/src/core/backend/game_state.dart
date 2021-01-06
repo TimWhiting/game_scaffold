@@ -69,7 +69,7 @@ class BackendProvider {
     final gameConfig = ref.watch(configProvider).state;
     final players = ref.watch(playersProvider).state;
     return Game.getInitialState(
-        gameConfig, players, ref.read, ref.read.backendGame(code));
+        gameConfig, players, ref.read.backendGame(code));
   }
 
   GameStateNotifier _gameStateNotifier(ProviderReference ref) {
@@ -143,7 +143,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
           if (_readyPlayers.length == state.players.size) {
             _readyPlayers.clear();
             return state
-                .moveNextRound(gameConfig, read, read.backendGame(code))
+                .moveNextRound(gameConfig, read.backendGame(code))
                 .gameValue();
           }
           return state.gameValue();
@@ -154,7 +154,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
         orElse: () =>
             GameError('General Event not implemented yet $e', 'programmer'),
       ),
-      game: (e) => state.next(e, read, read.backendGame(code)),
+      game: (e) => state.next(e, read.backendGame(code)),
     );
     if (nextState.isError) {
       read.backendGame(code).gameError = nextState.error;
