@@ -1,3 +1,7 @@
+## 0.1.1
+
+- Fix provider error
+  
 ## 0.1.0
 
 - First release that is more certain
