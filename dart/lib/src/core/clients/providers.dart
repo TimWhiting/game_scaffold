@@ -36,8 +36,11 @@ class GameProvider {
   // TODO: Replace most of these providers with using final late after switching
   // to Dart 2.12
   GameProvider(this.read, this.id) {
-    read(playerIDsProvider).state =
-        read(playerIDsProvider).state.plusElement(id);
+    Future.delayed(
+      100.milliseconds,
+      () => read(playerIDsProvider).state =
+          read(playerIDsProvider).state.plusElement(id),
+    );
     _gameCodeProvider = StateProvider((ref) => '');
     _gameInfoProvider = StateProvider((ref) => null);
     _gameLobbyProvider = StateProvider((ref) => null);
