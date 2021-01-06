@@ -28,7 +28,7 @@ final backendGamesProvider =
 class BackendProvider {
   BackendProvider(this.read, this.code) {
     Future.delayed(
-        100.milliseconds,
+        10.milliseconds,
         () => read(backendGameCodesProvider).state =
             read(backendGameCodesProvider).state.plusElement(code));
     initialStateProvider = Provider<Game>(_initialStateImpl);

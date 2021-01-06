@@ -1,3 +1,7 @@
+## 0.1.2
+
+- Change single config provider to make it overridable
+  
 ## 0.1.1
 
 - Fix provider error

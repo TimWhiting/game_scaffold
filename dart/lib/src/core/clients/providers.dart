@@ -37,7 +37,7 @@ class GameProvider {
   // to Dart 2.12
   GameProvider(this.read, this.id) {
     Future.delayed(
-      100.milliseconds,
+      10.milliseconds,
       () => read(playerIDsProvider).state =
           read(playerIDsProvider).state.plusElement(id),
     );
@@ -63,7 +63,8 @@ class GameProvider {
         return currentPlayer == null || currentPlayer == id;
       },
     );
-    _gameConfigProvider = StateProvider<GameConfig>((ref) => null);
+    _gameConfigProvider = StateProvider<GameConfig>(
+        (ref) => ref.watch(singleConfigProvider).state);
     _gameNameProvider = Provider<String>(
       (ref) => ref.watch(_gameConfigProvider).state.gameType.name,
     );
@@ -241,7 +242,8 @@ extension GameReaderX on Reader {
       this(gameLocationProvider).state = implementation;
   String get clientImplementation => this(gameLocationProvider).state;
   set gameConfig(GameConfig config) =>
-      this(singleConfigProvider).config = config;
+      this(singleConfigProvider).state = config;
+  GameConfig get gameConfig => this(singleConfigProvider).state;
   KtList<String> get playerIDs => this(playerIDsProvider).state;
 }
 
@@ -281,17 +283,4 @@ extension GameReaderGameX on GameReader {
 }
 
 /// Allows one config to write all players' configs
-final singleConfigProvider =
-    Provider<GameConfigManager>((ref) => GameConfigManager(ref.read));
-
-class GameConfigManager {
-  const GameConfigManager(this.read);
-
-  final Reader read;
-
-  set config(GameConfig config) {
-    for (final client in read.playerIDs.iter) {
-      read.gameFor(client).gameConfig = config;
-    }
-  }
-}
+final singleConfigProvider = StateProvider<GameConfig>((ref) => null);
