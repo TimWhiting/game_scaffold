@@ -112,6 +112,8 @@ String useGameName(GameProvider g) => useProvider(g.gameNameProvider);
 String usePlayerName(GameProvider g) => useProvider(g.playerNameProvider).state;
 
 abstract class GameHookWidget extends HookWidget {
+  const GameHookWidget({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final playerID = usePlayerID();

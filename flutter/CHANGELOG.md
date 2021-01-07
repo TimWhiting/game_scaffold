@@ -1,3 +1,7 @@
+## 0.1.3
+
+- Add `key` and const constructor to `GameHookWidget`
+
 ## 0.1.2
 
 - Add `GameHookWidget`
