@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/all.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 extension BuildContextGameScaffoldX on BuildContext {
   /// Setup parameters
@@ -109,3 +110,18 @@ GameStatus useGameStatus(GameProvider g) =>
 bool useGameTurn(GameProvider g) => useProvider(g.gameTurnProvider);
 String useGameName(GameProvider g) => useProvider(g.gameNameProvider);
 String usePlayerName(GameProvider g) => useProvider(g.playerNameProvider).state;
+
+abstract class GameHookWidget extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    final playerID = usePlayerID();
+    final gameProvider = useGameProvider(playerID);
+    return buildWithGame(context, playerID, gameProvider);
+  }
+
+  Widget buildWithGame(
+    BuildContext context,
+    String playerID,
+    GameProvider gameProvider,
+  );
+}

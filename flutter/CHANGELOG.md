@@ -1,3 +1,7 @@
+## 0.1.2
+
+- Add `GameHookWidget`
+
 ## 0.1.1
 
 - Update config extension
