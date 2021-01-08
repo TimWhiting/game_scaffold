@@ -1,3 +1,7 @@
+## 0.1.3+1
+
+- Fix game name provider
+
 ## 0.1.3
 
 - Remove reader from methods containing BackendGameReader

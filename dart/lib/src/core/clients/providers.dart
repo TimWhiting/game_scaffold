@@ -66,7 +66,7 @@ class GameProvider {
     _gameConfigProvider = StateProvider<GameConfig>(
         (ref) => ref.watch(singleConfigProvider).state);
     _gameNameProvider = Provider<String>(
-      (ref) => ref.watch(_gameConfigProvider).state.gameType.name,
+      (ref) => ref.watch(_gameStateProvider).state.type.name,
     );
     _playerNameProvider = StateProvider<String>(
       (ref) =>
