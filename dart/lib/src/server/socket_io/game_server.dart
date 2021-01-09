@@ -38,7 +38,7 @@ class GameServer {
   final Duration timeout;
 
   /// The game's id
-  String get id => _gameId;
+  String get gameID => _gameId;
 
   /// Gets [GameConfig] of this game
   GameConfig get gameConfig => _read.gameConfig;
@@ -131,7 +131,7 @@ class GameServer {
 
     client.on(
       IOChannel.disconnect.string,
-      (data) => _handleDisconnect(client, data),
+      (data) => _handleDisconnect(client, id, data),
     );
     // Player rejoining
     if (_clients.containsKey(id)) {
@@ -167,7 +167,7 @@ class GameServer {
     }
   }
 
-  void _handleDisconnect(IO.Socket socket, dynamic reason) {
+  void _handleDisconnect(IO.Socket socket, String id, dynamic reason) {
     _serverLogger.info('Client disconnected from $_gameId namespace $reason');
     _clients[id] = null;
   }
@@ -176,7 +176,7 @@ class GameServer {
     _players.add(player);
     _read.players = _players.toImmutableList();
     for (final client in _clients.entries) {
-      client.value?.emit(IOChannel.lobby.string, gameInfo(id).toJson());
+      client.value?.emit(IOChannel.lobby.string, gameInfo(client.key).toJson());
     }
   }
 

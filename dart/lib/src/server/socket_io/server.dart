@@ -125,8 +125,8 @@ class IOServer {
     final server = GameServer(
         io, this, container.read.backendGame(gameid), gameid, servers.remove,
         debug: debug);
-    servers[server.id] = server;
-    client.emit(IOChannel.gamecreated.string, server.id);
+    servers[server.gameID] = server;
+    client.emit(IOChannel.gamecreated.string, server.gameID);
   }
 
   Future<void> _deleteGame(IO.Socket client, String id) async {
