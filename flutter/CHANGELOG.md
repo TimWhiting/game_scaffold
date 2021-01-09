@@ -1,3 +1,7 @@
+## 0.1.4+1
+
+- Add example
+
 ## 0.1.4
 
 - Update `GameHookWidget` to just provide `GameProvider` in the buildWithGame method
