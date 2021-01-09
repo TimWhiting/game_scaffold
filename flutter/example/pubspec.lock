@@ -136,7 +136,7 @@ packages:
       path: "../../dart"
       relative: true
     source: path
-    version: "0.1.4+1"
+    version: "0.1.5"
   hooks_riverpod:
     dependency: "direct main"
     description:
@@ -173,7 +173,7 @@ packages:
     source: hosted
     version: "0.8.0"
   logging:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: logging
       url: "https://pub.dartlang.org"

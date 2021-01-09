@@ -193,18 +193,17 @@ class GameProvider {
 
   GameClient _gameClientImpl(ProviderReference ref) {
     final location = ref.watch(gameLocationProvider).state;
-    final gameCode = ref.watch(_gameCodeProvider).state;
     final address = ref.watch(selectedAddress).state;
     if (location == IOServerLocation && address == defaultAddress) {
       throw UnimplementedError(
           'Please set the address for the remote server before connecting a game server client');
     }
     final client = GameClient.fromParams(
-        location: location,
-        read: ref.read,
-        address: address,
-        id: playerID,
-        gameCode: gameCode);
+      location: location,
+      read: ref.read,
+      address: address,
+      id: playerID,
+    );
     ref.onDispose(client.dispose);
     return client;
   }

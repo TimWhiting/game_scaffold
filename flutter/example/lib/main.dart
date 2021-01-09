@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:game_scaffold/game_scaffold.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:game_scaffold_dart/games.dart';
+import 'package:logging/logging.dart';
 
 void main() {
   Game.registerGeneralEvents();
   TicTacToeGame.register();
   registerOnDeviceClients();
-
+  Logger.root.clearListeners();
+  Logger.root.level = Level.FINE;
+  Logger.root.onRecord.listen((record) =>
+      print('[${record.level}] ${record.loggerName}: ${record.message}'));
   runApp(ProviderScope(
     overrides: [
       gameLocationProvider
@@ -139,6 +143,7 @@ class GameWidget extends GameHookWidget {
   @override
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final gameState = gameProvider.useGameState as TicTacToeGame;
+    final gameError = gameProvider.useGameError;
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -146,6 +151,7 @@ class GameWidget extends GameHookWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text('$gameState'),
+            SizedBox(height: 20),
             for (final r in [0, 1, 2])
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -167,13 +173,16 @@ class GameWidget extends GameHookWidget {
                           ),
                         ),
                       ),
-                      onTap: () => context
-                          .gameClient(gameProvider.playerID)
-                          .sendEvent(TicTacToeGameEvent(
-                              gameProvider.playerID, r * 3 + c)),
+                      onTap: () =>
+                          context.gameClient(gameProvider.playerID).sendEvent(
+                                TicTacToeGameEvent(
+                                    gameProvider.playerID, r * 3 + c),
+                              ),
                     ),
                 ],
               ),
+            SizedBox(height: 20),
+            Text('$gameError'),
           ],
         ),
       ),

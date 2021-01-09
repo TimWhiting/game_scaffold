@@ -1,3 +1,8 @@
+
+## 0.1.5
+
+- Adjust GameClient to always use the latest GameCode (prevent from using old Providers with bad GameCode)
+
 ## 0.1.4+1
 
 - Update OnDeviceClient to default name to id

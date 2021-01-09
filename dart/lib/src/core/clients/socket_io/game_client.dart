@@ -10,75 +10,83 @@ import 'channels.dart';
 
 /// The socket IO implementation of [GameClient]
 class IOGameClient extends GameClient {
-  IOGameClient({Reader read, this.address, String gameCode, String id})
-      : socket = IO.io('$address/$gameCode', socketIOOpts),
-        super(id, gameCode, read) {
-    logger.info('Created Game Client $gameCode');
+  IOGameClient({Reader read, this.address, String id}) : super(id, read) {
+    Future.delayed(100.milliseconds, _ensureConnected);
   }
   final String address;
 
-  final IO.Socket socket;
+  IO.Socket _socket;
+  String _lastGameCode;
+
+  void _ensureConnected() {
+    if (gameCode != _lastGameCode || (_socket?.disconnected ?? true)) {
+      _socket?.disconnect();
+      _socket?.dispose();
+      _socket = IO.io('$address/$gameCode', socketIOOpts);
+      logger.info('Created Game Client Socket $gameCode');
+      _lastGameCode = gameCode;
+      read.gameFor(id).gameStatus = GameStatus.NotJoined;
+    }
+  }
 
   @override
   void exitGame() {
-    socket.off(IOChannel.error.string);
-    socket.off(IOChannel.gamestate.string);
-    socket.off(IOChannel.lobby.string);
+    _socket.off(IOChannel.error.string);
+    _socket.off(IOChannel.gamestate.string);
+    _socket.off(IOChannel.lobby.string);
     read.gameFor(id).gameStatus = GameStatus.NotJoined;
-    socket.disconnect();
+    _socket.disconnect();
   }
 
   @override
   Future<void> register() async {
+    _ensureConnected();
     read.gameFor(id).gameStatus = GameStatus.NotJoined;
-    final assignedName = await socket.call(
-        IOChannel.register, {'name': read.gameFor(id).playerName, 'id': id});
-
-    read.gameFor(id).playerName = assignedName as String;
-    read.gameFor(id).gameStatus = GameStatus.NotStarted;
     _watchState();
+    final assignedName = await _socket.call(
+        IOChannel.register, {'name': read.gameFor(id).playerName, 'id': id});
+    read.gameFor(id).playerName = assignedName as String;
   }
 
   void _onLobby(Map<String, dynamic> lobby) {
-    socket.on(IOChannel.lobby.string, (data) {
-      final gameInfo = GameInfo.fromJson(data);
-      read.gameFor(id).lobbyInfo = gameInfo;
-    });
+    final gameInfo = GameInfo.fromJson(lobby);
+    read.gameFor(id).gameStatus = GameStatus.NotStarted;
+    print('Lobby $gameInfo');
+    read.gameFor(id).lobbyInfo = gameInfo;
   }
 
   void _watchState() {
-    socket.on(IOChannel.gamestate.string, (data) {
+    _socket.on(IOChannel.gamestate.string, (data) {
+      _socket.off(IOChannel.lobby.string);
       final gameState = Game.fromJson(data as Map<String, dynamic>);
-      socket.off(IOChannel.lobby.string);
       logger.fine(data);
       read.gameFor(id).gameState = gameState;
       read.gameFor(id).gameStatus = gameState.gameStatus;
     });
-    socket.on(IOChannel.error.string, (data) {
+    _socket.on(IOChannel.error.string, (data) {
       read.gameFor(id).gameError = GameError.fromJson(data);
     });
-    socket.on(IOChannel.lobby.string, (d) => _onLobby(d));
+    _socket.on(IOChannel.lobby.string, (d) => _onLobby(d));
   }
 
   @override
   void sendEvent(Event event) {
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
-    socket.emit(IOChannel.event.string, js);
+    _socket.emit(IOChannel.event.string, js);
   }
 
   @override
   void dispose() {
     logger.info('Dispose');
-    socket.disconnect();
-    socket.dispose();
+    _socket.disconnect();
+    _socket.dispose();
   }
 
   static void registerImplementation() {
     GameClient.registerImplementation(
       IOServerLocation,
-      (read, address, id, gameCode) => IOGameClient(
-          address: address, read: read, id: id, gameCode: gameCode),
+      (read, address, id) => IOGameClient(address: address, read: read, id: id),
     );
   }
 }

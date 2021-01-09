@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod/all.dart';
 
@@ -7,14 +8,13 @@ import '../core.dart';
 
 /// A client for a particular game identified by [gameCode]
 abstract class GameClient {
-  GameClient(this.id, this.gameCode, this.read)
-      : logger = Logger('GameClient $gameCode');
+  GameClient(this.id, this.read) : logger = Logger('GameClient $id');
 
   /// The client's [id]
   final String id;
 
   /// The [gameCode] of the game the client has joined
-  final String gameCode;
+  String get gameCode => read.gameFor(id).gameCode;
   final Logger logger;
 
   final Reader read;
@@ -47,12 +47,12 @@ abstract class GameClient {
   /// Registers a [GameClient] implementation for the given [location]
   static void registerImplementation<T extends GameClient>(
     String location,
-    T Function(Reader read, String address, String id, String gameCode) impl,
+    T Function(Reader read, String address, String id) impl,
   ) {
     _clientImplementations[location] = impl;
   }
 
-  static final Map<String, GameClient Function(Reader, String, String, String)>
+  static final Map<String, GameClient Function(Reader, String, String)>
       _clientImplementations = {};
 
   /// Creates a [GameClient] with the parameters specified
@@ -61,13 +61,12 @@ abstract class GameClient {
     Reader read,
     String address,
     String id,
-    String gameCode,
   }) {
     final impl = _clientImplementations[location];
     if (impl == null) {
       throw UnimplementedError(
           'No ServerClient implementation for $location defined');
     }
-    return impl(read, address, id, gameCode);
+    return impl(read, address, id);
   }
 }

@@ -15,6 +15,7 @@ dependencies:
   flutter_hooks: any
   flutter_riverpod: any
   hooks_riverpod: any
+  logging: any
 
 dev_dependencies:
   flutter_test:

@@ -11,8 +11,7 @@ import '../clients.dart';
 ///
 /// Warning implementation not complete or tested yet
 class NoServerGameClient extends GameClient {
-  NoServerGameClient({Reader read, String id, String gameCode})
-      : super(id, gameCode, read);
+  NoServerGameClient({Reader read, String id}) : super(id, read);
   StreamSubscription<Game> _ss;
   StreamSubscription<GameError> _se;
   @override
@@ -49,11 +48,12 @@ class NoServerGameClient extends GameClient {
       read.gameFor(id).gameState = gameState;
       read.gameFor(id).gameStatus = gameState.gameStatus;
     }, onError: (e) {
-      print(e);
-      // TODO: Do something on error
+      read.gameFor(id).gameError = GameError(e, id);
     });
     _se = read.backendGame(gameCode).errorNotifier.stream.listen((gameError) {
-      read.gameFor(id).gameError = gameError;
+      if (gameError.person == id) {
+        read.gameFor(id).gameError = gameError;
+      }
     });
   }
 
@@ -74,8 +74,7 @@ class NoServerGameClient extends GameClient {
   static void registerImplementation() {
     GameClient.registerImplementation(
       OnDeviceLocation,
-      (read, address, id, gameCode) =>
-          NoServerGameClient(read: read, id: id, gameCode: gameCode),
+      (read, address, id) => NoServerGameClient(read: read, id: id),
     );
   }
 }

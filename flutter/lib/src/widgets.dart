@@ -44,9 +44,9 @@ class GameNavigator extends GameHookWidget {
         pages.add(lobby);
         if (gameStatus != GameStatus.NotStarted) {
           pages.add(game);
-          if (gameStatus == GameStatus.BetweenRounds) {
+          if (gameStatus == GameStatus.BetweenRounds && betweenRounds != game) {
             pages.add(betweenRounds);
-          } else if (gameStatus == GameStatus.Finished) {
+          } else if (gameStatus == GameStatus.Finished && gameOver != game) {
             pages.add(gameOver);
           }
         }
@@ -55,7 +55,8 @@ class GameNavigator extends GameHookWidget {
 
     return Navigator(
         pages: pages
-            .map((c) => MaterialPage(child: c, arguments: gameStatus))
+            .mapIndexed((index, c) => MaterialPage(
+                key: Key('$index'), child: c, arguments: gameStatus))
             .toList(),
         onPopPage: (route, p) {
           final status = route.settings.arguments as GameStatus;

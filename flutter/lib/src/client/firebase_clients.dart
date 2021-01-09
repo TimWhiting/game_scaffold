@@ -45,8 +45,7 @@ class FirebaseServerClient extends ServerClient {
 }
 
 class FirebaseGameClient extends GameClient {
-  FirebaseGameClient(String id, String gameCode, Reader read)
-      : super(id, gameCode, read);
+  FirebaseGameClient(String id, Reader read) : super(id, read);
 
   @override
   void dispose() {
@@ -72,7 +71,7 @@ class FirebaseGameClient extends GameClient {
   static void registerImplementation() {
     GameClient.registerImplementation(
       firebaseLocation,
-      (read, address, id, gameCode) => FirebaseGameClient(id, gameCode, read),
+      (read, address, id) => FirebaseGameClient(id, read),
     );
   }
 }
