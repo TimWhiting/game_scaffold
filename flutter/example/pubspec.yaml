@@ -22,5 +22,11 @@ dev_dependencies:
   # integration_test:
   #   sdk: flutter
 
+dependency_overrides:
+  game_scaffold:
+    path: ../
+  game_scaffold_dart:
+    path: ../../dart
+
 flutter:
   uses-material-design: true

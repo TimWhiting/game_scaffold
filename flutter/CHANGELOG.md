@@ -1,3 +1,7 @@
+## 0.1.4
+
+- Update `GameHookWidget` to just provide `GameProvider` in the buildWithGame method
+
 ## 0.1.3
 
 - Add `key` and const constructor to `GameHookWidget`

@@ -23,9 +23,10 @@ class NoServerGameClient extends GameClient {
   KtList<Player> get _players => read.backendGame(gameCode).players;
   @override
   Future<void> register() async {
-    read.backendGame(gameCode).players = _players.plusElement(Player(id));
+    read.backendGame(gameCode).players =
+        _players.plusElement(Player(id, name: id));
     read.gameFor(id).gameStatus = GameStatus.NotJoined;
-    read.gameFor(id).playerName = '';
+    read.gameFor(id).playerName = id;
     read.gameFor(id).gameStatus = GameStatus.NotStarted;
     _watchState();
     final config = read.backendGame(gameCode).gameConfig;

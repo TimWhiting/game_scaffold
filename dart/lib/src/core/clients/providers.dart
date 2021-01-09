@@ -35,11 +35,11 @@ final playerIDsProvider =
 class GameProvider {
   // TODO: Replace most of these providers with using final late after switching
   // to Dart 2.12
-  GameProvider(this.read, this.id) {
+  GameProvider(this.read, this.playerID) {
     Future.delayed(
       10.milliseconds,
       () => read(playerIDsProvider).state =
-          read(playerIDsProvider).state.plusElement(id),
+          read(playerIDsProvider).state.plusElement(playerID),
     );
     _gameCodeProvider = StateProvider((ref) => '');
     _gameInfoProvider = StateProvider((ref) => null);
@@ -60,7 +60,7 @@ class GameProvider {
         final currentPlayer =
             ref.watch(_gameStateProvider).state.currentPlayer.id;
         // Null indicates that all players can go simulataneously
-        return currentPlayer == null || currentPlayer == id;
+        return currentPlayer == null || currentPlayer == playerID;
       },
     );
     _gameConfigProvider = StateProvider<GameConfig>(
@@ -74,14 +74,14 @@ class GameProvider {
               .watch(_gameStateProvider)
               .state
               ?.players
-              ?.first((p) => p.id == id)
+              ?.first((p) => p.id == playerID)
               ?.name ??
           '',
     );
   }
 
   /// The playerID associated with the providers in this GameProvider
-  final String id;
+  final String playerID;
   final Reader read;
 
   /// Provides the game code for each client id
@@ -173,7 +173,10 @@ class GameProvider {
           'Please set the address for the remote server before connecting a game server client');
     }
     final client = ServerClient.fromParams(
-        location: location, read: ref.read, address: address, playerID: id);
+        location: location,
+        read: ref.read,
+        address: address,
+        playerID: playerID);
 
     ref.onDispose(client.dispose);
     return client;
@@ -200,7 +203,7 @@ class GameProvider {
         location: location,
         read: ref.read,
         address: address,
-        id: id,
+        id: playerID,
         gameCode: gameCode);
     ref.onDispose(client.dispose);
     return client;
@@ -208,7 +211,7 @@ class GameProvider {
 
   void dispose() {
     read(playerIDsProvider).state =
-        read(playerIDsProvider).state.minusElement(id);
+        read(playerIDsProvider).state.minusElement(playerID);
   }
 }
 

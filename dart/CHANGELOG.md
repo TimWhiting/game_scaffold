@@ -1,3 +1,7 @@
+## 0.1.4
+
+- Change GameProvider's id to be exposed as playerID
+
 ## 0.1.3+2
 
 - Fix some server notifications

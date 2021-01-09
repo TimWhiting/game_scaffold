@@ -118,12 +118,11 @@ abstract class GameHookWidget extends HookWidget {
   Widget build(BuildContext context) {
     final playerID = usePlayerID();
     final gameProvider = useGameProvider(playerID);
-    return buildWithGame(context, playerID, gameProvider);
+    return buildWithGame(context, gameProvider);
   }
 
   Widget buildWithGame(
     BuildContext context,
-    String playerID,
     GameProvider gameProvider,
   );
 }
