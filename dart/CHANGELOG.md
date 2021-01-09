@@ -1,3 +1,7 @@
+## 0.1.4+1
+
+- Update OnDeviceClient to default name to id
+  
 ## 0.1.4
 
 - Change GameProvider's id to be exposed as playerID

@@ -46,6 +46,8 @@ extension BuildContextGameScaffoldX on BuildContext {
       read(gameProvider(id).gameErrorProvider).state;
   GameStatus gameStatus(String id) =>
       read(gameProvider(id).gameStatusProvider).state;
+  void setGameStatus(String id, GameStatus status) =>
+      read(gameProvider(id).gameStatusProvider).state = status;
   bool gameTurn(String id) => read(gameProvider(id).gameTurnProvider);
   String gameName(String id) => read(gameProvider(id).gameNameProvider);
   String playerName(String id) =>

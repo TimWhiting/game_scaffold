@@ -26,7 +26,7 @@ class NoServerGameClient extends GameClient {
     read.backendGame(gameCode).players =
         _players.plusElement(Player(id, name: id));
     read.gameFor(id).gameStatus = GameStatus.NotJoined;
-    read.gameFor(id).playerName = id;
+    read.gameFor(id).playerName = read.gameFor(id).playerName ?? id;
     read.gameFor(id).gameStatus = GameStatus.NotStarted;
     _watchState();
     final config = read.backendGame(gameCode).gameConfig;

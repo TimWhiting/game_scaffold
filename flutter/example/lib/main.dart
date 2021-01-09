@@ -22,8 +22,8 @@ class TicTacToeApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      theme: ThemeData.dark().copyWith(
+        primaryColor: Colors.blueGrey,
       ),
       home: TicTacToeWidget(),
     );
@@ -64,11 +64,25 @@ class Player extends GameHookWidget {
       case GameStatus.NotJoined:
         return CreateOrJoinWidget();
       case GameStatus.NotStarted:
-        return LobbyWidget();
+        return WillPopScope(
+          onWillPop: () async {
+            context.setGameStatus(gameProvider.playerID, GameStatus.NotJoined);
+            return false;
+          },
+          child: Scaffold(
+              appBar: AppBar(leading: BackButton()), body: LobbyWidget()),
+        );
       case GameStatus.Started:
       case GameStatus.Finished:
       case GameStatus.BetweenRounds:
-        return GameWidget();
+        return WillPopScope(
+            onWillPop: () async {
+              context.setGameStatus(
+                  gameProvider.playerID, GameStatus.NotStarted);
+              return false;
+            },
+            child: Scaffold(
+                appBar: AppBar(leading: BackButton()), body: GameWidget()));
     }
     throw UnimplementedError('$gameStatus status in Player widget not handled');
   }
