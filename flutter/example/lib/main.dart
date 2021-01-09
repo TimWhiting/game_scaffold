@@ -43,6 +43,7 @@ class TicTacToeWidget extends StatelessWidget {
             child: Player(),
           ),
         ),
+        Container(width: 10, color: Colors.black),
         Expanded(
           child: ProviderScope(
             overrides: [playerIDProvider.overrideAs((watch) => P2)],
@@ -57,34 +58,11 @@ class TicTacToeWidget extends StatelessWidget {
 class Player extends GameHookWidget {
   @override
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
-    final gameStatus = gameProvider.useGameStatus;
-
-    switch (gameStatus) {
-      case GameStatus.NotConnected:
-      case GameStatus.NotJoined:
-        return CreateOrJoinWidget();
-      case GameStatus.NotStarted:
-        return WillPopScope(
-          onWillPop: () async {
-            context.setGameStatus(gameProvider.playerID, GameStatus.NotJoined);
-            return false;
-          },
-          child: Scaffold(
-              appBar: AppBar(leading: BackButton()), body: LobbyWidget()),
-        );
-      case GameStatus.Started:
-      case GameStatus.Finished:
-      case GameStatus.BetweenRounds:
-        return WillPopScope(
-            onWillPop: () async {
-              context.setGameStatus(
-                  gameProvider.playerID, GameStatus.NotStarted);
-              return false;
-            },
-            child: Scaffold(
-                appBar: AppBar(leading: BackButton()), body: GameWidget()));
-    }
-    throw UnimplementedError('$gameStatus status in Player widget not handled');
+    return GameNavigator(
+      connected: CreateOrJoinWidget(),
+      lobby: LobbyWidget(),
+      game: GameWidget(),
+    );
   }
 }
 
@@ -93,44 +71,49 @@ class CreateOrJoinWidget extends GameHookWidget {
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final playerID = gameProvider.playerID;
     final code = gameProvider.useGameCode;
-    return Column(
-      children: [
-        SizedBox(height: 40),
-        Text('Player $playerID'),
-        SizedBox(height: 20),
-        if (playerID == P1)
-          RaisedButton(
-            child: Text('Create Game'),
-            onPressed: () async {
-              final id = await context.gameClient(playerID).createGame(
-                    config: GameConfig(
-                      adminId: P1,
-                      customNames: false,
-                      gameType: 'tictactoe',
-                      rounds: 2,
-                      maxPlayers: 2,
-                    ),
-                  );
-              await context.gameClient(playerID).register(code: id);
-            },
-          ),
-        if (playerID == P2) ...[
-          SizedBox(
-            width: 200,
-            height: 30,
-            child: TextField(
-              textAlignVertical: TextAlignVertical.center,
-              decoration: InputDecoration(hintText: 'Enter Game Code'),
-              onChanged: (text) => context.setGameCode(playerID, text),
-            ),
-          ),
-          SizedBox(height: 20),
-          RaisedButton(
-            onPressed: () => context.gameClient(playerID).register(code: code),
-            child: Text('Join Game'),
-          )
-        ]
-      ],
+    return Scaffold(
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(height: 40),
+            Text('Player $playerID'),
+            SizedBox(height: 20),
+            if (playerID == P1)
+              RaisedButton(
+                child: Text('Create Game'),
+                onPressed: () async {
+                  final id = await context.gameClient(playerID).createGame(
+                        config: GameConfig(
+                          adminId: P1,
+                          customNames: false,
+                          gameType: 'tictactoe',
+                          rounds: 2,
+                          maxPlayers: 2,
+                        ),
+                      );
+                  await context.gameClient(playerID).register(code: id);
+                },
+              ),
+            if (playerID == P2) ...[
+              SizedBox(
+                width: 200,
+                height: 30,
+                child: TextField(
+                  textAlignVertical: TextAlignVertical.center,
+                  decoration: InputDecoration(hintText: 'Enter Game Code'),
+                  onChanged: (text) => context.setGameCode(playerID, text),
+                ),
+              ),
+              SizedBox(height: 20),
+              RaisedButton(
+                onPressed: () =>
+                    context.gameClient(playerID).register(code: code),
+                child: Text('Join Game'),
+              )
+            ]
+          ],
+        ),
+      ),
     );
   }
 }
@@ -139,18 +122,73 @@ class LobbyWidget extends GameHookWidget {
   @override
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final lobby = gameProvider.useLobbyInfo;
-    return Column(children: [
-      SizedBox(height: 40),
-      Text('Lobby'),
-      Text('$lobby'),
-    ]);
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: Column(children: [
+          SizedBox(height: 40),
+          Text('Lobby'),
+          Text('$lobby'),
+        ]),
+      ),
+    );
   }
 }
 
 class GameWidget extends GameHookWidget {
   @override
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
-    final gameState = gameProvider.useGameState;
-    return Text('$gameState');
+    final gameState = gameProvider.useGameState as TicTacToeGame;
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('$gameState'),
+            for (final r in [0, 1, 2])
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (final c in [0, 1, 2])
+                    GestureDetector(
+                      child: ColoredBox(
+                        color: Colors.black,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          color: Colors.white,
+                          margin: EdgeInsets.all(1),
+                          child: Center(
+                            child: Text(
+                              gameState.board
+                                  .xOrO(gameProvider.playerID, r * 3 + c),
+                            ),
+                          ),
+                        ),
+                      ),
+                      onTap: () => context
+                          .gameClient(gameProvider.playerID)
+                          .sendEvent(TicTacToeGameEvent(
+                              gameProvider.playerID, r * 3 + c)),
+                    ),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+extension TextX on KtList<String> {
+  String xOrO(String playerID, int location) {
+    if (this[location] == null) {
+      return '';
+    } else if (this[location] == P1) {
+      return 'X';
+    } else {
+      return 'O';
+    }
   }
 }

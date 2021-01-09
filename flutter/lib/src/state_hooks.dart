@@ -112,19 +112,3 @@ GameStatus useGameStatus(GameProvider g) =>
 bool useGameTurn(GameProvider g) => useProvider(g.gameTurnProvider);
 String useGameName(GameProvider g) => useProvider(g.gameNameProvider);
 String usePlayerName(GameProvider g) => useProvider(g.playerNameProvider).state;
-
-abstract class GameHookWidget extends HookWidget {
-  const GameHookWidget({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final playerID = usePlayerID();
-    final gameProvider = useGameProvider(playerID);
-    return buildWithGame(context, gameProvider);
-  }
-
-  Widget buildWithGame(
-    BuildContext context,
-    GameProvider gameProvider,
-  );
-}
