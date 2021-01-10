@@ -1,3 +1,6 @@
+## 0.1.5+1
+
+- Fix some io client issues
 
 ## 0.1.5
 

@@ -1,3 +1,7 @@
+## 0.1.5
+
+- More complete example with working io-client
+  
 ## 0.1.4+1
 
 - Add example
