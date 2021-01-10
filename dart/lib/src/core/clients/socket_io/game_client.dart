@@ -34,6 +34,7 @@ class IOGameClient extends GameClient {
     _socket.off(IOChannel.error.string);
     _socket.off(IOChannel.gamestate.string);
     _socket.off(IOChannel.lobby.string);
+    logger.info('Exiting game');
     read.gameFor(id).gameStatus = GameStatus.NotJoined;
     _socket.disconnect();
   }
@@ -41,6 +42,7 @@ class IOGameClient extends GameClient {
   @override
   Future<void> register() async {
     _ensureConnected();
+    logger.info('Registering');
     read.gameFor(id).gameStatus = GameStatus.NotJoined;
     _watchState();
     final assignedName = await _socket.call(
@@ -51,7 +53,7 @@ class IOGameClient extends GameClient {
   void _onLobby(Map<String, dynamic> lobby) {
     final gameInfo = GameInfo.fromJson(lobby);
     read.gameFor(id).gameStatus = GameStatus.NotStarted;
-    print('Lobby $gameInfo');
+    print('Got Lobby $gameInfo');
     read.gameFor(id).lobbyInfo = gameInfo;
   }
 
@@ -59,7 +61,7 @@ class IOGameClient extends GameClient {
     _socket.on(IOChannel.gamestate.string, (data) {
       _socket.off(IOChannel.lobby.string);
       final gameState = Game.fromJson(data as Map<String, dynamic>);
-      logger.fine(data);
+      logger.info('Got gamestate $data');
       read.gameFor(id).gameState = gameState;
       read.gameFor(id).gameStatus = gameState.gameStatus;
     });

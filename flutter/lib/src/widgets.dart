@@ -38,6 +38,8 @@ class GameNavigator extends GameHookWidget {
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final gameStatus = gameProvider.useGameStatus;
     final pages = [disconnected];
+    print(
+        'Building client ${gameProvider.playerID} with game status ${gameStatus}');
     if (gameStatus != GameStatus.NotConnected) {
       pages.add(connected);
       if (gameStatus != GameStatus.NotJoined) {
@@ -59,6 +61,7 @@ class GameNavigator extends GameHookWidget {
                 key: Key('$index'), child: c, arguments: gameStatus))
             .toList(),
         onPopPage: (route, p) {
+          print('Popping ${route.settings.arguments}');
           final status = route.settings.arguments as GameStatus;
           if (status == GameStatus.Finished ||
               status == GameStatus.BetweenRounds ||

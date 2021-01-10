@@ -22,10 +22,14 @@ class IOServerClient extends ServerClient {
         (_) => read.gameFor(playerID).gameStatus = GameStatus.NotJoined);
     socket.on(IOChannel.disconnect.string,
         (_) => read.gameFor(playerID).gameStatus = GameStatus.NotConnected);
-    Future.delayed(
-        100.milliseconds,
-        () => read.gameFor(playerID).gameStatus =
-            socket.connected ? GameStatus.NotJoined : GameStatus.NotConnected);
+    Future.delayed(10.milliseconds, () {
+      final currentStatus = read.gameFor(playerID).gameStatus;
+      if (currentStatus == GameStatus.NotConnected ||
+          currentStatus == GameStatus.NotJoined) {
+        read.gameFor(playerID).gameStatus =
+            socket.connected ? GameStatus.NotJoined : GameStatus.NotConnected;
+      }
+    });
     logger.info('Created ServerClient');
   }
 

@@ -11,7 +11,8 @@ import '../core.dart';
 /// * Get Game Info
 /// * Get List of Games that [playerID] is a part of
 abstract class ServerClient {
-  ServerClient(this.read, this.playerID) : logger = Logger('ServerClient');
+  ServerClient(this.read, this.playerID)
+      : logger = Logger('ServerClient $playerID');
 
   /// The id of the client
   final String playerID;
