@@ -51,7 +51,7 @@ class NoServerGameClient extends GameClient {
       read.gameFor(id).gameError = GameError(e, id);
     });
     _se = read.backendGame(gameCode).errorNotifier.stream.listen((gameError) {
-      if (gameError.person == id) {
+      if (gameError == null || gameError.person == id) {
         read.gameFor(id).gameError = gameError;
       }
     });

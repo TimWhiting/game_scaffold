@@ -1,3 +1,7 @@
+## 0.1.5+2
+
+- Fix on device game client issue
+  
 ## 0.1.5+1
 
 - Fix some io client issues
