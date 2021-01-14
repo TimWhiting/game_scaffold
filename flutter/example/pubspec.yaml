@@ -24,7 +24,7 @@ dev_dependencies:
   #   sdk: flutter
 
 dependency_overrides:
-  game_scaffold:
+  game_scaffold: 
     path: ../
   game_scaffold_dart:
     path: ../../dart

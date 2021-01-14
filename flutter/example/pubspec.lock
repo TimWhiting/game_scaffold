@@ -136,7 +136,7 @@ packages:
       path: "../../dart"
       relative: true
     source: path
-    version: "0.1.5+1"
+    version: "0.1.5+3"
   hooks_riverpod:
     dependency: "direct main"
     description:
