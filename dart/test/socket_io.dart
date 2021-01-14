@@ -11,8 +11,11 @@ void main() async {
   await test('Created', (read) async {
     final gameCode = read.gameFor(P1).gameCode;
     assert(ioServer.servers[gameCode] != null);
-    assert(read.gameFor(P1).gameStatus == GameStatus.NotConnected);
+    print(read.gameFor(P1).gameStatus);
+    assert(read.gameFor(P1).gameStatus == GameStatus.NotJoined);
   });
+
+  await Future.delayed(100.milliseconds);
 
   await test('Registered Start Game', (read) async {
     final gameCode = read.gameFor(P1).gameCode;

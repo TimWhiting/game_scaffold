@@ -16,6 +16,7 @@ String get homeDir {
   return Platform.environment['HOME'];
 }
 
+final agentBackendGame = Provider((ref) => BackendProvider(ref.read, '0000'));
 final backendGameCodesProvider =
     StateProvider<KtList<String>>((ref) => listOf());
 final backendGamesProvider =
@@ -166,6 +167,8 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
 }
 
 extension BackendReader on Reader {
+  BackendGameReader get agentGame =>
+      BackendGameReader(this, this(agentBackendGame));
   BackendGameReader backendGame(String code) =>
       BackendGameReader(this, this(backendGamesProvider(code)));
 }

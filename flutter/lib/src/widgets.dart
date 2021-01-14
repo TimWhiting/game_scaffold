@@ -38,8 +38,8 @@ class GameNavigator extends GameHookWidget {
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final gameStatus = gameProvider.useGameStatus;
     final pages = [disconnected];
-    print(
-        'Building client ${gameProvider.playerID} with game status ${gameStatus}');
+    // print(
+    //     'Building client ${gameProvider.playerID} with game status ${gameStatus}');
     if (gameStatus != GameStatus.NotConnected) {
       pages.add(connected);
       if (gameStatus != GameStatus.NotJoined) {

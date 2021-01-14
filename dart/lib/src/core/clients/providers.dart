@@ -202,7 +202,7 @@ class GameProvider {
       location: location,
       read: ref.read,
       address: address,
-      id: playerID,
+      playerID: playerID,
     );
     ref.onDispose(client.dispose);
     return client;

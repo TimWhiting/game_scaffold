@@ -1,3 +1,7 @@
+## 0.1.5+1
+
+- Add linux folder to example and also remove print statement
+  
 ## 0.1.5
 
 - More complete example with working io-client

@@ -10,12 +10,13 @@ class GameServerClient {
   final ServerClient _sClient;
 
   /// The client's [playerID]
-  String get playerID => _gClient.id;
+  String get playerID => _gClient.playerID;
 
   /// The [gameCode] of the game the client has joined
   String get gameCode => _gClient.gameCode;
 
   Reader read;
+  GameReader get game => read.gameFor(playerID);
 
   /// Causes the client to exit the game
   void exitGame() => _gClient.exitGame();

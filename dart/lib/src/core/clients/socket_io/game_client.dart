@@ -25,7 +25,7 @@ class IOGameClient extends GameClient {
       _socket = IO.io('$address/$gameCode', socketIOOpts);
       logger.info('Created Game Client Socket $gameCode');
       _lastGameCode = gameCode;
-      read.gameFor(id).gameStatus = GameStatus.NotJoined;
+      game.gameStatus = GameStatus.NotJoined;
     }
   }
 
@@ -35,7 +35,7 @@ class IOGameClient extends GameClient {
     _socket.off(IOChannel.gamestate.string);
     _socket.off(IOChannel.lobby.string);
     logger.info('Exiting game');
-    read.gameFor(id).gameStatus = GameStatus.NotJoined;
+    game.gameStatus = GameStatus.NotJoined;
     _socket.disconnect();
   }
 
@@ -43,18 +43,18 @@ class IOGameClient extends GameClient {
   Future<void> register() async {
     _ensureConnected();
     logger.info('Registering');
-    read.gameFor(id).gameStatus = GameStatus.NotJoined;
+    game.gameStatus = GameStatus.NotJoined;
     _watchState();
-    final assignedName = await _socket.call(
-        IOChannel.register, {'name': read.gameFor(id).playerName, 'id': id});
-    read.gameFor(id).playerName = assignedName as String;
+    final assignedName = await _socket
+        .call(IOChannel.register, {'name': game.playerName, 'id': playerID});
+    game.playerName = assignedName as String;
   }
 
   void _onLobby(Map<String, dynamic> lobby) {
     final gameInfo = GameInfo.fromJson(lobby);
-    read.gameFor(id).gameStatus = GameStatus.NotStarted;
+    game.gameStatus = GameStatus.NotStarted;
     print('Got Lobby $gameInfo');
-    read.gameFor(id).lobbyInfo = gameInfo;
+    game.lobbyInfo = gameInfo;
   }
 
   void _watchState() {
@@ -62,11 +62,11 @@ class IOGameClient extends GameClient {
       _socket.off(IOChannel.lobby.string);
       final gameState = Game.fromJson(data as Map<String, dynamic>);
       logger.info('Got gamestate $data');
-      read.gameFor(id).gameState = gameState;
-      read.gameFor(id).gameStatus = gameState.gameStatus;
+      game.gameState = gameState;
+      game.gameStatus = gameState.gameStatus;
     });
     _socket.on(IOChannel.error.string, (data) {
-      read.gameFor(id).gameError = GameError.fromJson(data);
+      game.gameError = GameError.fromJson(data);
     });
     _socket.on(IOChannel.lobby.string, (d) => _onLobby(d));
   }

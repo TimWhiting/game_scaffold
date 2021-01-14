@@ -10,16 +10,16 @@ import '../clients.dart';
 class NoServerClient extends ServerClient {
   NoServerClient({Reader read, String playerID}) : super(read, playerID);
   static final games = <String>[];
+  BackendGameReader get backend => read.backendGame(game.gameCode);
   @override
   Future<void> createGame() async {
     final gameCode = generateGameID([]);
-    read.gameFor(playerID).gameCode = gameCode;
-    read.backendGame(gameCode).gameConfig = read.gameFor(playerID).gameConfig;
+    game.gameCode = gameCode;
+    backend.gameConfig = game.gameConfig;
   }
 
   @override
-  Future<bool> deleteGame() async =>
-      games.remove(read.gameFor(playerID).gameCode);
+  Future<bool> deleteGame() async => games.remove(game.gameCode);
 
   @override
   void dispose() {}

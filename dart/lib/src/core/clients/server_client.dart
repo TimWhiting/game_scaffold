@@ -1,6 +1,7 @@
 import 'package:logging/logging.dart';
 import 'package:riverpod/all.dart';
 
+import '../../core.dart';
 import '../core.dart';
 
 /// A Client that can contact the server to manage games
@@ -16,6 +17,7 @@ abstract class ServerClient {
 
   /// The id of the client
   final String playerID;
+  GameReader get game => read.gameFor(playerID);
 
   final Reader read;
   final Logger logger;

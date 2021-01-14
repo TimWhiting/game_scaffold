@@ -1,3 +1,7 @@
+## 0.1.5+3
+
+- Add a dedicated backend game for an agent
+
 ## 0.1.5+2
 
 - Fix on device game client issue

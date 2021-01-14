@@ -11,24 +11,24 @@ import '../clients.dart';
 ///
 /// Warning implementation not complete or tested yet
 class NoServerGameClient extends GameClient {
-  NoServerGameClient({Reader read, String id}) : super(id, read);
+  NoServerGameClient({Reader read, String playerID}) : super(playerID, read);
   StreamSubscription<Game> _ss;
   StreamSubscription<GameError> _se;
+  BackendGameReader get backend => read.backendGame(game.gameCode);
   @override
   void exitGame() {
-    read.gameFor(id).gameStatus = GameStatus.NotJoined;
+    game.gameStatus = GameStatus.NotJoined;
   }
 
-  KtList<Player> get _players => read.backendGame(gameCode).players;
+  KtList<Player> get _players => backend.players;
   @override
   Future<void> register() async {
-    read.backendGame(gameCode).players =
-        _players.plusElement(Player(id, name: id));
-    read.gameFor(id).gameStatus = GameStatus.NotJoined;
-    read.gameFor(id).playerName = read.gameFor(id).playerName ?? id;
-    read.gameFor(id).gameStatus = GameStatus.NotStarted;
+    backend.players = _players.plusElement(Player(playerID, name: playerID));
+    game.gameStatus = GameStatus.NotJoined;
+    game.playerName = game.playerName ?? playerID;
+    game.gameStatus = GameStatus.NotStarted;
     _watchState();
-    final config = read.backendGame(gameCode).gameConfig;
+    final config = backend.gameConfig;
     if (_players.size == config.maxPlayers && config.autoStart) {
       sendEvent(GenericEvent.start());
     }
@@ -44,15 +44,15 @@ class NoServerGameClient extends GameClient {
   }
 
   void _watchState() {
-    _ss = read.backendGame(gameCode).gameNotifier.stream.listen((gameState) {
-      read.gameFor(id).gameState = gameState;
-      read.gameFor(id).gameStatus = gameState.gameStatus;
+    _ss = backend.gameNotifier.stream.listen((gameState) {
+      game.gameState = gameState;
+      game.gameStatus = gameState.gameStatus;
     }, onError: (e) {
-      read.gameFor(id).gameError = GameError(e, id);
+      game.gameError = GameError(e, playerID);
     });
-    _se = read.backendGame(gameCode).errorNotifier.stream.listen((gameError) {
-      if (gameError == null || gameError.person == id) {
-        read.gameFor(id).gameError = gameError;
+    _se = backend.errorNotifier.stream.listen((gameError) {
+      if (gameError == null || gameError.person == playerID) {
+        game.gameError = gameError;
       }
     });
   }
@@ -61,7 +61,7 @@ class NoServerGameClient extends GameClient {
   void sendEvent(Event event) {
     final js = event.asGameEvent.toJson();
     print('Sending event $js');
-    read.backendGame(gameCode).handleEvent(event.asGameEvent);
+    backend.handleEvent(event.asGameEvent);
   }
 
   @override
@@ -74,7 +74,7 @@ class NoServerGameClient extends GameClient {
   static void registerImplementation() {
     GameClient.registerImplementation(
       OnDeviceLocation,
-      (read, address, id) => NoServerGameClient(read: read, id: id),
+      (read, address, id) => NoServerGameClient(read: read, playerID: id),
     );
   }
 }
