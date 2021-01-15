@@ -53,7 +53,7 @@ class IOGameClient extends GameClient {
   void _onLobby(Map<String, dynamic> lobby) {
     final gameInfo = GameInfo.fromJson(lobby);
     game.gameStatus = GameStatus.NotStarted;
-    print('Got Lobby $gameInfo');
+    logger.info('Got Lobby $gameInfo');
     game.lobbyInfo = gameInfo;
   }
 

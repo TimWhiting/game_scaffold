@@ -122,6 +122,8 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   /// in the [gameState] will not trigger updates of the ui
   T get gameState => state;
 
+  BackendGameReader get backend => read.backendGame(code);
+
   /// Handles a [GameEvent] and updates the state accordingly
   ///
   /// Delegates to the game implementation for a game specific event [E]
@@ -135,7 +137,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
           _previousStates.removeLast();
           return _previousStates.removeLast().gameValue();
         },
-        start: () => read.backendGame(code).initialState.gameValue(),
+        start: () => backend.initialState.gameValue(),
         readyNextRound: (e) {
           if (_readyPlayers.length > 1) {
             _previousStates.remove(state);
@@ -143,9 +145,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
           _readyPlayers.add(e);
           if (_readyPlayers.length == state.players.size) {
             _readyPlayers.clear();
-            return state
-                .moveNextRound(gameConfig, read.backendGame(code))
-                .gameValue();
+            return state.moveNextRound(gameConfig, backend).gameValue();
           }
           return state.gameValue();
         },
@@ -155,10 +155,10 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
         orElse: () =>
             GameError('General Event not implemented yet $e', 'programmer'),
       ),
-      game: (e) => state.next(e, read.backendGame(code)),
+      game: (e) => state.next(e, backend),
     );
     if (nextState.isError) {
-      read.backendGame(code).gameError = nextState.error;
+      backend.gameError = nextState.error;
       _previousStates.removeLast();
     } else {
       state = nextState.value;

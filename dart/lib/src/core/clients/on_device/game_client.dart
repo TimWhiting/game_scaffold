@@ -60,7 +60,7 @@ class NoServerGameClient extends GameClient {
   @override
   void sendEvent(Event event) {
     final js = event.asGameEvent.toJson();
-    print('Sending event $js');
+    logger.info('Sending event $js');
     backend.handleEvent(event.asGameEvent);
   }
 
@@ -68,7 +68,7 @@ class NoServerGameClient extends GameClient {
   void dispose() {
     _ss?.cancel();
     _se?.cancel();
-    print('Disposing game client');
+    logger.info('Disposing game client');
   }
 
   static void registerImplementation() {

@@ -1,3 +1,7 @@
+## 0.1.5+4
+
+- Remove some print statements
+
 ## 0.1.5+3
 
 - Add a dedicated backend game for an agent
