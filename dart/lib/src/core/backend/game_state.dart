@@ -35,11 +35,13 @@ class BackendProvider {
     initialStateProvider = Provider<Game>(_initialStateImpl);
     gameStateProvider =
         StateNotifierProvider<GameStateNotifier>(_gameStateNotifier);
+    backendReader = BackendGameReader(read, this);
   }
 
   /// The game [code] that uniquely identifies the providers in this BackendProvider
   final String code;
   final Reader read;
+  BackendGameReader backendReader;
 
   void dispose() {
     read(backendGameCodesProvider).state =
@@ -69,13 +71,12 @@ class BackendProvider {
   Game _initialStateImpl(ProviderReference ref) {
     final gameConfig = ref.watch(configProvider).state;
     final players = ref.watch(playersProvider).state;
-    return Game.getInitialState(
-        gameConfig, players, ref.read.backendGame(code));
+    return Game.getInitialState(gameConfig, players, backendReader);
   }
 
   GameStateNotifier _gameStateNotifier(ProviderReference ref) {
     final gameConfig = ref.watch(configProvider).state;
-    return GameStateNotifier(gameConfig, ref.read, code);
+    return GameStateNotifier(gameConfig, backendReader, code);
   }
 }
 
@@ -101,7 +102,7 @@ class GameErrorNotifier extends StateNotifier<GameError> {
 class GameStateNotifier<E extends Event, T extends Game<E>>
     extends StateNotifier<T> {
   GameStateNotifier(this.gameConfig, this.read, this.code) : super(null);
-  final Reader read;
+  final BackendGameReader read;
 
   /// The [code] of this game
   final String code;
@@ -122,8 +123,6 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   /// in the [gameState] will not trigger updates of the ui
   T get gameState => state;
 
-  BackendGameReader get backend => read.backendGame(code);
-
   /// Handles a [GameEvent] and updates the state accordingly
   ///
   /// Delegates to the game implementation for a game specific event [E]
@@ -137,7 +136,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
           _previousStates.removeLast();
           return _previousStates.removeLast().gameValue();
         },
-        start: () => backend.initialState.gameValue(),
+        start: () => read.initialState.gameValue(),
         readyNextRound: (e) {
           if (_readyPlayers.length > 1) {
             _previousStates.remove(state);
@@ -145,7 +144,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
           _readyPlayers.add(e);
           if (_readyPlayers.length == state.players.size) {
             _readyPlayers.clear();
-            return state.moveNextRound(gameConfig, backend).gameValue();
+            return state.moveNextRound(gameConfig, read).gameValue();
           }
           return state.gameValue();
         },
@@ -155,10 +154,10 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
         orElse: () =>
             GameError('General Event not implemented yet $e', 'programmer'),
       ),
-      game: (e) => state.next(e, backend),
+      game: (e) => state.next(e, read),
     );
     if (nextState.isError) {
-      backend.gameError = nextState.error;
+      read.gameError = nextState.error;
       _previousStates.removeLast();
     } else {
       state = nextState.value;

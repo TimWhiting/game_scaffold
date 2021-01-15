@@ -1,3 +1,7 @@
+## 0.1.5+5
+
+- Fix issue with backend reader for agent games
+
 ## 0.1.5+4
 
 - Remove some print statements
