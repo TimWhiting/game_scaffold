@@ -1,0 +1,1 @@
+A common game package for examples of [game_scaffold_dart](https://pub.dev/packages/game_scaffold_dart) package
