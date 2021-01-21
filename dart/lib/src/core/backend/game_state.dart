@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:kt_dart/kt.dart';
+import 'package:logging/logging.dart';
 import 'package:riverpod/all.dart';
 import '../core.dart';
 
@@ -101,7 +102,10 @@ class GameErrorNotifier extends StateNotifier<GameError> {
 /// A [StateNotifier] that handles events for a particular game, delegating to the game's implementation for non generic events
 class GameStateNotifier<E extends Event, T extends Game<E>>
     extends StateNotifier<T> {
-  GameStateNotifier(this.gameConfig, this.read, this.code) : super(null);
+  GameStateNotifier(this.gameConfig, this.read, this.code)
+      : _gameStateLogger = Logger('GameStateNotifier $code'),
+        super(null);
+  final Logger _gameStateLogger;
   final BackendGameReader read;
 
   /// The [code] of this game
@@ -126,42 +130,45 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   ///
   /// In case of a [GenericEvent] this handles the implementation of handling the event
   void handleEvent(GameEvent event) {
-    _previousStates.add(state);
-    final nextState = event.when(
-      general: (e) => e.maybeWhen(
-        undo: () {
-          _previousStates.removeLast();
-          return _previousStates.removeLast().gameValue();
-        },
-        start: () => read.initialState.gameValue(),
-        readyNextRound: (e) {
-          if (state.readyPlayers.size > 1) {
-            _previousStates.remove(state);
-          }
-          var newState = state.copyWithGeneric((g) => g.addReadyPlayer(e));
-          if (newState.readyPlayers.size == state.players.size) {
-            return state
-                .moveNextRound(gameConfig, read)
-                .gameValue()
-                .value
-                .copyWithGeneric((g) => g.clearReadyPlayers())
-                .gameValue();
-          }
-          return newState.gameValue();
-        },
-        message: (_, __, ___) => state
-            .copyWithGeneric((g) => g.addMessage(e as GameMessage).updateTime())
-            .gameValue(),
-        orElse: () =>
-            GameError('General Event not implemented yet $e', 'programmer'),
-      ),
-      game: (e) => state.next(e, read),
-    );
-    if (nextState.isError) {
-      read.gameError = nextState.error;
-      _previousStates.removeLast();
-    } else {
-      state = nextState.value;
+    try {
+      _previousStates.add(state);
+      final nextState = event.when(
+        general: (e) => e.maybeWhen(
+          undo: () {
+            _previousStates.removeLast();
+            return _previousStates.removeLast().gameValue();
+          },
+          start: () => read.initialState.gameValue(),
+          readyNextRound: (e) {
+            if (state.readyPlayers.size > 1) {
+              _previousStates.remove(state);
+            }
+            var newState = state.copyWithGeneric((g) => g.addReadyPlayer(e));
+            if (newState.readyPlayers.size == state.players.size) {
+              return state
+                  .moveNextRound(gameConfig, read)
+                  .copyWithGeneric((g) => g.clearReadyPlayers())
+                  .gameValue();
+            }
+            return newState.gameValue();
+          },
+          message: (_, __, ___) => state
+              .copyWithGeneric(
+                  (g) => g.addMessage(e as GameMessage).updateTime())
+              .gameValue(),
+          orElse: () =>
+              GameError('General Event not implemented yet $e', 'programmer'),
+        ),
+        game: (e) => state.next(e, read),
+      );
+      if (nextState.isError) {
+        read.gameError = nextState.error;
+        _previousStates.removeLast();
+      } else {
+        state = nextState.value;
+      }
+    } catch (error) {
+      _gameStateLogger.severe(error);
     }
   }
 }

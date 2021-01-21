@@ -137,6 +137,7 @@ class GameServer {
     if (_clients.containsKey(id)) {
       // The player already exists, and is in the game
       // just update their client data
+      _serverLogger.info('Client $id rejoining');
       _clients[id] = client;
       _clients[id]
           .emit(IOChannel.gamestate.string, _gameState.gameState?.toJson());
