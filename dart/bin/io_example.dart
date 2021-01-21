@@ -1,5 +1,5 @@
 import 'package:game_scaffold_dart/server.dart';
-import 'package:game_scaffold_dart/games.dart';
+import 'package:game_scaffold_games/games.dart';
 
 void main(List<String> arguments) {
   // Must be done on both client and server

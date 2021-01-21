@@ -4,13 +4,16 @@ environment:
 packages:
   - dart/*
   - flutter/*
-  - game_scaffold_test/*
+  - flutter/example/*
+  - test/*
+  - games/*
 
 scripts:
-  analyze: melos exec -- pub global run tuneup check
+  analyze: melos exec -- exec pub global run tuneup check
   postbootstrap: tuneup --version || pub global activate tuneup
-  postclean: melos exec -- rm -rf ./build ./android/.gradle ./ios/.symlinks ./ios/Pods ./android/.idea ./.idea
-  test: melos exec -- flutter run test || dart run test
+  postclean: melos exec -- exec rm -rf ./build ./android/.gradle ./ios/.symlinks ./ios/Pods ./android/.idea ./.idea
+  test: melos exec -- exec flutter run test || dart run test
+  upgrade: melos exec -- exec flutter pub upgrade || dart pub upgrade
 
 dev_dependencies:
   pedantic: ^1.8.0

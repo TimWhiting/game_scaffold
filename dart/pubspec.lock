@@ -56,7 +56,7 @@ packages:
       name: build_daemon
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.6"
   build_resolvers:
     dependency: transitive
     description:
@@ -126,7 +126,7 @@ packages:
       name: code_builder
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.5.0"
+    version: "3.6.0"
   collection:
     dependency: transitive
     description:
@@ -225,6 +225,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.0"
+  game_scaffold_games:
+    dependency: "direct dev"
+    description:
+      name: game_scaffold_games
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   glob:
     dependency: transitive
     description:
@@ -441,14 +448,14 @@ packages:
       name: rikulo_commons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.1"
+    version: "4.3.0"
   riverpod:
     dependency: "direct main"
     description:
       name: riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.2"
   shelf:
     dependency: transitive
     description:
@@ -644,7 +651,7 @@ packages:
       name: web_socket_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   webkit_inspection_protocol:
     dependency: transitive
     description:

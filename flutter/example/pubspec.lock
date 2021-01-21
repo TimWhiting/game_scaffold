@@ -110,7 +110,7 @@ packages:
       name: flutter_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -129,21 +129,28 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.1.5+2"
+    version: "0.1.5+3"
   game_scaffold_dart:
     dependency: "direct overridden"
     description:
       path: "../../dart"
       relative: true
     source: path
-    version: "0.1.5+6"
+    version: "0.1.5+7"
+  game_scaffold_games:
+    dependency: "direct main"
+    description:
+      name: game_scaffold_games
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   hooks_riverpod:
     dependency: "direct main"
     description:
       name: hooks_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.2"
   http:
     dependency: transitive
     description:
@@ -220,14 +227,14 @@ packages:
       name: rikulo_commons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.1"
+    version: "4.3.0"
   riverpod:
     dependency: transitive
     description:
       name: riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.2"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -14,7 +14,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.41.1"
+    version: "0.41.2"
   args:
     dependency: transitive
     description:
@@ -98,7 +98,7 @@ packages:
       name: dartdoc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.38.0"
+    version: "0.39.0"
   dartx:
     dependency: transitive
     description:
@@ -152,7 +152,7 @@ packages:
       name: flutter_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -171,7 +171,7 @@ packages:
       name: game_scaffold_dart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.5+1"
+    version: "0.1.5+7"
   glob:
     dependency: transitive
     description:
@@ -185,7 +185,7 @@ packages:
       name: hooks_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.2"
   html:
     dependency: transitive
     description:
@@ -325,14 +325,14 @@ packages:
       name: rikulo_commons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.1"
+    version: "4.3.0"
   riverpod:
     dependency: "direct main"
     description:
       name: riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.2"
   sky_engine:
     dependency: transitive
     description: flutter

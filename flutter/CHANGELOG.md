@@ -1,3 +1,7 @@
+## 0.1.5+3
+
+- Update example to use new games package
+  
 ## 0.1.5+2
 
 - Add between rounds to example

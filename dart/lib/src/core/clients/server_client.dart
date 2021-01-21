@@ -62,4 +62,14 @@ abstract class ServerClient {
     }
     return impl(read, address, playerID);
   }
+
+  /// Connects to the backend
+  ///
+  /// Default implementation does nothing
+  Future<void> connect() async {}
+
+  /// Disconnect from the backend
+  ///
+  /// Default implementation does nothing
+  Future<void> disconnect() async {}
 }

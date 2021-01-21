@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 import 'package:game_scaffold_dart/src/core/backend.dart';
-import 'package:game_scaffold_dart/src/games/tic_tac_toe.dart';
+import 'package:game_scaffold_games/games.dart';
 
 Future<void> main(List<String> arguments) async {
   Game.registerGeneralEvents();

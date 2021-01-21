@@ -1,6 +1,6 @@
 import 'package:game_scaffold_dart/server.dart';
 
-import 'package:game_scaffold_dart/games.dart';
+import 'package:game_scaffold_games/games.dart';
 
 void main() async {
   Game.registerGeneralEvents();

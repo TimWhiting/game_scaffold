@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_scaffold/game_scaffold.dart';
 import 'package:hooks_riverpod/all.dart';
-import 'package:game_scaffold_dart/games.dart';
+import 'package:game_scaffold_games/games.dart';
 import 'package:logging/logging.dart';
 
 void main() {

@@ -4,7 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/flutter/melos_game_scaffold.iml" filepath="$PROJECT_DIR$/flutter/melos_game_scaffold.iml" />
       <module fileurl="file://$PROJECT_DIR$/dart/melos_game_scaffold_dart.iml" filepath="$PROJECT_DIR$/dart/melos_game_scaffold_dart.iml" />
-      <module fileurl="file://$PROJECT_DIR$/game_scaffold_test/melos_game_scaffold_test.iml" filepath="$PROJECT_DIR$/game_scaffold_test/melos_game_scaffold_test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games/melos_game_scaffold_games.iml" filepath="$PROJECT_DIR$/games/melos_game_scaffold_games.iml" />
+      <module fileurl="file://$PROJECT_DIR$/test/melos_game_scaffold_test.iml" filepath="$PROJECT_DIR$/test/melos_game_scaffold_test.iml" />
       <module fileurl="file://$PROJECT_DIR$/melos_game_scaffold_monorepo.iml" filepath="$PROJECT_DIR$/melos_game_scaffold_monorepo.iml" />
     </modules>
   </component>

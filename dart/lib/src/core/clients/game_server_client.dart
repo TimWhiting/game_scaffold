@@ -71,6 +71,16 @@ class GameServerClient {
     return await _sClient.deleteGame();
   }
 
+  /// Connects to the backend
+  Future<void> connect() async {
+    await _sClient.connect();
+  }
+
+  /// Disconnect from the backend
+  Future<void> disconnect() async {
+    await _sClient.disconnect();
+  }
+
   /// Gets a list of games on the server
   Future<List<GameInfo>> getGames() => _sClient.getGames();
 

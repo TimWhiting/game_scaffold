@@ -17,20 +17,9 @@ class IOServerClient extends ServerClient {
     this.address,
     String playerID,
   }) : super(read, playerID) {
-    socket = IO.io(address, socketIOOpts);
-    socket.on(IOChannel.connection.string,
-        (_) => read.gameFor(playerID).gameStatus = GameStatus.NotJoined);
-    socket.on(IOChannel.disconnect.string,
-        (_) => read.gameFor(playerID).gameStatus = GameStatus.NotConnected);
     Future.delayed(10.milliseconds, () {
-      final currentStatus = read.gameFor(playerID).gameStatus;
-      if (currentStatus == GameStatus.NotConnected ||
-          currentStatus == GameStatus.NotJoined) {
-        read.gameFor(playerID).gameStatus =
-            socket.connected ? GameStatus.NotJoined : GameStatus.NotConnected;
-      }
+      connect();
     });
-    logger.info('Created ServerClient');
   }
 
   final String address;
@@ -38,10 +27,10 @@ class IOServerClient extends ServerClient {
 
   @override
   Future<void> createGame() async {
-    final gameConfig = read.gameFor(playerID).gameConfig;
+    final gameConfig = game.gameConfig;
     logger.fine('Creating game $gameConfig');
     final gameCode = await _createGame(gameConfig);
-    read.gameFor(playerID).gameCode = gameCode;
+    game.gameCode = gameCode;
   }
 
   Future<String> _createGame(GameConfig config) async {
@@ -51,8 +40,7 @@ class IOServerClient extends ServerClient {
 
   @override
   Future<bool> deleteGame() async {
-    final result = await socket.call(
-        IOChannel.deletegame, read.gameFor(playerID).gameCode);
+    final result = await socket.call(IOChannel.deletegame, game.gameCode);
     return result as bool;
   }
 
@@ -67,7 +55,7 @@ class IOServerClient extends ServerClient {
   @override
   Future<void> getGameInfo(String gameId) async {
     final result = await socket.call(IOChannel.getgameinfo, gameId);
-    read.gameFor(playerID).currentGameInfo = result == '404'
+    game.currentGameInfo = result == '404'
         ? null
         : GameInfo.fromJson(result as Map<String, dynamic>);
   }
@@ -75,8 +63,34 @@ class IOServerClient extends ServerClient {
   @override
   void dispose() {
     logger.info('Dispose');
-    socket.disconnect();
     socket.dispose();
+  }
+
+  /// Connects to the backend
+  @override
+  Future<void> connect() async {
+    socket = IO.io(address, socketIOOpts);
+    socket.on(IOChannel.connection.string,
+        (_) => game.gameStatus = GameStatus.NotJoined);
+    socket.on(IOChannel.disconnect.string,
+        (_) => game.gameStatus = GameStatus.NotConnected);
+
+    final currentStatus = game.gameStatus;
+    if (currentStatus == GameStatus.NotConnected ||
+        currentStatus == GameStatus.NotJoined) {
+      game.gameStatus =
+          socket.connected ? GameStatus.NotJoined : GameStatus.NotConnected;
+    }
+    logger.info('Created ServerClient');
+  }
+
+  /// Disconnect from the backend
+  ///
+  /// Default implementation does nothing
+  @override
+  Future<void> disconnect() async {
+    socket.dispose();
+    game.gameStatus = GameStatus.NotConnected;
   }
 
   static void registerImplementation() {

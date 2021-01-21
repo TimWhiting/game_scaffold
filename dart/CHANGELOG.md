@@ -1,5 +1,9 @@
 ## 0.1.5+7
 
+- Remove tic tac toe and move it to the game_scaffold_games package
+  
+## 0.1.5+7
+
 - Add some logging.
 
 ## 0.1.5+6
