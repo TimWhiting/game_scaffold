@@ -1,4 +1,4 @@
-## 0.1.5+7
+## 0.1.5+8
 
 - Remove tic tac toe and move it to the game_scaffold_games package
   
