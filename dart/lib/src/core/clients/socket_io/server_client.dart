@@ -34,18 +34,21 @@ class IOServerClient extends ServerClient {
   }
 
   Future<String> _createGame(GameConfig config) async {
+    await _ensureInitialized();
     final result = await socket.call(IOChannel.creategame, config.toJson());
     return result as String;
   }
 
   @override
   Future<bool> deleteGame() async {
+    await _ensureInitialized();
     final result = await socket.call(IOChannel.deletegame, game.gameCode);
     return result as bool;
   }
 
   @override
   Future<List<GameInfo>> getGames() async {
+    await _ensureInitialized();
     final result = await socket.call(IOChannel.getgames, playerID);
     return (json.decode(result as String) as List<dynamic>)
         .map((v) => GameInfo.fromJson(v as Map<String, dynamic>))
@@ -54,6 +57,7 @@ class IOServerClient extends ServerClient {
 
   @override
   Future<void> getGameInfo(String gameId) async {
+    await _ensureInitialized();
     final result = await socket.call(IOChannel.getgameinfo, gameId);
     game.currentGameInfo = result == '404'
         ? null
@@ -66,9 +70,18 @@ class IOServerClient extends ServerClient {
     socket.dispose();
   }
 
+  Future<void> _ensureInitialized() async {
+    if (socket == null) {
+      await connect();
+    }
+  }
+
   /// Connects to the backend
   @override
   Future<void> connect() async {
+    if (socket != null) {
+      await disconnect();
+    }
     socket = IO.io(address, socketIOOpts);
     socket.on(IOChannel.connection.string,
         (_) => game.gameStatus = GameStatus.NotJoined);
@@ -76,6 +89,7 @@ class IOServerClient extends ServerClient {
         (_) => game.gameStatus = GameStatus.NotConnected);
 
     final currentStatus = game.gameStatus;
+    await Future.delayed(20.milliseconds);
     if (currentStatus == GameStatus.NotConnected ||
         currentStatus == GameStatus.NotJoined) {
       game.gameStatus =
@@ -90,6 +104,7 @@ class IOServerClient extends ServerClient {
   @override
   Future<void> disconnect() async {
     socket.dispose();
+    socket = null;
     game.gameStatus = GameStatus.NotConnected;
   }
 
