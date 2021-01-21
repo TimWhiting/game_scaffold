@@ -1,3 +1,7 @@
+## 0.1.5+6
+
+- Add ready players to the generic game state, and fix error channel for socket-io.
+
 ## 0.1.5+5
 
 - Fix issue with backend reader for agent games

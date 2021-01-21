@@ -12,6 +12,10 @@ _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
         ? KtList<Player>.from((json['players'] as List).map((e) =>
             e == null ? null : Player.fromJson(e as Map<String, dynamic>)))
         : null,
+    json['readyPlayers'] != null
+        ? KtList<String>.from(
+            (json['readyPlayers'] as List).map((e) => e as String))
+        : null,
     json['allRoundScores'] != null
         ? KtList<KtList<double>>.from((json['allRoundScores'] as List).map(
             (e) => e != null
@@ -33,6 +37,7 @@ _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$_$_GenericGameToJson(_$_GenericGame instance) =>
     <String, dynamic>{
       'players': instance.players?.asList(),
+      'readyPlayers': instance.readyPlayers?.asList(),
       'allRoundScores':
           instance.allRoundScores?.map((e) => e?.asList())?.iter?.toList(),
       'time': instance.time?.toIso8601String(),

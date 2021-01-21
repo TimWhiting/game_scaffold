@@ -20,7 +20,6 @@ class IOGameClient extends GameClient {
 
   void _ensureConnected() {
     if (gameCode != _lastGameCode || (_socket?.disconnected ?? true)) {
-      _socket?.disconnect();
       _socket?.dispose();
       _socket = IO.io('$address/$gameCode', socketIOOpts);
       logger.info('Created Game Client Socket $gameCode');
@@ -31,12 +30,11 @@ class IOGameClient extends GameClient {
 
   @override
   void exitGame() {
-    _socket.off(IOChannel.error.string);
+    _socket.off(IOChannel.error_channel.string);
     _socket.off(IOChannel.gamestate.string);
     _socket.off(IOChannel.lobby.string);
     logger.info('Exiting game');
     game.gameStatus = GameStatus.NotJoined;
-    _socket.disconnect();
   }
 
   @override
@@ -65,8 +63,10 @@ class IOGameClient extends GameClient {
       game.gameState = gameState;
       game.gameStatus = gameState.gameStatus;
     });
-    _socket.on(IOChannel.error.string, (data) {
-      game.gameError = GameError.fromJson(data);
+    _socket.on(IOChannel.error_channel.string, (data) {
+      final error = GameError.fromJson(data as Map<String, dynamic>);
+      logger.warning('Error: $error');
+      game.gameError = error;
     });
     _socket.on(IOChannel.lobby.string, (d) => _onLobby(d));
   }
@@ -80,8 +80,8 @@ class IOGameClient extends GameClient {
 
   @override
   void dispose() {
+    exitGame();
     logger.info('Dispose');
-    _socket.disconnect();
     _socket.dispose();
   }
 

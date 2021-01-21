@@ -83,7 +83,7 @@ class CreateOrJoinWidget extends GameHookWidget {
             Text('Player $playerID'),
             SizedBox(height: 20),
             if (playerID == P1)
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Create Game'),
                 onPressed: () async {
                   final id = await context.gameClient(playerID).createGame(
@@ -109,7 +109,7 @@ class CreateOrJoinWidget extends GameHookWidget {
                 ),
               ),
               SizedBox(height: 20),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () =>
                     context.gameClient(playerID).register(code: code),
                 child: Text('Join Game'),
@@ -143,6 +143,7 @@ class GameWidget extends GameHookWidget {
   @override
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final gameState = gameProvider.useGameState as TicTacToeGame;
+    final gameStatus = gameProvider.useGameStatus;
     final gameError = gameProvider.useGameError;
     return Scaffold(
       appBar: AppBar(),
@@ -181,6 +182,14 @@ class GameWidget extends GameHookWidget {
                     ),
                 ],
               ),
+            if (gameStatus == GameStatus.BetweenRounds &&
+                !gameState.readyPlayers.contains(gameProvider.playerID)) ...[
+              SizedBox(height: 20),
+              ElevatedButton(
+                  child: Text('Next Round'),
+                  onPressed: () =>
+                      context.gameClient(gameProvider.playerID).newRound()),
+            ],
             SizedBox(height: 20),
             Text('$gameError'),
           ],

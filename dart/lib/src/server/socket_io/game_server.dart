@@ -143,7 +143,7 @@ class GameServer {
       return;
     }
     if (_clients.length > gameConfig.maxPlayers) {
-      client?.emit(IOChannel.error.string,
+      client?.emit(IOChannel.error_channel.string,
           GameError('Too many players already, sorry', id));
     } else {
       if (gameConfig.customNames) {
@@ -216,7 +216,8 @@ class GameServer {
       return;
     }
     _serverLogger.info('Error: $message');
-    _clients[message.person]?.emit(IOChannel.error.string, message.toJson());
+    _clients[message.person]
+        ?.emit(IOChannel.error_channel.string, message.toJson());
   }
 
   dynamic _handleRequest(gameEvent) {

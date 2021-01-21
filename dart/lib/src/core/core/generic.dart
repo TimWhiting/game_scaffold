@@ -25,6 +25,7 @@ abstract class GenericGame with _$GenericGame {
   const GenericGame._();
   const factory GenericGame(
     KtList<Player> players,
+    KtList<String> readyPlayers,
     KtList<KtList<double>> allRoundScores,
     DateTime time,
     KtList<GameMessage> messages,
@@ -34,10 +35,18 @@ abstract class GenericGame with _$GenericGame {
   ) = _GenericGame;
   factory GenericGame.fromJson(Map<String, dynamic> map) =>
       _$GenericGameFromJson(map);
-  factory GenericGame.start(KtList<Player> players) => GenericGame(players,
-      KtList.empty(), DateTime.now(), KtList.empty(), GameStatus.Started, 0, 0);
+  factory GenericGame.start(KtList<Player> players) => GenericGame(
+      players,
+      KtList.empty(),
+      KtList.empty(),
+      DateTime.now(),
+      KtList.empty(),
+      GameStatus.Started,
+      0,
+      0);
   factory GenericGame.startRandom(KtList<Player> players) => GenericGame(
         players,
+        KtList.empty(),
         KtList.empty(),
         DateTime.now(),
         KtList.empty(),
@@ -116,6 +125,13 @@ abstract class GenericGame with _$GenericGame {
         players: players.shuffled,
         currentPlayerIndex: 0,
       );
+
+  /// Clears the list of ready players
+  GenericGame clearReadyPlayers() => copyWith(readyPlayers: listOf());
+
+  /// Adds a ready player to the list
+  GenericGame addReadyPlayer(String player) =>
+      copyWith(readyPlayers: readyPlayers.plusElement(player));
 }
 
 /// A [GenericEvent] that is handled by the Generic server implementation

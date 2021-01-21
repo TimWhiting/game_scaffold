@@ -19,6 +19,7 @@ class _$GenericGameTearOff {
 // ignore: unused_element
   _GenericGame call(
       KtList<Player> players,
+      KtList<String> readyPlayers,
       KtList<KtList<double>> allRoundScores,
       DateTime time,
       KtList<GameMessage> messages,
@@ -27,6 +28,7 @@ class _$GenericGameTearOff {
       int round) {
     return _GenericGame(
       players,
+      readyPlayers,
       allRoundScores,
       time,
       messages,
@@ -49,6 +51,7 @@ const $GenericGame = _$GenericGameTearOff();
 /// @nodoc
 mixin _$GenericGame {
   KtList<Player> get players;
+  KtList<String> get readyPlayers;
   KtList<KtList<double>> get allRoundScores;
   DateTime get time;
   KtList<GameMessage> get messages;
@@ -67,6 +70,7 @@ abstract class $GenericGameCopyWith<$Res> {
       _$GenericGameCopyWithImpl<$Res>;
   $Res call(
       {KtList<Player> players,
+      KtList<String> readyPlayers,
       KtList<KtList<double>> allRoundScores,
       DateTime time,
       KtList<GameMessage> messages,
@@ -86,6 +90,7 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
   @override
   $Res call({
     Object players = freezed,
+    Object readyPlayers = freezed,
     Object allRoundScores = freezed,
     Object time = freezed,
     Object messages = freezed,
@@ -95,6 +100,9 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
   }) {
     return _then(_value.copyWith(
       players: players == freezed ? _value.players : players as KtList<Player>,
+      readyPlayers: readyPlayers == freezed
+          ? _value.readyPlayers
+          : readyPlayers as KtList<String>,
       allRoundScores: allRoundScores == freezed
           ? _value.allRoundScores
           : allRoundScores as KtList<KtList<double>>,
@@ -121,6 +129,7 @@ abstract class _$GenericGameCopyWith<$Res>
   @override
   $Res call(
       {KtList<Player> players,
+      KtList<String> readyPlayers,
       KtList<KtList<double>> allRoundScores,
       DateTime time,
       KtList<GameMessage> messages,
@@ -142,6 +151,7 @@ class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
   @override
   $Res call({
     Object players = freezed,
+    Object readyPlayers = freezed,
     Object allRoundScores = freezed,
     Object time = freezed,
     Object messages = freezed,
@@ -151,6 +161,9 @@ class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
   }) {
     return _then(_GenericGame(
       players == freezed ? _value.players : players as KtList<Player>,
+      readyPlayers == freezed
+          ? _value.readyPlayers
+          : readyPlayers as KtList<String>,
       allRoundScores == freezed
           ? _value.allRoundScores
           : allRoundScores as KtList<KtList<double>>,
@@ -169,9 +182,17 @@ class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
 
 /// @nodoc
 class _$_GenericGame extends _GenericGame {
-  const _$_GenericGame(this.players, this.allRoundScores, this.time,
-      this.messages, this.gameStatus, this.currentPlayerIndex, this.round)
+  const _$_GenericGame(
+      this.players,
+      this.readyPlayers,
+      this.allRoundScores,
+      this.time,
+      this.messages,
+      this.gameStatus,
+      this.currentPlayerIndex,
+      this.round)
       : assert(players != null),
+        assert(readyPlayers != null),
         assert(allRoundScores != null),
         assert(time != null),
         assert(messages != null),
@@ -185,6 +206,8 @@ class _$_GenericGame extends _GenericGame {
 
   @override
   final KtList<Player> players;
+  @override
+  final KtList<String> readyPlayers;
   @override
   final KtList<KtList<double>> allRoundScores;
   @override
@@ -200,7 +223,7 @@ class _$_GenericGame extends _GenericGame {
 
   @override
   String toString() {
-    return 'GenericGame(players: $players, allRoundScores: $allRoundScores, time: $time, messages: $messages, gameStatus: $gameStatus, currentPlayerIndex: $currentPlayerIndex, round: $round)';
+    return 'GenericGame(players: $players, readyPlayers: $readyPlayers, allRoundScores: $allRoundScores, time: $time, messages: $messages, gameStatus: $gameStatus, currentPlayerIndex: $currentPlayerIndex, round: $round)';
   }
 
   @override
@@ -210,6 +233,9 @@ class _$_GenericGame extends _GenericGame {
             (identical(other.players, players) ||
                 const DeepCollectionEquality()
                     .equals(other.players, players)) &&
+            (identical(other.readyPlayers, readyPlayers) ||
+                const DeepCollectionEquality()
+                    .equals(other.readyPlayers, readyPlayers)) &&
             (identical(other.allRoundScores, allRoundScores) ||
                 const DeepCollectionEquality()
                     .equals(other.allRoundScores, allRoundScores)) &&
@@ -232,6 +258,7 @@ class _$_GenericGame extends _GenericGame {
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(players) ^
+      const DeepCollectionEquality().hash(readyPlayers) ^
       const DeepCollectionEquality().hash(allRoundScores) ^
       const DeepCollectionEquality().hash(time) ^
       const DeepCollectionEquality().hash(messages) ^
@@ -253,6 +280,7 @@ abstract class _GenericGame extends GenericGame {
   const _GenericGame._() : super._();
   const factory _GenericGame(
       KtList<Player> players,
+      KtList<String> readyPlayers,
       KtList<KtList<double>> allRoundScores,
       DateTime time,
       KtList<GameMessage> messages,
@@ -265,6 +293,8 @@ abstract class _GenericGame extends GenericGame {
 
   @override
   KtList<Player> get players;
+  @override
+  KtList<String> get readyPlayers;
   @override
   KtList<KtList<double>> get allRoundScores;
   @override

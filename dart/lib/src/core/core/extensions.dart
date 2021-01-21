@@ -63,6 +63,9 @@ extension GameX on Game {
 
   /// Gets whether the round is over
   bool get roundOver => generic.roundOver;
+
+  /// Gets the players who are ready for the next round
+  KtList<String> get readyPlayers => generic.readyPlayers;
 }
 
 extension GameKtListExtensions<T> on KtList<T> {

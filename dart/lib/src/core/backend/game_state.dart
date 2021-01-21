@@ -110,9 +110,6 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   /// The [GameConfig] that was used to create this [GameStateNotifier]
   final GameConfig gameConfig;
 
-  /// The players that are ready for the next round
-  final Set<String> _readyPlayers = {};
-
   /// A list of previous states
   final List<T> _previousStates = [];
 
@@ -138,15 +135,19 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
         },
         start: () => read.initialState.gameValue(),
         readyNextRound: (e) {
-          if (_readyPlayers.length > 1) {
+          if (state.readyPlayers.size > 1) {
             _previousStates.remove(state);
           }
-          _readyPlayers.add(e);
-          if (_readyPlayers.length == state.players.size) {
-            _readyPlayers.clear();
-            return state.moveNextRound(gameConfig, read).gameValue();
+          var newState = state.copyWithGeneric((g) => g.addReadyPlayer(e));
+          if (newState.readyPlayers.size == state.players.size) {
+            return state
+                .moveNextRound(gameConfig, read)
+                .gameValue()
+                .value
+                .copyWithGeneric((g) => g.clearReadyPlayers())
+                .gameValue();
           }
-          return state.gameValue();
+          return newState.gameValue();
         },
         message: (_, __, ___) => state
             .copyWithGeneric((g) => g.addMessage(e as GameMessage).updateTime())
