@@ -1,0 +1,6 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - init: dart pub upgrade
+    command: cd flutter/example && flutter run
