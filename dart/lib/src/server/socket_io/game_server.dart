@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:game_scaffold_dart/src/core/clients/socket_io/channels.dart';
-import 'package:kt_dart/kt.dart';
 //ignore: library_prefixes
 import 'package:socket_io/socket_io.dart' as IO;
 import 'package:logging/logging.dart';
@@ -47,8 +46,7 @@ class GameServer {
   String get gameType => gameConfig.gameType;
 
   /// Returns the list of players involved in the game
-  KtList<String> get playerNames =>
-      _players.map((p) => p.name).toImmutableList();
+  List<String> get playerNames => _players.map((p) => p.name).toUnmodifiable();
 
   /// Returns whether the client by [id] is the admin
   bool isClientAdmin(String id) => id == gameConfig.adminId;

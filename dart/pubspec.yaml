@@ -18,7 +18,7 @@ dependencies:
   enum_to_string: ^1.0.14
 
 dev_dependencies:
-  json_serializable_immutable_collections: 0.4.2
+  json_serializable: any
   freezed: any
   build_runner: any
   test: any

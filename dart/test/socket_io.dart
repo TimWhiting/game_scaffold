@@ -23,7 +23,7 @@ void main() async {
     await gameClient.register();
     gameClient.startGame();
     await Future.delayed(100.milliseconds);
-    assert(ioServer.servers[gameCode].playerNames.size == 1);
+    assert(ioServer.servers[gameCode].playerNames.length == 1);
     assert(read.gameFor(P1).gameState.gameStatus == GameStatus.Started);
   });
   assert(1 == 1);
