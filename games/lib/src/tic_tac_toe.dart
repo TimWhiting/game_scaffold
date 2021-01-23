@@ -12,7 +12,7 @@ abstract class TicTacToeGame
   const TicTacToeGame._();
   const factory TicTacToeGame({
     @required GenericGame generic,
-    @required KtList<String> board,
+    @unmodifiableStringList @required List<String> board,
     @Default('tictactoe') String type,
   }) = _TicTacToeGame;
   factory TicTacToeGame.fromJson(Map<String, dynamic> map) =>
@@ -33,7 +33,9 @@ abstract class TicTacToeGame
     }
 
     return copyWith(
-      board: (board.toMutableList()..[location] = player).toList(),
+      board: board
+          .mapIndexed((i, s) => i == location ? player : s)
+          .toUnmodifiable(),
     )._nextPlayerOrEndRound().gameValue();
   }
 
@@ -41,14 +43,12 @@ abstract class TicTacToeGame
     var gGame = generic.nextPlayer();
     if (playerIDs.any((p) => isWinner(p)) || board.all((l) => l != null)) {
       if (round == 2) {
-        gGame = gGame
-            .finishRound(
-              mapFrom({
-                players[0].id: points[players[0].id],
-                players[1].id: points[players[1].id]
-              }),
-            )
-            .updateStatus(GameStatus.Finished);
+        gGame = gGame.finishRound(
+          {
+            players[0].id: points[players[0].id],
+            players[1].id: points[players[1].id]
+          },
+        ).updateStatus(GameStatus.Finished);
       } else {
         gGame = gGame.updateStatus(GameStatus.BetweenRounds);
       }
@@ -65,12 +65,12 @@ abstract class TicTacToeGame
       GameConfig config, BackendGameReader backendReader) {
     return TicTacToeGame(
       generic: generic.finishRound(
-        mapFrom({
+        {
           players[0].id: points[players[0].id],
           players[1].id: points[players[1].id]
-        }),
+        },
       ),
-      board: listFrom(List.filled(9, null)),
+      board: List.unmodifiable(List.filled(9, null)),
     );
   }
 
@@ -79,20 +79,18 @@ abstract class TicTacToeGame
     return copyWith(generic: updates(generic));
   }
 
-  KtMap<String, double> get points {
-    return mapFrom(
-      {
-        for (final p in playerIDs.iter)
-          p: isWinner(p)
-              ? 1
-              : isLoser(p)
-                  ? 0
-                  : .5,
-      },
-    );
+  Map<String, double> get points {
+    return Map.unmodifiable({
+      for (final p in playerIDs)
+        p: isWinner(p)
+            ? 1.0
+            : isLoser(p)
+                ? 0.0
+                : .5,
+    });
   }
 
-  static final KtList<KtList<int>> winningLocationCombinations = listFrom([
+  static final List<List<int>> winningLocationCombinations = List.unmodifiable([
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -101,7 +99,7 @@ abstract class TicTacToeGame
     [2, 5, 8],
     [0, 4, 8],
     [2, 4, 6]
-  ].map((l) => listFrom(l)));
+  ].map((l) => l.toUnmodifiable()));
 
   bool isWinner(String playerID) {
     if (winningLocationCombinations
@@ -112,7 +110,7 @@ abstract class TicTacToeGame
   }
 
   bool isLoser(String playerID) {
-    if (isWinner(playerIDs.first((id) => id != playerID))) {
+    if (isWinner(playerIDs.firstWhere((id) => id != playerID))) {
       return true;
     } else {
       return false;
@@ -126,7 +124,7 @@ abstract class TicTacToeGame
       fromJson: (json) => TicTacToeGame.fromJson(json),
       initialState: (config, players, _) => TicTacToeGame(
         generic: GenericGame.start(players),
-        board: listFrom(List.filled(9, null)),
+        board: List.unmodifiable(List.filled(9, null)),
       ),
       gameEventFromJson: (j) => TicTacToeGameEvent.fromJson(j).asGameEvent,
     );

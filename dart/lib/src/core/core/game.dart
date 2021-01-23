@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../backend/game_state.dart';
+import 'core.dart';
 import 'errors.dart';
 import 'extensions.dart';
 import 'events.dart';
@@ -186,7 +187,7 @@ abstract class GameConfig with _$GameConfig {
 abstract class GameInfo with _$GameInfo {
   const factory GameInfo(
     String gameId,
-    List<String> players,
+    @unmodifiableStringList List<String> players,
     String player,
     bool creator,
     String gameType,

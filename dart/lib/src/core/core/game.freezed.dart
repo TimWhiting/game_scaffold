@@ -65,6 +65,7 @@ mixin _$GameConfig {
   Map<String, dynamic> get options;
 
   Map<String, dynamic> toJson();
+  @JsonKey(ignore: true)
   $GameConfigCopyWith<GameConfig> get copyWith;
 }
 
@@ -277,6 +278,7 @@ class _$_GameConfig implements _GameConfig {
       const DeepCollectionEquality().hash(autoStart) ^
       const DeepCollectionEquality().hash(options);
 
+  @JsonKey(ignore: true)
   @override
   _$GameConfigCopyWith<_GameConfig> get copyWith =>
       __$GameConfigCopyWithImpl<_GameConfig>(this, _$identity);
@@ -323,6 +325,7 @@ abstract class _GameConfig implements GameConfig {
   /// [options] must be json serializable
   Map<String, dynamic> get options;
   @override
+  @JsonKey(ignore: true)
   _$GameConfigCopyWith<_GameConfig> get copyWith;
 }
 
@@ -335,8 +338,8 @@ class _$GameInfoTearOff {
   const _$GameInfoTearOff();
 
 // ignore: unused_element
-  _GameInfo call(String gameId, List<String> players, String player,
-      bool creator, String gameType) {
+  _GameInfo call(String gameId, @unmodifiableStringList List<String> players,
+      String player, bool creator, String gameType) {
     return _GameInfo(
       gameId,
       players,
@@ -359,12 +362,14 @@ const $GameInfo = _$GameInfoTearOff();
 /// @nodoc
 mixin _$GameInfo {
   String get gameId;
+  @unmodifiableStringList
   List<String> get players;
   String get player;
   bool get creator;
   String get gameType;
 
   Map<String, dynamic> toJson();
+  @JsonKey(ignore: true)
   $GameInfoCopyWith<GameInfo> get copyWith;
 }
 
@@ -374,7 +379,7 @@ abstract class $GameInfoCopyWith<$Res> {
       _$GameInfoCopyWithImpl<$Res>;
   $Res call(
       {String gameId,
-      List<String> players,
+      @unmodifiableStringList List<String> players,
       String player,
       bool creator,
       String gameType});
@@ -413,7 +418,7 @@ abstract class _$GameInfoCopyWith<$Res> implements $GameInfoCopyWith<$Res> {
   @override
   $Res call(
       {String gameId,
-      List<String> players,
+      @unmodifiableStringList List<String> players,
       String player,
       bool creator,
       String gameType});
@@ -450,8 +455,8 @@ class __$GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
 
 /// @nodoc
 class _$_GameInfo implements _GameInfo {
-  const _$_GameInfo(
-      this.gameId, this.players, this.player, this.creator, this.gameType)
+  const _$_GameInfo(this.gameId, @unmodifiableStringList this.players,
+      this.player, this.creator, this.gameType)
       : assert(gameId != null),
         assert(players != null),
         assert(player != null),
@@ -464,6 +469,7 @@ class _$_GameInfo implements _GameInfo {
   @override
   final String gameId;
   @override
+  @unmodifiableStringList
   final List<String> players;
   @override
   final String player;
@@ -505,6 +511,7 @@ class _$_GameInfo implements _GameInfo {
       const DeepCollectionEquality().hash(creator) ^
       const DeepCollectionEquality().hash(gameType);
 
+  @JsonKey(ignore: true)
   @override
   _$GameInfoCopyWith<_GameInfo> get copyWith =>
       __$GameInfoCopyWithImpl<_GameInfo>(this, _$identity);
@@ -516,14 +523,19 @@ class _$_GameInfo implements _GameInfo {
 }
 
 abstract class _GameInfo implements GameInfo {
-  const factory _GameInfo(String gameId, List<String> players, String player,
-      bool creator, String gameType) = _$_GameInfo;
+  const factory _GameInfo(
+      String gameId,
+      @unmodifiableStringList List<String> players,
+      String player,
+      bool creator,
+      String gameType) = _$_GameInfo;
 
   factory _GameInfo.fromJson(Map<String, dynamic> json) = _$_GameInfo.fromJson;
 
   @override
   String get gameId;
   @override
+  @unmodifiableStringList
   List<String> get players;
   @override
   String get player;
@@ -532,5 +544,6 @@ abstract class _GameInfo implements GameInfo {
   @override
   String get gameType;
   @override
+  @JsonKey(ignore: true)
   _$GameInfoCopyWith<_GameInfo> get copyWith;
 }

@@ -35,26 +35,26 @@ const $GameEvent = _$GameEventTearOff();
 /// @nodoc
 mixin _$GameEvent {
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result game(Event event),
-    @required Result general(GenericEvent event),
+  TResult when<TResult extends Object>({
+    @required TResult game(Event event),
+    @required TResult general(GenericEvent event),
   });
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result game(Event event),
-    Result general(GenericEvent event),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult game(Event event),
+    TResult general(GenericEvent event),
+    @required TResult orElse(),
   });
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result game(_GameEventGame value),
-    @required Result general(_GameEventGeneral value),
+  TResult map<TResult extends Object>({
+    @required TResult game(_GameEventGame value),
+    @required TResult general(_GameEventGeneral value),
   });
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result game(_GameEventGame value),
-    Result general(_GameEventGeneral value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult game(_GameEventGame value),
+    TResult general(_GameEventGeneral value),
+    @required TResult orElse(),
   });
 }
 
@@ -127,15 +127,16 @@ class _$_GameEventGame extends _GameEventGame {
   int get hashCode =>
       runtimeType.hashCode ^ const DeepCollectionEquality().hash(event);
 
+  @JsonKey(ignore: true)
   @override
   _$GameEventGameCopyWith<_GameEventGame> get copyWith =>
       __$GameEventGameCopyWithImpl<_GameEventGame>(this, _$identity);
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result game(Event event),
-    @required Result general(GenericEvent event),
+  TResult when<TResult extends Object>({
+    @required TResult game(Event event),
+    @required TResult general(GenericEvent event),
   }) {
     assert(game != null);
     assert(general != null);
@@ -144,10 +145,10 @@ class _$_GameEventGame extends _GameEventGame {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result game(Event event),
-    Result general(GenericEvent event),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult game(Event event),
+    TResult general(GenericEvent event),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (game != null) {
@@ -158,9 +159,9 @@ class _$_GameEventGame extends _GameEventGame {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result game(_GameEventGame value),
-    @required Result general(_GameEventGeneral value),
+  TResult map<TResult extends Object>({
+    @required TResult game(_GameEventGame value),
+    @required TResult general(_GameEventGeneral value),
   }) {
     assert(game != null);
     assert(general != null);
@@ -169,10 +170,10 @@ class _$_GameEventGame extends _GameEventGame {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result game(_GameEventGame value),
-    Result general(_GameEventGeneral value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult game(_GameEventGame value),
+    TResult general(_GameEventGeneral value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (game != null) {
@@ -187,6 +188,7 @@ abstract class _GameEventGame extends GameEvent {
   const factory _GameEventGame(Event event) = _$_GameEventGame;
 
   Event get event;
+  @JsonKey(ignore: true)
   _$GameEventGameCopyWith<_GameEventGame> get copyWith;
 }
 
@@ -257,15 +259,16 @@ class _$_GameEventGeneral extends _GameEventGeneral {
   int get hashCode =>
       runtimeType.hashCode ^ const DeepCollectionEquality().hash(event);
 
+  @JsonKey(ignore: true)
   @override
   _$GameEventGeneralCopyWith<_GameEventGeneral> get copyWith =>
       __$GameEventGeneralCopyWithImpl<_GameEventGeneral>(this, _$identity);
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result game(Event event),
-    @required Result general(GenericEvent event),
+  TResult when<TResult extends Object>({
+    @required TResult game(Event event),
+    @required TResult general(GenericEvent event),
   }) {
     assert(game != null);
     assert(general != null);
@@ -274,10 +277,10 @@ class _$_GameEventGeneral extends _GameEventGeneral {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result game(Event event),
-    Result general(GenericEvent event),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult game(Event event),
+    TResult general(GenericEvent event),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (general != null) {
@@ -288,9 +291,9 @@ class _$_GameEventGeneral extends _GameEventGeneral {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result game(_GameEventGame value),
-    @required Result general(_GameEventGeneral value),
+  TResult map<TResult extends Object>({
+    @required TResult game(_GameEventGame value),
+    @required TResult general(_GameEventGeneral value),
   }) {
     assert(game != null);
     assert(general != null);
@@ -299,10 +302,10 @@ class _$_GameEventGeneral extends _GameEventGeneral {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result game(_GameEventGame value),
-    Result general(_GameEventGeneral value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult game(_GameEventGame value),
+    TResult general(_GameEventGeneral value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (general != null) {
@@ -317,5 +320,6 @@ abstract class _GameEventGeneral extends GameEvent {
   const factory _GameEventGeneral(GenericEvent event) = _$_GameEventGeneral;
 
   GenericEvent get event;
+  @JsonKey(ignore: true)
   _$GameEventGeneralCopyWith<_GameEventGeneral> get copyWith;
 }

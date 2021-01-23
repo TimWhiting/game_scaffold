@@ -11,9 +11,7 @@ _$_TicTacToeGame _$_$_TicTacToeGameFromJson(Map<String, dynamic> json) {
     generic: json['generic'] == null
         ? null
         : GenericGame.fromJson(json['generic'] as Map<String, dynamic>),
-    board: json['board'] != null
-        ? KtList<String>.from((json['board'] as List).map((e) => e as String))
-        : null,
+    board: unmodifiableStringList.fromJson(json['board'] as List),
     type: json['type'] as String ?? 'tictactoe',
   );
 }
@@ -21,7 +19,7 @@ _$_TicTacToeGame _$_$_TicTacToeGameFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$_$_TicTacToeGameToJson(_$_TicTacToeGame instance) =>
     <String, dynamic>{
       'generic': instance.generic,
-      'board': instance.board?.asList(),
+      'board': unmodifiableStringList.toJson(instance.board),
       'type': instance.type,
     };
 

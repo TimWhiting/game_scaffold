@@ -40,6 +40,7 @@ mixin _$Player {
   String get name;
 
   Map<String, dynamic> toJson();
+  @JsonKey(ignore: true)
   $PlayerCopyWith<Player> get copyWith;
 }
 
@@ -137,6 +138,7 @@ class _$_Player implements _Player {
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(name);
 
+  @JsonKey(ignore: true)
   @override
   _$PlayerCopyWith<_Player> get copyWith =>
       __$PlayerCopyWithImpl<_Player>(this, _$identity);
@@ -157,5 +159,6 @@ abstract class _Player implements Player {
   @override
   String get name;
   @override
+  @JsonKey(ignore: true)
   _$PlayerCopyWith<_Player> get copyWith;
 }

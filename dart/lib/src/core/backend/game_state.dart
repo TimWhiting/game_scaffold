@@ -166,8 +166,8 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
       } else {
         state = nextState.value;
       }
-    } catch (error) {
-      _gameStateLogger.severe(error);
+    } catch (error, st) {
+      _gameStateLogger.severe('$error $st');
     }
   }
 }

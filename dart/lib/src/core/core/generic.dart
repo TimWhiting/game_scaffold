@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'core.dart';
 import 'events.dart';
 import 'game.dart';
 import 'player.dart';
@@ -24,11 +25,11 @@ part 'generic.g.dart';
 abstract class GenericGame with _$GenericGame {
   const GenericGame._();
   const factory GenericGame(
-    List<Player> players,
-    List<String> readyPlayers,
-    List<List<double>> allRoundScores,
+    @unmodifiablePlayerList List<Player> players,
+    @unmodifiableStringList List<String> readyPlayers,
+    @unmodifiableDoubleListList List<List<double>> allRoundScores,
     DateTime time,
-    List<GameMessage> messages,
+    @unmodifiableGameMessageList List<GameMessage> messages,
     GameStatus gameStatus,
     int currentPlayerIndex,
     int round,
