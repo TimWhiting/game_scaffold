@@ -5,32 +5,27 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:integration_test/integration_test.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 
-// import 'package:example/main.dart' as app;
+import 'package:example/main.dart' as app;
 
-// void main() => run(_testMain);
+final p1Create = Key('Create Game Button 0');
+void main() => run(_testMain);
 
-// void _testMain() {
-//   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-//     // Build our app and trigger a frame.
-//     app.main();
+void _testMain() {
+  testWidgets('Create Game Works', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    app.main();
 
-//     // Trigger a frame.
-//     await tester.pumpAndSettle();
+    // Trigger a frame.
+    await tester.pumpAndSettle();
 
-//     // Verify that our counter starts at 0.
-//     expect(find.text('0'), findsOneWidget);
-//     expect(find.text('1'), findsNothing);
+    // Verify that our counter starts at 0.
+    expect(find.byKey(p1Create), findsOneWidget);
 
-//     // Tap the '+' icon and trigger a frame.
-//     await tester.tap(find.byIcon(Icons.add));
-//     await tester.pump();
-
-//     // Verify that our counter has incremented.
-//     expect(find.text('0'), findsNothing);
-//     expect(find.text('1'), findsOneWidget);
-//   });
-// }
+    await tester.tap(find.byKey(p1Create));
+    await tester.pumpAndSettle();
+  });
+}

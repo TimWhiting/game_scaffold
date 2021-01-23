@@ -24,7 +24,12 @@ final gameLocationProvider = StateProvider<String>((ref) => IOServerLocation);
 /// to have each of them be a `family` provider.
 final playerGameProvider = Provider.family<GameProvider, String>((ref, id) {
   final gp = GameProvider(ref.read, id);
-  ref.onDispose(gp.dispose);
+
+  ref.onDispose(() {
+    if (ref.mounted) {
+      gp.dispose();
+    }
+  });
   return gp;
 });
 final playerIDsProvider =

@@ -22,7 +22,11 @@ final backendGameCodesProvider =
 final backendGamesProvider =
     Provider.family<BackendProvider, String>((ref, code) {
   final bp = BackendProvider(ref.read, code);
-  ref.onDispose(bp.dispose);
+  ref.onDispose(() {
+    if (ref.mounted) {
+      bp.dispose();
+    }
+  });
   return bp;
 });
 

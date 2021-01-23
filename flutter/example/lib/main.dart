@@ -75,6 +75,8 @@ class CreateOrJoinWidget extends GameHookWidget {
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final playerID = gameProvider.playerID;
     final code = gameProvider.useGameCode;
+    // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
+    final gameClient = gameProvider.useGameClient;
     return Scaffold(
       body: Center(
         child: Column(
@@ -84,6 +86,7 @@ class CreateOrJoinWidget extends GameHookWidget {
             SizedBox(height: 20),
             if (playerID == P1)
               ElevatedButton(
+                key: Key('Create Game Button $playerID'),
                 child: Text('Create Game'),
                 onPressed: () async {
                   final id = await context.gameClient(playerID).createGame(
