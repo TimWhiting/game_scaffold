@@ -126,7 +126,14 @@ packages:
       name: game_scaffold_dart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.5+7"
+    version: "0.1.5+9"
+  game_scaffold_games:
+    dependency: "direct dev"
+    description:
+      name: game_scaffold_games
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   glob:
     dependency: transitive
     description:

@@ -6,7 +6,7 @@ Allows you an easy way to test games by a series of events and expected outcomes
 Example:
 ```dart
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
-import 'package:game_scaffold_dart/games.dart';
+import 'package:game_scaffold_games/games.dart';
 
 import 'package:game_scaffold_test/game_scaffold_test.dart';
 import 'package:test/test.dart';

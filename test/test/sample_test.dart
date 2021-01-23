@@ -1,5 +1,5 @@
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
-import 'package:game_scaffold_dart/games.dart';
+import 'package:game_scaffold_games/games.dart';
 
 import 'package:game_scaffold_test/game_scaffold_test.dart';
 import 'package:test/test.dart';
