@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:kt_dart/kt.dart' hide nullable;
-import 'package:riverpod/all.dart';
 
 import '../backend/game_state.dart';
 import 'errors.dart';
@@ -10,7 +8,6 @@ import 'events.dart';
 import 'generic.dart';
 import 'player.dart';
 export 'package:dartx/dartx.dart';
-export 'package:kt_dart/kt.dart' hide nullable;
 
 export 'errors.dart';
 
@@ -60,7 +57,7 @@ abstract class Game<E extends Event> {
     @required String name,
     @required Q Function(Map<String, dynamic>) fromJson,
     @required
-        T Function(GameConfig, KtList<Player>, BackendGameReader) initialState,
+        T Function(GameConfig, List<Player>, BackendGameReader) initialState,
     @required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
     Q Function(T) toClientView,
   }) {
@@ -84,7 +81,7 @@ abstract class Game<E extends Event> {
   static Game toClientView(Game g) => _toClientViews[g.type](g);
 
   /// Will get the initial state for a particular configuration
-  static Game getInitialState(GameConfig gameConfig, KtList<Player> players,
+  static Game getInitialState(GameConfig gameConfig, List<Player> players,
       BackendGameReader backendReader) {
     final initState = _initialStates[gameConfig.gameType];
     if (initState == null) {
@@ -128,7 +125,7 @@ abstract class Game<E extends Event> {
 
   /// Stores the function to create the initial state of the game
   static final Map<String,
-          Game Function(GameConfig, KtList<Player>, BackendGameReader)>
+          Game Function(GameConfig, List<Player>, BackendGameReader)>
       _initialStates = {};
 }
 

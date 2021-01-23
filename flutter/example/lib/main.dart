@@ -199,7 +199,7 @@ class GameWidget extends GameHookWidget {
   }
 }
 
-extension TextX on KtList<String> {
+extension TextX on List<String> {
   String xOrO(String playerID, int location) {
     if (this[location] == null) {
       return '';

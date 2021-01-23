@@ -20,22 +20,23 @@ class NoServerGameClient extends GameClient {
     game.gameStatus = GameStatus.NotJoined;
   }
 
-  KtList<Player> get _players => backend.players;
+  List<Player> get _players => backend.players;
   @override
   Future<void> register() async {
-    backend.players = _players.plusElement(Player(playerID, name: playerID));
+    backend.players =
+        [..._players, Player(playerID, name: playerID)].toUnmodifiable();
     game.gameStatus = GameStatus.NotJoined;
     game.playerName = game.playerName ?? playerID;
     game.gameStatus = GameStatus.NotStarted;
     _watchState();
     final config = backend.gameConfig;
-    if (_players.size == config.maxPlayers && config.autoStart) {
+    if (_players.length == config.maxPlayers && config.autoStart) {
       sendEvent(GenericEvent.start());
     }
-    for (final pID in _players.iter) {
+    for (final pID in _players) {
       read.gameFor(pID.id).lobbyInfo = GameInfo(
         gameCode,
-        _players.map((p) => p.name).asList(),
+        _players.map((p) => p.name).toUnmodifiable(),
         pID.name,
         false,
         config.gameType,

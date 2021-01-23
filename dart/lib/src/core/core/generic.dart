@@ -24,57 +24,59 @@ part 'generic.g.dart';
 abstract class GenericGame with _$GenericGame {
   const GenericGame._();
   const factory GenericGame(
-    KtList<Player> players,
-    KtList<String> readyPlayers,
-    KtList<KtList<double>> allRoundScores,
+    List<Player> players,
+    List<String> readyPlayers,
+    List<List<double>> allRoundScores,
     DateTime time,
-    KtList<GameMessage> messages,
+    List<GameMessage> messages,
     GameStatus gameStatus,
     int currentPlayerIndex,
     int round,
   ) = _GenericGame;
   factory GenericGame.fromJson(Map<String, dynamic> map) =>
       _$GenericGameFromJson(map);
-  factory GenericGame.start(KtList<Player> players) => GenericGame(
+  factory GenericGame.start(List<Player> players) => GenericGame(
       players,
-      KtList.empty(),
-      KtList.empty(),
+      List.unmodifiable([]),
+      List.unmodifiable([]),
       DateTime.now(),
-      KtList.empty(),
+      List.unmodifiable([]),
       GameStatus.Started,
       0,
       0);
-  factory GenericGame.startRandom(KtList<Player> players) => GenericGame(
+  factory GenericGame.startRandom(List<Player> players) => GenericGame(
         players,
-        KtList.empty(),
-        KtList.empty(),
+        List.unmodifiable([]),
+        List.unmodifiable([]),
         DateTime.now(),
-        KtList.empty(),
+        List.unmodifiable([]),
         GameStatus.Started,
         0,
-        Random().nextInt(players.size),
+        Random().nextInt(players.length),
       );
 
   /// Gets the player at the [currentPlayerIndex]
   Player get currentPlayer => players[currentPlayerIndex];
 
   /// Gets the total score for each player based off of [allRoundScores]
-  KtMap<String, double> get totalScores =>
-      playerRoundScores.mapValues((entry) => entry.value.sum());
+  Map<String, double> get totalScores => Map.unmodifiable(
+      playerRoundScores.mapValues((entry) => entry.value.sum()));
 
   /// Gets the scores for each player for all rounds based off of [allRoundScores]
-  KtMap<String, KtList<double>> get playerRoundScores => KtMap.from({
-        for (final p in 0.rangeTo(players.size - 1))
-          players[p].id: allRoundScores.map((rs) => rs[p]),
+  Map<String, List<double>> get playerRoundScores => Map.unmodifiable({
+        for (final p in 0.rangeTo(players.length - 1))
+          players[p].id: allRoundScores.map((rs) => rs[p]).toUnmodifiable(),
       });
 
   /// Gets the scores for each round for each player based off of [allRoundScores]
-  KtList<KtMap<String, double>> get roundPlayerScores =>
-      allRoundScores.map((rs) => KtMap.from(
+  List<Map<String, double>> get roundPlayerScores => allRoundScores
+      .map((rs) => Map.unmodifiable(
             {
-              for (final i in 0.rangeTo(players.size - 1)) players[i].id: rs[i],
+              for (final i in 0.rangeTo(players.length - 1))
+                players[i].id: rs[i],
             },
-          ));
+          ))
+      .toUnmodifiable();
 
   /// Gets whether the game is over
   bool get gameOver => gameStatus == GameStatus.Finished;
@@ -85,25 +87,25 @@ abstract class GenericGame with _$GenericGame {
   /// Returns a copy of the [GenericGame] with the next player in the player
   /// array as the current player
   GenericGame nextPlayer() =>
-      copyWith(currentPlayerIndex: (currentPlayerIndex + 1) % players.size);
+      copyWith(currentPlayerIndex: (currentPlayerIndex + 1) % players.length);
 
   /// Returns a copy of the [GenericGame] with the current player being the one
   /// with id [player]
   GenericGame setNextPlayer(String player) =>
-      copyWith(currentPlayerIndex: players.indexOfFirst((p) => p.id == player));
+      copyWith(currentPlayerIndex: players.indexWhere((p) => p.id == player));
 
   /// Returns a copy of the [GenericGame] with the time updated to the current time
   GenericGame updateTime() => copyWith(time: DateTime.now());
 
   /// Returns a copy of the [GenericGame] with the [msg] added to [messages]
   GenericGame addMessage(GameMessage msg) => copyWith(
-        messages: messages.plusElement(msg),
+        messages: List.unmodifiable([...messages, msg]),
       );
 
   /// Returns a copy of the [GenericGame] with the [round] incremented,
   /// [gameStatus] set to [GameStatus.Started] and optionally the
   /// players' [scores] added to [allRoundScores]
-  GenericGame finishRound([KtMap<String, double> scores]) => scores != null
+  GenericGame finishRound([Map<String, double> scores]) => scores != null
       ? updateScores(scores).copyWith(
           round: round + 1,
           gameStatus: GameStatus.Started,
@@ -112,9 +114,11 @@ abstract class GenericGame with _$GenericGame {
 
   /// Returns a copy of the [GenericGame] with the [scores] added to
   /// [allRoundScores]
-  GenericGame updateScores(KtMap<String, double> scores) => copyWith(
-        allRoundScores:
-            allRoundScores.plusElement(players.map((p) => scores[p.id])),
+  GenericGame updateScores(Map<String, double> scores) => copyWith(
+        allRoundScores: List.unmodifiable([
+          ...allRoundScores,
+          players.map((p) => scores[p.id]).toUnmodifiable()
+        ]),
       );
 
   /// Returns a copy of the [GenericGame] with the [gameStatus] updated to [status]
@@ -122,16 +126,17 @@ abstract class GenericGame with _$GenericGame {
 
   /// Shuffles the player list, and resets the [currentPlayerIndex] to the first
   GenericGame shufflePlayers() => copyWith(
-        players: players.shuffled,
+        players: players.shuffled(),
         currentPlayerIndex: 0,
       );
 
   /// Clears the list of ready players
-  GenericGame clearReadyPlayers() => copyWith(readyPlayers: listOf());
+  GenericGame clearReadyPlayers() =>
+      copyWith(readyPlayers: List.unmodifiable([]));
 
   /// Adds a ready player to the list
   GenericGame addReadyPlayer(String player) =>
-      copyWith(readyPlayers: readyPlayers.plusElement(player));
+      copyWith(readyPlayers: List.unmodifiable([...readyPlayers, player]));
 }
 
 /// A [GenericEvent] that is handled by the Generic server implementation

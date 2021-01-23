@@ -24,7 +24,7 @@ Future<void> main(List<String> arguments) async {
   read.gameFor(P2).gameCode = code;
   await read.gameFor(P2).gameClient.register();
 
-  print(read.backendGame(code).gameState.playerIDs.asList());
+  print(read.backendGame(code).gameState.playerIDs);
   print(read.backendGame(code).gameState.gameStatus);
   while (!read.backendGame(code).gameState.gameOver) {
     await loop(read, code);

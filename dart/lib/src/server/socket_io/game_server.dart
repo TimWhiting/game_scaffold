@@ -176,7 +176,7 @@ class GameServer {
 
   void _addPlayer(Player player) {
     _players.add(player);
-    _read.players = _players.toImmutableList();
+    _read.players = _players.toUnmodifiable();
     _serverLogger.info('Notifying ${_clients.length} clients of added player');
     for (final client in _clients.entries) {
       client.value?.emit(IOChannel.lobby.string, gameInfo(client.key).toJson());
