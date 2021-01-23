@@ -162,6 +162,7 @@ class GameWidget extends GameHookWidget {
                 children: [
                   for (final c in [0, 1, 2])
                     GestureDetector(
+                      key: Key('${gameProvider.playerID} square $r $c'),
                       child: ColoredBox(
                         color: Colors.black,
                         child: Container(

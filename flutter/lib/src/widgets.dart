@@ -56,27 +56,28 @@ class GameNavigator extends GameHookWidget {
     }
 
     return Navigator(
-        pages: pages.entries
-            .map((entry) => MaterialPage(
-                key: Key('${entry.key}'),
-                child: entry.value,
-                arguments: entry.key))
-            .toList(),
-        onPopPage: (route, p) {
-          print('Popping ${route.settings.arguments}');
-          final status = route.settings.arguments as GameStatus;
-          if (status == GameStatus.Finished ||
-              status == GameStatus.BetweenRounds ||
-              status == GameStatus.Started ||
-              status == GameStatus.NotStarted) {
-            context.gameClient(gameProvider.playerID).exitGame();
-            route.didPop(null);
-            return true;
-          } else if (status == GameStatus.NotJoined) {
-            context.gameClient(gameProvider.playerID).disconnect();
-            return true;
-          }
-          return false;
-        });
+      pages: pages.entries
+          .map((entry) => MaterialPage(
+              key: Key('${entry.key}'),
+              child: entry.value,
+              arguments: entry.key))
+          .toList(),
+      onPopPage: (route, p) {
+        // print('Popping ${route.settings.arguments}');
+        final status = route.settings.arguments as GameStatus;
+        if (status == GameStatus.Finished ||
+            status == GameStatus.BetweenRounds ||
+            status == GameStatus.Started ||
+            status == GameStatus.NotStarted) {
+          context.gameClient(gameProvider.playerID).exitGame();
+          route.didPop(null);
+          return true;
+        } else if (status == GameStatus.NotJoined) {
+          context.gameClient(gameProvider.playerID).disconnect();
+          return true;
+        }
+        return false;
+      },
+    );
   }
 }

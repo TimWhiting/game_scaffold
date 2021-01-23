@@ -6,6 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/all.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
@@ -15,17 +16,83 @@ final p1Create = Key('Create Game Button 0');
 void main() => run(_testMain);
 
 void _testMain() {
+  String getGameId(WidgetTester tester) {
+    final text = tester.widget<Text>(find.textContaining('gameId:'));
+    final codestart = text.data.indexOf('gameId:') + 'gameId:'.length + 1;
+    return text.data.substring(codestart, codestart + 4);
+  }
+
   testWidgets('Create Game Works', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
     app.main();
-
-    // Trigger a frame.
     await tester.pumpAndSettle();
-
-    // Verify that our counter starts at 0.
+    // Create a game
     expect(find.byKey(p1Create), findsOneWidget);
-
     await tester.tap(find.byKey(p1Create));
     await tester.pumpAndSettle();
+    // Get the game ID
+    final gameId = getGameId(tester);
+    expect(gameId, isNotEmpty);
+  });
+
+  testWidgets('Join Game Works', (WidgetTester tester) async {
+    app.main();
+    // Create a Game
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(p1Create));
+    await tester.pumpAndSettle();
+    // Get the Game ID
+    final gameId = getGameId(tester);
+    await tester.enterText(find.byType(TextField), gameId);
+    await tester.pumpAndSettle();
+    // 2nd Player Join Game
+    await tester.tap(find.text('Join Game'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('Playing Tic Tac Toe Works', (WidgetTester tester) async {
+    app.main();
+    // Create a Game
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(p1Create));
+    await tester.pumpAndSettle();
+    // Get the Game ID
+    final gameId = getGameId(tester);
+    await tester.enterText(find.byType(TextField), gameId);
+    await tester.pumpAndSettle();
+    // 2nd Player Join Game
+    await tester.tap(find.text('Join Game'));
+    await tester.pumpAndSettle();
+    for (var i = 0; i < 5; i++) {
+      final playerId = i % 2;
+      final row = i % 2;
+      final col = i % 3;
+      await tester.tap(find.byKey(Key('$playerId square $row $col')));
+      await tester.pumpAndSettle();
+    }
+    expect(find.textContaining('BetweenRounds'), findsNWidgets(2));
+    await tester.tap(find.text('Next Round').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Next Round').first);
+    await tester.pumpAndSettle();
+    for (var i = 0; i < 5; i++) {
+      final playerId = (i + 1) % 2;
+      final row = i % 2;
+      final col = i % 3;
+      await tester.tap(find.byKey(Key('$playerId square $row $col')));
+      await tester.pumpAndSettle();
+    }
+    expect(find.textContaining('BetweenRounds'), findsNWidgets(2));
+    await tester.tap(find.text('Next Round').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Next Round').first);
+    await tester.pumpAndSettle();
+    for (var i = 0; i < 5; i++) {
+      final playerId = i % 2;
+      final row = i % 2;
+      final col = i % 3;
+      await tester.tap(find.byKey(Key('$playerId square $row $col')));
+      await tester.pumpAndSettle();
+    }
+    expect(find.textContaining('Finished'), findsNWidgets(2));
   });
 }
