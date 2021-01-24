@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:riverpod/all.dart';
@@ -87,8 +88,8 @@ class IOServerClient extends ServerClient {
     final currentStatus = game.gameStatus;
     if (currentStatus == GameStatus.NotConnected ||
         currentStatus == GameStatus.NotJoined) {
-      game.gameStatus =
-          socket.connected ? GameStatus.NotJoined : GameStatus.NotConnected;
+      scheduleMicrotask(() => game.gameStatus =
+          socket.connected ? GameStatus.NotJoined : GameStatus.NotConnected);
     }
     logger.info('Created ServerClient');
   }
@@ -98,7 +99,7 @@ class IOServerClient extends ServerClient {
   /// Default implementation does nothing
   @override
   Future<void> disconnect() async {
-    socket.dispose();
+    socket?.dispose();
     game.gameStatus = GameStatus.NotConnected;
   }
 

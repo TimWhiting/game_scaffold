@@ -1,3 +1,7 @@
+## 0.2.0+3
+
+- Fix synchronous change problems
+
 ## 0.2.0+2
 
 - Fix extension resolution problem
