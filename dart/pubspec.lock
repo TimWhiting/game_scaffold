@@ -221,9 +221,9 @@ packages:
   game_scaffold_games:
     dependency: "direct dev"
     description:
-      path: "../games"
-      relative: true
-    source: path
+      name: game_scaffold_games
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.2.0"
   glob:
     dependency: transitive

@@ -1,3 +1,7 @@
+## 0.2.0+2
+
+- Fix extension resolution problem
+  
 ## 0.2.0
 
 - Remove ktdart dependency and use unmodifiable lists and maps instead

@@ -60,8 +60,8 @@ abstract class GenericGame with _$GenericGame {
   Player get currentPlayer => players[currentPlayerIndex];
 
   /// Gets the total score for each player based off of [allRoundScores]
-  Map<String, double> get totalScores => Map.unmodifiable(
-      playerRoundScores.mapValues((entry) => entry.value.sum()));
+  Map<String, double> get totalScores =>
+      playerRoundScores.mapValues((entry) => IterableNumX(entry.value).sum());
 
   /// Gets the scores for each player for all rounds based off of [allRoundScores]
   Map<String, List<double>> get playerRoundScores => Map.unmodifiable({

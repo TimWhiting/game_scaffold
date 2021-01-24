@@ -68,13 +68,13 @@ extension GameX on Game {
 }
 
 extension GameMapExtensions<K, V> on Map<K, V> {
-  Map<K, S> mapValues<S>(S Function(MapEntry entry) fn) {
+  Map<K, S> mapValues<S>(S Function(MapEntry<K, V> entry) fn) {
     return Map.unmodifiable({
       for (final entry in entries) entry.key: fn(entry),
     });
   }
 
-  Map<S, V> mapKeys<S>(S Function(MapEntry entry) fn) {
+  Map<S, V> mapKeys<S>(S Function(MapEntry<K, V> entry) fn) {
     return Map.unmodifiable({
       for (final entry in entries) fn(entry): entry.value,
     });

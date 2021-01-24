@@ -161,9 +161,9 @@ packages:
   game_scaffold_dart:
     dependency: "direct main"
     description:
-      path: "../dart"
-      relative: true
-    source: path
+      name: game_scaffold_dart
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.2.0"
   glob:
     dependency: transitive

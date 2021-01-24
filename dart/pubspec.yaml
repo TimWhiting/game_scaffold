@@ -1,6 +1,6 @@
 name: game_scaffold_dart
 description: A scaffold for game projects, taking care of server implementation and some general events
-version: 0.2.0
+version: 0.2.0+2
 homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:
@@ -24,7 +24,6 @@ dev_dependencies:
   test: any
   dartdoc: any
   game_scaffold_games: any
-
-dependency_overrides:
-  game_scaffold_games:
-    path: ../games
+# dependency_overrides:
+#   game_scaffold_games:
+#     path: ../games
