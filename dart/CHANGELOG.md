@@ -1,3 +1,7 @@
+## 0.2.0+4
+
+- Update lobby info creator field for on device games
+
 ## 0.2.0+3
 
 - Fix synchronous change problems

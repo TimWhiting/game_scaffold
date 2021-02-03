@@ -38,7 +38,7 @@ class NoServerGameClient extends GameClient {
         gameCode,
         _players.map((p) => p.name).toUnmodifiable(),
         pID.name,
-        false,
+        pID.id == backend.players.first.id,
         config.gameType,
       );
     }
