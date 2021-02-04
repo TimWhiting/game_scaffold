@@ -24,7 +24,7 @@ class _$GenericGameTearOff {
       DateTime time,
       @unmodifiableGameMessageList List<GameMessage> messages,
       GameStatus gameStatus,
-      int currentPlayerIndex,
+      @nullable int currentPlayerIndex,
       int round) {
     return _GenericGame(
       players,
@@ -60,6 +60,7 @@ mixin _$GenericGame {
   @unmodifiableGameMessageList
   List<GameMessage> get messages;
   GameStatus get gameStatus;
+  @nullable
   int get currentPlayerIndex;
   int get round;
 
@@ -80,7 +81,7 @@ abstract class $GenericGameCopyWith<$Res> {
       DateTime time,
       @unmodifiableGameMessageList List<GameMessage> messages,
       GameStatus gameStatus,
-      int currentPlayerIndex,
+      @nullable int currentPlayerIndex,
       int round});
 }
 
@@ -138,7 +139,7 @@ abstract class _$GenericGameCopyWith<$Res>
       DateTime time,
       @unmodifiableGameMessageList List<GameMessage> messages,
       GameStatus gameStatus,
-      int currentPlayerIndex,
+      @nullable int currentPlayerIndex,
       int round});
 }
 
@@ -193,7 +194,7 @@ class _$_GenericGame extends _GenericGame {
       this.time,
       @unmodifiableGameMessageList this.messages,
       this.gameStatus,
-      this.currentPlayerIndex,
+      @nullable this.currentPlayerIndex,
       this.round)
       : assert(players != null),
         assert(readyPlayers != null),
@@ -201,7 +202,6 @@ class _$_GenericGame extends _GenericGame {
         assert(time != null),
         assert(messages != null),
         assert(gameStatus != null),
-        assert(currentPlayerIndex != null),
         assert(round != null),
         super._();
 
@@ -225,6 +225,7 @@ class _$_GenericGame extends _GenericGame {
   @override
   final GameStatus gameStatus;
   @override
+  @nullable
   final int currentPlayerIndex;
   @override
   final int round;
@@ -294,7 +295,7 @@ abstract class _GenericGame extends GenericGame {
       DateTime time,
       @unmodifiableGameMessageList List<GameMessage> messages,
       GameStatus gameStatus,
-      int currentPlayerIndex,
+      @nullable int currentPlayerIndex,
       int round) = _$_GenericGame;
 
   factory _GenericGame.fromJson(Map<String, dynamic> json) =
@@ -317,6 +318,7 @@ abstract class _GenericGame extends GenericGame {
   @override
   GameStatus get gameStatus;
   @override
+  @nullable
   int get currentPlayerIndex;
   @override
   int get round;

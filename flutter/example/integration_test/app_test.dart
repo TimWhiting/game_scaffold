@@ -13,9 +13,10 @@ import 'package:integration_test/integration_test.dart';
 import 'package:example/main.dart' as app;
 
 final p1Create = Key('Create Game Button 0');
-void main() => run(_testMain);
 
-void _testMain() {
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
   String getGameId(WidgetTester tester) {
     final text = tester.widget<Text>(find.textContaining('gameId:'));
     final codestart = text.data.indexOf('gameId:') + 'gameId:'.length + 1;

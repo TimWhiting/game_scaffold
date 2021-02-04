@@ -31,7 +31,7 @@ abstract class GenericGame with _$GenericGame {
     DateTime time,
     @unmodifiableGameMessageList List<GameMessage> messages,
     GameStatus gameStatus,
-    int currentPlayerIndex,
+    @nullable int currentPlayerIndex,
     int round,
   ) = _GenericGame;
   factory GenericGame.fromJson(Map<String, dynamic> map) =>

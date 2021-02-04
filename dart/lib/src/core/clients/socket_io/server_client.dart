@@ -100,12 +100,7 @@ class IOServerClient extends ServerClient {
   /// Default implementation does nothing
   @override
   Future<void> disconnect() async {
-<<<<<<< HEAD
-    socket.dispose();
-    socket = null;
-=======
     socket?.dispose();
->>>>>>> 3d0fe18f02fdd6b57eea3e5bdc897014d256bdb7
     game.gameStatus = GameStatus.NotConnected;
   }
 

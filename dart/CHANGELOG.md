@@ -1,3 +1,6 @@
+## 0.2.0+5
+
+- Make currentPlayerIndex nullable for simultaneous action games
 
 ## 0.2.0+4
 
@@ -22,7 +25,7 @@
 ## 0.1.5+8
 
 - Remove tic tac toe and move it to the game_scaffold_games package
-  
+
 ## 0.1.5+7
 
 - Add some logging.
