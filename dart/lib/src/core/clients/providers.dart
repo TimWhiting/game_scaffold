@@ -63,7 +63,7 @@ class GameProvider {
     _gameTurnProvider = Provider<bool>(
       (ref) {
         final currentPlayer =
-            ref.watch(_gameStateProvider).state.currentPlayer.id;
+            ref.watch(_gameStateProvider).state.currentPlayer?.id;
         // Null indicates that all players can go simulataneously
         return currentPlayer == null || currentPlayer == playerID;
       },

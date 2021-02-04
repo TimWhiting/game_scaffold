@@ -1,4 +1,4 @@
-## 0.2.0+5
+## 0.2.0+6
 
 - Make currentPlayerIndex nullable for simultaneous action games
 

@@ -57,7 +57,8 @@ abstract class GenericGame with _$GenericGame {
       );
 
   /// Gets the player at the [currentPlayerIndex]
-  Player get currentPlayer => players[currentPlayerIndex];
+  Player get currentPlayer =>
+      currentPlayerIndex == null ? null : players[currentPlayerIndex];
 
   /// Gets the total score for each player based off of [allRoundScores]
   Map<String, double> get totalScores =>
