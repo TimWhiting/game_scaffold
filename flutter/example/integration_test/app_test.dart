@@ -5,32 +5,94 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:integration_test/integration_test.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 
-// import 'package:example/main.dart' as app;
+import 'package:example/main.dart' as app;
 
-// void main() => run(_testMain);
+final p1Create = Key('Create Game Button 0');
+void main() => run(_testMain);
 
-// void _testMain() {
-//   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-//     // Build our app and trigger a frame.
-//     app.main();
+void _testMain() {
+  String getGameId(WidgetTester tester) {
+    final text = tester.widget<Text>(find.textContaining('gameId:'));
+    final codestart = text.data.indexOf('gameId:') + 'gameId:'.length + 1;
+    return text.data.substring(codestart, codestart + 4);
+  }
 
-//     // Trigger a frame.
-//     await tester.pumpAndSettle();
+  testWidgets('Create Game Works', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+    // Create a game
+    expect(find.byKey(p1Create), findsOneWidget);
+    await tester.tap(find.byKey(p1Create));
+    await tester.pumpAndSettle();
+    // Get the game ID
+    final gameId = getGameId(tester);
+    expect(gameId, isNotEmpty);
+  });
 
-//     // Verify that our counter starts at 0.
-//     expect(find.text('0'), findsOneWidget);
-//     expect(find.text('1'), findsNothing);
+  testWidgets('Join Game Works', (WidgetTester tester) async {
+    app.main();
+    // Create a Game
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(p1Create));
+    await tester.pumpAndSettle();
+    // Get the Game ID
+    final gameId = getGameId(tester);
+    await tester.enterText(find.byType(TextField), gameId);
+    await tester.pumpAndSettle();
+    // 2nd Player Join Game
+    await tester.tap(find.text('Join Game'));
+    await tester.pumpAndSettle();
+  });
 
-//     // Tap the '+' icon and trigger a frame.
-//     await tester.tap(find.byIcon(Icons.add));
-//     await tester.pump();
-
-//     // Verify that our counter has incremented.
-//     expect(find.text('0'), findsNothing);
-//     expect(find.text('1'), findsOneWidget);
-//   });
-// }
+  testWidgets('Playing Tic Tac Toe Works', (WidgetTester tester) async {
+    app.main();
+    // Create a Game
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(p1Create));
+    await tester.pumpAndSettle();
+    // Get the Game ID
+    final gameId = getGameId(tester);
+    await tester.enterText(find.byType(TextField), gameId);
+    await tester.pumpAndSettle();
+    // 2nd Player Join Game
+    await tester.tap(find.text('Join Game'));
+    await tester.pumpAndSettle();
+    for (var i = 0; i < 5; i++) {
+      final playerId = i % 2;
+      final row = i % 2;
+      final col = i % 3;
+      await tester.tap(find.byKey(Key('$playerId square $row $col')));
+      await tester.pumpAndSettle();
+    }
+    expect(find.textContaining('BetweenRounds'), findsNWidgets(2));
+    await tester.tap(find.text('Next Round').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Next Round').first);
+    await tester.pumpAndSettle();
+    for (var i = 0; i < 5; i++) {
+      final playerId = (i + 1) % 2;
+      final row = i % 2;
+      final col = i % 3;
+      await tester.tap(find.byKey(Key('$playerId square $row $col')));
+      await tester.pumpAndSettle();
+    }
+    expect(find.textContaining('BetweenRounds'), findsNWidgets(2));
+    await tester.tap(find.text('Next Round').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Next Round').first);
+    await tester.pumpAndSettle();
+    for (var i = 0; i < 5; i++) {
+      final playerId = i % 2;
+      final row = i % 2;
+      final col = i % 3;
+      await tester.tap(find.byKey(Key('$playerId square $row $col')));
+      await tester.pumpAndSettle();
+    }
+    expect(find.textContaining('Finished'), findsNWidgets(2));
+  });
+}

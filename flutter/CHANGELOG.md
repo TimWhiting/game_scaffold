@@ -1,3 +1,7 @@
+## 0.2.0
+
+- Add integration test to example
+
 ## 0.1.5+3
 
 - Update example to use new games package

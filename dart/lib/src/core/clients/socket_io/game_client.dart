@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 import 'package:riverpod/all.dart';
 
@@ -24,7 +26,7 @@ class IOGameClient extends GameClient {
       _socket = IO.io('$address/$gameCode', socketIOOpts);
       logger.info('Created Game Client Socket $gameCode');
       _lastGameCode = gameCode;
-      game.gameStatus = GameStatus.NotJoined;
+      scheduleMicrotask(() => game.gameStatus = GameStatus.NotJoined);
     }
   }
 

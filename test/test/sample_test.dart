@@ -1,5 +1,5 @@
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
-import 'package:game_scaffold_dart/games.dart';
+import 'package:game_scaffold_games/games.dart';
 
 import 'package:game_scaffold_test/game_scaffold_test.dart';
 import 'package:test/test.dart';
@@ -19,7 +19,7 @@ void main() {
     ],
     test: (tester) {
       final initialState = tester.game;
-      expect(initialState.players.size, 2);
+      expect(initialState.players.length, 2);
       expect(initialState.board.all((s) => s == null), true);
 
       tester.event(TicTacToeGameEvent(P1, 0), (game, error) {
@@ -54,8 +54,8 @@ void main() {
         expect(game.roundOver, true);
       });
       tester.nextRound((game) {
-        expect(game.playerRoundScores[P1], listOf(1));
-        expect(game.playerRoundScores[P2], listOf(0));
+        expect(game.playerRoundScores[P1], [1]);
+        expect(game.playerRoundScores[P2], [0]);
         expect(game.totalScores[P1], 1);
         expect(game.totalScores[P2], 0);
       });

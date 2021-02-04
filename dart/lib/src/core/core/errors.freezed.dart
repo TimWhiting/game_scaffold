@@ -53,26 +53,26 @@ const $GameOrError = _$GameOrErrorTearOff();
 /// @nodoc
 mixin _$GameOrError<T extends Game<Event>> {
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result game(@GameConverter() T game),
-    @required Result error(String message, String person),
+  TResult when<TResult extends Object>({
+    @required TResult game(@GameConverter() T game),
+    @required TResult error(String message, String person),
   });
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result game(@GameConverter() T game),
-    Result error(String message, String person),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult game(@GameConverter() T game),
+    TResult error(String message, String person),
+    @required TResult orElse(),
   });
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result game(GameValue<T> value),
-    @required Result error(GameError<T> value),
+  TResult map<TResult extends Object>({
+    @required TResult game(GameValue<T> value),
+    @required TResult error(GameError<T> value),
   });
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result game(GameValue<T> value),
-    Result error(GameError<T> value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult game(GameValue<T> value),
+    TResult error(GameError<T> value),
+    @required TResult orElse(),
   });
   Map<String, dynamic> toJson();
 }
@@ -155,15 +155,16 @@ class _$GameValue<T extends Game<Event>> extends GameValue<T> {
   int get hashCode =>
       runtimeType.hashCode ^ const DeepCollectionEquality().hash(game);
 
+  @JsonKey(ignore: true)
   @override
   $GameValueCopyWith<T, GameValue<T>> get copyWith =>
       _$GameValueCopyWithImpl<T, GameValue<T>>(this, _$identity);
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result game(@GameConverter() T game),
-    @required Result error(String message, String person),
+  TResult when<TResult extends Object>({
+    @required TResult game(@GameConverter() T game),
+    @required TResult error(String message, String person),
   }) {
     assert(game != null);
     assert(error != null);
@@ -172,10 +173,10 @@ class _$GameValue<T extends Game<Event>> extends GameValue<T> {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result game(@GameConverter() T game),
-    Result error(String message, String person),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult game(@GameConverter() T game),
+    TResult error(String message, String person),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (game != null) {
@@ -186,9 +187,9 @@ class _$GameValue<T extends Game<Event>> extends GameValue<T> {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result game(GameValue<T> value),
-    @required Result error(GameError<T> value),
+  TResult map<TResult extends Object>({
+    @required TResult game(GameValue<T> value),
+    @required TResult error(GameError<T> value),
   }) {
     assert(game != null);
     assert(error != null);
@@ -197,10 +198,10 @@ class _$GameValue<T extends Game<Event>> extends GameValue<T> {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result game(GameValue<T> value),
-    Result error(GameError<T> value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult game(GameValue<T> value),
+    TResult error(GameError<T> value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (game != null) {
@@ -224,6 +225,7 @@ abstract class GameValue<T extends Game<Event>> extends GameOrError<T> {
 
   @GameConverter()
   T get game;
+  @JsonKey(ignore: true)
   $GameValueCopyWith<T, GameValue<T>> get copyWith;
 }
 
@@ -297,15 +299,16 @@ class _$GameError<T extends Game<Event>> extends GameError<T> {
       const DeepCollectionEquality().hash(message) ^
       const DeepCollectionEquality().hash(person);
 
+  @JsonKey(ignore: true)
   @override
   $GameErrorCopyWith<T, GameError<T>> get copyWith =>
       _$GameErrorCopyWithImpl<T, GameError<T>>(this, _$identity);
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result game(@GameConverter() T game),
-    @required Result error(String message, String person),
+  TResult when<TResult extends Object>({
+    @required TResult game(@GameConverter() T game),
+    @required TResult error(String message, String person),
   }) {
     assert(game != null);
     assert(error != null);
@@ -314,10 +317,10 @@ class _$GameError<T extends Game<Event>> extends GameError<T> {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result game(@GameConverter() T game),
-    Result error(String message, String person),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult game(@GameConverter() T game),
+    TResult error(String message, String person),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (error != null) {
@@ -328,9 +331,9 @@ class _$GameError<T extends Game<Event>> extends GameError<T> {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result game(GameValue<T> value),
-    @required Result error(GameError<T> value),
+  TResult map<TResult extends Object>({
+    @required TResult game(GameValue<T> value),
+    @required TResult error(GameError<T> value),
   }) {
     assert(game != null);
     assert(error != null);
@@ -339,10 +342,10 @@ class _$GameError<T extends Game<Event>> extends GameError<T> {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result game(GameValue<T> value),
-    Result error(GameError<T> value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult game(GameValue<T> value),
+    TResult error(GameError<T> value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (error != null) {
@@ -366,5 +369,6 @@ abstract class GameError<T extends Game<Event>> extends GameOrError<T> {
 
   String get message;
   String get person;
+  @JsonKey(ignore: true)
   $GameErrorCopyWith<T, GameError<T>> get copyWith;
 }

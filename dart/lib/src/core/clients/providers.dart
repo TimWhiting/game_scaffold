@@ -24,11 +24,16 @@ final gameLocationProvider = StateProvider<String>((ref) => IOServerLocation);
 /// to have each of them be a `family` provider.
 final playerGameProvider = Provider.family<GameProvider, String>((ref, id) {
   final gp = GameProvider(ref.read, id);
-  ref.onDispose(gp.dispose);
+
+  ref.onDispose(() {
+    if (ref.mounted) {
+      gp.dispose();
+    }
+  });
   return gp;
 });
 final playerIDsProvider =
-    StateProvider<KtList<String>>((ref) => listFrom(<String>[]));
+    StateProvider<List<String>>((ref) => List.unmodifiable(<String>[]));
 
 /// Provides an encapsulation of many providers without having to have each of
 /// them be a `family` provider.
@@ -39,7 +44,7 @@ class GameProvider {
     Future.delayed(
       10.milliseconds,
       () => read(playerIDsProvider).state =
-          read(playerIDsProvider).state.plusElement(playerID),
+          [...read(playerIDsProvider).state, playerID].toUnmodifiable(),
     );
     _gameCodeProvider = StateProvider((ref) => '');
     _gameInfoProvider = StateProvider((ref) => null);
@@ -74,7 +79,7 @@ class GameProvider {
               .watch(_gameStateProvider)
               .state
               ?.players
-              ?.first((p) => p.id == playerID)
+              ?.firstWhere((p) => p.id == playerID)
               ?.name ??
           '',
     );
@@ -209,8 +214,10 @@ class GameProvider {
   }
 
   void dispose() {
-    read(playerIDsProvider).state =
-        read(playerIDsProvider).state.minusElement(playerID);
+    read(playerIDsProvider).state = read(playerIDsProvider)
+        .state
+        .whereNot((id) => id == playerID)
+        .toUnmodifiable();
   }
 }
 
@@ -246,7 +253,7 @@ extension GameReaderX on Reader {
   set gameConfig(GameConfig config) =>
       this(singleConfigProvider).state = config;
   GameConfig get gameConfig => this(singleConfigProvider).state;
-  KtList<String> get playerIDs => this(playerIDsProvider).state;
+  List<String> get playerIDs => this(playerIDsProvider).state;
 }
 
 extension GameReaderGameX on GameReader {

@@ -75,6 +75,8 @@ class CreateOrJoinWidget extends GameHookWidget {
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final playerID = gameProvider.playerID;
     final code = gameProvider.useGameCode;
+    // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
+    final gameClient = gameProvider.useGameClient;
     return Scaffold(
       body: Center(
         child: Column(
@@ -84,6 +86,7 @@ class CreateOrJoinWidget extends GameHookWidget {
             SizedBox(height: 20),
             if (playerID == P1)
               ElevatedButton(
+                key: Key('Create Game Button $playerID'),
                 child: Text('Create Game'),
                 onPressed: () async {
                   final id = await context.gameClient(playerID).createGame(
@@ -159,6 +162,7 @@ class GameWidget extends GameHookWidget {
                 children: [
                   for (final c in [0, 1, 2])
                     GestureDetector(
+                      key: Key('${gameProvider.playerID} square $r $c'),
                       child: ColoredBox(
                         color: Colors.black,
                         child: Container(
@@ -199,7 +203,7 @@ class GameWidget extends GameHookWidget {
   }
 }
 
-extension TextX on KtList<String> {
+extension TextX on List<String> {
   String xOrO(String playerID, int location) {
     if (this[location] == null) {
       return '';

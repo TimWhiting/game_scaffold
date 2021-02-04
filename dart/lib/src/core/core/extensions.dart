@@ -29,17 +29,18 @@ extension GameX on Game {
   /// Gets the current Player ID
   String get currentPlayerID => generic.currentPlayer.id;
 
-  /// Gets the players that are a part of this game
-  KtList<Player> get players => generic.players;
+  /// Gets an unmodifiable list of players that are a part of this game
+  List<Player> get players => generic.players;
 
   /// Gets the players that are a part of this game
-  KtList<String> get playerIDs => generic.players.map((p) => p.id);
+  List<String> get playerIDs =>
+      List.unmodifiable(generic.players.map((p) => p.id));
 
   /// Gets the `DateTime` that this state was updated
   DateTime get time => generic.time;
 
   /// Gets the list of `GameMessage`s that have been exchanged this game
-  KtList<GameMessage> get messages => generic.messages;
+  List<GameMessage> get messages => generic.messages;
 
   /// Gets the status of the game
   GameStatus get gameStatus => generic.gameStatus;
@@ -48,15 +49,13 @@ extension GameX on Game {
   int get round => generic.round;
 
   /// Gets the total score for each player mapped by player id
-  KtMap<String, double> get totalScores => generic.totalScores;
+  Map<String, double> get totalScores => generic.totalScores;
 
   /// Gets the list of round scores for each player mapped by their id
-  KtMap<String, KtList<double>> get playerRoundScores =>
-      generic.playerRoundScores;
+  Map<String, List<double>> get playerRoundScores => generic.playerRoundScores;
 
   /// Gets the map of player scores grouped by round
-  KtList<KtMap<String, double>> get roundPlayerScores =>
-      generic.roundPlayerScores;
+  List<Map<String, double>> get roundPlayerScores => generic.roundPlayerScores;
 
   /// Gets whether the game is over
   bool get gameOver => generic.gameOver;
@@ -65,11 +64,19 @@ extension GameX on Game {
   bool get roundOver => generic.roundOver;
 
   /// Gets the players who are ready for the next round
-  KtList<String> get readyPlayers => generic.readyPlayers;
+  List<String> get readyPlayers => generic.readyPlayers;
 }
 
-extension GameKtListExtensions<T> on KtList<T> {
-  /// Gets a copy of this list with the elements shuffled
-  KtList<T> get shuffled =>
-      (toMutableList().asList()..shuffle()).toImmutableList();
+extension GameMapExtensions<K, V> on Map<K, V> {
+  Map<K, S> mapValues<S>(S Function(MapEntry<K, V> entry) fn) {
+    return Map.unmodifiable({
+      for (final entry in entries) entry.key: fn(entry),
+    });
+  }
+
+  Map<S, V> mapKeys<S>(S Function(MapEntry<K, V> entry) fn) {
+    return Map.unmodifiable({
+      for (final entry in entries) fn(entry): entry.value,
+    });
+  }
 }

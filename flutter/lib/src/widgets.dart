@@ -37,46 +37,47 @@ class GameNavigator extends GameHookWidget {
   @override
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final gameStatus = gameProvider.useGameStatus;
-    final pages = [disconnected];
+    final pages = {GameStatus.NotConnected: disconnected};
     // print(
     //     'Building client ${gameProvider.playerID} with game status ${gameStatus}');
     if (gameStatus != GameStatus.NotConnected) {
-      pages.add(connected);
+      pages[GameStatus.NotJoined] = connected;
       if (gameStatus != GameStatus.NotJoined) {
-        pages.add(lobby);
+        pages[GameStatus.NotStarted] = lobby;
         if (gameStatus != GameStatus.NotStarted) {
-          pages.add(game);
+          pages[GameStatus.Started] = game;
           if (gameStatus == GameStatus.BetweenRounds && betweenRounds != game) {
-            pages.add(betweenRounds);
+            pages[GameStatus.Started] = betweenRounds;
           } else if (gameStatus == GameStatus.Finished && gameOver != game) {
-            pages.add(gameOver);
+            pages[GameStatus.Started] = gameOver;
           }
         }
       }
     }
 
     return Navigator(
-        pages: pages
-            .mapIndexed((index, c) => MaterialPage(
-                key: Key('$index'), child: c, arguments: gameStatus))
-            .toList(),
-        onPopPage: (route, p) {
-          print('Popping ${route.settings.arguments}');
-          final status = route.settings.arguments as GameStatus;
-          if (status == GameStatus.Finished ||
-              status == GameStatus.BetweenRounds ||
-              status == GameStatus.Started ||
-              status == GameStatus.NotStarted) {
-            context.gameClient(gameProvider.playerID).exitGame();
-            route.didPop(null);
-            return true;
-          } else if (status == GameStatus.NotJoined) {
-            // context.gameClient(gameProvider.playerID).disconnect();
-            context.setGameStatus(
-                gameProvider.playerID, GameStatus.NotConnected);
-            return true;
-          }
-          return false;
-        });
+      pages: pages.entries
+          .map((entry) => MaterialPage(
+              key: Key('${entry.key}'),
+              child: entry.value,
+              arguments: entry.key))
+          .toList(),
+      onPopPage: (route, p) {
+        // print('Popping ${route.settings.arguments}');
+        final status = route.settings.arguments as GameStatus;
+        if (status == GameStatus.Finished ||
+            status == GameStatus.BetweenRounds ||
+            status == GameStatus.Started ||
+            status == GameStatus.NotStarted) {
+          context.gameClient(gameProvider.playerID).exitGame();
+          route.didPop(null);
+          return true;
+        } else if (status == GameStatus.NotJoined) {
+          context.gameClient(gameProvider.playerID).disconnect();
+          return true;
+        }
+        return false;
+      },
+    );
   }
 }

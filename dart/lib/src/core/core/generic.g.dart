@@ -8,26 +8,11 @@ part of 'generic.dart';
 
 _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
   return _$_GenericGame(
-    json['players'] != null
-        ? KtList<Player>.from((json['players'] as List).map((e) =>
-            e == null ? null : Player.fromJson(e as Map<String, dynamic>)))
-        : null,
-    json['readyPlayers'] != null
-        ? KtList<String>.from(
-            (json['readyPlayers'] as List).map((e) => e as String))
-        : null,
-    json['allRoundScores'] != null
-        ? KtList<KtList<double>>.from((json['allRoundScores'] as List).map(
-            (e) => e != null
-                ? KtList<double>.from(
-                    (e as List).map((e) => (e as num)?.toDouble()))
-                : null))
-        : null,
+    unmodifiablePlayerList.fromJson(json['players'] as List),
+    unmodifiableStringList.fromJson(json['readyPlayers'] as List),
+    unmodifiableDoubleListList.fromJson(json['allRoundScores'] as List),
     json['time'] == null ? null : DateTime.parse(json['time'] as String),
-    json['messages'] != null
-        ? KtList<GameMessage>.from((json['messages'] as List).map((e) =>
-            e == null ? null : GameMessage.fromJson(e as Map<String, dynamic>)))
-        : null,
+    unmodifiableGameMessageList.fromJson(json['messages'] as List),
     _$enumDecodeNullable(_$GameStatusEnumMap, json['gameStatus']),
     json['currentPlayerIndex'] as int,
     json['round'] as int,
@@ -36,12 +21,12 @@ _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$_$_GenericGameToJson(_$_GenericGame instance) =>
     <String, dynamic>{
-      'players': instance.players?.asList(),
-      'readyPlayers': instance.readyPlayers?.asList(),
+      'players': unmodifiablePlayerList.toJson(instance.players),
+      'readyPlayers': unmodifiableStringList.toJson(instance.readyPlayers),
       'allRoundScores':
-          instance.allRoundScores?.map((e) => e?.asList())?.iter?.toList(),
+          unmodifiableDoubleListList.toJson(instance.allRoundScores),
       'time': instance.time?.toIso8601String(),
-      'messages': instance.messages?.asList(),
+      'messages': unmodifiableGameMessageList.toJson(instance.messages),
       'gameStatus': _$GameStatusEnumMap[instance.gameStatus],
       'currentPlayerIndex': instance.currentPlayerIndex,
       'round': instance.round,

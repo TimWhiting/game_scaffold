@@ -19,7 +19,7 @@ class _$TicTacToeGameTearOff {
 // ignore: unused_element
   _TicTacToeGame call(
       {@required GenericGame generic,
-      @required KtList<String> board,
+      @required @unmodifiableStringList List<String> board,
       String type = 'tictactoe'}) {
     return _TicTacToeGame(
       generic: generic,
@@ -41,10 +41,12 @@ const $TicTacToeGame = _$TicTacToeGameTearOff();
 /// @nodoc
 mixin _$TicTacToeGame {
   GenericGame get generic;
-  KtList<String> get board;
+  @unmodifiableStringList
+  List<String> get board;
   String get type;
 
   Map<String, dynamic> toJson();
+  @JsonKey(ignore: true)
   $TicTacToeGameCopyWith<TicTacToeGame> get copyWith;
 }
 
@@ -53,7 +55,10 @@ abstract class $TicTacToeGameCopyWith<$Res> {
   factory $TicTacToeGameCopyWith(
           TicTacToeGame value, $Res Function(TicTacToeGame) then) =
       _$TicTacToeGameCopyWithImpl<$Res>;
-  $Res call({GenericGame generic, KtList<String> board, String type});
+  $Res call(
+      {GenericGame generic,
+      @unmodifiableStringList List<String> board,
+      String type});
 
   $GenericGameCopyWith<$Res> get generic;
 }
@@ -75,7 +80,7 @@ class _$TicTacToeGameCopyWithImpl<$Res>
   }) {
     return _then(_value.copyWith(
       generic: generic == freezed ? _value.generic : generic as GenericGame,
-      board: board == freezed ? _value.board : board as KtList<String>,
+      board: board == freezed ? _value.board : board as List<String>,
       type: type == freezed ? _value.type : type as String,
     ));
   }
@@ -98,7 +103,10 @@ abstract class _$TicTacToeGameCopyWith<$Res>
           _TicTacToeGame value, $Res Function(_TicTacToeGame) then) =
       __$TicTacToeGameCopyWithImpl<$Res>;
   @override
-  $Res call({GenericGame generic, KtList<String> board, String type});
+  $Res call(
+      {GenericGame generic,
+      @unmodifiableStringList List<String> board,
+      String type});
 
   @override
   $GenericGameCopyWith<$Res> get generic;
@@ -123,7 +131,7 @@ class __$TicTacToeGameCopyWithImpl<$Res>
   }) {
     return _then(_TicTacToeGame(
       generic: generic == freezed ? _value.generic : generic as GenericGame,
-      board: board == freezed ? _value.board : board as KtList<String>,
+      board: board == freezed ? _value.board : board as List<String>,
       type: type == freezed ? _value.type : type as String,
     ));
   }
@@ -134,7 +142,9 @@ class __$TicTacToeGameCopyWithImpl<$Res>
 /// @nodoc
 class _$_TicTacToeGame extends _TicTacToeGame {
   const _$_TicTacToeGame(
-      {@required this.generic, @required this.board, this.type = 'tictactoe'})
+      {@required this.generic,
+      @required @unmodifiableStringList this.board,
+      this.type = 'tictactoe'})
       : assert(generic != null),
         assert(board != null),
         assert(type != null),
@@ -146,7 +156,8 @@ class _$_TicTacToeGame extends _TicTacToeGame {
   @override
   final GenericGame generic;
   @override
-  final KtList<String> board;
+  @unmodifiableStringList
+  final List<String> board;
   @JsonKey(defaultValue: 'tictactoe')
   @override
   final String type;
@@ -176,6 +187,7 @@ class _$_TicTacToeGame extends _TicTacToeGame {
       const DeepCollectionEquality().hash(board) ^
       const DeepCollectionEquality().hash(type);
 
+  @JsonKey(ignore: true)
   @override
   _$TicTacToeGameCopyWith<_TicTacToeGame> get copyWith =>
       __$TicTacToeGameCopyWithImpl<_TicTacToeGame>(this, _$identity);
@@ -190,7 +202,7 @@ abstract class _TicTacToeGame extends TicTacToeGame {
   const _TicTacToeGame._() : super._();
   const factory _TicTacToeGame(
       {@required GenericGame generic,
-      @required KtList<String> board,
+      @required @unmodifiableStringList List<String> board,
       String type}) = _$_TicTacToeGame;
 
   factory _TicTacToeGame.fromJson(Map<String, dynamic> json) =
@@ -199,10 +211,12 @@ abstract class _TicTacToeGame extends TicTacToeGame {
   @override
   GenericGame get generic;
   @override
-  KtList<String> get board;
+  @unmodifiableStringList
+  List<String> get board;
   @override
   String get type;
   @override
+  @JsonKey(ignore: true)
   _$TicTacToeGameCopyWith<_TicTacToeGame> get copyWith;
 }
 
@@ -238,6 +252,7 @@ mixin _$TicTacToeGameEvent {
   int get location;
 
   Map<String, dynamic> toJson();
+  @JsonKey(ignore: true)
   $TicTacToeGameEventCopyWith<TicTacToeGameEvent> get copyWith;
 }
 
@@ -342,6 +357,7 @@ class _$_TicTacToeGameEvent extends _TicTacToeGameEvent {
       const DeepCollectionEquality().hash(player) ^
       const DeepCollectionEquality().hash(location);
 
+  @JsonKey(ignore: true)
   @override
   _$TicTacToeGameEventCopyWith<_TicTacToeGameEvent> get copyWith =>
       __$TicTacToeGameEventCopyWithImpl<_TicTacToeGameEvent>(this, _$identity);
@@ -365,5 +381,6 @@ abstract class _TicTacToeGameEvent extends TicTacToeGameEvent {
   @override
   int get location;
   @override
+  @JsonKey(ignore: true)
   _$TicTacToeGameEventCopyWith<_TicTacToeGameEvent> get copyWith;
 }

@@ -1,3 +1,20 @@
+
+## 0.2.0+4
+
+- Update lobby info creator field for on device games
+
+## 0.2.0+3
+
+- Fix synchronous change problems
+
+## 0.2.0+2
+
+- Fix extension resolution problem
+  
+## 0.2.0
+
+- Remove ktdart dependency and use unmodifiable lists and maps instead
+
 ## 0.1.5+9
 
 - Work on socket io connection / disconnection

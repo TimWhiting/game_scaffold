@@ -18,11 +18,11 @@ class _$GenericGameTearOff {
 
 // ignore: unused_element
   _GenericGame call(
-      KtList<Player> players,
-      KtList<String> readyPlayers,
-      KtList<KtList<double>> allRoundScores,
+      @unmodifiablePlayerList List<Player> players,
+      @unmodifiableStringList List<String> readyPlayers,
+      @unmodifiableDoubleListList List<List<double>> allRoundScores,
       DateTime time,
-      KtList<GameMessage> messages,
+      @unmodifiableGameMessageList List<GameMessage> messages,
       GameStatus gameStatus,
       int currentPlayerIndex,
       int round) {
@@ -50,16 +50,21 @@ const $GenericGame = _$GenericGameTearOff();
 
 /// @nodoc
 mixin _$GenericGame {
-  KtList<Player> get players;
-  KtList<String> get readyPlayers;
-  KtList<KtList<double>> get allRoundScores;
+  @unmodifiablePlayerList
+  List<Player> get players;
+  @unmodifiableStringList
+  List<String> get readyPlayers;
+  @unmodifiableDoubleListList
+  List<List<double>> get allRoundScores;
   DateTime get time;
-  KtList<GameMessage> get messages;
+  @unmodifiableGameMessageList
+  List<GameMessage> get messages;
   GameStatus get gameStatus;
   int get currentPlayerIndex;
   int get round;
 
   Map<String, dynamic> toJson();
+  @JsonKey(ignore: true)
   $GenericGameCopyWith<GenericGame> get copyWith;
 }
 
@@ -69,11 +74,11 @@ abstract class $GenericGameCopyWith<$Res> {
           GenericGame value, $Res Function(GenericGame) then) =
       _$GenericGameCopyWithImpl<$Res>;
   $Res call(
-      {KtList<Player> players,
-      KtList<String> readyPlayers,
-      KtList<KtList<double>> allRoundScores,
+      {@unmodifiablePlayerList List<Player> players,
+      @unmodifiableStringList List<String> readyPlayers,
+      @unmodifiableDoubleListList List<List<double>> allRoundScores,
       DateTime time,
-      KtList<GameMessage> messages,
+      @unmodifiableGameMessageList List<GameMessage> messages,
       GameStatus gameStatus,
       int currentPlayerIndex,
       int round});
@@ -99,17 +104,16 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
     Object round = freezed,
   }) {
     return _then(_value.copyWith(
-      players: players == freezed ? _value.players : players as KtList<Player>,
+      players: players == freezed ? _value.players : players as List<Player>,
       readyPlayers: readyPlayers == freezed
           ? _value.readyPlayers
-          : readyPlayers as KtList<String>,
+          : readyPlayers as List<String>,
       allRoundScores: allRoundScores == freezed
           ? _value.allRoundScores
-          : allRoundScores as KtList<KtList<double>>,
+          : allRoundScores as List<List<double>>,
       time: time == freezed ? _value.time : time as DateTime,
-      messages: messages == freezed
-          ? _value.messages
-          : messages as KtList<GameMessage>,
+      messages:
+          messages == freezed ? _value.messages : messages as List<GameMessage>,
       gameStatus:
           gameStatus == freezed ? _value.gameStatus : gameStatus as GameStatus,
       currentPlayerIndex: currentPlayerIndex == freezed
@@ -128,11 +132,11 @@ abstract class _$GenericGameCopyWith<$Res>
       __$GenericGameCopyWithImpl<$Res>;
   @override
   $Res call(
-      {KtList<Player> players,
-      KtList<String> readyPlayers,
-      KtList<KtList<double>> allRoundScores,
+      {@unmodifiablePlayerList List<Player> players,
+      @unmodifiableStringList List<String> readyPlayers,
+      @unmodifiableDoubleListList List<List<double>> allRoundScores,
       DateTime time,
-      KtList<GameMessage> messages,
+      @unmodifiableGameMessageList List<GameMessage> messages,
       GameStatus gameStatus,
       int currentPlayerIndex,
       int round});
@@ -160,15 +164,15 @@ class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
     Object round = freezed,
   }) {
     return _then(_GenericGame(
-      players == freezed ? _value.players : players as KtList<Player>,
+      players == freezed ? _value.players : players as List<Player>,
       readyPlayers == freezed
           ? _value.readyPlayers
-          : readyPlayers as KtList<String>,
+          : readyPlayers as List<String>,
       allRoundScores == freezed
           ? _value.allRoundScores
-          : allRoundScores as KtList<KtList<double>>,
+          : allRoundScores as List<List<double>>,
       time == freezed ? _value.time : time as DateTime,
-      messages == freezed ? _value.messages : messages as KtList<GameMessage>,
+      messages == freezed ? _value.messages : messages as List<GameMessage>,
       gameStatus == freezed ? _value.gameStatus : gameStatus as GameStatus,
       currentPlayerIndex == freezed
           ? _value.currentPlayerIndex
@@ -183,11 +187,11 @@ class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
 /// @nodoc
 class _$_GenericGame extends _GenericGame {
   const _$_GenericGame(
-      this.players,
-      this.readyPlayers,
-      this.allRoundScores,
+      @unmodifiablePlayerList this.players,
+      @unmodifiableStringList this.readyPlayers,
+      @unmodifiableDoubleListList this.allRoundScores,
       this.time,
-      this.messages,
+      @unmodifiableGameMessageList this.messages,
       this.gameStatus,
       this.currentPlayerIndex,
       this.round)
@@ -205,15 +209,19 @@ class _$_GenericGame extends _GenericGame {
       _$_$_GenericGameFromJson(json);
 
   @override
-  final KtList<Player> players;
+  @unmodifiablePlayerList
+  final List<Player> players;
   @override
-  final KtList<String> readyPlayers;
+  @unmodifiableStringList
+  final List<String> readyPlayers;
   @override
-  final KtList<KtList<double>> allRoundScores;
+  @unmodifiableDoubleListList
+  final List<List<double>> allRoundScores;
   @override
   final DateTime time;
   @override
-  final KtList<GameMessage> messages;
+  @unmodifiableGameMessageList
+  final List<GameMessage> messages;
   @override
   final GameStatus gameStatus;
   @override
@@ -266,6 +274,7 @@ class _$_GenericGame extends _GenericGame {
       const DeepCollectionEquality().hash(currentPlayerIndex) ^
       const DeepCollectionEquality().hash(round);
 
+  @JsonKey(ignore: true)
   @override
   _$GenericGameCopyWith<_GenericGame> get copyWith =>
       __$GenericGameCopyWithImpl<_GenericGame>(this, _$identity);
@@ -279,11 +288,11 @@ class _$_GenericGame extends _GenericGame {
 abstract class _GenericGame extends GenericGame {
   const _GenericGame._() : super._();
   const factory _GenericGame(
-      KtList<Player> players,
-      KtList<String> readyPlayers,
-      KtList<KtList<double>> allRoundScores,
+      @unmodifiablePlayerList List<Player> players,
+      @unmodifiableStringList List<String> readyPlayers,
+      @unmodifiableDoubleListList List<List<double>> allRoundScores,
       DateTime time,
-      KtList<GameMessage> messages,
+      @unmodifiableGameMessageList List<GameMessage> messages,
       GameStatus gameStatus,
       int currentPlayerIndex,
       int round) = _$_GenericGame;
@@ -292,15 +301,19 @@ abstract class _GenericGame extends GenericGame {
       _$_GenericGame.fromJson;
 
   @override
-  KtList<Player> get players;
+  @unmodifiablePlayerList
+  List<Player> get players;
   @override
-  KtList<String> get readyPlayers;
+  @unmodifiableStringList
+  List<String> get readyPlayers;
   @override
-  KtList<KtList<double>> get allRoundScores;
+  @unmodifiableDoubleListList
+  List<List<double>> get allRoundScores;
   @override
   DateTime get time;
   @override
-  KtList<GameMessage> get messages;
+  @unmodifiableGameMessageList
+  List<GameMessage> get messages;
   @override
   GameStatus get gameStatus;
   @override
@@ -308,6 +321,7 @@ abstract class _GenericGame extends GenericGame {
   @override
   int get round;
   @override
+  @JsonKey(ignore: true)
   _$GenericGameCopyWith<_GenericGame> get copyWith;
 }
 
@@ -371,34 +385,34 @@ const $GenericEvent = _$GenericEventTearOff();
 /// @nodoc
 mixin _$GenericEvent {
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result undo(),
-    @required Result start(),
-    @required Result readyNextRound(String player),
-    @required Result message(String message, String from, @nullable String to),
+  TResult when<TResult extends Object>({
+    @required TResult undo(),
+    @required TResult start(),
+    @required TResult readyNextRound(String player),
+    @required TResult message(String message, String from, @nullable String to),
   });
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result undo(),
-    Result start(),
-    Result readyNextRound(String player),
-    Result message(String message, String from, @nullable String to),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult undo(),
+    TResult start(),
+    TResult readyNextRound(String player),
+    TResult message(String message, String from, @nullable String to),
+    @required TResult orElse(),
   });
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result undo(_GenericEventUndo value),
-    @required Result start(_GenericEventStart value),
-    @required Result readyNextRound(_GenericReadyNextRoundEvent value),
-    @required Result message(GameMessage value),
+  TResult map<TResult extends Object>({
+    @required TResult undo(_GenericEventUndo value),
+    @required TResult start(_GenericEventStart value),
+    @required TResult readyNextRound(_GenericReadyNextRoundEvent value),
+    @required TResult message(GameMessage value),
   });
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result undo(_GenericEventUndo value),
-    Result start(_GenericEventStart value),
-    Result readyNextRound(_GenericReadyNextRoundEvent value),
-    Result message(GameMessage value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult undo(_GenericEventUndo value),
+    TResult start(_GenericEventStart value),
+    TResult readyNextRound(_GenericReadyNextRoundEvent value),
+    TResult message(GameMessage value),
+    @required TResult orElse(),
   });
   Map<String, dynamic> toJson();
 }
@@ -462,11 +476,11 @@ class _$_GenericEventUndo extends _GenericEventUndo {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result undo(),
-    @required Result start(),
-    @required Result readyNextRound(String player),
-    @required Result message(String message, String from, @nullable String to),
+  TResult when<TResult extends Object>({
+    @required TResult undo(),
+    @required TResult start(),
+    @required TResult readyNextRound(String player),
+    @required TResult message(String message, String from, @nullable String to),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -477,12 +491,12 @@ class _$_GenericEventUndo extends _GenericEventUndo {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result undo(),
-    Result start(),
-    Result readyNextRound(String player),
-    Result message(String message, String from, @nullable String to),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult undo(),
+    TResult start(),
+    TResult readyNextRound(String player),
+    TResult message(String message, String from, @nullable String to),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (undo != null) {
@@ -493,11 +507,11 @@ class _$_GenericEventUndo extends _GenericEventUndo {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result undo(_GenericEventUndo value),
-    @required Result start(_GenericEventStart value),
-    @required Result readyNextRound(_GenericReadyNextRoundEvent value),
-    @required Result message(GameMessage value),
+  TResult map<TResult extends Object>({
+    @required TResult undo(_GenericEventUndo value),
+    @required TResult start(_GenericEventStart value),
+    @required TResult readyNextRound(_GenericReadyNextRoundEvent value),
+    @required TResult message(GameMessage value),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -508,12 +522,12 @@ class _$_GenericEventUndo extends _GenericEventUndo {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result undo(_GenericEventUndo value),
-    Result start(_GenericEventStart value),
-    Result readyNextRound(_GenericReadyNextRoundEvent value),
-    Result message(GameMessage value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult undo(_GenericEventUndo value),
+    TResult start(_GenericEventStart value),
+    TResult readyNextRound(_GenericReadyNextRoundEvent value),
+    TResult message(GameMessage value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (undo != null) {
@@ -579,11 +593,11 @@ class _$_GenericEventStart extends _GenericEventStart {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result undo(),
-    @required Result start(),
-    @required Result readyNextRound(String player),
-    @required Result message(String message, String from, @nullable String to),
+  TResult when<TResult extends Object>({
+    @required TResult undo(),
+    @required TResult start(),
+    @required TResult readyNextRound(String player),
+    @required TResult message(String message, String from, @nullable String to),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -594,12 +608,12 @@ class _$_GenericEventStart extends _GenericEventStart {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result undo(),
-    Result start(),
-    Result readyNextRound(String player),
-    Result message(String message, String from, @nullable String to),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult undo(),
+    TResult start(),
+    TResult readyNextRound(String player),
+    TResult message(String message, String from, @nullable String to),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (start != null) {
@@ -610,11 +624,11 @@ class _$_GenericEventStart extends _GenericEventStart {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result undo(_GenericEventUndo value),
-    @required Result start(_GenericEventStart value),
-    @required Result readyNextRound(_GenericReadyNextRoundEvent value),
-    @required Result message(GameMessage value),
+  TResult map<TResult extends Object>({
+    @required TResult undo(_GenericEventUndo value),
+    @required TResult start(_GenericEventStart value),
+    @required TResult readyNextRound(_GenericReadyNextRoundEvent value),
+    @required TResult message(GameMessage value),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -625,12 +639,12 @@ class _$_GenericEventStart extends _GenericEventStart {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result undo(_GenericEventUndo value),
-    Result start(_GenericEventStart value),
-    Result readyNextRound(_GenericReadyNextRoundEvent value),
-    Result message(GameMessage value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult undo(_GenericEventUndo value),
+    TResult start(_GenericEventStart value),
+    TResult readyNextRound(_GenericReadyNextRoundEvent value),
+    TResult message(GameMessage value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (start != null) {
@@ -715,6 +729,7 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   int get hashCode =>
       runtimeType.hashCode ^ const DeepCollectionEquality().hash(player);
 
+  @JsonKey(ignore: true)
   @override
   _$GenericReadyNextRoundEventCopyWith<_GenericReadyNextRoundEvent>
       get copyWith => __$GenericReadyNextRoundEventCopyWithImpl<
@@ -722,11 +737,11 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result undo(),
-    @required Result start(),
-    @required Result readyNextRound(String player),
-    @required Result message(String message, String from, @nullable String to),
+  TResult when<TResult extends Object>({
+    @required TResult undo(),
+    @required TResult start(),
+    @required TResult readyNextRound(String player),
+    @required TResult message(String message, String from, @nullable String to),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -737,12 +752,12 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result undo(),
-    Result start(),
-    Result readyNextRound(String player),
-    Result message(String message, String from, @nullable String to),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult undo(),
+    TResult start(),
+    TResult readyNextRound(String player),
+    TResult message(String message, String from, @nullable String to),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (readyNextRound != null) {
@@ -753,11 +768,11 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result undo(_GenericEventUndo value),
-    @required Result start(_GenericEventStart value),
-    @required Result readyNextRound(_GenericReadyNextRoundEvent value),
-    @required Result message(GameMessage value),
+  TResult map<TResult extends Object>({
+    @required TResult undo(_GenericEventUndo value),
+    @required TResult start(_GenericEventStart value),
+    @required TResult readyNextRound(_GenericReadyNextRoundEvent value),
+    @required TResult message(GameMessage value),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -768,12 +783,12 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result undo(_GenericEventUndo value),
-    Result start(_GenericEventStart value),
-    Result readyNextRound(_GenericReadyNextRoundEvent value),
-    Result message(GameMessage value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult undo(_GenericEventUndo value),
+    TResult start(_GenericEventStart value),
+    TResult readyNextRound(_GenericReadyNextRoundEvent value),
+    TResult message(GameMessage value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (readyNextRound != null) {
@@ -798,6 +813,7 @@ abstract class _GenericReadyNextRoundEvent extends GenericEvent {
       _$_GenericReadyNextRoundEvent.fromJson;
 
   String get player;
+  @JsonKey(ignore: true)
   _$GenericReadyNextRoundEventCopyWith<_GenericReadyNextRoundEvent>
       get copyWith;
 }
@@ -880,17 +896,18 @@ class _$GameMessage extends GameMessage {
       const DeepCollectionEquality().hash(from) ^
       const DeepCollectionEquality().hash(to);
 
+  @JsonKey(ignore: true)
   @override
   $GameMessageCopyWith<GameMessage> get copyWith =>
       _$GameMessageCopyWithImpl<GameMessage>(this, _$identity);
 
   @override
   @optionalTypeArgs
-  Result when<Result extends Object>({
-    @required Result undo(),
-    @required Result start(),
-    @required Result readyNextRound(String player),
-    @required Result message(String message, String from, @nullable String to),
+  TResult when<TResult extends Object>({
+    @required TResult undo(),
+    @required TResult start(),
+    @required TResult readyNextRound(String player),
+    @required TResult message(String message, String from, @nullable String to),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -901,12 +918,12 @@ class _$GameMessage extends GameMessage {
 
   @override
   @optionalTypeArgs
-  Result maybeWhen<Result extends Object>({
-    Result undo(),
-    Result start(),
-    Result readyNextRound(String player),
-    Result message(String message, String from, @nullable String to),
-    @required Result orElse(),
+  TResult maybeWhen<TResult extends Object>({
+    TResult undo(),
+    TResult start(),
+    TResult readyNextRound(String player),
+    TResult message(String message, String from, @nullable String to),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (message != null) {
@@ -917,11 +934,11 @@ class _$GameMessage extends GameMessage {
 
   @override
   @optionalTypeArgs
-  Result map<Result extends Object>({
-    @required Result undo(_GenericEventUndo value),
-    @required Result start(_GenericEventStart value),
-    @required Result readyNextRound(_GenericReadyNextRoundEvent value),
-    @required Result message(GameMessage value),
+  TResult map<TResult extends Object>({
+    @required TResult undo(_GenericEventUndo value),
+    @required TResult start(_GenericEventStart value),
+    @required TResult readyNextRound(_GenericReadyNextRoundEvent value),
+    @required TResult message(GameMessage value),
   }) {
     assert(undo != null);
     assert(start != null);
@@ -932,12 +949,12 @@ class _$GameMessage extends GameMessage {
 
   @override
   @optionalTypeArgs
-  Result maybeMap<Result extends Object>({
-    Result undo(_GenericEventUndo value),
-    Result start(_GenericEventStart value),
-    Result readyNextRound(_GenericReadyNextRoundEvent value),
-    Result message(GameMessage value),
-    @required Result orElse(),
+  TResult maybeMap<TResult extends Object>({
+    TResult undo(_GenericEventUndo value),
+    TResult start(_GenericEventStart value),
+    TResult readyNextRound(_GenericReadyNextRoundEvent value),
+    TResult message(GameMessage value),
+    @required TResult orElse(),
   }) {
     assert(orElse != null);
     if (message != null) {
@@ -964,5 +981,6 @@ abstract class GameMessage extends GenericEvent {
   String get from;
   @nullable
   String get to;
+  @JsonKey(ignore: true)
   $GameMessageCopyWith<GameMessage> get copyWith;
 }

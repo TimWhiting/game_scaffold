@@ -16,19 +16,21 @@ dependencies:
   flutter_riverpod: any
   hooks_riverpod: any
   logging: any
-  game_scaffold_games: any 
+  game_scaffold_games: any
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  # integration_test:
-  #   sdk: flutter
+  integration_test:
+    sdk: flutter
 
 dependency_overrides:
-  game_scaffold: 
+  game_scaffold:
     path: ../
   game_scaffold_dart:
     path: ../../dart
+  game_scaffold_games:
+    path: ../../games
 
 flutter:
   uses-material-design: true

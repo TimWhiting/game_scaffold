@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:kt_dart/kt.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod/all.dart';
 import '../core.dart';
@@ -19,11 +18,15 @@ String get homeDir {
 
 final agentBackendGame = Provider((ref) => BackendProvider(ref.read, '0000'));
 final backendGameCodesProvider =
-    StateProvider<KtList<String>>((ref) => listOf());
+    StateProvider<List<String>>((ref) => List.unmodifiable([]));
 final backendGamesProvider =
     Provider.family<BackendProvider, String>((ref, code) {
   final bp = BackendProvider(ref.read, code);
-  ref.onDispose(bp.dispose);
+  ref.onDispose(() {
+    if (ref.mounted) {
+      bp.dispose();
+    }
+  });
   return bp;
 });
 
@@ -32,7 +35,7 @@ class BackendProvider {
     Future.delayed(
         10.milliseconds,
         () => read(backendGameCodesProvider).state =
-            read(backendGameCodesProvider).state.plusElement(code));
+            [...read(backendGameCodesProvider).state, code].toUnmodifiable());
     initialStateProvider = Provider<Game>(_initialStateImpl);
     gameStateProvider =
         StateNotifierProvider<GameStateNotifier>(_gameStateNotifier);
@@ -46,7 +49,7 @@ class BackendProvider {
 
   void dispose() {
     read(backendGameCodesProvider).state =
-        read(backendGameCodesProvider).state.minusElement(code);
+        [...read(backendGameCodesProvider).state, code].toUnmodifiable();
   }
 
   /// Provides the initial state of the game
@@ -59,8 +62,8 @@ class BackendProvider {
   StateNotifierProvider<GameStateNotifier> gameStateProvider;
 
   /// Keeps track of the players involved in the game on the server (or on the client) in the case of a local game
-  final playersProvider = StateProvider<KtList<Player>>(
-    (ref) => listFrom([]),
+  final playersProvider = StateProvider<List<Player>>(
+    (ref) => List.unmodifiable([]),
   );
 
   /// Keeps track
@@ -140,11 +143,11 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
           },
           start: () => read.initialState.gameValue(),
           readyNextRound: (e) {
-            if (state.readyPlayers.size > 1) {
+            if (state.readyPlayers.length > 1) {
               _previousStates.remove(state);
             }
             var newState = state.copyWithGeneric((g) => g.addReadyPlayer(e));
-            if (newState.readyPlayers.size == state.players.size) {
+            if (newState.readyPlayers.length == state.players.length) {
               return state
                   .moveNextRound(gameConfig, read)
                   .copyWithGeneric((g) => g.clearReadyPlayers())
@@ -167,8 +170,8 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
       } else {
         state = nextState.value;
       }
-    } catch (error) {
-      _gameStateLogger.severe(error);
+    } catch (error, st) {
+      _gameStateLogger.severe('$error $st');
     }
   }
 }
@@ -190,10 +193,10 @@ class BackendGameReader {
 
 extension BackendReaderX on BackendGameReader {
   /// On the backend gets the list of [Player]s
-  KtList<Player> get players => this(game.playersProvider).state;
+  List<Player> get players => this(game.playersProvider).state;
 
   /// On the  sets the players to [players]
-  set players(KtList<Player> players) =>
+  set players(List<Player> players) =>
       this(game.playersProvider).state = players;
 
   /// On the  gets the [GameConfig]
