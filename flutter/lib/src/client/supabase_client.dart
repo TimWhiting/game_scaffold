@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:game_scaffold/game_scaffold.dart';
 import 'package:riverpod/all.dart';
 import 'package:supabase/supabase.dart';
@@ -11,18 +13,21 @@ final supabaseProvider = Provider<SupabaseClient>(
 class SupabaseServerClient extends ServerClient {
   SupabaseServerClient(Reader read, String id) : super(read, id);
   SupabaseClient get _supaClient => read(supabaseProvider);
-  SupabaseQueryBuilder get gameConfig => _supaClient.from('GameConfig');
+  SupabaseQueryBuilder get gameDB => _supaClient.from('Game');
   @override
   Future<void> createGame() async {
-    final response =
-        await gameConfig.insert({'config': game.gameConfig.toJson()}).execute();
-    game.gameCode = response.data['id'];
+    final response = await gameDB.insert({
+      'id': generateGameID([]),
+      'config': game.gameConfig.toJson(),
+    }).execute();
+    print(response.error);
+    print(response.statusText);
+    game.gameCode = response.data[0]['id'];
   }
 
   @override
   Future<bool> deleteGame() async {
-    final response =
-        await gameConfig.delete().eq('id', game.gameCode).execute();
+    final response = await gameDB.delete().eq('id', game.gameCode).execute();
   }
 
   @override
@@ -32,7 +37,7 @@ class SupabaseServerClient extends ServerClient {
 
   @override
   Future<void> getGameInfo(String gameId) async {
-    final response = await gameConfig.select().eq('id', gameId).execute();
+    final response = await gameDB.select().eq('id', gameId).execute();
     final gameInfo = response.data;
     // TODO: More gameinfo stuff
     return GameInfo(
@@ -54,10 +59,9 @@ class SupabaseServerClient extends ServerClient {
 }
 
 class SupabaseGameClient extends GameClient {
-  SupabaseGameClient(String id, Reader read) : super(id, read);
+  SupabaseGameClient(String playerID, Reader read) : super(playerID, read);
   SupabaseClient get _supaClient => read(supabaseProvider);
-  SupabaseQueryBuilder get gameConfig => _supaClient.from('GameConfig');
-  SupabaseQueryBuilder get gameState => _supaClient.from('GameState');
+  SupabaseQueryBuilder get gameDB => _supaClient.from('Game');
 
   @override
   void dispose() {
@@ -70,9 +74,42 @@ class SupabaseGameClient extends GameClient {
   }
 
   @override
-  Future<void> register() {
-    // TODO: implement register
-    throw UnimplementedError();
+  Future<void> register() async {
+    var result =
+        await gameDB.select('players, config').eq('id', gameCode).execute();
+    if (result.error == null) {
+      print(result.data);
+      final newPlayers = (result.data[0]['players'] as List)
+          .map((p) => Player.fromJson(p))
+          .toList()
+            ..add(
+              Player(playerID, name: read.gameFor(playerID).playerName),
+            );
+      final gameConfig = GameConfig.fromJson(result.data[0]['config']);
+      if (newPlayers.length == gameConfig.maxPlayers) {
+        print('Max Limit');
+        // TODO: This
+        result = await gameDB
+            .update({
+              'players': newPlayers,
+              'state': Game.getInitialState(gameConfig, newPlayers,
+                  BackendGameReader(read, BackendProvider(read, gameCode)))
+            })
+            .eq('id', gameCode)
+            .execute();
+      } else {
+        print('More players please');
+        result = await gameDB
+            .update({'players': newPlayers})
+            .eq('id', gameCode)
+            .execute();
+      }
+
+      // TODO: Subscribe to the game state
+    } else {
+      print(result.statusText);
+      print(result.error.message);
+    }
   }
 
   @override

@@ -8,6 +8,7 @@ void main() {
   Game.registerGeneralEvents();
   TicTacToeGame.register();
   registerOnDeviceClients();
+
   Logger.root.clearListeners();
   Logger.root.level = Level.FINE;
   Logger.root.onRecord.listen((record) =>

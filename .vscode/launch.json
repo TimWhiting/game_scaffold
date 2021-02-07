@@ -42,5 +42,6 @@
       "type": "dart",
       "program": "bin/io_server.dart"
     }
+   
   ]
 }
