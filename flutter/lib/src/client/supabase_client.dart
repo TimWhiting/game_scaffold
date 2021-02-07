@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:game_scaffold/game_scaffold.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod/all.dart';
@@ -60,13 +62,14 @@ class SupabaseServerClient extends ServerClient {
   }
 
   GameInfo infoFromRow(Map<String, dynamic> gameInfo) {
+    print(gameInfo);
     final config = GameConfig.fromJson(gameInfo['config']);
     final players =
         (gameInfo['players'] as List).map((p) => Player.fromJson(p)).toList();
     return GameInfo(
       gameInfo['id'],
-      players.map((p) => p.name).toList(),
-      players.firstOrNullWhere((p) => p.id == playerID)?.name,
+      players.map((p) => p.nameOrID).toList(),
+      players.firstOrNullWhere((p) => p.id == playerID)?.nameOrID,
       config.adminId == playerID,
       config.gameType,
     );
@@ -74,13 +77,17 @@ class SupabaseServerClient extends ServerClient {
 
   @override
   Future<List<GameInfo>> getGames() async {
-    final response = await gameDB.select('id, config, players').execute();
+    final response =
+        await _supaClient.rpc('getallgames', {'playerid': playerID}).execute();
+
     if (response.error != null || response.count == 0) {
       _supaLogger
           .severe('In get game info Supabase Error ${response.statusText}');
     }
     final gameInfo = response.data as List;
-    return gameInfo.map((gi) => infoFromRow(gi)).toList();
+    final allGames = gameInfo.map((gi) => infoFromRow(gi)).toList();
+    _supaLogger.info('All Games: $allGames');
+    return allGames;
   }
 
   static void registerImplementation() {
@@ -159,4 +166,8 @@ class SupabaseGameClient extends GameClient {
 void registerSupabaseServerClients() {
   SupabaseServerClient.registerImplementation();
   SupabaseGameClient.registerImplementation();
+}
+
+extension PlayerXName on Player {
+  String get nameOrID => name == null || name == '' ? id : name;
 }

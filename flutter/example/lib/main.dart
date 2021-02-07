@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:game_scaffold/game_scaffold.dart';
 import 'package:hooks_riverpod/all.dart';
 import 'package:game_scaffold_games/games.dart';
@@ -78,6 +79,8 @@ class CreateOrJoinWidget extends GameHookWidget {
     final code = gameProvider.useGameCode;
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
     final gameClient = gameProvider.useGameClient;
+    final allGames = useFuture(gameProvider.useGameInfos);
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -118,7 +121,10 @@ class CreateOrJoinWidget extends GameHookWidget {
                     context.gameClient(playerID).register(code: code),
                 child: Text('Join Game'),
               )
-            ]
+            ],
+            if (allGames.hasData)
+              for (final info in allGames.data)
+                Text('Started Game: ${info.gameId}, Players: ${info.players}'),
           ],
         ),
       ),
