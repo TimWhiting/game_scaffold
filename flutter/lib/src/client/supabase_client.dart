@@ -127,13 +127,21 @@ class SupabaseGameClient extends GameClient {
           .toList();
 
       final gameConfig = GameConfig.fromJson(result.data[0]['config']);
-      _gameSub = gameDB.on(SupabaseEventTypes.update, (d) {
+      // _supaClient.realtime.onOpen(() => print('Socket opened.'));
+      // _supaClient.realtime.onClose((event) => print('Socket closed $event'));
+      // _supaClient.realtime.onError((error) => print('Socket error: $error'));
+      // _supaClient.realtime.onMessage((d) => print('Socket Message: $d'));
+      _supaClient.realtime.connect();
+      _gameSub = _supaClient.realtime.channel(
+        'realtime:public:Game',
+        chanParams: {'id': gameCode},
+      );
+      _gameSub.on(SupabaseEventTypes.update.name(), (d, {String ref}) {
         print('_______________\n\n\n\n\n\n\n');
         _supaLogger.info('$d');
         print('_______________\n\n\n\n\n\n\n');
-      }).subscribe((d, {String errorMsg}) {
-        print('$d $errorMsg');
       });
+      _gameSub.subscribe();
 
       if (oldPlayers.any((p) => p.id == playerID)) {
         _supaLogger.info('Player $playerID Rejoining');

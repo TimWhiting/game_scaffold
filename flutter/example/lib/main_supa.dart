@@ -22,7 +22,7 @@ void main() {
     exit(1);
   }
   Logger.root.clearListeners();
-  Logger.root.level = Level.INFO;
+  Logger.root.level = Level.FINEST;
 
   Logger.root.onRecord.listen((record) =>
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
