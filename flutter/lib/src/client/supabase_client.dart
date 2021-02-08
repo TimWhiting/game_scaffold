@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:riverpod/all.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase/src/supabase_query_builder.dart';
+import 'package:realtime_client/realtime_client.dart' hide Logger;
 
 const SupabaseLocation = 'supabase-server';
 
@@ -30,7 +31,9 @@ class SupabaseServerClient extends ServerClient {
           .severe('In create game Supabase Error ${response.statusText}');
       return;
     }
-    game.gameCode = response.data[0]['id'];
+    final code = response.data[0]['id'];
+    game.gameCode = code;
+    _supaLogger.info('GameCode: $code');
   }
 
   @override
@@ -102,7 +105,7 @@ class SupabaseGameClient extends GameClient {
   SupabaseGameClient(String playerID, Reader read) : super(playerID, read);
   SupabaseClient get _supaClient => read(supabaseProvider);
   SupabaseQueryBuilder get gameDB => _supaClient.from('Game');
-
+  RealtimeSubscription _gameSub;
   @override
   void dispose() {
     // TODO: implement dispose
@@ -119,13 +122,27 @@ class SupabaseGameClient extends GameClient {
         await gameDB.select('players, config').eq('id', gameCode).execute();
     if (result.error == null) {
       _supaLogger.info(result.data);
-      final newPlayers = (result.data[0]['players'] as List)
+      final oldPlayers = (result.data[0]['players'] as List)
           .map((p) => Player.fromJson(p))
-          .toList()
-            ..add(
-              Player(playerID, name: read.gameFor(playerID).playerName),
-            );
+          .toList();
+
       final gameConfig = GameConfig.fromJson(result.data[0]['config']);
+      _gameSub = gameDB.on(SupabaseEventTypes.update, (d) {
+        print('_______________\n\n\n\n\n\n\n');
+        _supaLogger.info('$d');
+        print('_______________\n\n\n\n\n\n\n');
+      }).subscribe((d, {String errorMsg}) {
+        print('$d $errorMsg');
+      });
+
+      if (oldPlayers.any((p) => p.id == playerID)) {
+        _supaLogger.info('Player $playerID Rejoining');
+        return;
+      }
+      final newPlayers = [
+        ...oldPlayers,
+        Player(playerID, name: read.gameFor(playerID).playerName),
+      ];
       if (newPlayers.length == gameConfig.maxPlayers) {
         _supaLogger.info('Max Limit');
         // TODO: This
@@ -144,8 +161,6 @@ class SupabaseGameClient extends GameClient {
             .eq('id', gameCode)
             .execute();
       }
-
-      // TODO: Subscribe to the game state
     } else {
       _supaLogger.info(result.statusText);
       _supaLogger.info(result.error.message);

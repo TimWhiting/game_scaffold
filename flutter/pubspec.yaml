@@ -15,7 +15,7 @@ dependencies:
   hooks_riverpod: ^0.12.1
   logging: ^0.11.4
   game_scaffold_dart: ^0.2.0
-  supabase: ^0.0.1-dev.4
+  supabase: ^0.0.1-dev.5
   flutter_hooks: ^0.15.0
 
 dev_dependencies:

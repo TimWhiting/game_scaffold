@@ -16,7 +16,7 @@ dependencies:
   flutter_riverpod: any
   hooks_riverpod: any
   logging: any
-  supabase: any
+  supabase: ^0.0.1-dev.5
   game_scaffold_games: any
 
 dev_dependencies:

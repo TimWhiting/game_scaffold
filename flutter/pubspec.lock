@@ -325,7 +325,7 @@ packages:
       name: realtime_client
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.5"
+    version: "0.0.7"
   rikulo_commons:
     dependency: transitive
     description:
@@ -414,7 +414,7 @@ packages:
       name: supabase
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1-dev.4"
+    version: "0.0.1-dev.5"
   term_glyph:
     dependency: transitive
     description:
