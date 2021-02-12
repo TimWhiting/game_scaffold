@@ -129,19 +129,15 @@ class SupabaseGameClient extends GameClient {
       final gameConfig = GameConfig.fromJson(result.data[0]['config']);
       // _supaClient.realtime.onOpen(() => print('Socket opened.'));
       // _supaClient.realtime.onClose((event) => print('Socket closed $event'));
-      // _supaClient.realtime.onError((error) => print('Socket error: $error'));
-      // _supaClient.realtime.onMessage((d) => print('Socket Message: $d'));
-      _supaClient.realtime.connect();
-      _gameSub = _supaClient.realtime.channel(
-        'realtime:public:Game',
-        chanParams: {'id': gameCode},
-      );
-      _gameSub.on(SupabaseEventTypes.update.name(), (d, {String ref}) {
+      _supaClient.realtime.onError((error) => print('Socket error: $error'));
+      _supaClient.realtime.onMessage((d) => print('Socket Message: $d'));
+      _gameSub = gameDB.on(SupabaseEventTypes.all, (d) {
         print('_______________\n\n\n\n\n\n\n');
         _supaLogger.info('$d');
         print('_______________\n\n\n\n\n\n\n');
-      });
-      _gameSub.subscribe();
+      }).subscribe((e, {String errorMsg}) => print('$e, $errorMsg'));
+      print(_gameSub.topic);
+      _gameSub.onError(print);
 
       if (oldPlayers.any((p) => p.id == playerID)) {
         _supaLogger.info('Player $playerID Rejoining');
@@ -153,7 +149,7 @@ class SupabaseGameClient extends GameClient {
       ];
       if (newPlayers.length == gameConfig.maxPlayers) {
         _supaLogger.info('Max Limit');
-        // TODO: This
+
         result = await gameDB
             .update({
               'players': newPlayers,
