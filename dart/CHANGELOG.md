@@ -1,3 +1,7 @@
+## 0.2.0+7
+
+- Add api for getting only the ServerClient or GameClient
+
 ## 0.2.0+6
 
 - Make currentPlayerIndex nullable for simultaneous action games

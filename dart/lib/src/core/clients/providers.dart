@@ -257,8 +257,18 @@ extension GameReaderX on Reader {
 }
 
 extension GameReaderGameX on GameReader {
-  /// Client
+  /// Client for the game
   GameServerClient get gameClient => this(game._gameServerClientProvider);
+
+  /// Typically you should use [gameClient] instead
+  ///
+  /// Unless you have a specific api on your implementation of [GameClient]
+  GameClient get onlyGameClient => this(game._gameClientProvider);
+
+  /// Typically you should use [gameClient] instead
+  ///
+  /// Unless you have a specific api on your implementation of [ServerClient]
+  ServerClient get onlyServerClient => this(game._serverClientProvider);
 
   /// Server information
   GameInfo get currentGameInfo => this(game._gameInfoProvider).state;
