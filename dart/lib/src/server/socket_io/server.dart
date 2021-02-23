@@ -27,6 +27,7 @@ class IOServer {
   final io = IO.Server(options: _serverSocketOpts);
   final servers = <String, GameServer>{};
   final clients = <IO.Socket>{};
+  final container = ProviderContainer();
 
   /// Keeps track of a set of games that a client is a part of by client id
   final _clientGames = <String, Set<String>>{};
@@ -120,7 +121,8 @@ class IOServer {
     logger.fine('Creating game');
     final gameConfig = GameConfig.fromJson(config);
     final gameid = generateGameID(servers.keys.toList());
-    final container = ProviderContainer();
+    // TODO: Use a Map of BackendGameProvider instead of container.read
+    // See: https://github.com/rrousselGit/river_pod/issues/348
     container.read.backendGame(gameid).gameConfig = gameConfig;
     final server = GameServer(
         io, this, container.read.backendGame(gameid), gameid, servers.remove,
