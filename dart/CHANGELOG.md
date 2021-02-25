@@ -1,3 +1,7 @@
+## 0.2.0+8
+
+- Add isMultiPly and isSimultaneous action to GenericGame
+
 ## 0.2.0+7
 
 - Add api for getting only the ServerClient or GameClient

@@ -1,3 +1,7 @@
+## 0.2.0+1
+
+- Update supabase implementation
+  
 ## 0.2.0
 
 - Add integration test to example
