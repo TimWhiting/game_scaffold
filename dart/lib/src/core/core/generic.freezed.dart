@@ -25,7 +25,9 @@ class _$GenericGameTearOff {
       @unmodifiableGameMessageList List<GameMessage> messages,
       GameStatus gameStatus,
       @nullable int currentPlayerIndex,
-      int round) {
+      int round,
+      bool isMultiPly,
+      bool isSimultaneousAction) {
     return _GenericGame(
       players,
       readyPlayers,
@@ -35,6 +37,8 @@ class _$GenericGameTearOff {
       gameStatus,
       currentPlayerIndex,
       round,
+      isMultiPly,
+      isSimultaneousAction,
     );
   }
 
@@ -63,6 +67,8 @@ mixin _$GenericGame {
   @nullable
   int get currentPlayerIndex;
   int get round;
+  bool get isMultiPly;
+  bool get isSimultaneousAction;
 
   Map<String, dynamic> toJson();
   @JsonKey(ignore: true)
@@ -82,7 +88,9 @@ abstract class $GenericGameCopyWith<$Res> {
       @unmodifiableGameMessageList List<GameMessage> messages,
       GameStatus gameStatus,
       @nullable int currentPlayerIndex,
-      int round});
+      int round,
+      bool isMultiPly,
+      bool isSimultaneousAction});
 }
 
 /// @nodoc
@@ -103,6 +111,8 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
     Object gameStatus = freezed,
     Object currentPlayerIndex = freezed,
     Object round = freezed,
+    Object isMultiPly = freezed,
+    Object isSimultaneousAction = freezed,
   }) {
     return _then(_value.copyWith(
       players: players == freezed ? _value.players : players as List<Player>,
@@ -121,6 +131,11 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
           ? _value.currentPlayerIndex
           : currentPlayerIndex as int,
       round: round == freezed ? _value.round : round as int,
+      isMultiPly:
+          isMultiPly == freezed ? _value.isMultiPly : isMultiPly as bool,
+      isSimultaneousAction: isSimultaneousAction == freezed
+          ? _value.isSimultaneousAction
+          : isSimultaneousAction as bool,
     ));
   }
 }
@@ -140,7 +155,9 @@ abstract class _$GenericGameCopyWith<$Res>
       @unmodifiableGameMessageList List<GameMessage> messages,
       GameStatus gameStatus,
       @nullable int currentPlayerIndex,
-      int round});
+      int round,
+      bool isMultiPly,
+      bool isSimultaneousAction});
 }
 
 /// @nodoc
@@ -163,6 +180,8 @@ class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
     Object gameStatus = freezed,
     Object currentPlayerIndex = freezed,
     Object round = freezed,
+    Object isMultiPly = freezed,
+    Object isSimultaneousAction = freezed,
   }) {
     return _then(_GenericGame(
       players == freezed ? _value.players : players as List<Player>,
@@ -179,6 +198,10 @@ class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
           ? _value.currentPlayerIndex
           : currentPlayerIndex as int,
       round == freezed ? _value.round : round as int,
+      isMultiPly == freezed ? _value.isMultiPly : isMultiPly as bool,
+      isSimultaneousAction == freezed
+          ? _value.isSimultaneousAction
+          : isSimultaneousAction as bool,
     ));
   }
 }
@@ -195,7 +218,9 @@ class _$_GenericGame extends _GenericGame {
       @unmodifiableGameMessageList this.messages,
       this.gameStatus,
       @nullable this.currentPlayerIndex,
-      this.round)
+      this.round,
+      this.isMultiPly,
+      this.isSimultaneousAction)
       : assert(players != null),
         assert(readyPlayers != null),
         assert(allRoundScores != null),
@@ -203,6 +228,8 @@ class _$_GenericGame extends _GenericGame {
         assert(messages != null),
         assert(gameStatus != null),
         assert(round != null),
+        assert(isMultiPly != null),
+        assert(isSimultaneousAction != null),
         super._();
 
   factory _$_GenericGame.fromJson(Map<String, dynamic> json) =>
@@ -229,10 +256,14 @@ class _$_GenericGame extends _GenericGame {
   final int currentPlayerIndex;
   @override
   final int round;
+  @override
+  final bool isMultiPly;
+  @override
+  final bool isSimultaneousAction;
 
   @override
   String toString() {
-    return 'GenericGame(players: $players, readyPlayers: $readyPlayers, allRoundScores: $allRoundScores, time: $time, messages: $messages, gameStatus: $gameStatus, currentPlayerIndex: $currentPlayerIndex, round: $round)';
+    return 'GenericGame(players: $players, readyPlayers: $readyPlayers, allRoundScores: $allRoundScores, time: $time, messages: $messages, gameStatus: $gameStatus, currentPlayerIndex: $currentPlayerIndex, round: $round, isMultiPly: $isMultiPly, isSimultaneousAction: $isSimultaneousAction)';
   }
 
   @override
@@ -260,7 +291,13 @@ class _$_GenericGame extends _GenericGame {
                 const DeepCollectionEquality()
                     .equals(other.currentPlayerIndex, currentPlayerIndex)) &&
             (identical(other.round, round) ||
-                const DeepCollectionEquality().equals(other.round, round)));
+                const DeepCollectionEquality().equals(other.round, round)) &&
+            (identical(other.isMultiPly, isMultiPly) ||
+                const DeepCollectionEquality()
+                    .equals(other.isMultiPly, isMultiPly)) &&
+            (identical(other.isSimultaneousAction, isSimultaneousAction) ||
+                const DeepCollectionEquality()
+                    .equals(other.isSimultaneousAction, isSimultaneousAction)));
   }
 
   @override
@@ -273,7 +310,9 @@ class _$_GenericGame extends _GenericGame {
       const DeepCollectionEquality().hash(messages) ^
       const DeepCollectionEquality().hash(gameStatus) ^
       const DeepCollectionEquality().hash(currentPlayerIndex) ^
-      const DeepCollectionEquality().hash(round);
+      const DeepCollectionEquality().hash(round) ^
+      const DeepCollectionEquality().hash(isMultiPly) ^
+      const DeepCollectionEquality().hash(isSimultaneousAction);
 
   @JsonKey(ignore: true)
   @override
@@ -296,7 +335,9 @@ abstract class _GenericGame extends GenericGame {
       @unmodifiableGameMessageList List<GameMessage> messages,
       GameStatus gameStatus,
       @nullable int currentPlayerIndex,
-      int round) = _$_GenericGame;
+      int round,
+      bool isMultiPly,
+      bool isSimultaneousAction) = _$_GenericGame;
 
   factory _GenericGame.fromJson(Map<String, dynamic> json) =
       _$_GenericGame.fromJson;
@@ -322,6 +363,10 @@ abstract class _GenericGame extends GenericGame {
   int get currentPlayerIndex;
   @override
   int get round;
+  @override
+  bool get isMultiPly;
+  @override
+  bool get isSimultaneousAction;
   @override
   @JsonKey(ignore: true)
   _$GenericGameCopyWith<_GenericGame> get copyWith;

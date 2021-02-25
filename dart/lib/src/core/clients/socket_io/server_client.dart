@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:riverpod/all.dart';
+import 'package:riverpod/riverpod.dart';
 
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;

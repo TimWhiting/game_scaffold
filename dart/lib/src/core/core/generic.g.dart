@@ -16,6 +16,8 @@ _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
     _$enumDecodeNullable(_$GameStatusEnumMap, json['gameStatus']),
     json['currentPlayerIndex'] as int,
     json['round'] as int,
+    json['isMultiPly'] as bool,
+    json['isSimultaneousAction'] as bool,
   );
 }
 
@@ -30,6 +32,8 @@ Map<String, dynamic> _$_$_GenericGameToJson(_$_GenericGame instance) =>
       'gameStatus': _$GameStatusEnumMap[instance.gameStatus],
       'currentPlayerIndex': instance.currentPlayerIndex,
       'round': instance.round,
+      'isMultiPly': instance.isMultiPly,
+      'isSimultaneousAction': instance.isSimultaneousAction,
     };
 
 T _$enumDecode<T>(

@@ -63,6 +63,12 @@ extension GameX on Game {
   /// Gets whether the round is over
   bool get roundOver => generic.roundOver;
 
+  /// Gets whether the game has multiple actions before a reward
+  bool get isMultiPly => generic.isMultiPly;
+
+  /// Gets whether the game is simultaneous action at this ply
+  bool get isSimultaneousAction => generic.isSimultaneousAction;
+
   /// Gets the players who are ready for the next round
   List<String> get readyPlayers => generic.readyPlayers;
 }

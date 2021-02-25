@@ -1,4 +1,4 @@
-import 'package:riverpod/all.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../core.dart';
 import 'clients.dart';

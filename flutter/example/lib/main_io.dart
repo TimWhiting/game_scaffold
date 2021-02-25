@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_scaffold/game_scaffold.dart';
 import 'package:game_scaffold_games/games.dart';
 import 'package:logging/logging.dart';

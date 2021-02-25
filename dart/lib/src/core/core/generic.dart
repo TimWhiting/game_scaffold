@@ -33,19 +33,38 @@ abstract class GenericGame with _$GenericGame {
     GameStatus gameStatus,
     @nullable int currentPlayerIndex,
     int round,
+    bool isMultiPly,
+    bool isSimultaneousAction,
   ) = _GenericGame;
   factory GenericGame.fromJson(Map<String, dynamic> map) =>
       _$GenericGameFromJson(map);
-  factory GenericGame.start(List<Player> players) => GenericGame(
-      players,
-      List.unmodifiable([]),
-      List.unmodifiable([]),
-      DateTime.now(),
-      List.unmodifiable([]),
-      GameStatus.Started,
-      0,
-      0);
-  factory GenericGame.startRandom(List<Player> players) => GenericGame(
+
+  /// Creates a default initialized game with [players]
+  factory GenericGame.start(
+    List<Player> players, {
+    bool multiPly = true,
+    bool simultaneousAction = false,
+  }) =>
+      GenericGame(
+        players,
+        List.unmodifiable([]),
+        List.unmodifiable([]),
+        DateTime.now(),
+        List.unmodifiable([]),
+        GameStatus.Started,
+        0,
+        0,
+        multiPly,
+        simultaneousAction,
+      );
+
+  /// Creates a default initialized game where the first player is chosen at random
+  factory GenericGame.startRandom(
+    List<Player> players, {
+    bool multiPly = true,
+    bool simultaneousAction = false,
+  }) =>
+      GenericGame(
         players,
         List.unmodifiable([]),
         List.unmodifiable([]),
@@ -54,6 +73,8 @@ abstract class GenericGame with _$GenericGame {
         GameStatus.Started,
         0,
         Random().nextInt(players.length),
+        multiPly,
+        simultaneousAction,
       );
 
   /// Gets the player at the [currentPlayerIndex]

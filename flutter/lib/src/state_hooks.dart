@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hooks_riverpod/all.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 extension BuildContextGameScaffoldX on BuildContext {
   /// Setup parameters

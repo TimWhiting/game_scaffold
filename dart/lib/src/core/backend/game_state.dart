@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:logging/logging.dart';
-import 'package:riverpod/all.dart';
+import 'package:riverpod/riverpod.dart';
 import '../core.dart';
 
 /// Gets the home path based on the operating system, should only be used in server contexts

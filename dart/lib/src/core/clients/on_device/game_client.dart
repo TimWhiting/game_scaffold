@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:riverpod/all.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../../backend.dart';
 import '../../client.dart';

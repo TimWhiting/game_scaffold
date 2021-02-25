@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:game_scaffold/game_scaffold.dart';
 import 'package:logging/logging.dart';
-import 'package:riverpod/all.dart';
+import 'package:riverpod/riverpod.dart';
 import 'package:supabase/supabase.dart';
 import 'package:supabase/src/supabase_query_builder.dart';
 import 'package:realtime_client/realtime_client.dart' hide Logger;
@@ -28,7 +26,7 @@ class SupabaseServerClient extends ServerClient {
 
     if (response.error != null) {
       _supaLogger
-          .severe('In create game Supabase Error ${response.statusText}');
+          .severe('In create game Supabase Error ${response.error.message}');
       return;
     }
     final code = response.data[0]['id'];
@@ -41,7 +39,7 @@ class SupabaseServerClient extends ServerClient {
     final response = await gameDB.delete().eq('id', game.gameCode).execute();
     if (response.error != null) {
       _supaLogger
-          .severe('In delete game Supabase Error ${response.statusText}');
+          .severe('In delete game Supabase Error ${response.error.message}');
       return false;
     }
     return response.count == 1;
@@ -57,7 +55,7 @@ class SupabaseServerClient extends ServerClient {
     final response = await gameDB.select().eq('id', gameId).execute();
     if (response.error != null || response.count == 0) {
       _supaLogger
-          .severe('In get game info Supabase Error ${response.statusText}');
+          .severe('In get game info Supabase Error ${response.error.message}');
       return;
     }
     final gameInfo = response.data[0] as Map<String, dynamic>;
@@ -80,12 +78,12 @@ class SupabaseServerClient extends ServerClient {
 
   @override
   Future<List<GameInfo>> getGames() async {
-    final response =
-        await _supaClient.rpc('getallgames', {'playerid': playerID}).execute();
+    final response = await _supaClient
+        .rpc('getallgames', params: {'playerid': playerID}).execute();
 
     if (response.error != null || response.count == 0) {
       _supaLogger
-          .severe('In get game info Supabase Error ${response.statusText}');
+          .severe('In get game info Supabase Error ${response.error.message}');
     }
     final gameInfo = response.data as List;
     final allGames = gameInfo.map((gi) => infoFromRow(gi)).toList();
@@ -166,7 +164,7 @@ class SupabaseGameClient extends GameClient {
             .execute();
       }
     } else {
-      _supaLogger.info(result.statusText);
+      _supaLogger.info(result.error.details);
       _supaLogger.info(result.error.message);
     }
   }

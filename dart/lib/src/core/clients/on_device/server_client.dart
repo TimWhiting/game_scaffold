@@ -1,5 +1,5 @@
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
-import 'package:riverpod/all.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../../core.dart';
 import '../clients.dart';
