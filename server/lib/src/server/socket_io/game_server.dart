@@ -4,8 +4,7 @@ import 'package:game_scaffold_dart/src/core/clients/socket_io/channels.dart';
 import 'package:socket_io/socket_io.dart' as IO;
 import 'package:logging/logging.dart';
 
-import '../../core.dart';
-import '../../core/backend.dart';
+import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 import 'server.dart';
 
 class GameServer {

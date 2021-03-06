@@ -7,9 +7,9 @@ import 'package:stream/stream.dart';
 
 //ignore: library_prefixes
 import 'package:socket_io/socket_io.dart' as IO;
+import 'package:game_scaffold_dart/game_scaffold_dart.dart';
+import 'package:game_scaffold_dart/src/core/clients/socket_io/channels.dart';
 
-import '../../core.dart';
-import '../../core/clients/socket_io/channels.dart';
 import 'game_server.dart';
 
 /// Options for server socket
