@@ -24,7 +24,7 @@ class NoServerGameClient extends GameClient {
   @override
   Future<void> register() async {
     backend.players =
-        [..._players, Player(playerID, name: playerID)].toUnmodifiable();
+        [..._players, Player(playerID, name: game.playerName ?? playerID)].toUnmodifiable();
     game.gameStatus = GameStatus.NotJoined;
     game.playerName = game.playerName ?? playerID;
     game.gameStatus = GameStatus.NotStarted;

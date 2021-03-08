@@ -1,3 +1,7 @@
+## 0.2.0+9
+
+- Update player name for ondevice server
+
 ## 0.2.0+8
 
 - Add isMultiPly and isSimultaneous action to GenericGame
