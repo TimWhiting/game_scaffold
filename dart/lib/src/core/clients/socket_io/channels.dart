@@ -34,9 +34,6 @@ enum IOChannel {
 extension IOChannelX on IOChannel {
   /// Retrieves the string for the enum
   String get string {
-    if (this == null) {
-      throw UnimplementedError('Socket IO channel cannot be null');
-    }
     return EnumToString.convertToString(this);
   }
 
@@ -72,7 +69,6 @@ extension IOChannelX on IOChannel {
       case IOChannel.getgames:
         return IOChannel.allgames;
     }
-    throw UnimplementedError('Invalid IO Channel');
   }
 }
 

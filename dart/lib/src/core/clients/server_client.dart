@@ -50,17 +50,17 @@ abstract class ServerClient {
 
   /// Creates a [ServerClient] from the [location] [address] and [playerID]
   static ServerClient fromParams({
-    String? location,
-    Reader? read,
-    String? address,
-    String? playerID,
+    required String location,
+    required Reader read,
+    required String address,
+    required String playerID,
   }) {
-    final impl = _clientImplementations[location!] as ServerClient Function(T Function<T>(RootProvider<Object, T>)?, String?, String?)?;
+    final impl = _clientImplementations[location];
     if (impl == null) {
       throw UnimplementedError(
           'No ServerClient implementation for $location defined');
     }
-    return impl(read as T Function<T>(RootProvider<Object, T>)?, address, playerID);
+    return impl(read, address, playerID);
   }
 
   /// Connects to the backend

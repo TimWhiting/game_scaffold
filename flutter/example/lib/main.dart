@@ -78,7 +78,7 @@ class CreateOrJoinWidget extends GameHookWidget {
     final playerID = gameProvider.playerID;
     final code = gameProvider.useGameCode;
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
-    final gameClient = gameProvider.useGameClient;
+    final _ = gameProvider.useGameClient;
     final allGames = useFuture(gameProvider.useGameInfos);
 
     return Scaffold(

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:game_scaffold_dart/src/core/clients/socket_io/channels.dart';
-//ignore: library_prefixes
-// ignore: import_of_legacy_library_into_null_safe
+// ignore: import_of_legacy_library_into_null_safe, library_prefixes
 import 'package:socket_io/socket_io.dart' as IO;
 import 'package:logging/logging.dart';
 
@@ -143,7 +142,7 @@ class GameServer {
       return;
     }
     if (_clients.length > gameConfig.maxPlayers) {
-      client?.emit(IOChannel.error_channel.string,
+      client.emit(IOChannel.error_channel.string,
           GameError('Too many players already, sorry', id!));
     } else {
       if (gameConfig.customNames) {
@@ -227,7 +226,7 @@ class GameServer {
     _active = true;
   }
 
-  String _getRandomPlayer() => (nameSets[gameConfig?.nameSet ?? NameSet.Basic]!
+  String _getRandomPlayer() => (nameSets[gameConfig.nameSet]!
       .except(_clientNames.values as Iterable<String>)
       .toList()
         ..shuffle())[0];

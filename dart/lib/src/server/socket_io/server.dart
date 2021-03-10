@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:logging/logging.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:stream/stream.dart';
 
-//ignore: library_prefixes
+// ignore: import_of_legacy_library_into_null_safe, library_prefixes
 import 'package:socket_io/socket_io.dart' as IO;
 
 import '../../core.dart';

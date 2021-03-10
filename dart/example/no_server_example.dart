@@ -67,8 +67,8 @@ Future<void> loop(Reader read, String code) async {
     }
     print('');
     if (gameState.roundOver) {
-      await read.gameFor(P1).gameClient.newRound();
-      await read.gameFor(P2).gameClient.newRound();
+      read.gameFor(P1).gameClient.newRound();
+      read.gameFor(P2).gameClient.newRound();
     } else {
       print('Finished');
       print('Player 0: ${gameState.totalScores[P1]}');
