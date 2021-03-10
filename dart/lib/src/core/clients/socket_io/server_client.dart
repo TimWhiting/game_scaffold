@@ -14,16 +14,16 @@ import 'channels.dart';
 /// The socket IO implementation of [ServerClient]
 class IOServerClient extends ServerClient {
   IOServerClient({
-    Reader? read,
-    this.address,
-    String? playerID,
+    required Reader read,
+    required this.address,
+    required String playerID,
   }) : super(read, playerID) {
-    Future.delayed(10.milliseconds, () {
+    Future.delayed(Duration(milliseconds: 10), () {
       connect();
     });
   }
 
-  final String? address;
+  final String address;
   IO.Socket? socket;
 
   @override
@@ -86,7 +86,7 @@ class IOServerClient extends ServerClient {
         (_) => game.gameStatus = GameStatus.NotConnected);
 
     final currentStatus = game.gameStatus;
-    await Future.delayed(20.milliseconds);
+    await Future.delayed(Duration(milliseconds: 20));
     if (currentStatus == GameStatus.NotConnected ||
         currentStatus == GameStatus.NotJoined) {
       scheduleMicrotask(() => game.gameStatus =

@@ -15,7 +15,7 @@ class IOGameClient extends GameClient {
   IOGameClient(
       {required Reader read, required this.address, required String id})
       : super(id, read) {
-    Future.delayed(100.milliseconds, _ensureConnected);
+    Future.delayed(Duration(milliseconds: 100), _ensureConnected);
   }
   final String address;
 

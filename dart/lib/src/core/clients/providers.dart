@@ -43,9 +43,9 @@ class GameProvider {
   // to Dart 2.12
   GameProvider(this.read, this.playerID) {
     Future.delayed(
-      10.milliseconds,
+      Duration(milliseconds: 10),
       () => read(playerIDsProvider).state =
-          [...read(playerIDsProvider).state, playerID].toUnmodifiable(),
+          List.unmodifiable([...read(playerIDsProvider).state, playerID]),
     );
     _gameCodeProvider = StateProvider((ref) => '');
     _gameInfoProvider = StateProvider((ref) => null);
@@ -213,9 +213,8 @@ class GameProvider {
   }
 
   void dispose() {
-    read(playerIDsProvider).state = IterableX(read(playerIDsProvider).state)
-        .whereNot((id) => id == playerID)
-        .toUnmodifiable();
+    read(playerIDsProvider).state = List.unmodifiable(
+        read(playerIDsProvider).state.whereNot((id) => id == playerID));
   }
 }
 

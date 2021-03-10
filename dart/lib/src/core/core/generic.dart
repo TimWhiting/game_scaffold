@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:collection/collection.dart';
 import 'core.dart';
 import 'events.dart';
 import 'game.dart';
@@ -83,23 +84,21 @@ class GenericGame with _$GenericGame {
 
   /// Gets the total score for each player based off of [allRoundScores]
   Map<String, double> get totalScores =>
-      playerRoundScores.mapValues((entry) => IterableNumX(entry.value).sum());
+      playerRoundScores.mapValues((entry) => entry.value.sum);
 
   /// Gets the scores for each player for all rounds based off of [allRoundScores]
   Map<String, List<double>> get playerRoundScores => Map.unmodifiable({
-        for (final p in 0.rangeTo(players.length - 1))
-          players[p].id: allRoundScores.map((rs) => rs[p]).toUnmodifiable(),
+        for (var p = 0; p < players.length; p++)
+          players[p].id: List.unmodifiable(allRoundScores.map((rs) => rs[p])),
       });
 
   /// Gets the scores for each round for each player based off of [allRoundScores]
-  List<Map<String, double>> get roundPlayerScores => allRoundScores
-      .map((rs) => Map.unmodifiable(
+  List<Map<String, double>> get roundPlayerScores =>
+      List.unmodifiable(allRoundScores.map((rs) => Map.unmodifiable(
             {
-              for (final i in 0.rangeTo(players.length - 1))
-                players[i].id: rs[i],
+              for (var i = 0; i < players.length; i++) players[i].id: rs[i],
             },
-          ))
-      .toUnmodifiable() as List<Map<String, double>>;
+          )));
 
   /// Gets whether the game is over
   bool get gameOver => gameStatus == GameStatus.Finished;
@@ -109,27 +108,27 @@ class GenericGame with _$GenericGame {
 
   /// Returns a copy of the [GenericGame] with the next player in the player
   /// array as the current player
-  GenericGame? nextPlayer() =>
+  GenericGame nextPlayer() =>
       copyWith(currentPlayerIndex: (currentPlayerIndex! + 1) % players.length);
 
   /// Returns a copy of the [GenericGame] with the current player being the one
   /// with id [player]
-  GenericGame? setNextPlayer(String player) =>
+  GenericGame setNextPlayer(String player) =>
       copyWith(currentPlayerIndex: players.indexWhere((p) => p.id == player));
 
   /// Returns a copy of the [GenericGame] with the time updated to the current time
-  GenericGame? updateTime() => copyWith(time: DateTime.now());
+  GenericGame updateTime() => copyWith(time: DateTime.now());
 
   /// Returns a copy of the [GenericGame] with the [msg] added to [messages]
-  GenericGame? addMessage(GameMessage msg) => copyWith(
+  GenericGame addMessage(GameMessage msg) => copyWith(
         messages: List.unmodifiable([...messages, msg]),
       );
 
   /// Returns a copy of the [GenericGame] with the [round] incremented,
   /// [gameStatus] set to [GameStatus.Started] and optionally the
   /// players' [scores] added to [allRoundScores]
-  GenericGame? finishRound([Map<String, double>? scores]) => scores != null
-      ? updateScores(scores)!.copyWith(
+  GenericGame finishRound([Map<String, double>? scores]) => scores != null
+      ? updateScores(scores).copyWith(
           round: round + 1,
           gameStatus: GameStatus.Started,
         )
@@ -137,28 +136,28 @@ class GenericGame with _$GenericGame {
 
   /// Returns a copy of the [GenericGame] with the [scores] added to
   /// [allRoundScores]
-  GenericGame? updateScores(Map<String, double> scores) => copyWith(
+  GenericGame updateScores(Map<String, double> scores) => copyWith(
         allRoundScores: List.unmodifiable([
           ...allRoundScores,
-          players.map((p) => scores[p.id]).toUnmodifiable()
+          List.unmodifiable(players.map((p) => scores[p.id]))
         ]),
       );
 
   /// Returns a copy of the [GenericGame] with the [gameStatus] updated to [status]
-  GenericGame? updateStatus(GameStatus status) => copyWith(gameStatus: status);
+  GenericGame updateStatus(GameStatus status) => copyWith(gameStatus: status);
 
   /// Shuffles the player list, and resets the [currentPlayerIndex] to the first
-  GenericGame? shufflePlayers() => copyWith(
-        players: players.shuffled(),
+  GenericGame shufflePlayers() => copyWith(
+        players: List.from(players)..shuffle(),
         currentPlayerIndex: 0,
       );
 
   /// Clears the list of ready players
-  GenericGame? clearReadyPlayers() =>
+  GenericGame clearReadyPlayers() =>
       copyWith(readyPlayers: List.unmodifiable([]));
 
   /// Adds a ready player to the list
-  GenericGame? addReadyPlayer(String player) =>
+  GenericGame addReadyPlayer(String player) =>
       copyWith(readyPlayers: List.unmodifiable([...readyPlayers, player]));
 }
 

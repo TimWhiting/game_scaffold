@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:characters/characters.dart';
 import '../core.dart';
 
 /// Gets the home path based on the operating system, should only be used in server contexts
@@ -33,9 +34,9 @@ final ProviderFamily<BackendProvider, String>? backendGamesProvider =
 class BackendProvider {
   BackendProvider(this.read, this.code) {
     Future.delayed(
-        10.milliseconds,
+        Duration(milliseconds: 10),
         () => read(backendGameCodesProvider).state =
-            [...read(backendGameCodesProvider).state, code].toUnmodifiable());
+            List.unmodifiable([...read(backendGameCodesProvider).state, code]));
     initialStateProvider = Provider<Game>(_initialStateImpl);
     gameStateProvider =
         StateNotifierProvider<GameStateNotifier>(_gameStateNotifier);
@@ -49,7 +50,7 @@ class BackendProvider {
 
   void dispose() {
     read(backendGameCodesProvider).state =
-        [...read(backendGameCodesProvider).state, code].toUnmodifiable();
+        List.unmodifiable([...read(backendGameCodesProvider).state, code]);
   }
 
   /// Provides the initial state of the game
@@ -158,7 +159,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
           },
           message: (_, __, ___) => state
               .copyWithGeneric(
-                  (g) => g.addMessage(e as GameMessage)!.updateTime())
+                  (g) => g.addMessage(e as GameMessage).updateTime())
               .gameValue(),
           orElse: () =>
               GameError('General Event not implemented yet $e', 'programmer'),
@@ -237,8 +238,9 @@ extension BackendReaderX on BackendGameReader {
 String generateGameID(List<String> avoidList) {
   var gameid = '';
   while (gameid.length != 4 || avoidList.contains(gameid)) {
-    gameid =
-        'BCDFGHJKLMNPQRSTVWXZ'.characters.shuffled().join('').substring(0, 4);
+    gameid = ('BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle())
+        .join('')
+        .substring(0, 4);
   }
   return gameid;
 }

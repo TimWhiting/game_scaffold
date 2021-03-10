@@ -40,12 +40,12 @@ abstract class ServerClient {
   /// Registers a particular implementation of [ServerClient] for the given [location]
   static void registerImplementation<T extends ServerClient>(
     String location,
-    T Function(Reader?, String?, String?) impl,
+    T Function(Reader, String, String) impl,
   ) {
     _clientImplementations[location] = impl;
   }
 
-  static final Map<String, ServerClient Function(Reader?, String?, String?)>
+  static final Map<String, ServerClient Function(Reader, String, String)>
       _clientImplementations = {};
 
   /// Creates a [ServerClient] from the [location] [address] and [playerID]

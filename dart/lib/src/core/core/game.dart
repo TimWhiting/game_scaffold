@@ -8,7 +8,6 @@ import 'extensions.dart';
 import 'events.dart';
 import 'generic.dart';
 import 'player.dart';
-export 'package:dartx/dartx.dart';
 
 export 'errors.dart';
 
@@ -28,7 +27,7 @@ abstract class Game<E extends Event> {
   /// So make the error as informative as possible. This method should return a copy of the state if
   /// undo functionality needs to work. (i.e. the class should be immutable), for high performance you can
   /// make the changes and just return the changed instance itself, but undo functionality won't work.
-  GameOrError next(E event, BackendGameReader? backendReader);
+  GameOrError next(E event, BackendGameReader backendReader);
 
   /// Copies the state of the game with generic replaced by the function applying updates to the most recent copy of generic
   ///
@@ -40,11 +39,11 @@ abstract class Game<E extends Event> {
   ///  return copyWith(generic: updates(generic));
   ///}
   /// ```
-  Game copyWithGeneric(GenericGame? Function(GenericGame) updates);
+  Game copyWithGeneric(GenericGame Function(GenericGame) updates);
 
   /// Logic to apply after all players have consented they want to play another round
   /// to initialize the next round
-  Game moveNextRound(GameConfig config, BackendGameReader? backendReader);
+  Game moveNextRound(GameConfig config, BackendGameReader backendReader);
 
   /// Serializes the state for consumption by the frontend
   Map<String, dynamic> toJson();
@@ -83,7 +82,7 @@ abstract class Game<E extends Event> {
 
   /// Will get the initial state for a particular configuration
   static Game getInitialState(GameConfig gameConfig, List<Player> players,
-      BackendGameReader? backendReader) {
+      BackendGameReader backendReader) {
     final initState = _initialStates[gameConfig.gameType!];
     if (initState == null) {
       throw UnimplementedError(

@@ -30,7 +30,7 @@ class UnmodifiableList<T> implements JsonConverter<List<T>, List> {
   final JsonConverter elementConverter = const DefaultConverter();
   @override
   List<T> fromJson(List json) =>
-      json.map(elementConverter.fromJson).cast<T>().toUnmodifiable();
+      List.unmodifiable(json.map(elementConverter.fromJson).cast<T>());
 
   @override
   List toJson(List<T> object) => object.map(elementConverter.toJson).toList();
@@ -41,10 +41,8 @@ class UnmodifiableListList<T> implements JsonConverter<List<List<T>>, List> {
   final JsonConverter elementConverter = const DefaultConverter();
 
   @override
-  List<List<T>> fromJson(List json) => json
-      .cast<List>()
-      .map((j) => j.map(elementConverter.fromJson).cast<T>().toUnmodifiable())
-      .toUnmodifiable();
+  List<List<T>> fromJson(List json) => List.unmodifiable(json.cast<List>().map(
+      (j) => List.unmodifiable(j.map(elementConverter.fromJson).cast<T>())));
 
   @override
   List toJson(List<List<T>> object) =>

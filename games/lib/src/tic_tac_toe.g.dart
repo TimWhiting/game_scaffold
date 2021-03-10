@@ -8,11 +8,9 @@ part of 'tic_tac_toe.dart';
 
 _$_TicTacToeGame _$_$_TicTacToeGameFromJson(Map<String, dynamic> json) {
   return _$_TicTacToeGame(
-    generic: json['generic'] == null
-        ? null
-        : GenericGame.fromJson(json['generic'] as Map<String, dynamic>),
+    generic: GenericGame.fromJson(json['generic'] as Map<String, dynamic>),
     board: unmodifiableStringList.fromJson(json['board'] as List),
-    type: json['type'] as String ?? 'tictactoe',
+    type: json['type'] as String? ?? 'tictactoe',
   );
 }
 

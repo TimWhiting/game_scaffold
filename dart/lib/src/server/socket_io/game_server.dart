@@ -46,7 +46,8 @@ class GameServer {
   String? get gameType => gameConfig.gameType;
 
   /// Returns the list of players involved in the game
-  List<String> get playerNames => _players.map((p) => p.name).toUnmodifiable();
+  List<String> get playerNames =>
+      List.unmodifiable(_players.map((p) => p.name));
 
   /// Returns whether the client by [id] is the admin
   bool isClientAdmin(String? id) => id == gameConfig.adminId;
@@ -174,7 +175,7 @@ class GameServer {
 
   void _addPlayer(Player player) {
     _players.add(player);
-    _read.players = _players.toUnmodifiable();
+    _read.players = List.unmodifiable(_players);
     _serverLogger.info('Notifying ${_clients.length} clients of added player');
     for (final client in _clients.entries) {
       client.value?.emit(IOChannel.lobby.string, gameInfo(client.key).toJson());
@@ -226,8 +227,8 @@ class GameServer {
     _active = true;
   }
 
-  String _getRandomPlayer() => (nameSets[gameConfig.nameSet]!
-      .except(_clientNames.values as Iterable<String>)
+  String _getRandomPlayer() => ((Set.of(nameSets[gameConfig.nameSet]!)
+        ..difference(_clientNames.values.cast<String>().toSet()))
       .toList()
         ..shuffle())[0];
 
