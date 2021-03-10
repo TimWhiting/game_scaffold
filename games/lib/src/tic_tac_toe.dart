@@ -10,7 +10,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
   const TicTacToeGame._();
   const factory TicTacToeGame({
     required GenericGame generic,
-    @unmodifiableStringList required List<String?> board,
+    required IList<String?> board,
     @Default('tictactoe') String type,
   }) = _TicTacToeGame;
   factory TicTacToeGame.fromJson(Map<String, dynamic> map) =>
@@ -31,8 +31,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
     }
 
     return copyWith(
-      board: List.unmodifiable(
-          board.mapIndexed((i, s) => i == location ? player : s)),
+      board: board.mapIndexed((i, s) => i == location ? player : s).toIList(),
     )._nextPlayerOrEndRound().gameValue();
   }
 
@@ -67,7 +66,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
           players[1].id: points[players[1].id]!
         },
       ),
-      board: List.unmodifiable(List.filled(9, null)),
+      board: List.filled(9, null).lock,
     );
   }
 
@@ -76,8 +75,8 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
     return copyWith(generic: updates(generic));
   }
 
-  Map<String, double> get points {
-    return Map.unmodifiable({
+  IMap<String, double> get points {
+    return IMap({
       for (final p in playerIDs)
         p: isWinner(p)
             ? 1.0
@@ -87,7 +86,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
     });
   }
 
-  static final List<List<int>> winningLocationCombinations = List.unmodifiable([
+  static final IList<IList<int>> winningLocationCombinations = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -96,7 +95,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
     [2, 5, 8],
     [0, 4, 8],
     [2, 4, 6]
-  ].map((l) => List.unmodifiable(l)));
+  ].map((l) => l.lock).toIList();
 
   bool isWinner(String playerID) {
     if (winningLocationCombinations
@@ -122,7 +121,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
       initialState: (config, players, _) => TicTacToeGame(
         generic: GenericGame.start(players,
             multiPly: true, simultaneousAction: false),
-        board: List.unmodifiable(List.filled(9, null)),
+        board: List.filled(9, null).lock,
       ),
       gameEventFromJson: (j) => TicTacToeGameEvent.fromJson(j).asGameEvent,
     );

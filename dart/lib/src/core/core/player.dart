@@ -3,7 +3,9 @@ import 'package:json_annotation/json_annotation.dart';
 part 'player.freezed.dart';
 part 'player.g.dart';
 
-// typedef PlayerID = String; // TODO: Create a typedef when nonfunction-type-aliases becomes available
+// typedef PlayerID = String; Generation libraries have to be compatible
+// typedef PlayerName = String;
+
 /// A default PlayerID for Player 1 in a two player game
 const String P1 = '0';
 

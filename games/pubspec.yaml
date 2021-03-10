@@ -10,9 +10,10 @@ dependencies:
   json_annotation: ^4.0.0
   freezed_annotation: ^0.14.0
   game_scaffold_dart: "^0.2.0+2"
+  fast_immutable_collections: ^2.0.1
 
 dev_dependencies:
-  json_serializable: any
+  json_serializable_fic: ^0.0.1-nullsafety.0
   build_runner: any
   freezed: ^0.14.0
 
@@ -20,7 +21,9 @@ dependency_overrides:
   game_scaffold_dart:
     path: ../dart
   logging: ^1.0.0
-  socket_io_common: ^1.0.0-nullsafety.1
+  args: ^2.0.0
   crypto: ^3.0.0
+  convert: ^3.0.0
+  socket_io_common: ^1.0.0-nullsafety.1
 
 
