@@ -15,7 +15,7 @@ abstract class Event {
 /// An [Event] that represents either a [GenericEvent] or a user defined [Event]
 /// for a partiular game
 @freezed
-abstract class GameEvent with _$GameEvent implements Event {
+class GameEvent with _$GameEvent implements Event {
   const GameEvent._();
 
   /// Represents an [event] that is for a particlar [Game]

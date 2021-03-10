@@ -5,29 +5,29 @@ import 'player.dart';
 
 extension GameTypeOf on String {
   /// Returns the game's user friendly name based on the game's type identifier
-  String get name => Game.gameNames[this];
+  String get name => Game.gameNames[this]!;
 }
 
 /// An extension to convert an `Event` to a `GameEvent`
 extension EventX on Event {
   /// Converts an `Event` to a `GameEvent` if it isn't already a `GameEvent`
   GameEvent get asGameEvent => this is GameEvent
-      ? this
+      ? this as GameEvent
       : this is GenericEvent
-          ? GameEvent.general(this)
+          ? GameEvent.general(this as GenericEvent)
           : GameEvent.game(this);
 }
 
 /// Some extensions on `Game` to more easiliy get some of the `GenericGame` fields
 extension GameX on Game {
   /// Gets the current player's index
-  int get currentPlayerIndex => generic.currentPlayerIndex;
+  int? get currentPlayerIndex => generic.currentPlayerIndex;
 
   /// Gets the current [Player] or null if the game is not turn based
-  Player get currentPlayer => generic.currentPlayer;
+  Player? get currentPlayer => generic.currentPlayer;
 
   /// Gets the current Player ID
-  String get currentPlayerID => generic.currentPlayer.id;
+  String get currentPlayerID => generic.currentPlayer!.id;
 
   /// Gets an unmodifiable list of players that are a part of this game
   List<Player> get players => generic.players;

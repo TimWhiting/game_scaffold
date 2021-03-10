@@ -8,9 +8,9 @@ import '../clients.dart';
 ///
 /// Warning implementation not complete or tested yet
 class NoServerClient extends ServerClient {
-  NoServerClient({Reader read, String playerID}) : super(read, playerID);
+  NoServerClient({Reader? read, String? playerID}) : super(read, playerID);
   static final games = <String>[];
-  BackendGameReader get backend => read.backendGame(game.gameCode);
+  BackendGameReader get backend => read!.backendGame(game.gameCode);
   @override
   Future<void> createGame() async {
     final gameCode = generateGameID([]);

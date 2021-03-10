@@ -7,19 +7,19 @@ import '../core.dart';
 /// Gets the home path based on the operating system, should only be used in server contexts
 String get homeDir {
   if (Platform.isMacOS) {
-    return Platform.environment['HOME'];
+    return Platform.environment['HOME']!;
   } else if (Platform.isLinux) {
-    return Platform.environment['HOME'];
+    return Platform.environment['HOME']!;
   } else if (Platform.isWindows) {
-    return Platform.environment['UserProfile'];
+    return Platform.environment['UserProfile']!;
   }
-  return Platform.environment['HOME'];
+  return Platform.environment['HOME']!;
 }
 
 final agentBackendGame = Provider((ref) => BackendProvider(ref.read, '0000'));
 final backendGameCodesProvider =
     StateProvider<List<String>>((ref) => List.unmodifiable([]));
-final backendGamesProvider =
+final ProviderFamily<BackendProvider, String>? backendGamesProvider =
     Provider.family<BackendProvider, String>((ref, code) {
   final bp = BackendProvider(ref.read, code);
   ref.onDispose(() {
@@ -45,7 +45,7 @@ class BackendProvider {
   /// The game [code] that uniquely identifies the providers in this BackendProvider
   final String code;
   final Reader read;
-  BackendGameReader backendReader;
+  late BackendGameReader backendReader;
 
   void dispose() {
     read(backendGameCodesProvider).state =
@@ -56,10 +56,10 @@ class BackendProvider {
   ///
   /// Creates based on config from [gameConfigProvider] and
   /// list of players from [playersProvider]
-  Provider<Game> initialStateProvider;
+  late Provider<Game> initialStateProvider;
 
   /// Provides the [GameStateNotifier] based on the [GameConfig] from [gameConfigProvider]
-  StateNotifierProvider<GameStateNotifier> gameStateProvider;
+  late StateNotifierProvider<GameStateNotifier> gameStateProvider;
 
   /// Keeps track of the players involved in the game on the server (or on the client) in the case of a local game
   final playersProvider = StateProvider<List<Player>>(
@@ -67,7 +67,8 @@ class BackendProvider {
   );
 
   /// Keeps track
-  final configProvider = StateProvider<GameConfig>((ref) => null);
+  final configProvider = StateProvider<GameConfig>(
+      ((ref) => null) as GameConfig Function(ProviderReference));
 
   /// Provides the [GameErrorNotifier] to keep track of errors of a game
   final errorProvider = StateNotifierProvider((ref) => GameErrorNotifier());
@@ -85,16 +86,16 @@ class BackendProvider {
 }
 
 /// A companion [StateNotifier] to the [GameStateNotifier] that keeps track of the most recent error, and lets the client clear the error
-class GameErrorNotifier extends StateNotifier<GameError> {
+class GameErrorNotifier extends StateNotifier<GameError?> {
   GameErrorNotifier() : super(null);
 
   /// Sets the error [state]
-  set error(GameError err) {
+  set error(GameError? err) {
     state = err;
   }
 
   /// Gets the error that was set
-  GameError get error => state;
+  GameError? get error => state;
 
   /// Clears any error that was set
   void clearError() {
@@ -107,7 +108,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
     extends StateNotifier<T> {
   GameStateNotifier(this.gameConfig, this.read, this.code)
       : _gameStateLogger = Logger('GameStateNotifier $code'),
-        super(null);
+        super(read.initialState as T);
   final Logger _gameStateLogger;
   final BackendGameReader read;
 
@@ -125,7 +126,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   /// Remember to watch / listen to the state of the [GameStateNotifier]
   /// rather than just watching changes in the notifier itself, otherwise changes
   /// in the [gameState] will not trigger updates of the ui
-  T get gameState => state;
+  T? get gameState => state;
 
   /// Handles a [GameEvent] and updates the state accordingly
   ///
@@ -157,18 +158,18 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
           },
           message: (_, __, ___) => state
               .copyWithGeneric(
-                  (g) => g.addMessage(e as GameMessage).updateTime())
+                  (g) => g.addMessage(e as GameMessage)!.updateTime())
               .gameValue(),
           orElse: () =>
               GameError('General Event not implemented yet $e', 'programmer'),
         ),
-        game: (e) => state.next(e, read),
+        game: (e) => state.next(e as E, read),
       );
       if (nextState.isError) {
         read.gameError = nextState.error;
         _previousStates.removeLast();
       } else {
-        state = nextState.value;
+        state = nextState.value as T;
       }
     } catch (error, st) {
       _gameStateLogger.severe('$error $st');
@@ -180,7 +181,7 @@ extension BackendReader on Reader {
   BackendGameReader get agentGame =>
       BackendGameReader(this, this(agentBackendGame));
   BackendGameReader backendGame(String code) =>
-      BackendGameReader(this, this(backendGamesProvider(code)));
+      BackendGameReader(this, this(backendGamesProvider!(code)));
 }
 
 class BackendGameReader {
@@ -206,19 +207,19 @@ extension BackendReaderX on BackendGameReader {
   set gameConfig(GameConfig config) => this(game.configProvider).state = config;
 
   /// On the  gets the latest [GameError]
-  GameError get gameError => this(game.errorProvider.state);
+  GameError? get gameError => this(game.errorProvider.state);
 
   /// On the  sets the [GameError]
-  set gameError(GameError error) => errorNotifier.error = error;
+  set gameError(GameError? error) => errorNotifier!.error = error;
 
   /// on the  clears the lastest game error
-  void clearError() => errorNotifier.clearError();
+  void clearError() => errorNotifier!.clearError();
 
   /// On the  gets the error notifier
-  GameErrorNotifier get errorNotifier => this(game.errorProvider);
+  GameErrorNotifier? get errorNotifier => this(game.errorProvider);
 
   /// On the  gets the latest [Game] state
-  Game get gameState => this(game.gameStateProvider.state);
+  Game? get gameState => this(game.gameStateProvider.state);
 
   /// On the  gets the [GameStateNotifier]
   GameStateNotifier get gameNotifier => this(game.gameStateProvider);

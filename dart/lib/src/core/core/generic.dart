@@ -22,7 +22,7 @@ part 'generic.g.dart';
 /// * The [currentPlayerIndex]
 /// * The current [round]
 @freezed
-abstract class GenericGame with _$GenericGame {
+class GenericGame with _$GenericGame {
   const GenericGame._();
   const factory GenericGame(
     @unmodifiablePlayerList List<Player> players,
@@ -31,7 +31,7 @@ abstract class GenericGame with _$GenericGame {
     DateTime time,
     @unmodifiableGameMessageList List<GameMessage> messages,
     GameStatus gameStatus,
-    @nullable int currentPlayerIndex,
+    int? currentPlayerIndex,
     int round,
     bool isMultiPly,
     bool isSimultaneousAction,
@@ -42,8 +42,8 @@ abstract class GenericGame with _$GenericGame {
   /// Creates a default initialized game with [players]
   factory GenericGame.start(
     List<Player> players, {
-    bool multiPly = true,
-    bool simultaneousAction = false,
+    required bool multiPly,
+    required bool simultaneousAction,
   }) =>
       GenericGame(
         players,
@@ -61,8 +61,8 @@ abstract class GenericGame with _$GenericGame {
   /// Creates a default initialized game where the first player is chosen at random
   factory GenericGame.startRandom(
     List<Player> players, {
-    bool multiPly = true,
-    bool simultaneousAction = false,
+    required bool multiPly,
+    required bool simultaneousAction,
   }) =>
       GenericGame(
         players,
@@ -78,8 +78,8 @@ abstract class GenericGame with _$GenericGame {
       );
 
   /// Gets the player at the [currentPlayerIndex]
-  Player get currentPlayer =>
-      currentPlayerIndex == null ? null : players[currentPlayerIndex];
+  Player? get currentPlayer =>
+      currentPlayerIndex == null ? null : players[currentPlayerIndex!];
 
   /// Gets the total score for each player based off of [allRoundScores]
   Map<String, double> get totalScores =>
@@ -99,7 +99,7 @@ abstract class GenericGame with _$GenericGame {
                 players[i].id: rs[i],
             },
           ))
-      .toUnmodifiable();
+      .toUnmodifiable() as List<Map<String, double>>;
 
   /// Gets whether the game is over
   bool get gameOver => gameStatus == GameStatus.Finished;
@@ -109,27 +109,27 @@ abstract class GenericGame with _$GenericGame {
 
   /// Returns a copy of the [GenericGame] with the next player in the player
   /// array as the current player
-  GenericGame nextPlayer() =>
-      copyWith(currentPlayerIndex: (currentPlayerIndex + 1) % players.length);
+  GenericGame? nextPlayer() =>
+      copyWith(currentPlayerIndex: (currentPlayerIndex! + 1) % players.length);
 
   /// Returns a copy of the [GenericGame] with the current player being the one
   /// with id [player]
-  GenericGame setNextPlayer(String player) =>
+  GenericGame? setNextPlayer(String player) =>
       copyWith(currentPlayerIndex: players.indexWhere((p) => p.id == player));
 
   /// Returns a copy of the [GenericGame] with the time updated to the current time
-  GenericGame updateTime() => copyWith(time: DateTime.now());
+  GenericGame? updateTime() => copyWith(time: DateTime.now());
 
   /// Returns a copy of the [GenericGame] with the [msg] added to [messages]
-  GenericGame addMessage(GameMessage msg) => copyWith(
+  GenericGame? addMessage(GameMessage msg) => copyWith(
         messages: List.unmodifiable([...messages, msg]),
       );
 
   /// Returns a copy of the [GenericGame] with the [round] incremented,
   /// [gameStatus] set to [GameStatus.Started] and optionally the
   /// players' [scores] added to [allRoundScores]
-  GenericGame finishRound([Map<String, double> scores]) => scores != null
-      ? updateScores(scores).copyWith(
+  GenericGame? finishRound([Map<String, double>? scores]) => scores != null
+      ? updateScores(scores)!.copyWith(
           round: round + 1,
           gameStatus: GameStatus.Started,
         )
@@ -137,7 +137,7 @@ abstract class GenericGame with _$GenericGame {
 
   /// Returns a copy of the [GenericGame] with the [scores] added to
   /// [allRoundScores]
-  GenericGame updateScores(Map<String, double> scores) => copyWith(
+  GenericGame? updateScores(Map<String, double> scores) => copyWith(
         allRoundScores: List.unmodifiable([
           ...allRoundScores,
           players.map((p) => scores[p.id]).toUnmodifiable()
@@ -145,27 +145,27 @@ abstract class GenericGame with _$GenericGame {
       );
 
   /// Returns a copy of the [GenericGame] with the [gameStatus] updated to [status]
-  GenericGame updateStatus(GameStatus status) => copyWith(gameStatus: status);
+  GenericGame? updateStatus(GameStatus status) => copyWith(gameStatus: status);
 
   /// Shuffles the player list, and resets the [currentPlayerIndex] to the first
-  GenericGame shufflePlayers() => copyWith(
+  GenericGame? shufflePlayers() => copyWith(
         players: players.shuffled(),
         currentPlayerIndex: 0,
       );
 
   /// Clears the list of ready players
-  GenericGame clearReadyPlayers() =>
+  GenericGame? clearReadyPlayers() =>
       copyWith(readyPlayers: List.unmodifiable([]));
 
   /// Adds a ready player to the list
-  GenericGame addReadyPlayer(String player) =>
+  GenericGame? addReadyPlayer(String player) =>
       copyWith(readyPlayers: List.unmodifiable([...readyPlayers, player]));
 }
 
 /// A [GenericEvent] that is handled by the Generic server implementation
 /// rather than handling it differently in each game implementation
 @freezed
-abstract class GenericEvent with _$GenericEvent implements Event {
+class GenericEvent with _$GenericEvent implements Event {
   const GenericEvent._();
 
   /// Undo's the effects of the last event
@@ -180,7 +180,7 @@ abstract class GenericEvent with _$GenericEvent implements Event {
 
   /// Sends a [message] from the player with id [from] to the player with id [to]
   const factory GenericEvent.message(String message,
-      {@required String from, @required @nullable String to}) = GameMessage;
+      {required String from, required String? to}) = GameMessage;
 
   factory GenericEvent.fromJson(Map<String, dynamic> map) =>
       _$GenericEventFromJson(map);

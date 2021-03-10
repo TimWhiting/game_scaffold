@@ -11,10 +11,10 @@ _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
     unmodifiablePlayerList.fromJson(json['players'] as List),
     unmodifiableStringList.fromJson(json['readyPlayers'] as List),
     unmodifiableDoubleListList.fromJson(json['allRoundScores'] as List),
-    json['time'] == null ? null : DateTime.parse(json['time'] as String),
+    DateTime.parse(json['time'] as String),
     unmodifiableGameMessageList.fromJson(json['messages'] as List),
-    _$enumDecodeNullable(_$GameStatusEnumMap, json['gameStatus']),
-    json['currentPlayerIndex'] as int,
+    _$enumDecode(_$GameStatusEnumMap, json['gameStatus']),
+    json['currentPlayerIndex'] as int?,
     json['round'] as int,
     json['isMultiPly'] as bool,
     json['isSimultaneousAction'] as bool,
@@ -27,7 +27,7 @@ Map<String, dynamic> _$_$_GenericGameToJson(_$_GenericGame instance) =>
       'readyPlayers': unmodifiableStringList.toJson(instance.readyPlayers),
       'allRoundScores':
           unmodifiableDoubleListList.toJson(instance.allRoundScores),
-      'time': instance.time?.toIso8601String(),
+      'time': instance.time.toIso8601String(),
       'messages': unmodifiableGameMessageList.toJson(instance.messages),
       'gameStatus': _$GameStatusEnumMap[instance.gameStatus],
       'currentPlayerIndex': instance.currentPlayerIndex,
@@ -36,36 +36,30 @@ Map<String, dynamic> _$_$_GenericGameToJson(_$_GenericGame instance) =>
       'isSimultaneousAction': instance.isSimultaneousAction,
     };
 
-T _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
 }) {
   if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
   }
 
-  final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
-}
-
-T _$enumDecodeNullable<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
 }
 
 const _$GameStatusEnumMap = {
@@ -110,7 +104,7 @@ _$GameMessage _$_$GameMessageFromJson(Map<String, dynamic> json) {
   return _$GameMessage(
     json['message'] as String,
     from: json['from'] as String,
-    to: json['to'] as String,
+    to: json['to'] as String?,
   );
 }
 

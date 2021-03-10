@@ -9,7 +9,7 @@ part of 'player.dart';
 _$_Player _$_$_PlayerFromJson(Map<String, dynamic> json) {
   return _$_Player(
     json['id'] as String,
-    name: json['name'] as String ?? '',
+    name: json['name'] as String? ?? '',
   );
 }
 

@@ -79,7 +79,7 @@ extension IOChannelX on IOChannel {
 extension SocketIOX on IO.Socket {
   /// Calls `requestChannel` with `request`, and receives the corresponding
   /// response on the `requestChannel.reponseChannel`, returning it as a `Future`
-  Future<Object> call(IOChannel requestChannel, Object request) {
+  Future<Object> call(IOChannel requestChannel, Object? request) {
     final responseChannel = requestChannel.responseChannel;
     final completer = Completer<Object>();
     once(responseChannel.string, completer.complete);

@@ -23,6 +23,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   dartdoc: any
+  game_scaffold_games: any
 
 # dependency_overrides:
 #   game_scaffold_dart:

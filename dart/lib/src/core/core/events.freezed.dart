@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'events.dart';
 
@@ -9,18 +9,19 @@ part of 'events.dart';
 
 T _$identity<T>(T value) => value;
 
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+
 /// @nodoc
 class _$GameEventTearOff {
   const _$GameEventTearOff();
 
-// ignore: unused_element
   _GameEventGame game(Event event) {
     return _GameEventGame(
       event,
     );
   }
 
-// ignore: unused_element
   _GameEventGeneral general(GenericEvent event) {
     return _GameEventGeneral(
       event,
@@ -29,33 +30,36 @@ class _$GameEventTearOff {
 }
 
 /// @nodoc
-// ignore: unused_element
 const $GameEvent = _$GameEventTearOff();
 
 /// @nodoc
 mixin _$GameEvent {
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult game(Event event),
-    @required TResult general(GenericEvent event),
-  });
+  TResult when<TResult extends Object?>({
+    required TResult Function(Event event) game,
+    required TResult Function(GenericEvent event) general,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult game(Event event),
-    TResult general(GenericEvent event),
-    @required TResult orElse(),
-  });
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Event event)? game,
+    TResult Function(GenericEvent event)? general,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult game(_GameEventGame value),
-    @required TResult general(_GameEventGeneral value),
-  });
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GameEventGame value) game,
+    required TResult Function(_GameEventGeneral value) general,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult game(_GameEventGame value),
-    TResult general(_GameEventGeneral value),
-    @required TResult orElse(),
-  });
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GameEventGame value)? game,
+    TResult Function(_GameEventGeneral value)? general,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -93,19 +97,20 @@ class __$GameEventGameCopyWithImpl<$Res> extends _$GameEventCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object event = freezed,
+    Object? event = freezed,
   }) {
     return _then(_GameEventGame(
-      event == freezed ? _value.event : event as Event,
+      event == freezed
+          ? _value.event
+          : event // ignore: cast_nullable_to_non_nullable
+              as Event,
     ));
   }
 }
 
 /// @nodoc
 class _$_GameEventGame extends _GameEventGame {
-  const _$_GameEventGame(this.event)
-      : assert(event != null),
-        super._();
+  const _$_GameEventGame(this.event) : super._();
 
   @override
   final Event event;
@@ -134,23 +139,20 @@ class _$_GameEventGame extends _GameEventGame {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult game(Event event),
-    @required TResult general(GenericEvent event),
+  TResult when<TResult extends Object?>({
+    required TResult Function(Event event) game,
+    required TResult Function(GenericEvent event) general,
   }) {
-    assert(game != null);
-    assert(general != null);
     return game(event);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult game(Event event),
-    TResult general(GenericEvent event),
-    @required TResult orElse(),
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Event event)? game,
+    TResult Function(GenericEvent event)? general,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (game != null) {
       return game(event);
     }
@@ -159,23 +161,20 @@ class _$_GameEventGame extends _GameEventGame {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult game(_GameEventGame value),
-    @required TResult general(_GameEventGeneral value),
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GameEventGame value) game,
+    required TResult Function(_GameEventGeneral value) general,
   }) {
-    assert(game != null);
-    assert(general != null);
     return game(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult game(_GameEventGame value),
-    TResult general(_GameEventGeneral value),
-    @required TResult orElse(),
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GameEventGame value)? game,
+    TResult Function(_GameEventGeneral value)? general,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (game != null) {
       return game(this);
     }
@@ -184,12 +183,13 @@ class _$_GameEventGame extends _GameEventGame {
 }
 
 abstract class _GameEventGame extends GameEvent {
-  const _GameEventGame._() : super._();
   const factory _GameEventGame(Event event) = _$_GameEventGame;
+  const _GameEventGame._() : super._();
 
-  Event get event;
+  Event get event => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  _$GameEventGameCopyWith<_GameEventGame> get copyWith;
+  _$GameEventGameCopyWith<_GameEventGame> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -215,18 +215,18 @@ class __$GameEventGeneralCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object event = freezed,
+    Object? event = freezed,
   }) {
     return _then(_GameEventGeneral(
-      event == freezed ? _value.event : event as GenericEvent,
+      event == freezed
+          ? _value.event
+          : event // ignore: cast_nullable_to_non_nullable
+              as GenericEvent,
     ));
   }
 
   @override
   $GenericEventCopyWith<$Res> get event {
-    if (_value.event == null) {
-      return null;
-    }
     return $GenericEventCopyWith<$Res>(_value.event, (value) {
       return _then(_value.copyWith(event: value));
     });
@@ -235,9 +235,7 @@ class __$GameEventGeneralCopyWithImpl<$Res>
 
 /// @nodoc
 class _$_GameEventGeneral extends _GameEventGeneral {
-  const _$_GameEventGeneral(this.event)
-      : assert(event != null),
-        super._();
+  const _$_GameEventGeneral(this.event) : super._();
 
   @override
   final GenericEvent event;
@@ -266,23 +264,20 @@ class _$_GameEventGeneral extends _GameEventGeneral {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult game(Event event),
-    @required TResult general(GenericEvent event),
+  TResult when<TResult extends Object?>({
+    required TResult Function(Event event) game,
+    required TResult Function(GenericEvent event) general,
   }) {
-    assert(game != null);
-    assert(general != null);
     return general(event);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult game(Event event),
-    TResult general(GenericEvent event),
-    @required TResult orElse(),
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Event event)? game,
+    TResult Function(GenericEvent event)? general,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (general != null) {
       return general(event);
     }
@@ -291,23 +286,20 @@ class _$_GameEventGeneral extends _GameEventGeneral {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult game(_GameEventGame value),
-    @required TResult general(_GameEventGeneral value),
+  TResult map<TResult extends Object?>({
+    required TResult Function(_GameEventGame value) game,
+    required TResult Function(_GameEventGeneral value) general,
   }) {
-    assert(game != null);
-    assert(general != null);
     return general(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult game(_GameEventGame value),
-    TResult general(_GameEventGeneral value),
-    @required TResult orElse(),
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_GameEventGame value)? game,
+    TResult Function(_GameEventGeneral value)? general,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (general != null) {
       return general(this);
     }
@@ -316,10 +308,11 @@ class _$_GameEventGeneral extends _GameEventGeneral {
 }
 
 abstract class _GameEventGeneral extends GameEvent {
-  const _GameEventGeneral._() : super._();
   const factory _GameEventGeneral(GenericEvent event) = _$_GameEventGeneral;
+  const _GameEventGeneral._() : super._();
 
-  GenericEvent get event;
+  GenericEvent get event => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  _$GameEventGeneralCopyWith<_GameEventGeneral> get copyWith;
+  _$GameEventGeneralCopyWith<_GameEventGeneral> get copyWith =>
+      throw _privateConstructorUsedError;
 }

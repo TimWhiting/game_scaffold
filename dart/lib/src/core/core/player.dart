@@ -20,7 +20,7 @@ final Map<NameSet, List<String>> nameSets = {
 
 /// Represents the basic details of a player in a game
 @freezed
-abstract class Player with _$Player {
+class Player with _$Player {
   /// Represents the basic details of a player in a game
   ///
   /// Players have a unique id and an optional name

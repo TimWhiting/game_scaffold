@@ -4,16 +4,16 @@ import 'core.dart';
 
 class BasicConverter<T> implements JsonConverter<dynamic, T> {
   const BasicConverter(
-      {T Function(dynamic) fromJson, dynamic Function(T) toJson})
+      {T Function(dynamic)? fromJson, dynamic Function(T)? toJson})
       : _fromJson = fromJson,
-        _toJson = toJson;
-  final T Function(dynamic) _fromJson;
-  final T Function(dynamic) _toJson;
+        _toJson = toJson as T Function(dynamic)?;
+  final T Function(dynamic)? _fromJson;
+  final T Function(dynamic)? _toJson;
   @override
-  dynamic fromJson(T json) => _fromJson(json);
+  dynamic fromJson(T json) => _fromJson!(json);
 
   @override
-  T toJson(dynamic object) => _toJson(object);
+  T toJson(dynamic object) => _toJson!(object);
 }
 
 class DefaultConverter implements JsonConverter {

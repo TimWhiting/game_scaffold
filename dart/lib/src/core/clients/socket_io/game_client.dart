@@ -12,13 +12,15 @@ import 'channels.dart';
 
 /// The socket IO implementation of [GameClient]
 class IOGameClient extends GameClient {
-  IOGameClient({Reader read, this.address, String id}) : super(id, read) {
+  IOGameClient(
+      {required Reader read, required this.address, required String id})
+      : super(id, read) {
     Future.delayed(100.milliseconds, _ensureConnected);
   }
   final String address;
 
-  IO.Socket _socket;
-  String _lastGameCode;
+  IO.Socket? _socket;
+  String? _lastGameCode;
 
   void _ensureConnected() {
     if (gameCode != _lastGameCode || (_socket?.disconnected ?? true)) {
@@ -32,9 +34,9 @@ class IOGameClient extends GameClient {
 
   @override
   void exitGame() {
-    _socket.off(IOChannel.error_channel.string);
-    _socket.off(IOChannel.gamestate.string);
-    _socket.off(IOChannel.lobby.string);
+    _socket!.off(IOChannel.error_channel.string);
+    _socket!.off(IOChannel.gamestate.string);
+    _socket!.off(IOChannel.lobby.string);
     logger.info('Exiting game');
     game.gameStatus = GameStatus.NotJoined;
   }
@@ -45,7 +47,7 @@ class IOGameClient extends GameClient {
     logger.info('Registering');
     game.gameStatus = GameStatus.NotJoined;
     _watchState();
-    final assignedName = await _socket
+    final assignedName = await _socket!
         .call(IOChannel.register, {'name': game.playerName, 'id': playerID});
     game.playerName = assignedName as String;
   }
@@ -58,33 +60,33 @@ class IOGameClient extends GameClient {
   }
 
   void _watchState() {
-    _socket.on(IOChannel.gamestate.string, (data) {
-      _socket.off(IOChannel.lobby.string);
+    _socket!.on(IOChannel.gamestate.string, (data) {
+      _socket!.off(IOChannel.lobby.string);
       final gameState = Game.fromJson(data as Map<String, dynamic>);
       logger.info('Got gamestate $data');
       game.gameState = gameState;
       game.gameStatus = gameState.gameStatus;
     });
-    _socket.on(IOChannel.error_channel.string, (data) {
+    _socket!.on(IOChannel.error_channel.string, (data) {
       final error = GameError.fromJson(data as Map<String, dynamic>);
       logger.warning('Error: $error');
       game.gameError = error;
     });
-    _socket.on(IOChannel.lobby.string, (d) => _onLobby(d));
+    _socket!.on(IOChannel.lobby.string, (d) => _onLobby(d));
   }
 
   @override
   void sendEvent(Event event) {
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
-    _socket.emit(IOChannel.event.string, js);
+    _socket!.emit(IOChannel.event.string, js);
   }
 
   @override
   void dispose() {
     exitGame();
     logger.info('Dispose');
-    _socket.dispose();
+    _socket!.dispose();
   }
 
   static void registerImplementation() {

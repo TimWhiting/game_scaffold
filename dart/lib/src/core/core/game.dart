@@ -28,7 +28,7 @@ abstract class Game<E extends Event> {
   /// So make the error as informative as possible. This method should return a copy of the state if
   /// undo functionality needs to work. (i.e. the class should be immutable), for high performance you can
   /// make the changes and just return the changed instance itself, but undo functionality won't work.
-  GameOrError next(E event, BackendGameReader backendReader);
+  GameOrError next(E event, BackendGameReader? backendReader);
 
   /// Copies the state of the game with generic replaced by the function applying updates to the most recent copy of generic
   ///
@@ -40,11 +40,11 @@ abstract class Game<E extends Event> {
   ///  return copyWith(generic: updates(generic));
   ///}
   /// ```
-  Game copyWithGeneric(GenericGame Function(GenericGame) updates);
+  Game copyWithGeneric(GenericGame? Function(GenericGame) updates);
 
   /// Logic to apply after all players have consented they want to play another round
   /// to initialize the next round
-  Game moveNextRound(GameConfig config, BackendGameReader backendReader);
+  Game moveNextRound(GameConfig config, BackendGameReader? backendReader);
 
   /// Serializes the state for consumption by the frontend
   Map<String, dynamic> toJson();
@@ -55,18 +55,18 @@ abstract class Game<E extends Event> {
   /// Registers a game type with the server
   static void registerGameType<T extends Game, Q extends Game>(
     String type, {
-    @required String name,
-    @required Q Function(Map<String, dynamic>) fromJson,
-    @required
-        T Function(GameConfig, List<Player>, BackendGameReader) initialState,
-    @required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
-    Q Function(T) toClientView,
+    required String name,
+    required Q Function(Map<String, dynamic>) fromJson,
+    required T Function(GameConfig, List<Player>, BackendGameReader?)
+        initialState,
+    required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
+    Q Function(T)? toClientView,
   }) {
     gameNames[type] = name;
     _fromJsonFactory[type] = fromJson;
     _eventFromJsonFactory[type] = gameEventFromJson;
     _initialStates[type] = initialState;
-    _toClientViews[type] = (toClientView as Game Function(Game)) ?? (g) => g;
+    _toClientViews[type] = (toClientView as Game Function(Game)?) ?? (g) => g;
   }
 
   /// Converts the game from json to the particular type based on the type field
@@ -79,12 +79,12 @@ abstract class Game<E extends Event> {
   }
 
   /// Optionally converts the game from a full game state to a view of the game from the client's perspective
-  static Game toClientView(Game g) => _toClientViews[g.type](g);
+  static Game toClientView(Game g) => _toClientViews[g.type]!(g);
 
   /// Will get the initial state for a particular configuration
   static Game getInitialState(GameConfig gameConfig, List<Player> players,
-      BackendGameReader backendReader) {
-    final initState = _initialStates[gameConfig.gameType];
+      BackendGameReader? backendReader) {
+    final initState = _initialStates[gameConfig.gameType!];
     if (initState == null) {
       throw UnimplementedError(
           'No game of that type exists in the registry ${gameConfig.gameType}');
@@ -126,7 +126,7 @@ abstract class Game<E extends Event> {
 
   /// Stores the function to create the initial state of the game
   static final Map<String,
-          Game Function(GameConfig, List<Player>, BackendGameReader)>
+          Game Function(GameConfig, List<Player>, BackendGameReader?)>
       _initialStates = {};
 }
 
@@ -157,10 +157,10 @@ enum GameStatus {
 /// Custom options can be added to the [options] map, but must be in a json
 /// compatible form
 @freezed
-abstract class GameConfig with _$GameConfig {
+class GameConfig with _$GameConfig {
   const factory GameConfig({
-    String adminId,
-    String gameType,
+    String? adminId,
+    String? gameType,
     @Default(NameSet.Basic) NameSet nameSet,
     @Default(false) bool customNames,
     @Default(15) int rounds,
@@ -169,7 +169,7 @@ abstract class GameConfig with _$GameConfig {
     @Default(true) bool autoStart,
 
     /// [options] must be json serializable
-    Map<String, dynamic> options,
+    Map<String, dynamic>? options,
   }) = _GameConfig;
   factory GameConfig.fromJson(Map<String, dynamic> map) =>
       _$GameConfigFromJson(map);
@@ -184,7 +184,7 @@ abstract class GameConfig with _$GameConfig {
 /// * The [player]'s id in the game
 /// * Whether the player is the [creator] of the game
 @freezed
-abstract class GameInfo with _$GameInfo {
+class GameInfo with _$GameInfo {
   const factory GameInfo(
     String gameId,
     @unmodifiableStringList List<String> players,

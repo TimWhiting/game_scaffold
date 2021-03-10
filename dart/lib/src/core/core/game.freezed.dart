@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'game.dart';
 
@@ -8,6 +8,10 @@ part of 'game.dart';
 // **************************************************************************
 
 T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+
 GameConfig _$GameConfigFromJson(Map<String, dynamic> json) {
   return _GameConfig.fromJson(json);
 }
@@ -16,17 +20,16 @@ GameConfig _$GameConfigFromJson(Map<String, dynamic> json) {
 class _$GameConfigTearOff {
   const _$GameConfigTearOff();
 
-// ignore: unused_element
   _GameConfig call(
-      {String adminId,
-      String gameType,
+      {String? adminId,
+      String? gameType,
       NameSet nameSet = NameSet.Basic,
       bool customNames = false,
       int rounds = 15,
       int minPlayers = 1,
       int maxPlayers = 10,
       bool autoStart = true,
-      Map<String, dynamic> options}) {
+      Map<String, dynamic>? options}) {
     return _GameConfig(
       adminId: adminId,
       gameType: gameType,
@@ -40,33 +43,32 @@ class _$GameConfigTearOff {
     );
   }
 
-// ignore: unused_element
   GameConfig fromJson(Map<String, Object> json) {
     return GameConfig.fromJson(json);
   }
 }
 
 /// @nodoc
-// ignore: unused_element
 const $GameConfig = _$GameConfigTearOff();
 
 /// @nodoc
 mixin _$GameConfig {
-  String get adminId;
-  String get gameType;
-  NameSet get nameSet;
-  bool get customNames;
-  int get rounds;
-  int get minPlayers;
-  int get maxPlayers;
-  bool get autoStart;
+  String? get adminId => throw _privateConstructorUsedError;
+  String? get gameType => throw _privateConstructorUsedError;
+  NameSet get nameSet => throw _privateConstructorUsedError;
+  bool get customNames => throw _privateConstructorUsedError;
+  int get rounds => throw _privateConstructorUsedError;
+  int get minPlayers => throw _privateConstructorUsedError;
+  int get maxPlayers => throw _privateConstructorUsedError;
+  bool get autoStart => throw _privateConstructorUsedError;
 
   /// [options] must be json serializable
-  Map<String, dynamic> get options;
+  Map<String, dynamic>? get options => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson();
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $GameConfigCopyWith<GameConfig> get copyWith;
+  $GameConfigCopyWith<GameConfig> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -75,15 +77,15 @@ abstract class $GameConfigCopyWith<$Res> {
           GameConfig value, $Res Function(GameConfig) then) =
       _$GameConfigCopyWithImpl<$Res>;
   $Res call(
-      {String adminId,
-      String gameType,
+      {String? adminId,
+      String? gameType,
       NameSet nameSet,
       bool customNames,
       int rounds,
       int minPlayers,
       int maxPlayers,
       bool autoStart,
-      Map<String, dynamic> options});
+      Map<String, dynamic>? options});
 }
 
 /// @nodoc
@@ -96,28 +98,53 @@ class _$GameConfigCopyWithImpl<$Res> implements $GameConfigCopyWith<$Res> {
 
   @override
   $Res call({
-    Object adminId = freezed,
-    Object gameType = freezed,
-    Object nameSet = freezed,
-    Object customNames = freezed,
-    Object rounds = freezed,
-    Object minPlayers = freezed,
-    Object maxPlayers = freezed,
-    Object autoStart = freezed,
-    Object options = freezed,
+    Object? adminId = freezed,
+    Object? gameType = freezed,
+    Object? nameSet = freezed,
+    Object? customNames = freezed,
+    Object? rounds = freezed,
+    Object? minPlayers = freezed,
+    Object? maxPlayers = freezed,
+    Object? autoStart = freezed,
+    Object? options = freezed,
   }) {
     return _then(_value.copyWith(
-      adminId: adminId == freezed ? _value.adminId : adminId as String,
-      gameType: gameType == freezed ? _value.gameType : gameType as String,
-      nameSet: nameSet == freezed ? _value.nameSet : nameSet as NameSet,
-      customNames:
-          customNames == freezed ? _value.customNames : customNames as bool,
-      rounds: rounds == freezed ? _value.rounds : rounds as int,
-      minPlayers: minPlayers == freezed ? _value.minPlayers : minPlayers as int,
-      maxPlayers: maxPlayers == freezed ? _value.maxPlayers : maxPlayers as int,
-      autoStart: autoStart == freezed ? _value.autoStart : autoStart as bool,
-      options:
-          options == freezed ? _value.options : options as Map<String, dynamic>,
+      adminId: adminId == freezed
+          ? _value.adminId
+          : adminId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      gameType: gameType == freezed
+          ? _value.gameType
+          : gameType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nameSet: nameSet == freezed
+          ? _value.nameSet
+          : nameSet // ignore: cast_nullable_to_non_nullable
+              as NameSet,
+      customNames: customNames == freezed
+          ? _value.customNames
+          : customNames // ignore: cast_nullable_to_non_nullable
+              as bool,
+      rounds: rounds == freezed
+          ? _value.rounds
+          : rounds // ignore: cast_nullable_to_non_nullable
+              as int,
+      minPlayers: minPlayers == freezed
+          ? _value.minPlayers
+          : minPlayers // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxPlayers: maxPlayers == freezed
+          ? _value.maxPlayers
+          : maxPlayers // ignore: cast_nullable_to_non_nullable
+              as int,
+      autoStart: autoStart == freezed
+          ? _value.autoStart
+          : autoStart // ignore: cast_nullable_to_non_nullable
+              as bool,
+      options: options == freezed
+          ? _value.options
+          : options // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
     ));
   }
 }
@@ -129,15 +156,15 @@ abstract class _$GameConfigCopyWith<$Res> implements $GameConfigCopyWith<$Res> {
       __$GameConfigCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String adminId,
-      String gameType,
+      {String? adminId,
+      String? gameType,
       NameSet nameSet,
       bool customNames,
       int rounds,
       int minPlayers,
       int maxPlayers,
       bool autoStart,
-      Map<String, dynamic> options});
+      Map<String, dynamic>? options});
 }
 
 /// @nodoc
@@ -152,28 +179,53 @@ class __$GameConfigCopyWithImpl<$Res> extends _$GameConfigCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object adminId = freezed,
-    Object gameType = freezed,
-    Object nameSet = freezed,
-    Object customNames = freezed,
-    Object rounds = freezed,
-    Object minPlayers = freezed,
-    Object maxPlayers = freezed,
-    Object autoStart = freezed,
-    Object options = freezed,
+    Object? adminId = freezed,
+    Object? gameType = freezed,
+    Object? nameSet = freezed,
+    Object? customNames = freezed,
+    Object? rounds = freezed,
+    Object? minPlayers = freezed,
+    Object? maxPlayers = freezed,
+    Object? autoStart = freezed,
+    Object? options = freezed,
   }) {
     return _then(_GameConfig(
-      adminId: adminId == freezed ? _value.adminId : adminId as String,
-      gameType: gameType == freezed ? _value.gameType : gameType as String,
-      nameSet: nameSet == freezed ? _value.nameSet : nameSet as NameSet,
-      customNames:
-          customNames == freezed ? _value.customNames : customNames as bool,
-      rounds: rounds == freezed ? _value.rounds : rounds as int,
-      minPlayers: minPlayers == freezed ? _value.minPlayers : minPlayers as int,
-      maxPlayers: maxPlayers == freezed ? _value.maxPlayers : maxPlayers as int,
-      autoStart: autoStart == freezed ? _value.autoStart : autoStart as bool,
-      options:
-          options == freezed ? _value.options : options as Map<String, dynamic>,
+      adminId: adminId == freezed
+          ? _value.adminId
+          : adminId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      gameType: gameType == freezed
+          ? _value.gameType
+          : gameType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nameSet: nameSet == freezed
+          ? _value.nameSet
+          : nameSet // ignore: cast_nullable_to_non_nullable
+              as NameSet,
+      customNames: customNames == freezed
+          ? _value.customNames
+          : customNames // ignore: cast_nullable_to_non_nullable
+              as bool,
+      rounds: rounds == freezed
+          ? _value.rounds
+          : rounds // ignore: cast_nullable_to_non_nullable
+              as int,
+      minPlayers: minPlayers == freezed
+          ? _value.minPlayers
+          : minPlayers // ignore: cast_nullable_to_non_nullable
+              as int,
+      maxPlayers: maxPlayers == freezed
+          ? _value.maxPlayers
+          : maxPlayers // ignore: cast_nullable_to_non_nullable
+              as int,
+      autoStart: autoStart == freezed
+          ? _value.autoStart
+          : autoStart // ignore: cast_nullable_to_non_nullable
+              as bool,
+      options: options == freezed
+          ? _value.options
+          : options // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
     ));
   }
 }
@@ -191,21 +243,15 @@ class _$_GameConfig implements _GameConfig {
       this.minPlayers = 1,
       this.maxPlayers = 10,
       this.autoStart = true,
-      this.options})
-      : assert(nameSet != null),
-        assert(customNames != null),
-        assert(rounds != null),
-        assert(minPlayers != null),
-        assert(maxPlayers != null),
-        assert(autoStart != null);
+      this.options});
 
   factory _$_GameConfig.fromJson(Map<String, dynamic> json) =>
       _$_$_GameConfigFromJson(json);
 
   @override
-  final String adminId;
+  final String? adminId;
   @override
-  final String gameType;
+  final String? gameType;
   @JsonKey(defaultValue: NameSet.Basic)
   @override
   final NameSet nameSet;
@@ -227,7 +273,7 @@ class _$_GameConfig implements _GameConfig {
   @override
 
   /// [options] must be json serializable
-  final Map<String, dynamic> options;
+  final Map<String, dynamic>? options;
 
   @override
   String toString() {
@@ -291,42 +337,43 @@ class _$_GameConfig implements _GameConfig {
 
 abstract class _GameConfig implements GameConfig {
   const factory _GameConfig(
-      {String adminId,
-      String gameType,
+      {String? adminId,
+      String? gameType,
       NameSet nameSet,
       bool customNames,
       int rounds,
       int minPlayers,
       int maxPlayers,
       bool autoStart,
-      Map<String, dynamic> options}) = _$_GameConfig;
+      Map<String, dynamic>? options}) = _$_GameConfig;
 
   factory _GameConfig.fromJson(Map<String, dynamic> json) =
       _$_GameConfig.fromJson;
 
   @override
-  String get adminId;
+  String? get adminId => throw _privateConstructorUsedError;
   @override
-  String get gameType;
+  String? get gameType => throw _privateConstructorUsedError;
   @override
-  NameSet get nameSet;
+  NameSet get nameSet => throw _privateConstructorUsedError;
   @override
-  bool get customNames;
+  bool get customNames => throw _privateConstructorUsedError;
   @override
-  int get rounds;
+  int get rounds => throw _privateConstructorUsedError;
   @override
-  int get minPlayers;
+  int get minPlayers => throw _privateConstructorUsedError;
   @override
-  int get maxPlayers;
+  int get maxPlayers => throw _privateConstructorUsedError;
   @override
-  bool get autoStart;
+  bool get autoStart => throw _privateConstructorUsedError;
   @override
 
   /// [options] must be json serializable
-  Map<String, dynamic> get options;
+  Map<String, dynamic>? get options => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$GameConfigCopyWith<_GameConfig> get copyWith;
+  _$GameConfigCopyWith<_GameConfig> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 GameInfo _$GameInfoFromJson(Map<String, dynamic> json) {
@@ -337,7 +384,6 @@ GameInfo _$GameInfoFromJson(Map<String, dynamic> json) {
 class _$GameInfoTearOff {
   const _$GameInfoTearOff();
 
-// ignore: unused_element
   _GameInfo call(String gameId, @unmodifiableStringList List<String> players,
       String player, bool creator, String gameType) {
     return _GameInfo(
@@ -349,28 +395,27 @@ class _$GameInfoTearOff {
     );
   }
 
-// ignore: unused_element
   GameInfo fromJson(Map<String, Object> json) {
     return GameInfo.fromJson(json);
   }
 }
 
 /// @nodoc
-// ignore: unused_element
 const $GameInfo = _$GameInfoTearOff();
 
 /// @nodoc
 mixin _$GameInfo {
-  String get gameId;
+  String get gameId => throw _privateConstructorUsedError;
   @unmodifiableStringList
-  List<String> get players;
-  String get player;
-  bool get creator;
-  String get gameType;
+  List<String> get players => throw _privateConstructorUsedError;
+  String get player => throw _privateConstructorUsedError;
+  bool get creator => throw _privateConstructorUsedError;
+  String get gameType => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson();
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $GameInfoCopyWith<GameInfo> get copyWith;
+  $GameInfoCopyWith<GameInfo> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -395,18 +440,33 @@ class _$GameInfoCopyWithImpl<$Res> implements $GameInfoCopyWith<$Res> {
 
   @override
   $Res call({
-    Object gameId = freezed,
-    Object players = freezed,
-    Object player = freezed,
-    Object creator = freezed,
-    Object gameType = freezed,
+    Object? gameId = freezed,
+    Object? players = freezed,
+    Object? player = freezed,
+    Object? creator = freezed,
+    Object? gameType = freezed,
   }) {
     return _then(_value.copyWith(
-      gameId: gameId == freezed ? _value.gameId : gameId as String,
-      players: players == freezed ? _value.players : players as List<String>,
-      player: player == freezed ? _value.player : player as String,
-      creator: creator == freezed ? _value.creator : creator as bool,
-      gameType: gameType == freezed ? _value.gameType : gameType as String,
+      gameId: gameId == freezed
+          ? _value.gameId
+          : gameId // ignore: cast_nullable_to_non_nullable
+              as String,
+      players: players == freezed
+          ? _value.players
+          : players // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      player: player == freezed
+          ? _value.player
+          : player // ignore: cast_nullable_to_non_nullable
+              as String,
+      creator: creator == freezed
+          ? _value.creator
+          : creator // ignore: cast_nullable_to_non_nullable
+              as bool,
+      gameType: gameType == freezed
+          ? _value.gameType
+          : gameType // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -435,18 +495,33 @@ class __$GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object gameId = freezed,
-    Object players = freezed,
-    Object player = freezed,
-    Object creator = freezed,
-    Object gameType = freezed,
+    Object? gameId = freezed,
+    Object? players = freezed,
+    Object? player = freezed,
+    Object? creator = freezed,
+    Object? gameType = freezed,
   }) {
     return _then(_GameInfo(
-      gameId == freezed ? _value.gameId : gameId as String,
-      players == freezed ? _value.players : players as List<String>,
-      player == freezed ? _value.player : player as String,
-      creator == freezed ? _value.creator : creator as bool,
-      gameType == freezed ? _value.gameType : gameType as String,
+      gameId == freezed
+          ? _value.gameId
+          : gameId // ignore: cast_nullable_to_non_nullable
+              as String,
+      players == freezed
+          ? _value.players
+          : players // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      player == freezed
+          ? _value.player
+          : player // ignore: cast_nullable_to_non_nullable
+              as String,
+      creator == freezed
+          ? _value.creator
+          : creator // ignore: cast_nullable_to_non_nullable
+              as bool,
+      gameType == freezed
+          ? _value.gameType
+          : gameType // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -456,12 +531,7 @@ class __$GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
 /// @nodoc
 class _$_GameInfo implements _GameInfo {
   const _$_GameInfo(this.gameId, @unmodifiableStringList this.players,
-      this.player, this.creator, this.gameType)
-      : assert(gameId != null),
-        assert(players != null),
-        assert(player != null),
-        assert(creator != null),
-        assert(gameType != null);
+      this.player, this.creator, this.gameType);
 
   factory _$_GameInfo.fromJson(Map<String, dynamic> json) =>
       _$_$_GameInfoFromJson(json);
@@ -533,17 +603,18 @@ abstract class _GameInfo implements GameInfo {
   factory _GameInfo.fromJson(Map<String, dynamic> json) = _$_GameInfo.fromJson;
 
   @override
-  String get gameId;
+  String get gameId => throw _privateConstructorUsedError;
   @override
   @unmodifiableStringList
-  List<String> get players;
+  List<String> get players => throw _privateConstructorUsedError;
   @override
-  String get player;
+  String get player => throw _privateConstructorUsedError;
   @override
-  bool get creator;
+  bool get creator => throw _privateConstructorUsedError;
   @override
-  String get gameType;
+  String get gameType => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$GameInfoCopyWith<_GameInfo> get copyWith;
+  _$GameInfoCopyWith<_GameInfo> get copyWith =>
+      throw _privateConstructorUsedError;
 }

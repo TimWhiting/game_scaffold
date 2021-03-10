@@ -60,10 +60,10 @@ abstract class GameClient {
 
   /// Creates a [GameClient] with the parameters specified
   static GameClient fromParams({
-    String location,
-    Reader read,
-    String address,
-    String playerID,
+    required String location,
+    required Reader read,
+    required String address,
+    required String playerID,
   }) {
     final impl = _clientImplementations[location];
     if (impl == null) {

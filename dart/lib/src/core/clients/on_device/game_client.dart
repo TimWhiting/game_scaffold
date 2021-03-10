@@ -11,9 +11,10 @@ import '../clients.dart';
 ///
 /// Warning implementation not complete or tested yet
 class NoServerGameClient extends GameClient {
-  NoServerGameClient({Reader read, String playerID}) : super(playerID, read);
-  StreamSubscription<Game> _ss;
-  StreamSubscription<GameError> _se;
+  NoServerGameClient({required Reader read, required String playerID})
+      : super(playerID, read);
+  StreamSubscription<Game?>? _ss;
+  StreamSubscription<GameError?>? _se;
   BackendGameReader get backend => read.backendGame(game.gameCode);
   @override
   void exitGame() {
@@ -23,10 +24,12 @@ class NoServerGameClient extends GameClient {
   List<Player> get _players => backend.players;
   @override
   Future<void> register() async {
-    backend.players =
-        [..._players, Player(playerID, name: game.playerName ?? playerID)].toUnmodifiable();
+    backend.players = [
+      ..._players,
+      Player(playerID, name: game.playerName ?? playerID)
+    ].toUnmodifiable();
     game.gameStatus = GameStatus.NotJoined;
-    game.playerName = game.playerName ?? playerID;
+    game.playerName = game.playerName == '' ? playerID : game.playerName;
     game.gameStatus = GameStatus.NotStarted;
     _watchState();
     final config = backend.gameConfig;
@@ -39,7 +42,7 @@ class NoServerGameClient extends GameClient {
         _players.map((p) => p.name).toUnmodifiable(),
         pID.name,
         pID.id == backend.players.first.id,
-        config.gameType,
+        config.gameType!,
       );
     }
   }
@@ -51,9 +54,9 @@ class NoServerGameClient extends GameClient {
     }, onError: (e) {
       game.gameError = GameError(e, playerID);
     });
-    _se = backend.errorNotifier.stream.listen((gameError) {
+    _se = backend.errorNotifier!.stream.listen((gameError) {
       if (gameError == null || gameError.person == playerID) {
-        game.gameError = gameError;
+        game.gameError = gameError!;
       }
     });
   }

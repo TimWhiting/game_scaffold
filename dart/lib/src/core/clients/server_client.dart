@@ -16,10 +16,10 @@ abstract class ServerClient {
       : logger = Logger('ServerClient $playerID');
 
   /// The id of the client
-  final String playerID;
-  GameReader get game => read.gameFor(playerID);
+  final String? playerID;
+  GameReader get game => read!.gameFor(playerID!);
 
-  final Reader read;
+  final Reader? read;
   final Logger logger;
 
   /// Creates a game on the server
@@ -40,27 +40,27 @@ abstract class ServerClient {
   /// Registers a particular implementation of [ServerClient] for the given [location]
   static void registerImplementation<T extends ServerClient>(
     String location,
-    T Function(Reader, String, String) impl,
+    T Function(Reader?, String?, String?) impl,
   ) {
     _clientImplementations[location] = impl;
   }
 
-  static final Map<String, ServerClient Function(Reader, String, String)>
+  static final Map<String, ServerClient Function(Reader?, String?, String?)>
       _clientImplementations = {};
 
   /// Creates a [ServerClient] from the [location] [address] and [playerID]
   static ServerClient fromParams({
-    String location,
-    Reader read,
-    String address,
-    String playerID,
+    String? location,
+    Reader? read,
+    String? address,
+    String? playerID,
   }) {
-    final impl = _clientImplementations[location];
+    final impl = _clientImplementations[location!] as ServerClient Function(T Function<T>(RootProvider<Object, T>)?, String?, String?)?;
     if (impl == null) {
       throw UnimplementedError(
           'No ServerClient implementation for $location defined');
     }
-    return impl(read, address, playerID);
+    return impl(read as T Function<T>(RootProvider<Object, T>)?, address, playerID);
   }
 
   /// Connects to the backend

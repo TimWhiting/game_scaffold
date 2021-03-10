@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'errors.dart';
 
@@ -8,6 +8,10 @@ part of 'errors.dart';
 // **************************************************************************
 
 T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+
 GameOrError<T> _$GameOrErrorFromJson<T extends Game<Event>>(
     Map<String, dynamic> json) {
   switch (json['runtimeType'] as String) {
@@ -25,14 +29,12 @@ GameOrError<T> _$GameOrErrorFromJson<T extends Game<Event>>(
 class _$GameOrErrorTearOff {
   const _$GameOrErrorTearOff();
 
-// ignore: unused_element
   GameValue<T> game<T extends Game<Event>>(@GameConverter() T game) {
     return GameValue<T>(
       game,
     );
   }
 
-// ignore: unused_element
   GameError<T> error<T extends Game<Event>>(String message, String person) {
     return GameError<T>(
       message,
@@ -40,41 +42,43 @@ class _$GameOrErrorTearOff {
     );
   }
 
-// ignore: unused_element
   GameOrError<T> fromJson<T extends Game<Event>>(Map<String, Object> json) {
     return GameOrError<T>.fromJson(json);
   }
 }
 
 /// @nodoc
-// ignore: unused_element
 const $GameOrError = _$GameOrErrorTearOff();
 
 /// @nodoc
 mixin _$GameOrError<T extends Game<Event>> {
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult game(@GameConverter() T game),
-    @required TResult error(String message, String person),
-  });
+  TResult when<TResult extends Object?>({
+    required TResult Function(@GameConverter() T game) game,
+    required TResult Function(String message, String person) error,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult game(@GameConverter() T game),
-    TResult error(String message, String person),
-    @required TResult orElse(),
-  });
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(@GameConverter() T game)? game,
+    TResult Function(String message, String person)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult game(GameValue<T> value),
-    @required TResult error(GameError<T> value),
-  });
+  TResult map<TResult extends Object?>({
+    required TResult Function(GameValue<T> value) game,
+    required TResult Function(GameError<T> value) error,
+  }) =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult game(GameValue<T> value),
-    TResult error(GameError<T> value),
-    @required TResult orElse(),
-  });
-  Map<String, dynamic> toJson();
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GameValue<T> value)? game,
+    TResult Function(GameError<T> value)? error,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -115,10 +119,13 @@ class _$GameValueCopyWithImpl<T extends Game<Event>, $Res>
 
   @override
   $Res call({
-    Object game = freezed,
+    Object? game = freezed,
   }) {
     return _then(GameValue<T>(
-      game == freezed ? _value.game : game as T,
+      game == freezed
+          ? _value.game
+          : game // ignore: cast_nullable_to_non_nullable
+              as T,
     ));
   }
 }
@@ -127,9 +134,7 @@ class _$GameValueCopyWithImpl<T extends Game<Event>, $Res>
 
 /// @nodoc
 class _$GameValue<T extends Game<Event>> extends GameValue<T> {
-  const _$GameValue(@GameConverter() this.game)
-      : assert(game != null),
-        super._();
+  const _$GameValue(@GameConverter() this.game) : super._();
 
   factory _$GameValue.fromJson(Map<String, dynamic> json) =>
       _$_$GameValueFromJson(json);
@@ -162,23 +167,20 @@ class _$GameValue<T extends Game<Event>> extends GameValue<T> {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult game(@GameConverter() T game),
-    @required TResult error(String message, String person),
+  TResult when<TResult extends Object?>({
+    required TResult Function(@GameConverter() T game) game,
+    required TResult Function(String message, String person) error,
   }) {
-    assert(game != null);
-    assert(error != null);
     return game(this.game);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult game(@GameConverter() T game),
-    TResult error(String message, String person),
-    @required TResult orElse(),
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(@GameConverter() T game)? game,
+    TResult Function(String message, String person)? error,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (game != null) {
       return game(this.game);
     }
@@ -187,23 +189,20 @@ class _$GameValue<T extends Game<Event>> extends GameValue<T> {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult game(GameValue<T> value),
-    @required TResult error(GameError<T> value),
+  TResult map<TResult extends Object?>({
+    required TResult Function(GameValue<T> value) game,
+    required TResult Function(GameError<T> value) error,
   }) {
-    assert(game != null);
-    assert(error != null);
     return game(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult game(GameValue<T> value),
-    TResult error(GameError<T> value),
-    @required TResult orElse(),
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GameValue<T> value)? game,
+    TResult Function(GameError<T> value)? error,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (game != null) {
       return game(this);
     }
@@ -217,16 +216,17 @@ class _$GameValue<T extends Game<Event>> extends GameValue<T> {
 }
 
 abstract class GameValue<T extends Game<Event>> extends GameOrError<T> {
-  const GameValue._() : super._();
   const factory GameValue(@GameConverter() T game) = _$GameValue<T>;
+  const GameValue._() : super._();
 
   factory GameValue.fromJson(Map<String, dynamic> json) =
       _$GameValue<T>.fromJson;
 
   @GameConverter()
-  T get game;
+  T get game => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $GameValueCopyWith<T, GameValue<T>> get copyWith;
+  $GameValueCopyWith<T, GameValue<T>> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -250,12 +250,18 @@ class _$GameErrorCopyWithImpl<T extends Game<Event>, $Res>
 
   @override
   $Res call({
-    Object message = freezed,
-    Object person = freezed,
+    Object? message = freezed,
+    Object? person = freezed,
   }) {
     return _then(GameError<T>(
-      message == freezed ? _value.message : message as String,
-      person == freezed ? _value.person : person as String,
+      message == freezed
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      person == freezed
+          ? _value.person
+          : person // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -264,10 +270,7 @@ class _$GameErrorCopyWithImpl<T extends Game<Event>, $Res>
 
 /// @nodoc
 class _$GameError<T extends Game<Event>> extends GameError<T> {
-  const _$GameError(this.message, this.person)
-      : assert(message != null),
-        assert(person != null),
-        super._();
+  const _$GameError(this.message, this.person) : super._();
 
   factory _$GameError.fromJson(Map<String, dynamic> json) =>
       _$_$GameErrorFromJson(json);
@@ -306,23 +309,20 @@ class _$GameError<T extends Game<Event>> extends GameError<T> {
 
   @override
   @optionalTypeArgs
-  TResult when<TResult extends Object>({
-    @required TResult game(@GameConverter() T game),
-    @required TResult error(String message, String person),
+  TResult when<TResult extends Object?>({
+    required TResult Function(@GameConverter() T game) game,
+    required TResult Function(String message, String person) error,
   }) {
-    assert(game != null);
-    assert(error != null);
     return error(message, person);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object>({
-    TResult game(@GameConverter() T game),
-    TResult error(String message, String person),
-    @required TResult orElse(),
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(@GameConverter() T game)? game,
+    TResult Function(String message, String person)? error,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (error != null) {
       return error(message, person);
     }
@@ -331,23 +331,20 @@ class _$GameError<T extends Game<Event>> extends GameError<T> {
 
   @override
   @optionalTypeArgs
-  TResult map<TResult extends Object>({
-    @required TResult game(GameValue<T> value),
-    @required TResult error(GameError<T> value),
+  TResult map<TResult extends Object?>({
+    required TResult Function(GameValue<T> value) game,
+    required TResult Function(GameError<T> value) error,
   }) {
-    assert(game != null);
-    assert(error != null);
     return error(this);
   }
 
   @override
   @optionalTypeArgs
-  TResult maybeMap<TResult extends Object>({
-    TResult game(GameValue<T> value),
-    TResult error(GameError<T> value),
-    @required TResult orElse(),
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GameValue<T> value)? game,
+    TResult Function(GameError<T> value)? error,
+    required TResult orElse(),
   }) {
-    assert(orElse != null);
     if (error != null) {
       return error(this);
     }
@@ -361,14 +358,15 @@ class _$GameError<T extends Game<Event>> extends GameError<T> {
 }
 
 abstract class GameError<T extends Game<Event>> extends GameOrError<T> {
-  const GameError._() : super._();
   const factory GameError(String message, String person) = _$GameError<T>;
+  const GameError._() : super._();
 
   factory GameError.fromJson(Map<String, dynamic> json) =
       _$GameError<T>.fromJson;
 
-  String get message;
-  String get person;
+  String get message => throw _privateConstructorUsedError;
+  String get person => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $GameErrorCopyWith<T, GameError<T>> get copyWith;
+  $GameErrorCopyWith<T, GameError<T>> get copyWith =>
+      throw _privateConstructorUsedError;
 }
