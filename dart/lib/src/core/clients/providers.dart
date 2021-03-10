@@ -1,5 +1,4 @@
 import 'package:riverpod/riverpod.dart';
-import 'package:collection/collection.dart';
 import '../core.dart';
 import 'clients.dart';
 
@@ -22,7 +21,7 @@ final gameLocationProvider = StateProvider<String>((ref) => IOServerLocation);
 
 /// Provides an encapsulation of many providers related to a Game without having
 /// to have each of them be a `family` provider.
-final ProviderFamily<GameProvider, String>? playerGameProvider =
+final ProviderFamily<GameProvider, String> playerGameProvider =
     Provider.family<GameProvider, String>((ref, id) {
   final gp = GameProvider(ref.read, id);
 
@@ -34,18 +33,16 @@ final ProviderFamily<GameProvider, String>? playerGameProvider =
   return gp;
 });
 final playerIDsProvider =
-    StateProvider<List<String>>((ref) => List.unmodifiable(<String>[]));
+    StateProvider<IList<String>>((ref) => <String>[].lock);
 
 /// Provides an encapsulation of many providers without having to have each of
 /// them be a `family` provider.
 class GameProvider {
-  // TODO: Replace most of these providers with using final late after switching
-  // to Dart 2.12
   GameProvider(this.read, this.playerID) {
     Future.delayed(
       Duration(milliseconds: 10),
       () => read(playerIDsProvider).state =
-          List.unmodifiable([...read(playerIDsProvider).state, playerID]),
+          read(playerIDsProvider).state.add(playerID),
     );
     _gameCodeProvider = StateProvider((ref) => '');
     _gameInfoProvider = StateProvider((ref) => null);
@@ -121,11 +118,11 @@ class GameProvider {
 
   /// Provides the game info of all games that the client with the specified id
   /// is a part of
-  late FutureProvider<List<GameInfo>> _gamesProvider;
+  late FutureProvider<IList<GameInfo>> _gamesProvider;
 
   /// Provides the game info of all games that the client with the specified id
   /// is a part of
-  FutureProvider<List<GameInfo>> get gamesProvider => _gamesProvider;
+  FutureProvider<IList<GameInfo>> get gamesProvider => _gamesProvider;
 
   /// Provides the game state for the current game of the client with specified id
   late StateProvider<Game?> _gameStateProvider;
@@ -213,8 +210,8 @@ class GameProvider {
   }
 
   void dispose() {
-    read(playerIDsProvider).state = List.unmodifiable(
-        read(playerIDsProvider).state.whereNot((id) => id == playerID));
+    read(playerIDsProvider).state =
+        read(playerIDsProvider).state.remove(playerID);
   }
 }
 
@@ -225,7 +222,7 @@ final playerIDProvider = ScopedProvider((ref) => '');
 
 extension ReaderGameX on ScopedReader {
   GameReader get game =>
-      GameReader(this, this(playerGameProvider!(this(playerIDProvider))));
+      GameReader(this, this(playerGameProvider(this(playerIDProvider))));
 }
 
 class GameReader {
@@ -241,7 +238,7 @@ extension GameReaderX on Reader {
   String get address => this(selectedAddress).state;
 
   GameReader gameFor(String id) =>
-      GameReader(this, this(playerGameProvider!(id)));
+      GameReader(this, this(playerGameProvider(id)));
 
   /// Setup parameters
   set clientImplementation(String implementation) =>
@@ -250,7 +247,7 @@ extension GameReaderX on Reader {
   set gameConfig(GameConfig config) =>
       this(singleConfigProvider).state = config;
   GameConfig get gameConfig => this(singleConfigProvider).state;
-  List<String> get playerIDs => this(playerIDsProvider).state;
+  IList<String> get playerIDs => this(playerIDsProvider).state;
 }
 
 extension GameReaderGameX on GameReader {
@@ -273,7 +270,7 @@ extension GameReaderGameX on GameReader {
       this(game._gameInfoProvider).state = info;
   GameInfo? get lobbyInfo => this(game._gameLobbyProvider).state;
   set lobbyInfo(GameInfo? info) => this(game._gameLobbyProvider).state = info;
-  Future<List<GameInfo>>? get gameInfos => this(game._gamesProvider.future);
+  Future<IList<GameInfo>> get gameInfos => this(game._gamesProvider.future);
 
   /// Game setup information
   GameConfig get gameConfig => this(game._gameConfigProvider).state;
@@ -300,4 +297,5 @@ extension GameReaderGameX on GameReader {
 }
 
 /// Allows one config to write all players' configs
-final singleConfigProvider = StateProvider<GameConfig>((ref) => GameConfig());
+final singleConfigProvider =
+    StateProvider<GameConfig>((ref) => GameConfig(gameType: ''));

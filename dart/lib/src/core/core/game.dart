@@ -56,7 +56,7 @@ abstract class Game<E extends Event> {
     String type, {
     required String name,
     required Q Function(Map<String, dynamic>) fromJson,
-    required T Function(GameConfig, List<Player>, BackendGameReader?)
+    required T Function(GameConfig, IList<Player>, BackendGameReader)
         initialState,
     required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
     Q Function(T)? toClientView,
@@ -81,9 +81,9 @@ abstract class Game<E extends Event> {
   static Game toClientView(Game g) => _toClientViews[g.type]!(g);
 
   /// Will get the initial state for a particular configuration
-  static Game getInitialState(GameConfig gameConfig, List<Player> players,
+  static Game getInitialState(GameConfig gameConfig, IList<Player> players,
       BackendGameReader backendReader) {
-    final initState = _initialStates[gameConfig.gameType!];
+    final initState = _initialStates[gameConfig.gameType];
     if (initState == null) {
       throw UnimplementedError(
           'No game of that type exists in the registry ${gameConfig.gameType}');
@@ -125,7 +125,7 @@ abstract class Game<E extends Event> {
 
   /// Stores the function to create the initial state of the game
   static final Map<String,
-          Game Function(GameConfig, List<Player>, BackendGameReader?)>
+          Game Function(GameConfig, IList<Player>, BackendGameReader)>
       _initialStates = {};
 }
 
@@ -159,7 +159,7 @@ enum GameStatus {
 class GameConfig with _$GameConfig {
   const factory GameConfig({
     String? adminId,
-    String? gameType,
+    required String gameType,
     @Default(NameSet.Basic) NameSet nameSet,
     @Default(false) bool customNames,
     @Default(15) int rounds,
@@ -186,7 +186,7 @@ class GameConfig with _$GameConfig {
 class GameInfo with _$GameInfo {
   const factory GameInfo(
     String gameId,
-    @unmodifiableStringList List<String> players,
+    IList<String> players,
     String player,
     bool creator,
     String gameType,

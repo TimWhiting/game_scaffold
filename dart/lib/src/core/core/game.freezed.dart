@@ -22,7 +22,7 @@ class _$GameConfigTearOff {
 
   _GameConfig call(
       {String? adminId,
-      String? gameType,
+      required String gameType,
       NameSet nameSet = NameSet.Basic,
       bool customNames = false,
       int rounds = 15,
@@ -54,7 +54,7 @@ const $GameConfig = _$GameConfigTearOff();
 /// @nodoc
 mixin _$GameConfig {
   String? get adminId => throw _privateConstructorUsedError;
-  String? get gameType => throw _privateConstructorUsedError;
+  String get gameType => throw _privateConstructorUsedError;
   NameSet get nameSet => throw _privateConstructorUsedError;
   bool get customNames => throw _privateConstructorUsedError;
   int get rounds => throw _privateConstructorUsedError;
@@ -78,7 +78,7 @@ abstract class $GameConfigCopyWith<$Res> {
       _$GameConfigCopyWithImpl<$Res>;
   $Res call(
       {String? adminId,
-      String? gameType,
+      String gameType,
       NameSet nameSet,
       bool customNames,
       int rounds,
@@ -116,7 +116,7 @@ class _$GameConfigCopyWithImpl<$Res> implements $GameConfigCopyWith<$Res> {
       gameType: gameType == freezed
           ? _value.gameType
           : gameType // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       nameSet: nameSet == freezed
           ? _value.nameSet
           : nameSet // ignore: cast_nullable_to_non_nullable
@@ -157,7 +157,7 @@ abstract class _$GameConfigCopyWith<$Res> implements $GameConfigCopyWith<$Res> {
   @override
   $Res call(
       {String? adminId,
-      String? gameType,
+      String gameType,
       NameSet nameSet,
       bool customNames,
       int rounds,
@@ -197,7 +197,7 @@ class __$GameConfigCopyWithImpl<$Res> extends _$GameConfigCopyWithImpl<$Res>
       gameType: gameType == freezed
           ? _value.gameType
           : gameType // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       nameSet: nameSet == freezed
           ? _value.nameSet
           : nameSet // ignore: cast_nullable_to_non_nullable
@@ -236,7 +236,7 @@ class __$GameConfigCopyWithImpl<$Res> extends _$GameConfigCopyWithImpl<$Res>
 class _$_GameConfig implements _GameConfig {
   const _$_GameConfig(
       {this.adminId,
-      this.gameType,
+      required this.gameType,
       this.nameSet = NameSet.Basic,
       this.customNames = false,
       this.rounds = 15,
@@ -251,7 +251,7 @@ class _$_GameConfig implements _GameConfig {
   @override
   final String? adminId;
   @override
-  final String? gameType;
+  final String gameType;
   @JsonKey(defaultValue: NameSet.Basic)
   @override
   final NameSet nameSet;
@@ -338,7 +338,7 @@ class _$_GameConfig implements _GameConfig {
 abstract class _GameConfig implements GameConfig {
   const factory _GameConfig(
       {String? adminId,
-      String? gameType,
+      required String gameType,
       NameSet nameSet,
       bool customNames,
       int rounds,
@@ -353,7 +353,7 @@ abstract class _GameConfig implements GameConfig {
   @override
   String? get adminId => throw _privateConstructorUsedError;
   @override
-  String? get gameType => throw _privateConstructorUsedError;
+  String get gameType => throw _privateConstructorUsedError;
   @override
   NameSet get nameSet => throw _privateConstructorUsedError;
   @override
@@ -384,8 +384,8 @@ GameInfo _$GameInfoFromJson(Map<String, dynamic> json) {
 class _$GameInfoTearOff {
   const _$GameInfoTearOff();
 
-  _GameInfo call(String gameId, @unmodifiableStringList List<String> players,
-      String player, bool creator, String gameType) {
+  _GameInfo call(String gameId, IList<String> players, String player,
+      bool creator, String gameType) {
     return _GameInfo(
       gameId,
       players,
@@ -406,8 +406,7 @@ const $GameInfo = _$GameInfoTearOff();
 /// @nodoc
 mixin _$GameInfo {
   String get gameId => throw _privateConstructorUsedError;
-  @unmodifiableStringList
-  List<String> get players => throw _privateConstructorUsedError;
+  IList<String> get players => throw _privateConstructorUsedError;
   String get player => throw _privateConstructorUsedError;
   bool get creator => throw _privateConstructorUsedError;
   String get gameType => throw _privateConstructorUsedError;
@@ -424,7 +423,7 @@ abstract class $GameInfoCopyWith<$Res> {
       _$GameInfoCopyWithImpl<$Res>;
   $Res call(
       {String gameId,
-      @unmodifiableStringList List<String> players,
+      IList<String> players,
       String player,
       bool creator,
       String gameType});
@@ -454,7 +453,7 @@ class _$GameInfoCopyWithImpl<$Res> implements $GameInfoCopyWith<$Res> {
       players: players == freezed
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as IList<String>,
       player: player == freezed
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
@@ -478,7 +477,7 @@ abstract class _$GameInfoCopyWith<$Res> implements $GameInfoCopyWith<$Res> {
   @override
   $Res call(
       {String gameId,
-      @unmodifiableStringList List<String> players,
+      IList<String> players,
       String player,
       bool creator,
       String gameType});
@@ -509,7 +508,7 @@ class __$GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
       players == freezed
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as IList<String>,
       player == freezed
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
@@ -530,8 +529,8 @@ class __$GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
 
 /// @nodoc
 class _$_GameInfo implements _GameInfo {
-  const _$_GameInfo(this.gameId, @unmodifiableStringList this.players,
-      this.player, this.creator, this.gameType);
+  const _$_GameInfo(
+      this.gameId, this.players, this.player, this.creator, this.gameType);
 
   factory _$_GameInfo.fromJson(Map<String, dynamic> json) =>
       _$_$_GameInfoFromJson(json);
@@ -539,8 +538,7 @@ class _$_GameInfo implements _GameInfo {
   @override
   final String gameId;
   @override
-  @unmodifiableStringList
-  final List<String> players;
+  final IList<String> players;
   @override
   final String player;
   @override
@@ -593,20 +591,15 @@ class _$_GameInfo implements _GameInfo {
 }
 
 abstract class _GameInfo implements GameInfo {
-  const factory _GameInfo(
-      String gameId,
-      @unmodifiableStringList List<String> players,
-      String player,
-      bool creator,
-      String gameType) = _$_GameInfo;
+  const factory _GameInfo(String gameId, IList<String> players, String player,
+      bool creator, String gameType) = _$_GameInfo;
 
   factory _GameInfo.fromJson(Map<String, dynamic> json) = _$_GameInfo.fromJson;
 
   @override
   String get gameId => throw _privateConstructorUsedError;
   @override
-  @unmodifiableStringList
-  List<String> get players => throw _privateConstructorUsedError;
+  IList<String> get players => throw _privateConstructorUsedError;
   @override
   String get player => throw _privateConstructorUsedError;
   @override

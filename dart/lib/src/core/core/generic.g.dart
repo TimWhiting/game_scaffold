@@ -8,11 +8,17 @@ part of 'generic.dart';
 
 _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
   return _$_GenericGame(
-    unmodifiablePlayerList.fromJson(json['players'] as List),
-    unmodifiableStringList.fromJson(json['readyPlayers'] as List),
-    unmodifiableDoubleListList.fromJson(json['allRoundScores'] as List),
+    (json['players'] as List)
+        .map((e) => Player.fromJson(e as Map<String, dynamic>))
+        .toIList(),
+    (json['readyPlayers'] as List).map((e) => e as String).toIList(),
+    (json['allRoundScores'] as List)
+        .map((e) => (e as List).map((e) => (e as num).toDouble()).toIList())
+        .toIList(),
     DateTime.parse(json['time'] as String),
-    unmodifiableGameMessageList.fromJson(json['messages'] as List),
+    (json['messages'] as List)
+        .map((e) => GameMessage.fromJson(e as Map<String, dynamic>))
+        .toIList(),
     _$enumDecode(_$GameStatusEnumMap, json['gameStatus']),
     json['currentPlayerIndex'] as int?,
     json['round'] as int,
@@ -23,12 +29,11 @@ _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$_$_GenericGameToJson(_$_GenericGame instance) =>
     <String, dynamic>{
-      'players': unmodifiablePlayerList.toJson(instance.players),
-      'readyPlayers': unmodifiableStringList.toJson(instance.readyPlayers),
-      'allRoundScores':
-          unmodifiableDoubleListList.toJson(instance.allRoundScores),
+      'players': instance.players.toList(),
+      'readyPlayers': instance.readyPlayers.toList(),
+      'allRoundScores': instance.allRoundScores.map((e) => e.toList()).toList(),
       'time': instance.time.toIso8601String(),
-      'messages': unmodifiableGameMessageList.toJson(instance.messages),
+      'messages': instance.messages.toList(),
       'gameStatus': _$GameStatusEnumMap[instance.gameStatus],
       'currentPlayerIndex': instance.currentPlayerIndex,
       'round': instance.round,

@@ -16,10 +16,10 @@ abstract class ServerClient {
       : logger = Logger('ServerClient $playerID');
 
   /// The id of the client
-  final String? playerID;
-  GameReader get game => read!.gameFor(playerID!);
+  final String playerID;
+  GameReader get game => read.gameFor(playerID);
 
-  final Reader? read;
+  final Reader read;
   final Logger logger;
 
   /// Creates a game on the server
@@ -29,7 +29,7 @@ abstract class ServerClient {
   Future<bool> deleteGame();
 
   /// Gets a list of games on the server
-  Future<List<GameInfo>> getGames();
+  Future<IList<GameInfo>> getGames();
 
   /// Gets info about a particular game from the server
   Future<void> getGameInfo(String gameId);

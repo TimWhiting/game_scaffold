@@ -31,15 +31,14 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
     }
 
     return copyWith(
-      board: board
-          .mapIndexed((i, s) => i == location ? player : s)
-          .toUnmodifiable(),
+      board: List.unmodifiable(
+          board.mapIndexed((i, s) => i == location ? player : s)),
     )._nextPlayerOrEndRound().gameValue();
   }
 
   TicTacToeGame _nextPlayerOrEndRound() {
     var gGame = generic.nextPlayer();
-    if (playerIDs.any((p) => isWinner(p)) || board.all((l) => l != null)) {
+    if (playerIDs.any((p) => isWinner(p)) || board.every((l) => l != null)) {
       if (round == 2) {
         gGame = gGame.finishRound(
           {
@@ -97,11 +96,11 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
     [2, 5, 8],
     [0, 4, 8],
     [2, 4, 6]
-  ].map((l) => l.toUnmodifiable()));
+  ].map((l) => List.unmodifiable(l)));
 
   bool isWinner(String playerID) {
     if (winningLocationCombinations
-        .any((comb) => comb.all((loc) => board[loc] == playerID))) {
+        .any((comb) => comb.every((loc) => board[loc] == playerID))) {
       return true;
     }
     return false;

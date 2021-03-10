@@ -21,9 +21,6 @@ final _serverSocketOpts = <String, dynamic>{
 class IOServer {
   final bool debug;
   final bool https;
-  final String? pathToPem;
-  final String? pathToRsa;
-  final int? port;
   final logger = Logger('IOServer');
   final io = IO.Server(options: _serverSocketOpts);
   final servers = <String, GameServer>{};
@@ -31,13 +28,13 @@ class IOServer {
   final container = ProviderContainer();
 
   /// Keeps track of a set of games that a client is a part of by client id
-  final _clientGames = <String?, Set<String>>{};
+  final _clientGames = <String, Set<String>>{};
   IOServer({
     this.debug = false,
     this.https = false,
-    this.pathToPem,
-    this.pathToRsa,
-    this.port,
+    String? pathToPem,
+    String? pathToRsa,
+    int port = defaultGamePort,
   }) {
     final server = StreamServer();
     if (https) {
@@ -47,16 +44,10 @@ class IOServer {
       final security = SecurityContext()
         ..useCertificateChain(pathToPem!)
         ..usePrivateKey(pathToRsa!);
-      server.startSecure(
-        security,
-        address: InternetAddress.anyIPv4,
-        port: port ?? defaultGamePort,
-      );
+      server.startSecure(security,
+          address: InternetAddress.anyIPv4, port: port);
     } else {
-      server.start(
-        address: InternetAddress.loopbackIPv4,
-        port: port ?? defaultGamePort,
-      );
+      server.start(address: InternetAddress.loopbackIPv4, port: port);
     }
     io.listen(server, _serverSocketOpts);
     io.on(
@@ -101,10 +92,10 @@ class IOServer {
     );
   }
 
-  void _getGameInfo(IO.Socket client, String? id) {
+  void _getGameInfo(IO.Socket client, String id) {
     if (servers.containsKey(id)) {
       client.emit(IOChannel.gameinfo.string,
-          servers[id!]!.gameInfo(servers[id]!.clientID(client)).toJson());
+          servers[id]!.gameInfo(servers[id]!.clientID(client)).toJson());
     } else {
       client.emit(IOChannel.gameinfo.string, '404');
     }
@@ -132,14 +123,14 @@ class IOServer {
     client.emit(IOChannel.gamecreated.string, server.gameID);
   }
 
-  Future<void> _deleteGame(IO.Socket client, String? id) async {
+  Future<void> _deleteGame(IO.Socket client, String id) async {
     logger.info('Deleting game $id');
-    servers[id!]!.notifyKilled(client);
+    servers[id]!.notifyKilled(client);
     await Future.delayed(Duration(seconds: 2));
     servers[id]!.killGame();
   }
 
-  void _getGames(IO.Socket client, String? id) {
+  void _getGames(IO.Socket client, String id) {
     if (_clientGames[id] == null) {
       client.emit(IOChannel.allgames.string, json.encode([]));
     } else {
@@ -147,7 +138,7 @@ class IOServer {
     }
   }
 
-  void _updateGames(String? id, IO.Socket client) {
+  void _updateGames(String id, IO.Socket client) {
     logger.info('Getting all games for $id');
     final games = _clientGames[id]!;
     final gameInfo =
@@ -155,14 +146,14 @@ class IOServer {
     client.emit(IOChannel.allgames.string, json.encode(gameInfo));
   }
 
-  void addClientToGame(String? id, String gameId) {
+  void addClientToGame(String id, String gameId) {
     if (_clientGames[id] == null) {
       _clientGames[id] = {};
     }
     _clientGames[id]!.add(gameId);
   }
 
-  void removeClientFromGame(String? id, String gameId) {
+  void removeClientFromGame(String id, String gameId) {
     _clientGames[id]?.remove(gameId);
   }
 }

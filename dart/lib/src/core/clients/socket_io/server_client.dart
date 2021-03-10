@@ -48,12 +48,12 @@ class IOServerClient extends ServerClient {
   }
 
   @override
-  Future<List<GameInfo>> getGames() async {
+  Future<IList<GameInfo>> getGames() async {
     await _ensureConnected();
     final result = await socket!.call(IOChannel.getgames, playerID);
     return (json.decode(result as String) as List<dynamic>)
         .map((v) => GameInfo.fromJson(v as Map<String, dynamic>))
-        .toList();
+        .toIList();
   }
 
   @override
@@ -68,7 +68,7 @@ class IOServerClient extends ServerClient {
   @override
   void dispose() {
     logger.info('Dispose');
-    socket!.dispose();
+    socket?.dispose();
   }
 
   Future<void> _ensureConnected() async {

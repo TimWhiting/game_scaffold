@@ -9,7 +9,7 @@ part of 'game.dart';
 _$_GameConfig _$_$_GameConfigFromJson(Map<String, dynamic> json) {
   return _$_GameConfig(
     adminId: json['adminId'] as String?,
-    gameType: json['gameType'] as String?,
+    gameType: json['gameType'] as String,
     nameSet: _$enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ??
         NameSet.Basic,
     customNames: json['customNames'] as bool? ?? false,
@@ -78,7 +78,7 @@ const _$NameSetEnumMap = {
 _$_GameInfo _$_$_GameInfoFromJson(Map<String, dynamic> json) {
   return _$_GameInfo(
     json['gameId'] as String,
-    unmodifiableStringList.fromJson(json['players'] as List),
+    (json['players'] as List).map((e) => e as String).toIList(),
     json['player'] as String,
     json['creator'] as bool,
     json['gameType'] as String,
@@ -88,7 +88,7 @@ _$_GameInfo _$_$_GameInfoFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$_$_GameInfoToJson(_$_GameInfo instance) =>
     <String, dynamic>{
       'gameId': instance.gameId,
-      'players': unmodifiableStringList.toJson(instance.players),
+      'players': instance.players.toList(),
       'player': instance.player,
       'creator': instance.creator,
       'gameType': instance.gameType,

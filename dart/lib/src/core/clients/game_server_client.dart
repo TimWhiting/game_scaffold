@@ -82,7 +82,7 @@ class GameServerClient {
   }
 
   /// Gets a list of games on the server
-  Future<List<GameInfo>> getGames() => _sClient.getGames();
+  Future<IList<GameInfo>> getGames() => _sClient.getGames();
 
   /// Gets info about a particular game from the server
   Future<GameInfo> getGameInfo(String gameId) async {

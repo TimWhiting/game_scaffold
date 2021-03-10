@@ -21,11 +21,11 @@ class NoServerGameClient extends GameClient {
     game.gameStatus = GameStatus.NotJoined;
   }
 
-  List<Player> get _players => backend.players;
+  IList<Player> get _players => backend.players;
   @override
   Future<void> register() async {
-    backend.players = List.unmodifiable(
-        [..._players, Player(playerID, name: game.playerName ?? playerID)]);
+    backend.players =
+        _players.add(Player(playerID, name: game.playerName ?? playerID));
     game.gameStatus = GameStatus.NotJoined;
     game.playerName = game.playerName == '' ? playerID : game.playerName;
     game.gameStatus = GameStatus.NotStarted;
@@ -37,10 +37,10 @@ class NoServerGameClient extends GameClient {
     for (final pID in _players) {
       read.gameFor(pID.id).lobbyInfo = GameInfo(
         gameCode,
-        List.unmodifiable(_players.map((p) => p.name)),
+        _players.map((p) => p.name).toIList(),
         pID.name,
         pID.id == backend.players.first.id,
-        config.gameType!,
+        config.gameType,
       );
     }
   }

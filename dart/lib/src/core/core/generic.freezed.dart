@@ -21,11 +21,11 @@ class _$GenericGameTearOff {
   const _$GenericGameTearOff();
 
   _GenericGame call(
-      @unmodifiablePlayerList List<Player> players,
-      @unmodifiableStringList List<String> readyPlayers,
-      @unmodifiableDoubleListList List<List<double>> allRoundScores,
+      IList<Player> players,
+      IList<String> readyPlayers,
+      IList<IList<double>> allRoundScores,
       DateTime time,
-      @unmodifiableGameMessageList List<GameMessage> messages,
+      IList<GameMessage> messages,
       GameStatus gameStatus,
       int? currentPlayerIndex,
       int round,
@@ -55,15 +55,11 @@ const $GenericGame = _$GenericGameTearOff();
 
 /// @nodoc
 mixin _$GenericGame {
-  @unmodifiablePlayerList
-  List<Player> get players => throw _privateConstructorUsedError;
-  @unmodifiableStringList
-  List<String> get readyPlayers => throw _privateConstructorUsedError;
-  @unmodifiableDoubleListList
-  List<List<double>> get allRoundScores => throw _privateConstructorUsedError;
+  IList<Player> get players => throw _privateConstructorUsedError;
+  IList<String> get readyPlayers => throw _privateConstructorUsedError;
+  IList<IList<double>> get allRoundScores => throw _privateConstructorUsedError;
   DateTime get time => throw _privateConstructorUsedError;
-  @unmodifiableGameMessageList
-  List<GameMessage> get messages => throw _privateConstructorUsedError;
+  IList<GameMessage> get messages => throw _privateConstructorUsedError;
   GameStatus get gameStatus => throw _privateConstructorUsedError;
   int? get currentPlayerIndex => throw _privateConstructorUsedError;
   int get round => throw _privateConstructorUsedError;
@@ -82,11 +78,11 @@ abstract class $GenericGameCopyWith<$Res> {
           GenericGame value, $Res Function(GenericGame) then) =
       _$GenericGameCopyWithImpl<$Res>;
   $Res call(
-      {@unmodifiablePlayerList List<Player> players,
-      @unmodifiableStringList List<String> readyPlayers,
-      @unmodifiableDoubleListList List<List<double>> allRoundScores,
+      {IList<Player> players,
+      IList<String> readyPlayers,
+      IList<IList<double>> allRoundScores,
       DateTime time,
-      @unmodifiableGameMessageList List<GameMessage> messages,
+      IList<GameMessage> messages,
       GameStatus gameStatus,
       int? currentPlayerIndex,
       int round,
@@ -119,15 +115,15 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
       players: players == freezed
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
+              as IList<Player>,
       readyPlayers: readyPlayers == freezed
           ? _value.readyPlayers
           : readyPlayers // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as IList<String>,
       allRoundScores: allRoundScores == freezed
           ? _value.allRoundScores
           : allRoundScores // ignore: cast_nullable_to_non_nullable
-              as List<List<double>>,
+              as IList<IList<double>>,
       time: time == freezed
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -135,7 +131,7 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
       messages: messages == freezed
           ? _value.messages
           : messages // ignore: cast_nullable_to_non_nullable
-              as List<GameMessage>,
+              as IList<GameMessage>,
       gameStatus: gameStatus == freezed
           ? _value.gameStatus
           : gameStatus // ignore: cast_nullable_to_non_nullable
@@ -168,11 +164,11 @@ abstract class _$GenericGameCopyWith<$Res>
       __$GenericGameCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@unmodifiablePlayerList List<Player> players,
-      @unmodifiableStringList List<String> readyPlayers,
-      @unmodifiableDoubleListList List<List<double>> allRoundScores,
+      {IList<Player> players,
+      IList<String> readyPlayers,
+      IList<IList<double>> allRoundScores,
       DateTime time,
-      @unmodifiableGameMessageList List<GameMessage> messages,
+      IList<GameMessage> messages,
       GameStatus gameStatus,
       int? currentPlayerIndex,
       int round,
@@ -207,15 +203,15 @@ class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
       players == freezed
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
-              as List<Player>,
+              as IList<Player>,
       readyPlayers == freezed
           ? _value.readyPlayers
           : readyPlayers // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as IList<String>,
       allRoundScores == freezed
           ? _value.allRoundScores
           : allRoundScores // ignore: cast_nullable_to_non_nullable
-              as List<List<double>>,
+              as IList<IList<double>>,
       time == freezed
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -223,7 +219,7 @@ class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
       messages == freezed
           ? _value.messages
           : messages // ignore: cast_nullable_to_non_nullable
-              as List<GameMessage>,
+              as IList<GameMessage>,
       gameStatus == freezed
           ? _value.gameStatus
           : gameStatus // ignore: cast_nullable_to_non_nullable
@@ -253,11 +249,11 @@ class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
 /// @nodoc
 class _$_GenericGame extends _GenericGame {
   const _$_GenericGame(
-      @unmodifiablePlayerList this.players,
-      @unmodifiableStringList this.readyPlayers,
-      @unmodifiableDoubleListList this.allRoundScores,
+      this.players,
+      this.readyPlayers,
+      this.allRoundScores,
       this.time,
-      @unmodifiableGameMessageList this.messages,
+      this.messages,
       this.gameStatus,
       this.currentPlayerIndex,
       this.round,
@@ -269,19 +265,15 @@ class _$_GenericGame extends _GenericGame {
       _$_$_GenericGameFromJson(json);
 
   @override
-  @unmodifiablePlayerList
-  final List<Player> players;
+  final IList<Player> players;
   @override
-  @unmodifiableStringList
-  final List<String> readyPlayers;
+  final IList<String> readyPlayers;
   @override
-  @unmodifiableDoubleListList
-  final List<List<double>> allRoundScores;
+  final IList<IList<double>> allRoundScores;
   @override
   final DateTime time;
   @override
-  @unmodifiableGameMessageList
-  final List<GameMessage> messages;
+  final IList<GameMessage> messages;
   @override
   final GameStatus gameStatus;
   @override
@@ -359,11 +351,11 @@ class _$_GenericGame extends _GenericGame {
 
 abstract class _GenericGame extends GenericGame {
   const factory _GenericGame(
-      @unmodifiablePlayerList List<Player> players,
-      @unmodifiableStringList List<String> readyPlayers,
-      @unmodifiableDoubleListList List<List<double>> allRoundScores,
+      IList<Player> players,
+      IList<String> readyPlayers,
+      IList<IList<double>> allRoundScores,
       DateTime time,
-      @unmodifiableGameMessageList List<GameMessage> messages,
+      IList<GameMessage> messages,
       GameStatus gameStatus,
       int? currentPlayerIndex,
       int round,
@@ -375,19 +367,15 @@ abstract class _GenericGame extends GenericGame {
       _$_GenericGame.fromJson;
 
   @override
-  @unmodifiablePlayerList
-  List<Player> get players => throw _privateConstructorUsedError;
+  IList<Player> get players => throw _privateConstructorUsedError;
   @override
-  @unmodifiableStringList
-  List<String> get readyPlayers => throw _privateConstructorUsedError;
+  IList<String> get readyPlayers => throw _privateConstructorUsedError;
   @override
-  @unmodifiableDoubleListList
-  List<List<double>> get allRoundScores => throw _privateConstructorUsedError;
+  IList<IList<double>> get allRoundScores => throw _privateConstructorUsedError;
   @override
   DateTime get time => throw _privateConstructorUsedError;
   @override
-  @unmodifiableGameMessageList
-  List<GameMessage> get messages => throw _privateConstructorUsedError;
+  IList<GameMessage> get messages => throw _privateConstructorUsedError;
   @override
   GameStatus get gameStatus => throw _privateConstructorUsedError;
   @override

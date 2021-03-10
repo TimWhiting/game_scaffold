@@ -1,7 +1,10 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'events.dart';
 import 'game.dart';
 import 'generic.dart';
 import 'player.dart';
+
+export 'package:fast_immutable_collections/fast_immutable_collections.dart';
 
 extension GameTypeOf on String {
   /// Returns the game's user friendly name based on the game's type identifier
@@ -30,17 +33,16 @@ extension GameX on Game {
   String get currentPlayerID => generic.currentPlayer!.id;
 
   /// Gets an unmodifiable list of players that are a part of this game
-  List<Player> get players => generic.players;
+  IList<Player> get players => generic.players;
 
   /// Gets the players that are a part of this game
-  List<String> get playerIDs =>
-      List.unmodifiable(generic.players.map((p) => p.id));
+  IList<String> get playerIDs => generic.players.map((p) => p.id).toIList();
 
   /// Gets the `DateTime` that this state was updated
   DateTime get time => generic.time;
 
   /// Gets the list of `GameMessage`s that have been exchanged this game
-  List<GameMessage> get messages => generic.messages;
+  IList<GameMessage> get messages => generic.messages;
 
   /// Gets the status of the game
   GameStatus get gameStatus => generic.gameStatus;
@@ -49,13 +51,15 @@ extension GameX on Game {
   int get round => generic.round;
 
   /// Gets the total score for each player mapped by player id
-  Map<String, double> get totalScores => generic.totalScores;
+  IMap<String, double> get totalScores => generic.totalScores;
 
   /// Gets the list of round scores for each player mapped by their id
-  Map<String, List<double>> get playerRoundScores => generic.playerRoundScores;
+  IMap<String, IList<double>> get playerRoundScores =>
+      generic.playerRoundScores;
 
   /// Gets the map of player scores grouped by round
-  List<Map<String, double>> get roundPlayerScores => generic.roundPlayerScores;
+  IList<IMap<String, double>> get roundPlayerScores =>
+      generic.roundPlayerScores;
 
   /// Gets whether the game is over
   bool get gameOver => generic.gameOver;
@@ -70,18 +74,18 @@ extension GameX on Game {
   bool get isSimultaneousAction => generic.isSimultaneousAction;
 
   /// Gets the players who are ready for the next round
-  List<String> get readyPlayers => generic.readyPlayers;
+  IList<String> get readyPlayers => generic.readyPlayers;
 }
 
-extension GameMapExtensions<K, V> on Map<K, V> {
-  Map<K, S> mapValues<S>(S Function(MapEntry<K, V> entry) fn) {
-    return Map.unmodifiable({
+extension GameMapExtensions<K, V> on IMap<K, V> {
+  IMap<K, S> mapValues<S>(S Function(MapEntry<K, V> entry) fn) {
+    return IMap({
       for (final entry in entries) entry.key: fn(entry),
     });
   }
 
-  Map<S, V> mapKeys<S>(S Function(MapEntry<K, V> entry) fn) {
-    return Map.unmodifiable({
+  IMap<S, V> mapKeys<S>(S Function(MapEntry<K, V> entry) fn) {
+    return IMap({
       for (final entry in entries) fn(entry): entry.value,
     });
   }

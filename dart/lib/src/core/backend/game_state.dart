@@ -19,7 +19,7 @@ String get homeDir {
 
 final agentBackendGame = Provider((ref) => BackendProvider(ref.read, '0000'));
 final backendGameCodesProvider =
-    StateProvider<List<String>>((ref) => List.unmodifiable([]));
+    StateProvider<IList<String>>((ref) => <String>[].lock);
 final ProviderFamily<BackendProvider, String>? backendGamesProvider =
     Provider.family<BackendProvider, String>((ref, code) {
   final bp = BackendProvider(ref.read, code);
@@ -36,7 +36,7 @@ class BackendProvider {
     Future.delayed(
         Duration(milliseconds: 10),
         () => read(backendGameCodesProvider).state =
-            List.unmodifiable([...read(backendGameCodesProvider).state, code]));
+            read(backendGameCodesProvider).state.add(code));
     initialStateProvider = Provider<Game>(_initialStateImpl);
     gameStateProvider =
         StateNotifierProvider<GameStateNotifier>(_gameStateNotifier);
@@ -50,7 +50,7 @@ class BackendProvider {
 
   void dispose() {
     read(backendGameCodesProvider).state =
-        List.unmodifiable([...read(backendGameCodesProvider).state, code]);
+        read(backendGameCodesProvider).state.remove(code);
   }
 
   /// Provides the initial state of the game
@@ -63,8 +63,8 @@ class BackendProvider {
   late StateNotifierProvider<GameStateNotifier> gameStateProvider;
 
   /// Keeps track of the players involved in the game on the server (or on the client) in the case of a local game
-  final playersProvider = StateProvider<List<Player>>(
-    (ref) => List.unmodifiable([]),
+  final playersProvider = StateProvider<IList<Player>>(
+    (ref) => <Player>[].lock,
   );
 
   /// Keeps track
@@ -195,10 +195,10 @@ class BackendGameReader {
 
 extension BackendReaderX on BackendGameReader {
   /// On the backend gets the list of [Player]s
-  List<Player> get players => this(game.playersProvider).state;
+  IList<Player> get players => this(game.playersProvider).state;
 
   /// On the  sets the players to [players]
-  set players(List<Player> players) =>
+  set players(IList<Player> players) =>
       this(game.playersProvider).state = players;
 
   /// On the  gets the [GameConfig]
@@ -211,13 +211,13 @@ extension BackendReaderX on BackendGameReader {
   GameError? get gameError => this(game.errorProvider.state);
 
   /// On the  sets the [GameError]
-  set gameError(GameError? error) => errorNotifier!.error = error;
+  set gameError(GameError? error) => errorNotifier.error = error;
 
   /// on the  clears the lastest game error
-  void clearError() => errorNotifier!.clearError();
+  void clearError() => errorNotifier.clearError();
 
   /// On the  gets the error notifier
-  GameErrorNotifier? get errorNotifier => this(game.errorProvider);
+  GameErrorNotifier get errorNotifier => this(game.errorProvider);
 
   /// On the  gets the latest [Game] state
   Game? get gameState => this(game.gameStateProvider.state);
