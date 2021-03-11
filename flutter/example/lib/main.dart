@@ -45,14 +45,14 @@ class TicTacToeWidget extends StatelessWidget {
       body: Row(children: [
         Expanded(
           child: ProviderScope(
-            overrides: [playerIDProvider.overrideAs(((watch) => P1) )],
+            overrides: [playerIDProvider.overrideAs(((watch) => P1))],
             child: Player(),
           ),
         ),
         Container(width: 10, color: Colors.black),
         Expanded(
           child: ProviderScope(
-            overrides: [playerIDProvider.overrideAs(((watch) => P2) )],
+            overrides: [playerIDProvider.overrideAs(((watch) => P2))],
             child: Player(),
           ),
         ),
@@ -79,7 +79,8 @@ class CreateOrJoinWidget extends GameHookWidget {
     final code = gameProvider.useGameCode;
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
     final _ = gameProvider.useGameClient;
-    final allGames = useFuture(gameProvider.useGameInfos);
+    final allGames =
+        useFuture(gameProvider.useGameInfos, initialData: <GameInfo>[].lock);
 
     return Scaffold(
       body: Center(
@@ -91,7 +92,6 @@ class CreateOrJoinWidget extends GameHookWidget {
             if (playerID == P1)
               ElevatedButton(
                 key: Key('Create Game Button $playerID'),
-                child: Text('Create Game'),
                 onPressed: () async {
                   final id = await context.gameClient.createGame(
                     config: GameConfig(
@@ -104,6 +104,7 @@ class CreateOrJoinWidget extends GameHookWidget {
                   );
                   await context.gameClient.register(code: id);
                 },
+                child: Text('Create Game'),
               ),
             if (playerID == P2) ...[
               SizedBox(
@@ -122,7 +123,7 @@ class CreateOrJoinWidget extends GameHookWidget {
               )
             ],
             if (allGames.hasData)
-              for (final info in allGames.data)
+              for (final info in allGames.data!)
                 Text('Started Game: ${info.gameId}, Players: ${info.players}'),
           ],
         ),
@@ -169,6 +170,9 @@ class GameWidget extends GameHookWidget {
                   for (final c in [0, 1, 2])
                     GestureDetector(
                       key: Key('${gameProvider.playerID} square $r $c'),
+                      onTap: () => context.gameClient.sendEvent(
+                        TicTacToeGameEvent(gameProvider.playerID, r * 3 + c),
+                      ),
                       child: ColoredBox(
                         color: Colors.black,
                         child: Container(
@@ -184,9 +188,6 @@ class GameWidget extends GameHookWidget {
                           ),
                         ),
                       ),
-                      onTap: () => context.gameClient.sendEvent(
-                        TicTacToeGameEvent(gameProvider.playerID, r * 3 + c),
-                      ),
                     ),
                 ],
               ),
@@ -194,8 +195,9 @@ class GameWidget extends GameHookWidget {
                 !gameState.readyPlayers.contains(gameProvider.playerID)) ...[
               SizedBox(height: 20),
               ElevatedButton(
-                  child: Text('Next Round'),
-                  onPressed: () => context.gameClient.newRound()),
+                onPressed: () => context.gameClient.newRound(),
+                child: Text('Next Round'),
+              ),
             ],
             SizedBox(height: 20),
             Text('$gameError'),
@@ -206,7 +208,7 @@ class GameWidget extends GameHookWidget {
   }
 }
 
-extension TextX on List<String> {
+extension TextX on IList<String?> {
   String xOrO(String playerID, int location) {
     if (this[location] == null) {
       return '';
