@@ -31,3 +31,6 @@ dependency_overrides:
   crypto: ^3.0.0
   convert: ^3.0.0
   socket_io_common: ^1.0.0-nullsafety.1
+
+scripts:
+  - gen: dart run build_runner build --enable-experiment=nonfunction-type-aliases
