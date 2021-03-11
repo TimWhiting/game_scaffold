@@ -1,7 +1,9 @@
 import 'package:game_scaffold/game_scaffold.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:supabase/supabase.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:supabase/src/supabase_query_builder.dart';
 import 'package:realtime_client/realtime_client.dart' hide Logger;
 
@@ -66,18 +68,18 @@ class SupabaseServerClient extends ServerClient {
     print(gameInfo);
     final config = GameConfig.fromJson(gameInfo['config']);
     final players =
-        (gameInfo['players'] as List).map((p) => Player.fromJson(p)).toList();
+        (gameInfo['players'] as List).map((p) => Player.fromJson(p)).toIList();
     return GameInfo(
       gameInfo['id'],
-      players.map((p) => p.nameOrID).toList(),
-      players.firstOrNullWhere((p) => p.id == playerID)?.nameOrID,
+      players.map((p) => p.nameOrID).toIList(),
+      players.firstWhereOrNull((p) => p.id == playerID)?.nameOrID ?? '',
       config.adminId == playerID,
       config.gameType,
     );
   }
 
   @override
-  Future<List<GameInfo>> getGames() async {
+  Future<IList<GameInfo>> getGames() async {
     final response = await _supaClient
         .rpc('getallgames', params: {'playerid': playerID}).execute();
 
@@ -88,14 +90,12 @@ class SupabaseServerClient extends ServerClient {
     final gameInfo = response.data as List;
     final allGames = gameInfo.map((gi) => infoFromRow(gi)).toList();
     _supaLogger.info('All Games: $allGames');
-    return allGames;
+    return allGames.lock;
   }
 
   static void registerImplementation() {
-    ServerClient.registerImplementation(
-      SupabaseLocation,
-      (reader, address, id) => SupabaseServerClient(reader, id),
-    );
+    ServerClient.registerImplementation(SupabaseLocation,
+        (reader, address, id) => SupabaseServerClient(reader, id));
   }
 }
 
@@ -103,7 +103,7 @@ class SupabaseGameClient extends GameClient {
   SupabaseGameClient(String playerID, Reader read) : super(playerID, read);
   SupabaseClient get _supaClient => read(supabaseProvider);
   SupabaseQueryBuilder get gameDB => _supaClient.from('Game');
-  RealtimeSubscription _gameSub;
+  late RealtimeSubscription _gameSub;
   @override
   void dispose() {
     // TODO: implement dispose
@@ -133,7 +133,7 @@ class SupabaseGameClient extends GameClient {
         print('_______________\n\n\n\n\n\n\n');
         _supaLogger.info('$d');
         print('_______________\n\n\n\n\n\n\n');
-      }).subscribe((e, {String errorMsg}) => print('$e, $errorMsg'));
+      }).subscribe((e, {String? errorMsg}) => print('$e, $errorMsg'));
       print(_gameSub.topic);
       _gameSub.onError(print);
 
@@ -141,10 +141,8 @@ class SupabaseGameClient extends GameClient {
         _supaLogger.info('Player $playerID Rejoining');
         return;
       }
-      final newPlayers = [
-        ...oldPlayers,
-        Player(playerID, name: read.gameFor(playerID).playerName),
-      ];
+      final newPlayers = oldPlayers.lock
+          .add(Player(playerID, name: read.gameFor(playerID).playerName ?? ''));
       if (newPlayers.length == gameConfig.maxPlayers) {
         _supaLogger.info('Max Limit');
 
@@ -186,5 +184,5 @@ void registerSupabaseServerClients() {
 }
 
 extension PlayerXName on Player {
-  String get nameOrID => name == null || name == '' ? id : name;
+  String get nameOrID => name == '' ? id : name;
 }

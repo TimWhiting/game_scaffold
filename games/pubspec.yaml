@@ -1,6 +1,6 @@
 name: game_scaffold_games
 description: Games for the game_scaffold_dart package
-version: 0.2.0
+version: 0.3.0
 homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:

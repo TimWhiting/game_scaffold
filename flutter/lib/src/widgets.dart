@@ -4,7 +4,7 @@ import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 import 'state_hooks.dart';
 
 abstract class GameHookWidget extends HookWidget {
-  const GameHookWidget({Key key}) : super(key: key);
+  const GameHookWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +18,12 @@ abstract class GameHookWidget extends HookWidget {
 
 class GameNavigator extends GameHookWidget {
   GameNavigator(
-      {Widget disconnected,
-      @required this.connected,
-      @required this.lobby,
-      @required this.game,
-      Widget betweenRounds,
-      Widget gameOver})
+      {Widget? disconnected,
+      required this.connected,
+      required this.lobby,
+      required this.game,
+      Widget? betweenRounds,
+      Widget? gameOver})
       : disconnected = disconnected ?? connected,
         betweenRounds = betweenRounds ?? game,
         gameOver = gameOver ?? game;
@@ -58,22 +58,22 @@ class GameNavigator extends GameHookWidget {
     return Navigator(
       pages: pages.entries
           .map((entry) => MaterialPage(
-              key: Key('${entry.key}'),
+              key: Key('${entry.key}') as LocalKey?,
               child: entry.value,
               arguments: entry.key))
           .toList(),
       onPopPage: (route, p) {
         // print('Popping ${route.settings.arguments}');
-        final status = route.settings.arguments as GameStatus;
+        final status = route.settings.arguments as GameStatus?;
         if (status == GameStatus.Finished ||
             status == GameStatus.BetweenRounds ||
             status == GameStatus.Started ||
             status == GameStatus.NotStarted) {
-          context.gameClient(gameProvider.playerID).exitGame();
+          context.gameClient.exitGame();
           route.didPop(null);
           return true;
         } else if (status == GameStatus.NotJoined) {
-          context.gameClient(gameProvider.playerID).disconnect();
+          context.gameClient.disconnect();
           return true;
         }
         return false;

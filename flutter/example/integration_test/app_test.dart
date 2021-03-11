@@ -18,8 +18,8 @@ void main() {
 
   String getGameId(WidgetTester tester) {
     final text = tester.widget<Text>(find.textContaining('gameId:'));
-    final codestart = text.data.indexOf('gameId:') + 'gameId:'.length + 1;
-    return text.data.substring(codestart, codestart + 4);
+    final codestart = text.data!.indexOf('gameId:') + 'gameId:'.length + 1;
+    return text.data!.substring(codestart, codestart + 4);
   }
 
   testWidgets('Create Game Works', (WidgetTester tester) async {

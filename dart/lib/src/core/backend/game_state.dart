@@ -68,8 +68,8 @@ class BackendProvider {
   );
 
   /// Keeps track
-  final configProvider = StateProvider<GameConfig>(
-      ((ref) => null) as GameConfig Function(ProviderReference));
+  final configProvider =
+      StateProvider<GameConfig>((ref) => GameConfig(gameType: ''));
 
   /// Provides the [GameErrorNotifier] to keep track of errors of a game
   final errorProvider = StateNotifierProvider((ref) => GameErrorNotifier());

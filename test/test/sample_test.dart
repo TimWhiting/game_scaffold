@@ -20,10 +20,10 @@ void main() {
     test: (tester) {
       final initialState = tester.game;
       expect(initialState.players.length, 2);
-      expect(initialState.board.all((s) => s == null), true);
+      expect(initialState.board.every((s) => s == null), true);
 
       tester.event(TicTacToeGameEvent(P1, 0), (game, error) {
-        expect(game.board.all((s) => s == null), false);
+        expect(game.board.every((s) => s == null), false);
         expect(game.board[0], P1);
       });
       tester.event(TicTacToeGameEvent(P2, 0), (game, error) {

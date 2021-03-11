@@ -23,7 +23,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
   }
 
   GameOrError<TicTacToeGame> _handleMove(String player, int location) {
-    if (player != currentPlayer!.id) {
+    if (player != currentPlayer?.id) {
       return GameError('Not your turn', player);
     }
     if (!canMove(player, location)) {

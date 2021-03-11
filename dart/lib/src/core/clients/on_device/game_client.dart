@@ -52,9 +52,9 @@ class NoServerGameClient extends GameClient {
     }, onError: (e) {
       game.gameError = GameError(e, playerID);
     });
-    _se = backend.errorNotifier!.stream.listen((gameError) {
+    _se = backend.errorNotifier.stream.listen((gameError) {
       if (gameError == null || gameError.person == playerID) {
-        game.gameError = gameError!;
+        game.gameError = gameError;
       }
     });
   }

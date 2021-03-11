@@ -45,14 +45,14 @@ class TicTacToeWidget extends StatelessWidget {
       body: Row(children: [
         Expanded(
           child: ProviderScope(
-            overrides: [playerIDProvider.overrideAs((watch) => P1)],
+            overrides: [playerIDProvider.overrideAs(((watch) => P1) )],
             child: Player(),
           ),
         ),
         Container(width: 10, color: Colors.black),
         Expanded(
           child: ProviderScope(
-            overrides: [playerIDProvider.overrideAs((watch) => P2)],
+            overrides: [playerIDProvider.overrideAs(((watch) => P2) )],
             child: Player(),
           ),
         ),
@@ -93,16 +93,16 @@ class CreateOrJoinWidget extends GameHookWidget {
                 key: Key('Create Game Button $playerID'),
                 child: Text('Create Game'),
                 onPressed: () async {
-                  final id = await context.gameClient(playerID).createGame(
-                        config: GameConfig(
-                          adminId: P1,
-                          customNames: false,
-                          gameType: 'tictactoe',
-                          rounds: 2,
-                          maxPlayers: 2,
-                        ),
-                      );
-                  await context.gameClient(playerID).register(code: id);
+                  final id = await context.gameClient.createGame(
+                    config: GameConfig(
+                      adminId: P1,
+                      customNames: false,
+                      gameType: 'tictactoe',
+                      rounds: 2,
+                      maxPlayers: 2,
+                    ),
+                  );
+                  await context.gameClient.register(code: id);
                 },
               ),
             if (playerID == P2) ...[
@@ -112,13 +112,12 @@ class CreateOrJoinWidget extends GameHookWidget {
                 child: TextField(
                   textAlignVertical: TextAlignVertical.center,
                   decoration: InputDecoration(hintText: 'Enter Game Code'),
-                  onChanged: (text) => context.setGameCode(playerID, text),
+                  onChanged: (text) => context.setGameCode(text),
                 ),
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () =>
-                    context.gameClient(playerID).register(code: code),
+                onPressed: () => context.gameClient.register(code: code),
                 child: Text('Join Game'),
               )
             ],
@@ -185,11 +184,9 @@ class GameWidget extends GameHookWidget {
                           ),
                         ),
                       ),
-                      onTap: () =>
-                          context.gameClient(gameProvider.playerID).sendEvent(
-                                TicTacToeGameEvent(
-                                    gameProvider.playerID, r * 3 + c),
-                              ),
+                      onTap: () => context.gameClient.sendEvent(
+                        TicTacToeGameEvent(gameProvider.playerID, r * 3 + c),
+                      ),
                     ),
                 ],
               ),
@@ -198,8 +195,7 @@ class GameWidget extends GameHookWidget {
               SizedBox(height: 20),
               ElevatedButton(
                   child: Text('Next Round'),
-                  onPressed: () =>
-                      context.gameClient(gameProvider.playerID).newRound()),
+                  onPressed: () => context.gameClient.newRound()),
             ],
             SizedBox(height: 20),
             Text('$gameError'),

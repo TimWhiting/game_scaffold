@@ -1,3 +1,7 @@
+## 0.3.0
+
+- Migrate to null-safety
+
 ## 0.2.0
 
 - Depend on dart version 0.2.0 to unify constraints
