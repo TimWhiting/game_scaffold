@@ -15,9 +15,10 @@ dependencies:
   hooks_riverpod: ^0.13.1
   logging: ^1.0.0
   game_scaffold_dart: ^0.3.0
-  supabase: ^0.0.1-dev.9
   flutter_hooks: ^0.16.0
-  realtime_client: ^0.0.8
+  supabase: ^0.0.1-dev.9
+  postgrest: ^0.0.7
+  realtime_client: ^0.0.7
 
 dev_dependencies:
   flutter_test:

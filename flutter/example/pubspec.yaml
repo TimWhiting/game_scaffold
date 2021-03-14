@@ -16,7 +16,9 @@ dependencies:
   flutter_riverpod: any
   hooks_riverpod: any
   logging: any
-  supabase: ^0.0.1-dev.5
+  supabase: 0.0.1-dev.9
+  postgrest: 0.0.7
+  realtime_client: 0.0.7
   game_scaffold_games: any
 
 dev_dependencies:

@@ -7,7 +7,7 @@ packages:
       name: archive
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.1.2"
   args:
     dependency: "direct overridden"
     description:
@@ -134,7 +134,7 @@ packages:
       name: freezed_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0"
+    version: "0.14.1"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
@@ -167,7 +167,7 @@ packages:
       name: gotrue
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1-dev.9"
+    version: "0.0.1-dev.7"
   hooks_riverpod:
     dependency: "direct main"
     description:
@@ -181,14 +181,14 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.0"
+    version: "0.12.2"
   http_parser:
     dependency: transitive
     description:
       name: http_parser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0"
+    version: "3.1.4"
   integration_test:
     dependency: "direct dev"
     description: flutter
@@ -258,12 +258,12 @@ packages:
     source: hosted
     version: "3.0.0"
   postgrest:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: postgrest
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.8"
+    version: "0.0.7"
   process:
     dependency: transitive
     description:
@@ -272,12 +272,12 @@ packages:
     source: hosted
     version: "4.1.0"
   realtime_client:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: realtime_client
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.8"
+    version: "0.0.7"
   rikulo_commons:
     dependency: transitive
     description:
@@ -422,7 +422,7 @@ packages:
       name: web_socket_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "1.2.0"
   webdriver:
     dependency: transitive
     description:

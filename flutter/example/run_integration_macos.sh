@@ -1,1 +1,1 @@
-flutter drive --driver integration_test/driver.dart --target integration_test/app_test.dart -d macos
+flutter drive --no-sound-null-safety --enable-experiment=nonfunction-type-aliases --driver integration_test/driver.dart --target integration_test/app_test.dart -d macos

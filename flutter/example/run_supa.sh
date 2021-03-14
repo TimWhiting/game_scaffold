@@ -1,2 +1,2 @@
 #!/bin/zsh
-flutter run -d macos -t lib/main_supa.dart
+flutter run --no-sound-null-safety --enable-experiment=nonfunction-type-aliases -d macos -t lib/main_supa.dart
