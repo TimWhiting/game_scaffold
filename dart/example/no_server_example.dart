@@ -31,7 +31,7 @@ Future<void> main(List<String> arguments) async {
   }
 }
 
-Future<void> loop(Reader read, String code) async {
+Future<void> loop(Reader read, GameCode code) async {
   printStateAndAction(read, code);
   final player = read.backendGame(code).gameState.currentPlayer.id;
   List<int> location;
@@ -78,7 +78,7 @@ Future<void> loop(Reader read, String code) async {
   }
 }
 
-void printStateAndAction(Reader read, String code) {
+void printStateAndAction(Reader read, GameCode code) {
   print('Player ${read.backendGame(code).gameState.currentPlayer.id}\'s turn');
   final gameState = read.backendGame(code).gameState as TicTacToeGame;
   String strFor(int index) => gameState.board[index] == P1

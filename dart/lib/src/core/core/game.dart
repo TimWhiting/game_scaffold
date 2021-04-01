@@ -14,6 +14,8 @@ export 'errors.dart';
 part 'game.freezed.dart';
 part 'game.g.dart';
 
+typedef GameCode = String;
+typedef GameType = String;
 /// Abstract class that all games must inherit from
 abstract class Game<E extends Event> {
   Game();
@@ -49,11 +51,11 @@ abstract class Game<E extends Event> {
   Map<String, dynamic> toJson();
 
   /// Returns the name game type that is registered for serialization
-  String get type;
+  GameType get type;
 
   /// Registers a game type with the server
   static void registerGameType<T extends Game, Q extends Game>(
-    String type, {
+    GameType type, {
     required String name,
     required Q Function(Map<String, dynamic>) fromJson,
     required T Function(GameConfig, IList<Player>, BackendGameReader)
@@ -110,21 +112,21 @@ abstract class Game<E extends Event> {
   /// Some private fields to keep track of information about registered games
 
   /// Converts the game from json based on the type
-  static final Map<String, Game Function(Map<String, dynamic>)>
+  static final Map<GameType, Game Function(Map<String, dynamic>)>
       _fromJsonFactory = {};
 
   /// Converts the game to a potentially smaller form for sending over the wire
-  static final Map<String, Game Function(Game)> _toClientViews = {};
+  static final Map<GameType, Game Function(Game)> _toClientViews = {};
 
   /// Converts the event from json to the event type
-  static final Map<String, GameEvent Function(Map<String, dynamic>)>
+  static final Map<GameType, GameEvent Function(Map<String, dynamic>)>
       _eventFromJsonFactory = {};
 
   /// Stores the user friendly name of the game based on the type
-  static final Map<String, String> gameNames = {};
+  static final Map<GameType, String> gameNames = {};
 
   /// Stores the function to create the initial state of the game
-  static final Map<String,
+  static final Map<GameType,
           Game Function(GameConfig, IList<Player>, BackendGameReader)>
       _initialStates = {};
 }
@@ -158,8 +160,8 @@ enum GameStatus {
 @freezed
 class GameConfig with _$GameConfig {
   const factory GameConfig({
-    String? adminId,
-    required String gameType,
+    PlayerID? adminId,
+    required GameType gameType,
     @Default(NameSet.Basic) NameSet nameSet,
     @Default(false) bool customNames,
     @Default(15) int rounds,
@@ -185,11 +187,11 @@ class GameConfig with _$GameConfig {
 @freezed
 class GameInfo with _$GameInfo {
   const factory GameInfo(
-    String gameId,
-    IList<String> players,
+    GameCode gameId,
+    IList<PlayerID> players,
     String player,
     bool creator,
-    String gameType,
+    GameType gameType,
   ) = _GameInfo;
   factory GameInfo.fromJson(Map<String, dynamic> map) =>
       _$GameInfoFromJson(map);

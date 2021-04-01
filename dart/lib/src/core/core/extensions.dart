@@ -36,7 +36,7 @@ extension GameX on Game {
   IList<Player> get players => generic.players;
 
   /// Gets the players that are a part of this game
-  IList<String> get playerIDs => generic.players.map((p) => p.id).toIList();
+  IList<PlayerID> get playerIDs => generic.players.map((p) => p.id).toIList();
 
   /// Gets the `DateTime` that this state was updated
   DateTime get time => generic.time;
@@ -51,14 +51,14 @@ extension GameX on Game {
   int get round => generic.round;
 
   /// Gets the total score for each player mapped by player id
-  IMap<String, double> get totalScores => generic.totalScores;
+  IMap<PlayerID, double> get totalScores => generic.totalScores;
 
   /// Gets the list of round scores for each player mapped by their id
-  IMap<String, IList<double>> get playerRoundScores =>
+  IMap<PlayerID, IList<double>> get playerRoundScores =>
       generic.playerRoundScores;
 
   /// Gets the map of player scores grouped by round
-  IList<IMap<String, double>> get roundPlayerScores =>
+  IList<IMap<PlayerID, double>> get roundPlayerScores =>
       generic.roundPlayerScores;
 
   /// Gets whether the game is over
@@ -74,7 +74,7 @@ extension GameX on Game {
   bool get isSimultaneousAction => generic.isSimultaneousAction;
 
   /// Gets the players who are ready for the next round
-  IList<String> get readyPlayers => generic.readyPlayers;
+  IList<PlayerID> get readyPlayers => generic.readyPlayers;
 }
 
 extension GameMapExtensions<K, V> on IMap<K, V> {

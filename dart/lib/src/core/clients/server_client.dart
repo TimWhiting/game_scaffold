@@ -4,6 +4,9 @@ import 'package:riverpod/riverpod.dart';
 import '../../core.dart';
 import '../core.dart';
 
+typedef ServerLocation = String;
+// TODO: Make this a URI
+typedef GameAddress = String;
 /// A Client that can contact the server to manage games
 ///
 /// The client can
@@ -16,7 +19,7 @@ abstract class ServerClient {
       : logger = Logger('ServerClient $playerID');
 
   /// The id of the client
-  final String playerID;
+  final PlayerID playerID;
   GameReader get game => read.gameFor(playerID);
 
   final Reader read;
@@ -39,21 +42,21 @@ abstract class ServerClient {
 
   /// Registers a particular implementation of [ServerClient] for the given [location]
   static void registerImplementation<T extends ServerClient>(
-    String location,
-    T Function(Reader, String, String) impl,
+    ServerLocation location,
+    T Function(Reader, GameAddress, PlayerID) impl,
   ) {
     _clientImplementations[location] = impl;
   }
 
-  static final Map<String, ServerClient Function(Reader, String, String)>
+  static final Map<ServerLocation, ServerClient Function(Reader, GameAddress, PlayerID)>
       _clientImplementations = {};
 
   /// Creates a [ServerClient] from the [location] [address] and [playerID]
   static ServerClient fromParams({
-    required String location,
+    required ServerLocation location,
     required Reader read,
-    required String address,
-    required String playerID,
+    required GameAddress address,
+    required PlayerID playerID,
   }) {
     final impl = _clientImplementations[location];
     if (impl == null) {

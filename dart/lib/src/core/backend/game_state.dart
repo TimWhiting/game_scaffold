@@ -19,9 +19,9 @@ String get homeDir {
 
 final agentBackendGame = Provider((ref) => BackendProvider(ref.read, '0000'));
 final backendGameCodesProvider =
-    StateProvider<IList<String>>((ref) => <String>[].lock);
-final ProviderFamily<BackendProvider, String>? backendGamesProvider =
-    Provider.family<BackendProvider, String>((ref, code) {
+    StateProvider<IList<GameCode>>((ref) => <GameCode>[].lock);
+final ProviderFamily<BackendProvider, GameCode>? backendGamesProvider =
+    Provider.family<BackendProvider, GameCode>((ref, code) {
   final bp = BackendProvider(ref.read, code);
   ref.onDispose(() {
     if (ref.mounted) {
@@ -44,7 +44,7 @@ class BackendProvider {
   }
 
   /// The game [code] that uniquely identifies the providers in this BackendProvider
-  final String code;
+  final GameCode code;
   final Reader read;
   late BackendGameReader backendReader;
 
@@ -114,7 +114,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   final BackendGameReader read;
 
   /// The [code] of this game
-  final String code;
+  final GameCode code;
 
   /// The [GameConfig] that was used to create this [GameStateNotifier]
   final GameConfig gameConfig;
@@ -181,7 +181,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
 extension BackendReader on Reader {
   BackendGameReader get agentGame =>
       BackendGameReader(this, this(agentBackendGame));
-  BackendGameReader backendGame(String code) =>
+  BackendGameReader backendGame(GameCode code) =>
       BackendGameReader(this, this(backendGamesProvider!(code)));
 }
 
@@ -235,7 +235,7 @@ extension BackendReaderX on BackendGameReader {
   Game get initialState => this(game.initialStateProvider);
 }
 
-String generateGameID(List<String> avoidList) {
+GameCode generateGameID(List<String> avoidList) {
   var gameid = '';
   while (gameid.length != 4 || avoidList.contains(gameid)) {
     gameid = ('BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle())

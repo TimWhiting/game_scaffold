@@ -14,7 +14,7 @@ class GameOrError<T extends Game> with _$GameOrError {
   const factory GameOrError.game(@GameConverter() T game) = GameValue;
 
   /// Represets an error
-  const factory GameOrError.error(String message, String person) = GameError;
+  const factory GameOrError.error(String message, PlayerID person) = GameError;
 
   /// Returns whether this instance is an error
   bool get isError => this is GameError;

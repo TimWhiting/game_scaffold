@@ -10,10 +10,10 @@ class GameServerClient {
   final ServerClient _sClient;
 
   /// The client's [playerID]
-  String get playerID => _gClient.playerID;
+  PlayerID get playerID => _gClient.playerID;
 
   /// The [gameCode] of the game the client has joined
-  String get gameCode => _gClient.gameCode;
+  GameCode get gameCode => _gClient.gameCode;
 
   Reader read;
   GameReader get game => read.gameFor(playerID);
@@ -24,7 +24,7 @@ class GameServerClient {
   /// Registers the client with the game server with the optionally provided [code]
   ///
   /// Specifying [code] is just shorthand for updating the [gameCodeProvider]
-  Future<void> register({String? code}) async {
+  Future<void> register({GameCode? code}) async {
     if (code != null) {
       read.gameFor(playerID).gameCode = code;
     }
@@ -47,13 +47,13 @@ class GameServerClient {
   ///
   /// Not currently implemented [to], a particular player the comment is directed
   /// towards
-  void sendMessage(String message, {String? to}) =>
+  void sendMessage(String message, {PlayerID? to}) =>
       _gClient.sendMessage(message);
 
   /// Creates a game on the server
   ///
   /// Specifying [config] is just a shorthand for updating the [gameConfigProvider]
-  Future<String> createGame({GameConfig? config}) async {
+  Future<GameCode> createGame({GameConfig? config}) async {
     if (config != null) {
       read.gameFor(playerID).gameConfig = config;
     }
@@ -64,7 +64,7 @@ class GameServerClient {
   /// Deletes the game on the server
   ///
   /// Specifying [code] is just shorthand for updating the [gameCodeProvider]
-  Future<bool> deleteGame({String? code}) async {
+  Future<bool> deleteGame({GameCode? code}) async {
     if (code != null) {
       read.gameFor(playerID).gameCode = code;
     }
@@ -85,7 +85,7 @@ class GameServerClient {
   Future<IList<GameInfo>> getGames() => _sClient.getGames();
 
   /// Gets info about a particular game from the server
-  Future<GameInfo> getGameInfo(String gameId) async {
+  Future<GameInfo> getGameInfo(GameCode gameId) async {
     await _sClient.getGameInfo(gameId);
     return read.gameFor(playerID).currentGameInfo!;
   }

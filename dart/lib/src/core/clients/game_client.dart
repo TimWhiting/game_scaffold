@@ -12,10 +12,10 @@ abstract class GameClient {
       : logger = Logger('GameClient $playerID');
 
   /// The client's [playerID]
-  final String playerID;
+  final PlayerID playerID;
 
   /// The [gameCode] of the game the client has joined
-  String get gameCode => read.gameFor(playerID).gameCode;
+  GameCode get gameCode => read.gameFor(playerID).gameCode;
   final Logger logger;
 
   final Reader read;
@@ -49,21 +49,22 @@ abstract class GameClient {
 
   /// Registers a [GameClient] implementation for the given [location]
   static void registerImplementation<T extends GameClient>(
-    String location,
-    T Function(Reader read, String address, String playerID) impl,
+    ServerLocation location,
+    T Function(Reader read, GameAddress address, PlayerID playerID) impl,
   ) {
     _clientImplementations[location] = impl;
   }
 
-  static final Map<String, GameClient Function(Reader, String, String)>
+  static final Map<ServerLocation,
+          GameClient Function(Reader, GameAddress, PlayerID)>
       _clientImplementations = {};
 
   /// Creates a [GameClient] with the parameters specified
   static GameClient fromParams({
-    required String location,
+    required ServerLocation location,
     required Reader read,
-    required String address,
-    required String playerID,
+    required GameAddress address,
+    required PlayerID playerID,
   }) {
     final impl = _clientImplementations[location];
     if (impl == null) {

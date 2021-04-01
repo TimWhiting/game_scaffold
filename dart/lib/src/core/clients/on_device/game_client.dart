@@ -11,7 +11,7 @@ import '../clients.dart';
 ///
 /// Warning implementation not complete or tested yet
 class NoServerGameClient extends GameClient {
-  NoServerGameClient({required Reader read, required String playerID})
+  NoServerGameClient({required Reader read, required PlayerID playerID})
       : super(playerID, read);
   StreamSubscription<Game?>? _ss;
   StreamSubscription<GameError?>? _se;

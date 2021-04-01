@@ -23,12 +23,12 @@ class IOServer {
   final bool https;
   final logger = Logger('IOServer');
   final io = IO.Server(options: _serverSocketOpts);
-  final servers = <String, GameServer>{};
+  final servers = <GameCode, GameServer>{};
   final clients = <IO.Socket>{};
   final container = ProviderContainer();
 
   /// Keeps track of a set of games that a client is a part of by client id
-  final _clientGames = <String, Set<String>>{};
+  final _clientGames = <PlayerID, Set<GameCode>>{};
   IOServer({
     this.debug = false,
     this.https = false,
@@ -92,7 +92,7 @@ class IOServer {
     );
   }
 
-  void _getGameInfo(IO.Socket client, String id) {
+  void _getGameInfo(IO.Socket client, PlayerID id) {
     if (servers.containsKey(id)) {
       client.emit(IOChannel.gameinfo.string,
           servers[id]!.gameInfo(servers[id]!.clientID(client)).toJson());
@@ -123,14 +123,14 @@ class IOServer {
     client.emit(IOChannel.gamecreated.string, server.gameID);
   }
 
-  Future<void> _deleteGame(IO.Socket client, String id) async {
+  Future<void> _deleteGame(IO.Socket client, GameCode id) async {
     logger.info('Deleting game $id');
     servers[id]!.notifyKilled(client);
     await Future.delayed(Duration(seconds: 2));
     servers[id]!.killGame();
   }
 
-  void _getGames(IO.Socket client, String id) {
+  void _getGames(IO.Socket client, PlayerID id) {
     if (_clientGames[id] == null) {
       client.emit(IOChannel.allgames.string, json.encode([]));
     } else {
@@ -138,7 +138,7 @@ class IOServer {
     }
   }
 
-  void _updateGames(String id, IO.Socket client) {
+  void _updateGames(PlayerID id, IO.Socket client) {
     logger.info('Getting all games for $id');
     final games = _clientGames[id]!;
     final gameInfo =
@@ -146,14 +146,14 @@ class IOServer {
     client.emit(IOChannel.allgames.string, json.encode(gameInfo));
   }
 
-  void addClientToGame(String id, String gameId) {
+  void addClientToGame(PlayerID id, GameCode gameId) {
     if (_clientGames[id] == null) {
       _clientGames[id] = {};
     }
     _clientGames[id]!.add(gameId);
   }
 
-  void removeClientFromGame(String id, String gameId) {
+  void removeClientFromGame(PlayerID id, GameCode gameId) {
     _clientGames[id]?.remove(gameId);
   }
 }

@@ -16,14 +16,14 @@ class IOServerClient extends ServerClient {
   IOServerClient({
     required Reader read,
     required this.address,
-    required String playerID,
+    required PlayerID playerID,
   }) : super(read, playerID) {
     Future.delayed(Duration(milliseconds: 10), () {
       connect();
     });
   }
 
-  final String address;
+  final GameAddress address;
   IO.Socket? socket;
 
   @override
@@ -34,10 +34,10 @@ class IOServerClient extends ServerClient {
     game.gameCode = gameCode;
   }
 
-  Future<String> _createGame(GameConfig config) async {
+  Future<GameCode> _createGame(GameConfig config) async {
     await _ensureConnected();
     final result = await socket!.call(IOChannel.creategame, config.toJson());
-    return result as String;
+    return result as GameCode;
   }
 
   @override
@@ -57,7 +57,7 @@ class IOServerClient extends ServerClient {
   }
 
   @override
-  Future<void> getGameInfo(String gameId) async {
+  Future<void> getGameInfo(GameCode gameId) async {
     await _ensureConnected();
     final result = await socket!.call(IOChannel.getgameinfo, gameId);
     game.currentGameInfo = result == '404'

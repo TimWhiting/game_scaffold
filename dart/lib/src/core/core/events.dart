@@ -2,6 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:game_scaffold_dart/src/core/core/generic.dart';
 part 'events.freezed.dart';
 
+// The type of the event
+typedef EventType = String;
 /// Represents an event of a game
 ///
 /// Must associate itself with a particular [type] of game registered to the server
@@ -9,7 +11,7 @@ abstract class Event {
   Map<String, dynamic> toJson();
 
   /// The game [type] this event is handled by
-  String get type;
+  EventType get type;
 }
 
 /// An [Event] that represents either a [GenericEvent] or a user defined [Event]
@@ -25,7 +27,7 @@ class GameEvent with _$GameEvent implements Event {
   const factory GameEvent.general(GenericEvent event) = _GameEventGeneral;
 
   @override
-  String get type => when(game: (_) => 'game', general: (_) => 'general');
+  EventType get type => when(game: (_) => 'game', general: (_) => 'general');
 
   @override
   Map<String, dynamic> toJson() =>

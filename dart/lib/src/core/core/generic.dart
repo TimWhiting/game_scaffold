@@ -27,7 +27,7 @@ class GenericGame with _$GenericGame {
   const GenericGame._();
   const factory GenericGame(
     IList<Player> players,
-    IList<String> readyPlayers,
+    IList<PlayerID> readyPlayers,
     IList<IList<double>> allRoundScores,
     DateTime time,
     IList<GameMessage> messages,
@@ -48,7 +48,7 @@ class GenericGame with _$GenericGame {
   }) =>
       GenericGame(
         players,
-        <String>[].lock,
+        <PlayerID>[].lock,
         <IList<double>>[].lock,
         DateTime.now(),
         <GameMessage>[].lock,
@@ -67,7 +67,7 @@ class GenericGame with _$GenericGame {
   }) =>
       GenericGame(
         players,
-        <String>[].lock,
+        <PlayerID>[].lock,
         <IList<double>>[].lock,
         DateTime.now(),
         <GameMessage>[].lock,
@@ -83,17 +83,17 @@ class GenericGame with _$GenericGame {
       currentPlayerIndex == null ? null : players[currentPlayerIndex!];
 
   /// Gets the total score for each player based off of [allRoundScores]
-  IMap<String, double> get totalScores =>
+  IMap<PlayerID, double> get totalScores =>
       playerRoundScores.mapValues((entry) => entry.value.sum);
 
   /// Gets the scores for each player for all rounds based off of [allRoundScores]
-  IMap<String, IList<double>> get playerRoundScores => IMap({
+  IMap<PlayerID, IList<double>> get playerRoundScores => IMap({
         for (var p = 0; p < players.length; p++)
           players[p].id: IList(allRoundScores.map((rs) => rs[p])),
       });
 
   /// Gets the scores for each round for each player based off of [allRoundScores]
-  IList<IMap<String, double>> get roundPlayerScores =>
+  IList<IMap<PlayerID, double>> get roundPlayerScores =>
       IList(allRoundScores.map((rs) => IMap(
             {
               for (var i = 0; i < players.length; i++) players[i].id: rs[i],
@@ -113,7 +113,7 @@ class GenericGame with _$GenericGame {
 
   /// Returns a copy of the [GenericGame] with the current player being the one
   /// with id [player]
-  GenericGame setNextPlayer(String player) =>
+  GenericGame setNextPlayer(PlayerID player) =>
       copyWith(currentPlayerIndex: players.indexWhere((p) => p.id == player));
 
   /// Returns a copy of the [GenericGame] with the time updated to the current time
@@ -127,7 +127,7 @@ class GenericGame with _$GenericGame {
   /// Returns a copy of the [GenericGame] with the [round] incremented,
   /// [gameStatus] set to [GameStatus.Started] and optionally the
   /// players' [scores] added to [allRoundScores]
-  GenericGame finishRound([Map<String, double>? scores]) => scores != null
+  GenericGame finishRound([Map<PlayerID, double>? scores]) => scores != null
       ? updateScores(scores).copyWith(
           round: round + 1,
           gameStatus: GameStatus.Started,
@@ -136,7 +136,7 @@ class GenericGame with _$GenericGame {
 
   /// Returns a copy of the [GenericGame] with the [scores] added to
   /// [allRoundScores]
-  GenericGame updateScores(Map<String, double> scores) => copyWith(
+  GenericGame updateScores(Map<PlayerID, double> scores) => copyWith(
       allRoundScores:
           allRoundScores.add(players.map((p) => scores[p.id]!).toIList()));
 
@@ -150,10 +150,10 @@ class GenericGame with _$GenericGame {
       );
 
   /// Clears the list of ready players
-  GenericGame clearReadyPlayers() => copyWith(readyPlayers: <String>[].lock);
+  GenericGame clearReadyPlayers() => copyWith(readyPlayers: <PlayerID>[].lock);
 
   /// Adds a ready player to the list
-  GenericGame addReadyPlayer(String player) =>
+  GenericGame addReadyPlayer(PlayerID player) =>
       copyWith(readyPlayers: readyPlayers.add(player));
 }
 
@@ -175,7 +175,7 @@ class GenericEvent with _$GenericEvent implements Event {
 
   /// Sends a [message] from the player with id [from] to the player with id [to]
   const factory GenericEvent.message(String message,
-      {required String from, required String? to}) = GameMessage;
+      {required PlayerID from, required PlayerID? to}) = GameMessage;
 
   factory GenericEvent.fromJson(Map<String, dynamic> map) =>
       _$GenericEventFromJson(map);

@@ -9,7 +9,7 @@ const defaultGamePort = 45912;
 const defaultAddress = 'your game server ip';
 
 /// The provider that controls which game server address to connect to
-final selectedAddress = StateProvider<String>((ref) => defaultAddress);
+final selectedAddress = StateProvider<GameAddress>((ref) => defaultAddress);
 
 /// An enum for the location of the game server
 // enum GameServerLocation { OnDevice, IOServer, Firebase }
@@ -17,12 +17,13 @@ final selectedAddress = StateProvider<String>((ref) => defaultAddress);
 
 /// The provider that controls the [GameClient] and [ServerClient]
 /// implementation to use
-final gameLocationProvider = StateProvider<String>((ref) => IOServerLocation);
+final gameLocationProvider =
+    StateProvider<ServerLocation>((ref) => IOServerLocation);
 
 /// Provides an encapsulation of many providers related to a Game without having
 /// to have each of them be a `family` provider.
-final ProviderFamily<GameProvider, String> playerGameProvider =
-    Provider.family<GameProvider, String>((ref, id) {
+final ProviderFamily<GameProvider, PlayerID> playerGameProvider =
+    Provider.family<GameProvider, PlayerID>((ref, id) {
   final gp = GameProvider(ref.read, id);
 
   ref.onDispose(() {
@@ -33,7 +34,7 @@ final ProviderFamily<GameProvider, String> playerGameProvider =
   return gp;
 });
 final playerIDsProvider =
-    StateProvider<IList<String>>((ref) => <String>[].lock);
+    StateProvider<IList<PlayerID>>((ref) => <PlayerID>[].lock);
 
 /// Provides an encapsulation of many providers without having to have each of
 /// them be a `family` provider.
@@ -82,14 +83,14 @@ class GameProvider {
   }
 
   /// The playerID associated with the providers in this GameProvider
-  final String playerID;
+  final PlayerID playerID;
   final Reader read;
 
   /// Provides the game code for each client id
-  late StateProvider<String> _gameCodeProvider;
+  late StateProvider<GameCode> _gameCodeProvider;
 
   /// Provides the game code for each client id
-  StateProvider<String> get gameCodeProvider => _gameCodeProvider;
+  StateProvider<GameCode> get gameCodeProvider => _gameCodeProvider;
 
   /// Provides the [ServerClient] for each client id
   late Provider<ServerClient> _serverClientProvider;
@@ -218,7 +219,7 @@ class GameProvider {
 /// Provides the player id for a particular section of the widget tree
 ///
 /// This is so that a multiplayer game within the same app can be played
-final playerIDProvider = ScopedProvider((ref) => '');
+final playerIDProvider = ScopedProvider<PlayerID>((ref) => '');
 
 extension ReaderGameX on ScopedReader {
   GameReader get game =>
@@ -234,20 +235,20 @@ class GameReader {
 
 extension GameReaderX on Reader {
   /// Setup parameters
-  set address(String address) => this(selectedAddress).state = address;
-  String get address => this(selectedAddress).state;
+  set address(GameAddress address) => this(selectedAddress).state = address;
+  GameAddress get address => this(selectedAddress).state;
 
-  GameReader gameFor(String id) =>
+  GameReader gameFor(PlayerID id) =>
       GameReader(this, this(playerGameProvider(id)));
 
   /// Setup parameters
-  set clientImplementation(String implementation) =>
+  set clientImplementation(ServerLocation implementation) =>
       this(gameLocationProvider).state = implementation;
-  String get clientImplementation => this(gameLocationProvider).state;
+  ServerLocation get clientImplementation => this(gameLocationProvider).state;
   set gameConfig(GameConfig config) =>
       this(singleConfigProvider).state = config;
   GameConfig get gameConfig => this(singleConfigProvider).state;
-  IList<String> get playerIDs => this(playerIDsProvider).state;
+  IList<PlayerID> get playerIDs => this(playerIDsProvider).state;
 }
 
 extension GameReaderGameX on GameReader {
@@ -276,8 +277,8 @@ extension GameReaderGameX on GameReader {
   GameConfig get gameConfig => this(game._gameConfigProvider).state;
   set gameConfig(GameConfig config) =>
       this(game._gameConfigProvider).state = config;
-  String get gameCode => this(game._gameCodeProvider).state;
-  set gameCode(String code) => this(game._gameCodeProvider).state = code;
+  GameCode get gameCode => this(game._gameCodeProvider).state;
+  set gameCode(GameCode code) => this(game._gameCodeProvider).state = code;
 
   /// Game information
   Game? get gameState => this(game._gameStateProvider).state;

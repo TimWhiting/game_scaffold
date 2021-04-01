@@ -37,32 +37,32 @@ class GameServer {
   final Duration timeout;
 
   /// The game's id
-  String get gameID => _gameId;
+  GameCode get gameID => _gameId;
 
   /// Gets [GameConfig] of this game
   GameConfig get gameConfig => _read.gameConfig;
 
   /// Gets the game's type from the config
-  String get gameType => gameConfig.gameType;
+  GameType get gameType => gameConfig.gameType;
 
   /// Returns the list of players involved in the game
-  IList<String> get playerNames => _players.map((p) => p.name).toIList();
+  IList<PlayerID> get playerNames => _players.map((p) => p.name).toIList();
 
   /// Returns whether the client by [id] is the admin
-  bool isClientAdmin(String? id) => id == gameConfig.adminId;
+  bool isClientAdmin(PlayerID? id) => id == gameConfig.adminId;
 
   /// Gets the client's name corresponding to [id]
-  String? getClientName(String id) => _clientNames[id];
+  String? getClientName(PlayerID id) => _clientNames[id];
 
   final BackendGameReader _read;
-  final String _gameId;
+  final GameCode _gameId;
   final IList<Player> _players = <Player>[].lock;
-  final _clients = <String, IO.Socket?>{};
-  final _clientNames = <String, String>{};
+  final _clients = <PlayerID, IO.Socket?>{};
+  final _clientNames = <PlayerID, String>{};
   final _socket;
 
   /// The callback to call when the game ends
-  final void Function(String) _onGameOver;
+  final void Function(GameCode) _onGameOver;
 
   /// The notifier for the game state
   final GameStateNotifier _gameState;
@@ -95,7 +95,7 @@ class GameServer {
     );
   }
 
-  GameInfo gameInfo(String? id) => GameInfo(
+  GameInfo gameInfo(PlayerID? id) => GameInfo(
         _gameId,
         _players.map((p) => p.name).toIList(),
         _clientNames[id] ?? '',
@@ -124,7 +124,7 @@ class GameServer {
         .info('Game server namespace $_gameId registering client $data');
 
     final name = data['name'] as String;
-    final id = data['id'] as String;
+    final id = data['id'] as PlayerID;
     print('Client registered');
 
     client.on(
@@ -167,7 +167,7 @@ class GameServer {
     }
   }
 
-  void _handleDisconnect(IO.Socket socket, String id, dynamic reason) {
+  void _handleDisconnect(IO.Socket socket, PlayerID id, dynamic reason) {
     _serverLogger.info('Client disconnected from $_gameId namespace $reason');
     _clients[id] = null;
   }
@@ -225,6 +225,7 @@ class GameServer {
     _active = true;
   }
 
+  /// Gets a name that hasn't already been used
   String _getRandomPlayer() => ((Set.of(nameSets[gameConfig.nameSet]!)
         ..difference(_clientNames.values.cast<String>().toSet()))
       .toList()
@@ -248,6 +249,6 @@ class GameServer {
     }
   }
 
-  String clientID(IO.Socket client) =>
+  PlayerID clientID(IO.Socket client) =>
       _clients.entries.firstWhere((c) => c.value == client).key;
 }
