@@ -39,7 +39,7 @@ class BackendProvider {
             read(backendGameCodesProvider).state.add(code));
     initialStateProvider = Provider<Game>(_initialStateImpl);
     gameStateProvider =
-        StateNotifierProvider<GameStateNotifier>(_gameStateNotifier);
+        StateNotifierProvider<GameStateNotifier, Game?>(_gameStateNotifier);
     backendReader = BackendGameReader(read, this);
   }
 
@@ -60,7 +60,7 @@ class BackendProvider {
   late Provider<Game> initialStateProvider;
 
   /// Provides the [GameStateNotifier] based on the [GameConfig] from [gameConfigProvider]
-  late StateNotifierProvider<GameStateNotifier> gameStateProvider;
+  late StateNotifierProvider<GameStateNotifier, Game?> gameStateProvider;
 
   /// Keeps track of the players involved in the game on the server (or on the client) in the case of a local game
   final playersProvider = StateProvider<IList<Player>>(
@@ -72,7 +72,7 @@ class BackendProvider {
       StateProvider<GameConfig>((ref) => GameConfig(gameType: ''));
 
   /// Provides the [GameErrorNotifier] to keep track of errors of a game
-  final errorProvider = StateNotifierProvider((ref) => GameErrorNotifier());
+  final errorProvider = StateNotifierProvider<GameErrorNotifier, GameError?>((ref) => GameErrorNotifier());
 
   Game _initialStateImpl(ProviderReference ref) {
     final gameConfig = ref.watch(configProvider).state;
@@ -208,7 +208,7 @@ extension BackendReaderX on BackendGameReader {
   set gameConfig(GameConfig config) => this(game.configProvider).state = config;
 
   /// On the  gets the latest [GameError]
-  GameError? get gameError => this(game.errorProvider.state);
+  GameError? get gameError => this(game.errorProvider);
 
   /// On the  sets the [GameError]
   set gameError(GameError? error) => errorNotifier.error = error;
@@ -217,13 +217,13 @@ extension BackendReaderX on BackendGameReader {
   void clearError() => errorNotifier.clearError();
 
   /// On the  gets the error notifier
-  GameErrorNotifier get errorNotifier => this(game.errorProvider);
+  GameErrorNotifier get errorNotifier => this(game.errorProvider.notifier);
 
   /// On the  gets the latest [Game] state
-  Game? get gameState => this(game.gameStateProvider.state);
+  Game? get gameState => this(game.gameStateProvider);
 
   /// On the  gets the [GameStateNotifier]
-  GameStateNotifier get gameNotifier => this(game.gameStateProvider);
+  GameStateNotifier get gameNotifier => this(game.gameStateProvider.notifier);
 
   /// On the  handles [event]
   void handleEvent(GameEvent event) => gameNotifier.handleEvent(event);
