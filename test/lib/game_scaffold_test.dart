@@ -12,14 +12,14 @@ import 'package:test/test.dart' as darttest;
 /// Uses the OnDevice clients
 @isTest
 void testGame<T extends Game>(
-  String name, {
+  String testName, {
   required GameConfig config,
   required List<Player> players,
   required void Function(GameTester<T>) test,
 }) {
   darttest.group(name, () {
     final Reader read = ProviderContainer().read;
-    late String code;
+    late GameCode code;
     darttest.setUp(() async {
       read(gameLocationProvider).state = OnDeviceLocation;
       read.gameFor(players.first.id).gameConfig = config;
@@ -45,7 +45,7 @@ void testGame<T extends Game>(
 class GameTester<T extends Game> {
   final Reader _read;
   final List<Player> _players;
-  final String code;
+  final GameCode code;
 
   GameTester(this._read, this._players, this.code);
 

@@ -22,7 +22,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
     return _handleMove(event.player, event.location);
   }
 
-  GameOrError<TicTacToeGame> _handleMove(String player, int location) {
+  GameOrError<TicTacToeGame> _handleMove(PlayerID player, int location) {
     if (player != currentPlayer?.id) {
       return GameError('Not your turn', player);
     }
@@ -52,7 +52,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
     return copyWith(generic: gGame);
   }
 
-  bool canMove(String player, int location) {
+  bool canMove(PlayerID player, int location) {
     return location >= 0 && location < 9 && board[location] == null;
   }
 
@@ -97,7 +97,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
     [2, 4, 6]
   ].map((l) => l.lock).toIList();
 
-  bool isWinner(String playerID) {
+  bool isWinner(PlayerID playerID) {
     if (winningLocationCombinations
         .any((comb) => comb.every((loc) => board[loc] == playerID))) {
       return true;
@@ -105,7 +105,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
     return false;
   }
 
-  bool isLoser(String playerID) {
+  bool isLoser(PlayerID playerID) {
     if (isWinner(playerIDs.firstWhere((id) => id != playerID))) {
       return true;
     } else {
@@ -131,7 +131,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
 @freezed
 class TicTacToeGameEvent with _$TicTacToeGameEvent implements Event {
   const TicTacToeGameEvent._();
-  const factory TicTacToeGameEvent(String player, int location) =
+  const factory TicTacToeGameEvent(PlayerID player, int location) =
       _TicTacToeGameEvent;
   factory TicTacToeGameEvent.fromJson(Map<String, dynamic> map) =>
       _$TicTacToeGameEventFromJson(map);
