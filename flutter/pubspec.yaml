@@ -34,5 +34,6 @@ dependency_overrides:
   socket_io:
     git:
       url: git@github.com:TimWhiting/socket.io-dart
+      ref: null-safety
 
 flutter:

@@ -294,8 +294,8 @@ packages:
     dependency: "direct overridden"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: "8333528eb41e0c67b4ef1df7ed3918567860c227"
+      ref: null-safety
+      resolved-ref: "890abac214ae5fe72999d54bcf4299803e3e837b"
       url: "git@github.com:TimWhiting/socket.io-dart"
     source: git
     version: "0.9.4"

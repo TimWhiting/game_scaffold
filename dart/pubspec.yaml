@@ -29,6 +29,7 @@ dependency_overrides:
   socket_io:
     git:
       url: git@github.com:TimWhiting/socket.io-dart
+      ref: null-safety
 
 scripts:
   - gen: dart run build_runner build --enable-experiment=nonfunction-type-aliases
