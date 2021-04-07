@@ -6,7 +6,6 @@ import 'package:logging/logging.dart';
 import 'package:game_scaffold_dart/server.dart';
 
 import 'main.dart';
-
 void main() {
   final _ = IOServer();
   Game.registerGeneralEvents();
@@ -17,7 +16,7 @@ void main() {
   Logger.root.onRecord.listen((record) =>
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
   runApp(ProviderScope(
-    overrides: [
+    overrides: [  
       selectedAddress.overrideWithProvider(
           StateProvider((_) => 'http://localhost:$defaultGamePort')),
     ],

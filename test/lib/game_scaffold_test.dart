@@ -1,4 +1,5 @@
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
+import 'package:meta/meta.dart';
 import 'package:test/test.dart' as darttest;
 
 /// Tests the game with [T] type in a group with [name] and test named [name + '_Tests']
@@ -9,6 +10,7 @@ import 'package:test/test.dart' as darttest;
 /// * [test] gives you access to a [GameTester] which allows you to test the game
 ///
 /// Uses the OnDevice clients
+@isTest
 void testGame<T extends Game>(
   String name, {
   required GameConfig config,

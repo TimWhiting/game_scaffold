@@ -7,7 +7,7 @@ environment:
   sdk: '>=2.13.0-0 <3.0.0'
 
 dependencies:
-  riverpod: ^0.14.0
+  riverpod: ^0.14.0+1
   freezed_annotation: ^0.14.1
   socket_io: ^0.9.4
   json_annotation: ^4.0.0

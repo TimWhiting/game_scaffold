@@ -16,7 +16,7 @@ packages:
     source: hosted
     version: "1.3.0"
   args:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: args
       url: "https://pub.dartlang.org"
@@ -84,7 +84,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   csslib:
     dependency: transitive
     description:
@@ -98,7 +98,7 @@ packages:
       name: dartdoc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.41.0"
+    version: "0.42.0"
   enum_to_string:
     dependency: transitive
     description:
@@ -145,7 +145,7 @@ packages:
       name: flutter_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.1+1"
+    version: "0.14.0+1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -192,7 +192,7 @@ packages:
       name: hooks_riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.1+1"
+    version: "0.14.0+1"
   html:
     dependency: transitive
     description:
@@ -263,13 +263,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  mustache:
-    dependency: transitive
-    description:
-      name: mustache
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.1"
   package_config:
     dependency: transitive
     description:
@@ -318,14 +311,14 @@ packages:
       name: rikulo_commons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.0"
+    version: "5.0.3"
   riverpod:
     dependency: "direct main"
     description:
       name: riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.1"
+    version: "0.14.0+1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -374,12 +367,12 @@ packages:
     source: hosted
     version: "0.7.0"
   stream:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: stream
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.0"
+    version: "3.0.0"
   stream_channel:
     dependency: transitive
     description:
@@ -414,7 +407,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.19"
+    version: "0.3.0"
   typed_data:
     dependency: transitive
     description:
