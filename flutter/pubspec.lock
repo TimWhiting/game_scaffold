@@ -72,14 +72,14 @@ packages:
     source: hosted
     version: "1.15.0"
   convert:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: convert
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
   crypto:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: crypto
       url: "https://pub.dartlang.org"
@@ -325,11 +325,13 @@ packages:
     source: sdk
     version: "0.0.99"
   socket_io:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: socket_io
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "8333528eb41e0c67b4ef1df7ed3918567860c227"
+      url: "git@github.com:TimWhiting/socket.io-dart"
+    source: git
     version: "0.9.4"
   socket_io_client:
     dependency: transitive
@@ -339,7 +341,7 @@ packages:
     source: hosted
     version: "1.0.0-nullsafety.0"
   socket_io_common:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: socket_io_common
       url: "https://pub.dartlang.org"
@@ -367,7 +369,7 @@ packages:
     source: hosted
     version: "0.7.0"
   stream:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: stream
       url: "https://pub.dartlang.org"
@@ -421,7 +423,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.2"
+    version: "3.0.3"
   vector_math:
     dependency: transitive
     description:
@@ -451,5 +453,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.12.0 <3.0.0"
+  dart: ">=2.13.0-0 <3.0.0"
   flutter: ">=1.20.0"

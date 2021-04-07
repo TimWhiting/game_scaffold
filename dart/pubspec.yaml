@@ -11,7 +11,7 @@ dependencies:
   freezed_annotation: ^0.14.1
   socket_io: ^0.9.4
   json_annotation: ^4.0.0
-  stream: ^2.6.0
+  stream: ^3.0.0
   logging: ^1.0.0
   socket_io_client: ^1.0.0-nullsafety.0
   enum_to_string: ^2.0.1
@@ -22,15 +22,13 @@ dependencies:
 dev_dependencies:
   json_serializable_fic: ^0.2.0
   freezed: ^0.14.1+2
-  build_runner: ^1.11.5
+  build_runner: ^1.12.2
   test: any
 
 dependency_overrides:
-  logging: ^1.0.01
-  crypto: ^3.0.0
-  convert: ^3.0.0
-  stream: ^3.0.0
-  socket_io_common: ^1.0.0-nullsafety.1
+  socket_io:
+    git:
+      url: git@github.com:TimWhiting/socket.io-dart
 
 scripts:
   - gen: dart run build_runner build --enable-experiment=nonfunction-type-aliases

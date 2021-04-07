@@ -17,7 +17,7 @@ void testGame<T extends Game>(
   required List<Player> players,
   required void Function(GameTester<T>) test,
 }) {
-  darttest.group(name, () {
+  darttest.group(testName, () {
     final Reader read = ProviderContainer().read;
     late GameCode code;
     darttest.setUp(() async {
@@ -32,7 +32,7 @@ void testGame<T extends Game>(
         read.gameFor(players.first.id).gameClient.startGame();
       }
     });
-    darttest.test(name + '_Tests', () {
+    darttest.test(testName + '_Tests', () {
       test(GameTester<T>(read, players, code));
     });
   });

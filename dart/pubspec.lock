@@ -135,7 +135,7 @@ packages:
     source: hosted
     version: "1.15.0"
   convert:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: convert
       url: "https://pub.dartlang.org"
@@ -149,7 +149,7 @@ packages:
     source: hosted
     version: "1.0.2"
   crypto:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: crypto
       url: "https://pub.dartlang.org"
@@ -410,9 +410,11 @@ packages:
   socket_io:
     dependency: "direct main"
     description:
-      name: socket_io
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "8333528eb41e0c67b4ef1df7ed3918567860c227"
+      url: "git@github.com:TimWhiting/socket.io-dart"
+    source: git
     version: "0.9.4"
   socket_io_client:
     dependency: "direct main"
@@ -422,7 +424,7 @@ packages:
     source: hosted
     version: "1.0.0-nullsafety.0"
   socket_io_common:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: socket_io_common
       url: "https://pub.dartlang.org"
@@ -546,7 +548,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.2"
+    version: "3.0.3"
   vm_service:
     dependency: transitive
     description:
