@@ -2,7 +2,7 @@ import 'package:game_scaffold/game_scaffold.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:supabase/supabase.dart';
+import 'package:supabase/supabase.dart' hide Provider;
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:supabase/src/supabase_query_builder.dart';
 import 'package:realtime_client/realtime_client.dart' hide Logger;

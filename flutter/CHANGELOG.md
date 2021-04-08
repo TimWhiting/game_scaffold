@@ -1,3 +1,7 @@
+## 0.3.0+1
+
+- Hide provider
+  
 ## 0.3.0
 
 - Migrate to null-safety

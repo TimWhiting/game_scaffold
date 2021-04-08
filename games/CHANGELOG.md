@@ -1,3 +1,7 @@
+## 0.3.0+1
+
+- Fix null-safety dependency issue
+
 ## 0.3.0
 
 - Null safety release
