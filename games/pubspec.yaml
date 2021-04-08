@@ -17,13 +17,9 @@ dev_dependencies:
   build_runner: any
   freezed: ^0.14.0
 
-dependency_overrides:
-  game_scaffold_dart:
-    path: ../dart
-  socket_io:
-    git:
-      url: git@github.com:TimWhiting/socket.io-dart
-      ref: null-safety
+# dependency_overrides:
+#   game_scaffold_dart:
+#     path: ../dart
 
 scripts:
   - gen: dart run build_runner build --enable-experiment=nonfunction-type-aliases

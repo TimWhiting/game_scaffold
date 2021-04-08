@@ -84,7 +84,7 @@ packages:
       name: fast_immutable_collections
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.3"
   file:
     dependency: transitive
     description:
@@ -291,14 +291,12 @@ packages:
     source: sdk
     version: "0.0.99"
   socket_io:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "."
-      ref: null-safety
-      resolved-ref: "890abac214ae5fe72999d54bcf4299803e3e837b"
-      url: "git@github.com:TimWhiting/socket.io-dart"
-    source: git
-    version: "0.9.4"
+      name: socket_io
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   socket_io_client:
     dependency: transitive
     description:
@@ -396,7 +394,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.3"
+    version: "3.0.4"
   vector_math:
     dependency: transitive
     description:

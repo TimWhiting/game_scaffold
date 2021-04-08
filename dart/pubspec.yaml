@@ -9,7 +9,7 @@ environment:
 dependencies:
   riverpod: ^0.14.0+1
   freezed_annotation: ^0.14.1
-  socket_io: ^0.9.4
+  socket_io: ^1.0.0
   json_annotation: ^4.0.0
   stream: ^3.0.0
   logging: ^1.0.0
@@ -24,12 +24,6 @@ dev_dependencies:
   freezed: ^0.14.1+2
   build_runner: ^1.12.2
   test: any
-
-dependency_overrides:
-  socket_io:
-    git:
-      url: git@github.com:TimWhiting/socket.io-dart
-      ref: null-safety
 
 scripts:
   - gen: dart run build_runner build --enable-experiment=nonfunction-type-aliases

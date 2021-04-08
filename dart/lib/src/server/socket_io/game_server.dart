@@ -56,7 +56,7 @@ class GameServer {
 
   final BackendGameReader _read;
   final GameCode _gameId;
-  final IList<Player> _players = <Player>[].lock;
+  IList<Player> get _players => _read.players;
   final _clients = <PlayerID, IO.Socket?>{};
   final _clientNames = <PlayerID, String>{};
   final _socket;
@@ -123,7 +123,7 @@ class GameServer {
     _serverLogger
         .info('Game server namespace $_gameId registering client $data');
 
-    final name = data['name'] as String;
+    final name = data['name'] as String?;
     final id = data['id'] as PlayerID;
     print('Client registered');
 
@@ -148,8 +148,8 @@ class GameServer {
       if (gameConfig.customNames) {
         _serverLogger.info('Creating player with name $name');
         _clients[id] = client;
-        _clientNames[id] = name;
-        _addPlayer(Player(id, name: name));
+        _clientNames[id] = name ?? 'No name';
+        _addPlayer(Player(id, name: name ?? 'No name'));
         mainServer.addClientToGame(id, _gameId);
       } else {
         _serverLogger.info('Creating player with random name');

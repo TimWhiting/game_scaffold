@@ -26,14 +26,11 @@ dev_dependencies:
   dartdoc: any
   game_scaffold_games: any
 
-dependency_overrides:
-  game_scaffold_dart:
-    path: ../dart
-  game_scaffold_games:
-    path: ../games
-  socket_io:
-    git:
-      url: git@github.com:TimWhiting/socket.io-dart
-      ref: null-safety
+# dependency_overrides:
+  # game_scaffold_dart:
+  #   path: ../dart
+  # game_scaffold_games:
+  #   path: ../games
+
 
 flutter:

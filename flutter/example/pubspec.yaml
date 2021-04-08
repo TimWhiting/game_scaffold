@@ -34,10 +34,6 @@ dependency_overrides:
     path: ../../dart
   game_scaffold_games:
     path: ../../games
-  socket_io:
-    git:
-      url: git@github.com:TimWhiting/socket.io-dart
-      ref: null-safety
 
 flutter:
   uses-material-design: true
