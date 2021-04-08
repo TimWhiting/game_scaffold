@@ -1,10 +1,11 @@
 name: game_scaffold_dart_example
 description: A scaffold for game projects, taking care of server implementation and some general events
 version: 0.3.0
+publish_to: none
 homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:
-  sdk: ">=2.10.0 <3.0.0"
+  sdk: ">=2.13.0 <3.0.0"
 
 dependencies:
   riverpod: ^0.14.0+1
