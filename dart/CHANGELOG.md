@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Update packages
+
 ## 0.3.0
 
 - Migrate to null-safety

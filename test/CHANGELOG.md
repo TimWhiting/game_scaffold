@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Update dependencies and fix initialization error
+
 ## 0.3.0
 
 - Migrate to null-safety

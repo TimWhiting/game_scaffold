@@ -1,6 +1,6 @@
 name: game_scaffold
 description: A new Flutter package project.
-version: 0.3.0+1
+version: 0.3.1
 homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:
@@ -10,11 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  collection: ^1.15.0
   riverpod: ^0.14.0+1
   flutter_riverpod: ^0.14.0
   hooks_riverpod: ^0.14.0
   logging: ^1.0.0
-  game_scaffold_dart: ^0.3.0
+  game_scaffold_dart: ^0.3.1
   flutter_hooks: ^0.16.0
   supabase: ^0.0.1-dev.11
   postgrest: ^0.0.7
@@ -26,11 +27,11 @@ dev_dependencies:
   dartdoc: any
   game_scaffold_games: any
 
-dependency_overrides:
-  game_scaffold_dart:
-    path: ../dart
-  game_scaffold_games:
-    path: ../games
+# dependency_overrides:
+#   game_scaffold_dart:
+#     path: ../dart
+#   game_scaffold_games:
+#     path: ../games
 
 
 flutter:

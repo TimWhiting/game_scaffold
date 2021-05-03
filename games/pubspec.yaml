@@ -1,6 +1,6 @@
 name: game_scaffold_games
 description: Games for the game_scaffold_dart package
-version: 0.3.0+1
+version: 0.3.1
 homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:
@@ -9,7 +9,7 @@ environment:
 dependencies:
   json_annotation: ^4.0.0
   freezed_annotation: ^0.14.0
-  game_scaffold_dart: ^0.3.0
+  game_scaffold_dart: ^0.3.1
   fast_immutable_collections: ^5.0.0-dev.9
 
 dev_dependencies:
@@ -17,9 +17,9 @@ dev_dependencies:
   build_runner: any
   freezed: ^0.14.0
 
-dependency_overrides:
-  game_scaffold_dart:
-    path: ../dart
+# dependency_overrides:
+#   game_scaffold_dart:
+#     path: ../dart
 
 scripts:
   - gen: dart run build_runner build --enable-experiment=nonfunction-type-aliases
