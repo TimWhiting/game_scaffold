@@ -64,7 +64,7 @@ class GameTester<T extends Game> {
     _read.backendGame(code).handleEvent(event.asGameEvent);
 
     final game = _read.backendGame(code).gameState as T;
-    final error = _read.backendGame(code).gameError as GameError<T>;
+    final error = _read.backendGame(code).gameError as GameError<T>?;
     if (error != null) {
       _read.backendGame(code).clearError();
     }
