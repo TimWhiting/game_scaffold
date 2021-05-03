@@ -11,10 +11,11 @@ class GameOrError<T extends Game> with _$GameOrError {
   const GameOrError._();
 
   /// Represents a game
-  const factory GameOrError.game(@GameConverter() T game) = GameValue;
+  const factory GameOrError.game(@GameConverter() T game) = GameValue<T>;
 
   /// Represets an error
-  const factory GameOrError.error(String message, PlayerID person) = GameError;
+  const factory GameOrError.error(String message, PlayerID person) =
+      GameError<T>;
 
   /// Returns whether this instance is an error
   bool get isError => this is GameError;

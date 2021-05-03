@@ -60,11 +60,11 @@ class GameTester<T extends Game> {
   ///   expect(game.players.size, 2);
   /// });
   /// ```
-  void event(Event event, Function(T, GameError?) outcome) {
+  void event(Event event, Function(T, GameError<T>?) outcome) {
     _read.backendGame(code).handleEvent(event.asGameEvent);
 
     final game = _read.backendGame(code).gameState as T;
-    final error = _read.backendGame(code).gameError as GameError<T>?;
+    final error = _read.backendGame(code).gameError as GameError<T>;
     if (error != null) {
       _read.backendGame(code).clearError();
     }
