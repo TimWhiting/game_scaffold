@@ -37,16 +37,12 @@ class BackendProvider {
         Duration(milliseconds: 10),
         () => read(backendGameCodesProvider).state =
             read(backendGameCodesProvider).state.add(code));
-    initialStateProvider = Provider<Game>(_initialStateImpl);
-    gameStateProvider =
-        StateNotifierProvider<GameStateNotifier, Game?>(_gameStateNotifier);
-    backendReader = BackendGameReader(read, this);
   }
 
   /// The game [code] that uniquely identifies the providers in this BackendProvider
   final GameCode code;
   final Reader read;
-  late BackendGameReader backendReader;
+  late BackendGameReader backendReader = BackendGameReader(read, this);
 
   void dispose() {
     read(backendGameCodesProvider).state =
@@ -57,10 +53,11 @@ class BackendProvider {
   ///
   /// Creates based on config from [gameConfigProvider] and
   /// list of players from [playersProvider]
-  late Provider<Game> initialStateProvider;
+  late Provider<Game> initialStateProvider = Provider<Game>(_initialStateImpl);
 
   /// Provides the [GameStateNotifier] based on the [GameConfig] from [gameConfigProvider]
-  late StateNotifierProvider<GameStateNotifier, Game?> gameStateProvider;
+  late StateNotifierProvider<GameStateNotifier, Game?> gameStateProvider =
+      StateNotifierProvider<GameStateNotifier, Game?>(_gameStateNotifier);
 
   /// Keeps track of the players involved in the game on the server (or on the client) in the case of a local game
   final playersProvider = StateProvider<IList<Player>>(
@@ -72,7 +69,8 @@ class BackendProvider {
       StateProvider<GameConfig>((ref) => GameConfig(gameType: ''));
 
   /// Provides the [GameErrorNotifier] to keep track of errors of a game
-  final errorProvider = StateNotifierProvider<GameErrorNotifier, GameError?>((ref) => GameErrorNotifier());
+  final errorProvider = StateNotifierProvider<GameErrorNotifier, GameError?>(
+      (ref) => GameErrorNotifier());
 
   Game _initialStateImpl(ProviderReference ref) {
     final gameConfig = ref.watch(configProvider).state;
@@ -135,6 +133,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   ///
   /// In case of a [GenericEvent] this handles the implementation of handling the event
   void handleEvent(GameEvent event) {
+    print('${event.toJson()}');
     try {
       _previousStates.add(state);
       final nextState = event.when(

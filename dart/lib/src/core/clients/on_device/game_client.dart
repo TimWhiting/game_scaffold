@@ -32,7 +32,7 @@ class NoServerGameClient extends GameClient {
     _watchState();
     final config = backend.gameConfig;
     if (_players.length == config.maxPlayers && config.autoStart) {
-      sendEvent(GenericEvent.start());
+      sendEvent(GenericEvent.start().asGameEvent);
     }
     for (final pID in _players) {
       read.gameFor(pID.id).lobbyInfo = GameInfo(
@@ -61,6 +61,7 @@ class NoServerGameClient extends GameClient {
 
   @override
   void sendEvent(Event event) {
+    print('${event.toJson()}');
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
     backend.handleEvent(event.asGameEvent);

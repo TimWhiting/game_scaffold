@@ -22,13 +22,15 @@ void testGame<T extends Game>(
     late GameCode code;
     darttest.setUp(() async {
       read(gameLocationProvider).state = OnDeviceLocation;
-      read.gameFor(players.first.id).gameConfig = config;
-      code = await read.gameFor(players.first.id).gameClient.createGame();
+      code = await read
+          .gameFor(players.first.id)
+          .gameClient
+          .createGame(config: config);
       for (final p in players) {
-        read.gameFor(p.id).gameCode = code;
-        await read.gameFor(p.id).gameClient.register();
+        await read.gameFor(p.id).gameClient.register(code: code);
       }
-      if (read.backendGame(code).gameState?.gameStatus != GameStatus.Started) {
+
+      if (read.gameFor(players.first.id).gameStatus != GameStatus.Started) {
         read.gameFor(players.first.id).gameClient.startGame();
       }
     });
