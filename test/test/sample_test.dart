@@ -36,7 +36,7 @@ void main() {
       });
       tester.event(TicTacToeGameEvent(P2, 2), (game, error) {
         expect(error, isNotNull);
-        expect(game.board[2], null);
+        expect(game.board[2], '');
       });
       tester.event(TicTacToeGameEvent(P1, 3), (game, error) {
         expect(error, isNull);

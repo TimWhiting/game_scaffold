@@ -9,7 +9,7 @@ part of 'tic_tac_toe.dart';
 _$_TicTacToeGame _$_$_TicTacToeGameFromJson(Map<String, dynamic> json) {
   return _$_TicTacToeGame(
     generic: GenericGame.fromJson(json['generic'] as Map<String, dynamic>),
-    board: IList.fromJson(json['board'], (value) => value as String),
+    board: IList.fromJson(json['board'], (value) => value as String?),
     type: json['type'] as String? ?? 'tictactoe',
   );
 }
