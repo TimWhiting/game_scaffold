@@ -210,7 +210,7 @@ class GameWidget extends GameHookWidget {
 
 extension TextX on IList<String?> {
   String xOrO(String playerID, int location) {
-    if (this[location] == null) {
+    if (this[location] == '') {
       return '';
     } else if (this[location] == P1) {
       return 'X';

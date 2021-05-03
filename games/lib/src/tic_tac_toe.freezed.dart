@@ -22,7 +22,7 @@ class _$TicTacToeGameTearOff {
 
   _TicTacToeGame call(
       {required GenericGame generic,
-      required IList<String?> board,
+      required IList<String> board,
       String type = 'tictactoe'}) {
     return _TicTacToeGame(
       generic: generic,
@@ -42,7 +42,7 @@ const $TicTacToeGame = _$TicTacToeGameTearOff();
 /// @nodoc
 mixin _$TicTacToeGame {
   GenericGame get generic => throw _privateConstructorUsedError;
-  IList<String?> get board => throw _privateConstructorUsedError;
+  IList<String> get board => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -56,7 +56,7 @@ abstract class $TicTacToeGameCopyWith<$Res> {
   factory $TicTacToeGameCopyWith(
           TicTacToeGame value, $Res Function(TicTacToeGame) then) =
       _$TicTacToeGameCopyWithImpl<$Res>;
-  $Res call({GenericGame generic, IList<String?> board, String type});
+  $Res call({GenericGame generic, IList<String> board, String type});
 
   $GenericGameCopyWith<$Res> get generic;
 }
@@ -84,7 +84,7 @@ class _$TicTacToeGameCopyWithImpl<$Res>
       board: board == freezed
           ? _value.board
           : board // ignore: cast_nullable_to_non_nullable
-              as IList<String?>,
+              as IList<String>,
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -107,7 +107,7 @@ abstract class _$TicTacToeGameCopyWith<$Res>
           _TicTacToeGame value, $Res Function(_TicTacToeGame) then) =
       __$TicTacToeGameCopyWithImpl<$Res>;
   @override
-  $Res call({GenericGame generic, IList<String?> board, String type});
+  $Res call({GenericGame generic, IList<String> board, String type});
 
   @override
   $GenericGameCopyWith<$Res> get generic;
@@ -138,7 +138,7 @@ class __$TicTacToeGameCopyWithImpl<$Res>
       board: board == freezed
           ? _value.board
           : board // ignore: cast_nullable_to_non_nullable
-              as IList<String?>,
+              as IList<String>,
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -161,7 +161,7 @@ class _$_TicTacToeGame extends _TicTacToeGame {
   @override
   final GenericGame generic;
   @override
-  final IList<String?> board;
+  final IList<String> board;
   @JsonKey(defaultValue: 'tictactoe')
   @override
   final String type;
@@ -205,7 +205,7 @@ class _$_TicTacToeGame extends _TicTacToeGame {
 abstract class _TicTacToeGame extends TicTacToeGame {
   const factory _TicTacToeGame(
       {required GenericGame generic,
-      required IList<String?> board,
+      required IList<String> board,
       String type}) = _$_TicTacToeGame;
   const _TicTacToeGame._() : super._();
 
@@ -215,7 +215,7 @@ abstract class _TicTacToeGame extends TicTacToeGame {
   @override
   GenericGame get generic => throw _privateConstructorUsedError;
   @override
-  IList<String?> get board => throw _privateConstructorUsedError;
+  IList<String> get board => throw _privateConstructorUsedError;
   @override
   String get type => throw _privateConstructorUsedError;
   @override

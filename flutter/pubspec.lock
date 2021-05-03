@@ -119,7 +119,7 @@ packages:
       name: fast_immutable_collections
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.3"
+    version: "4.0.6"
   file:
     dependency: transitive
     description:
@@ -161,16 +161,16 @@ packages:
   game_scaffold_dart:
     dependency: "direct main"
     description:
-      name: game_scaffold_dart
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../dart"
+      relative: true
+    source: path
     version: "0.3.0"
   game_scaffold_games:
     dependency: "direct dev"
     description:
-      name: game_scaffold_games
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../games"
+      relative: true
+    source: path
     version: "0.3.0+1"
   glob:
     dependency: transitive
@@ -337,14 +337,14 @@ packages:
       name: socket_io_client
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-nullsafety.0"
+    version: "1.0.0"
   socket_io_common:
     dependency: transitive
     description:
       name: socket_io_common
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-nullsafety.1"
+    version: "1.0.0"
   source_span:
     dependency: transitive
     description:

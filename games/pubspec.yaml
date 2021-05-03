@@ -10,16 +10,16 @@ dependencies:
   json_annotation: ^4.0.0
   freezed_annotation: ^0.14.0
   game_scaffold_dart: ^0.3.0
-  fast_immutable_collections: ^2.0.1
+  fast_immutable_collections: ^4.0.6
 
 dev_dependencies:
-  json_serializable_fic: ^0.0.1-nullsafety.0
+  json_serializable: ^4.1.1
   build_runner: any
   freezed: ^0.14.0
 
-# dependency_overrides:
-#   game_scaffold_dart:
-#     path: ../dart
+dependency_overrides:
+  game_scaffold_dart:
+    path: ../dart
 
 scripts:
   - gen: dart run build_runner build --enable-experiment=nonfunction-type-aliases

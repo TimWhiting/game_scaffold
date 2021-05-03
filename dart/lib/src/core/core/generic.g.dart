@@ -8,17 +8,14 @@ part of 'generic.dart';
 
 _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
   return _$_GenericGame(
-    (json['players'] as List)
-        .map((e) => Player.fromJson(e as Map<String, dynamic>))
-        .toIList(),
-    (json['readyPlayers'] as List).map((e) => e as String).toIList(),
-    (json['allRoundScores'] as List)
-        .map((e) => (e as List).map((e) => (e as num).toDouble()).toIList())
-        .toIList(),
+    IList.fromJson(json['players'],
+        (value) => Player.fromJson(value as Map<String, dynamic>)),
+    IList.fromJson(json['readyPlayers'], (value) => value as String),
+    IList.fromJson(json['allRoundScores'],
+        (value) => IList.fromJson(value, (value) => (value as num).toDouble())),
     DateTime.parse(json['time'] as String),
-    (json['messages'] as List)
-        .map((e) => GameMessage.fromJson(e as Map<String, dynamic>))
-        .toIList(),
+    IList.fromJson(json['messages'],
+        (value) => GameMessage.fromJson(value as Map<String, dynamic>)),
     _$enumDecode(_$GameStatusEnumMap, json['gameStatus']),
     json['currentPlayerIndex'] as int?,
     json['round'] as int,
@@ -29,11 +26,21 @@ _$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$_$_GenericGameToJson(_$_GenericGame instance) =>
     <String, dynamic>{
-      'players': instance.players.toList(),
-      'readyPlayers': instance.readyPlayers.toList(),
-      'allRoundScores': instance.allRoundScores.map((e) => e.toList()).toList(),
+      'players': instance.players.toJson(
+        (value) => value,
+      ),
+      'readyPlayers': instance.readyPlayers.toJson(
+        (value) => value,
+      ),
+      'allRoundScores': instance.allRoundScores.toJson(
+        (value) => value.toJson(
+          (value) => value,
+        ),
+      ),
       'time': instance.time.toIso8601String(),
-      'messages': instance.messages.toList(),
+      'messages': instance.messages.toJson(
+        (value) => value,
+      ),
       'gameStatus': _$GameStatusEnumMap[instance.gameStatus],
       'currentPlayerIndex': instance.currentPlayerIndex,
       'round': instance.round,

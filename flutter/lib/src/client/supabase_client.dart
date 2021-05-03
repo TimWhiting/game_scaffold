@@ -6,6 +6,7 @@ import 'package:supabase/supabase.dart' hide Provider;
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:supabase/src/supabase_query_builder.dart';
 import 'package:realtime_client/realtime_client.dart' hide Logger;
+import 'package:collection/collection.dart';
 
 const SupabaseLocation = 'supabase-server';
 

@@ -63,7 +63,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   enum_to_string:
     dependency: transitive
     description:
@@ -84,7 +84,7 @@ packages:
       name: fast_immutable_collections
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.3"
+    version: "4.0.6"
   file:
     dependency: transitive
     description:
@@ -139,7 +139,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.3.0"
+    version: "0.3.0+1"
   game_scaffold_dart:
     dependency: "direct overridden"
     description:
@@ -153,7 +153,7 @@ packages:
       path: "../../games"
       relative: true
     source: path
-    version: "0.3.0"
+    version: "0.3.0+1"
   gotrue:
     dependency: transitive
     description:
@@ -303,14 +303,14 @@ packages:
       name: socket_io_client
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-nullsafety.0"
+    version: "1.0.0"
   socket_io_common:
     dependency: transitive
     description:
       name: socket_io_common
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0-nullsafety.1"
+    version: "1.0.0"
   source_span:
     dependency: transitive
     description:
@@ -359,7 +359,7 @@ packages:
       name: supabase
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1-dev.10"
+    version: "0.0.1-dev.11"
   sync_http:
     dependency: transitive
     description:

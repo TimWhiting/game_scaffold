@@ -10,7 +10,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
   const TicTacToeGame._();
   const factory TicTacToeGame({
     required GenericGame generic,
-    required IList<String?> board,
+    required IList<String> board,
     @Default('tictactoe') String type,
   }) = _TicTacToeGame;
   factory TicTacToeGame.fromJson(Map<String, dynamic> map) =>
@@ -37,7 +37,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
 
   TicTacToeGame _nextPlayerOrEndRound() {
     var gGame = generic.nextPlayer();
-    if (playerIDs.any((p) => isWinner(p)) || board.every((l) => l != null)) {
+    if (playerIDs.any((p) => isWinner(p)) || board.every((l) => l != '')) {
       if (round == 2) {
         gGame = gGame.finishRound(
           {
@@ -53,7 +53,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
   }
 
   bool canMove(PlayerID player, int location) {
-    return location >= 0 && location < 9 && board[location] == null;
+    return location >= 0 && location < 9 && board[location] == '';
   }
 
   @override
@@ -66,7 +66,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
           players[1].id: points[players[1].id]!
         },
       ),
-      board: List.filled(9, null).lock,
+      board: List.filled(9, '').lock,
     );
   }
 
@@ -121,7 +121,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
       initialState: (config, players, _) => TicTacToeGame(
         generic: GenericGame.start(players,
             multiPly: true, simultaneousAction: false),
-        board: List.filled(9, null).lock,
+        board: List.filled(9, '').lock,
       ),
       gameEventFromJson: (j) => TicTacToeGameEvent.fromJson(j).asGameEvent,
     );
