@@ -17,7 +17,7 @@ abstract class GameHookWidget extends HookWidget {
 }
 
 class GameNavigator extends GameHookWidget {
-  GameNavigator(
+  const GameNavigator(
       {Widget? disconnected,
       required this.connected,
       required this.lobby,

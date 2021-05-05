@@ -4,6 +4,7 @@ import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 import 'package:game_scaffold_dart/src/core/backend.dart';
 import 'package:game_scaffold_games/games.dart';
 
+// ignore_for_file: avoid_print
 Future<void> main(List<String> arguments) async {
   Game.registerGeneralEvents();
   TicTacToeGame.register();
@@ -11,7 +12,7 @@ Future<void> main(List<String> arguments) async {
   final Reader read = ProviderContainer().read;
   read.clientImplementation = OnDeviceLocation;
   final p1Reader = read.gameFor(P1);
-  p1Reader.gameConfig = GameConfig(
+  p1Reader.gameConfig = const GameConfig(
     adminId: P1,
     customNames: false,
     gameType: 'tictactoe',
@@ -37,14 +38,14 @@ Future<void> loop(Reader read, GameCode code) async {
   List<int?> location;
   do {
     final command = stdin.readLineSync();
-    location = command!.split(',').map((n) => int.tryParse(n)).toList();
+    location = command!.split(',').map(int.tryParse).toList();
   } while (location.any((l) => l == null));
 
   read.gameFor(player).gameClient.sendEvent(
         TicTacToeGameEvent(player, location[0]! * 3 + location[1]!),
       );
 
-  await Future.delayed(Duration(milliseconds: 100));
+  await Future.delayed(const Duration(milliseconds: 100));
   final error = read.backendGame(code).gameError;
   if (error != null) {
     print('');

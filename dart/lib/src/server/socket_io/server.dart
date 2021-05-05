@@ -3,11 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:logging/logging.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:stream/stream.dart';
-
 // ignore: import_of_legacy_library_into_null_safe, library_prefixes
 import 'package:socket_io/socket_io.dart' as IO;
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:stream/stream.dart';
 
 import '../../core.dart';
 import '../../core/clients/socket_io/channels.dart';
@@ -52,7 +51,7 @@ class IOServer {
     io.listen(server, _serverSocketOpts);
     io.on(
       IOChannel.connection.string,
-      (client) => _handleClientConnection(client),
+      _handleClientConnection,
     );
     Logger.root.clearListeners();
     Logger.root.level = Level.FINE; // defaults to Level.INFO
@@ -101,7 +100,7 @@ class IOServer {
     }
   }
 
-  void _clientDisconnect(IO.Socket client, dynamic reason) {
+  void _clientDisconnect(IO.Socket client, reason) {
     clients.remove(client);
     logger.info('Client disconnected');
   }

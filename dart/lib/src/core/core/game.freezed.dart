@@ -281,7 +281,7 @@ class _$_GameConfig implements _GameConfig {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) ||
         (other is _GameConfig &&
             (identical(other.adminId, adminId) ||
@@ -552,7 +552,7 @@ class _$_GameInfo implements _GameInfo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) ||
         (other is _GameInfo &&
             (identical(other.gameId, gameId) ||

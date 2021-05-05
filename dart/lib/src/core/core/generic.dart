@@ -1,13 +1,15 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:collection/collection.dart';
+
 import 'core.dart';
 import 'events.dart';
+import 'extensions.dart';
 import 'game.dart';
 import 'player.dart';
-import 'extensions.dart';
+
 part 'generic.freezed.dart';
 part 'generic.g.dart';
 

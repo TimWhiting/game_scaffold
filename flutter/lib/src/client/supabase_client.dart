@@ -1,12 +1,12 @@
+import 'package:collection/collection.dart';
 import 'package:game_scaffold/game_scaffold.dart';
 import 'package:logging/logging.dart';
+import 'package:realtime_client/realtime_client.dart' hide Logger;
 import 'package:riverpod/riverpod.dart';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:supabase/supabase.dart' hide Provider;
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:supabase/src/supabase_query_builder.dart';
-import 'package:realtime_client/realtime_client.dart' hide Logger;
-import 'package:collection/collection.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:supabase/supabase.dart' hide Provider;
 
 const SupabaseLocation = 'supabase-server';
 
@@ -89,7 +89,8 @@ class SupabaseServerClient extends ServerClient {
           .severe('In get game info Supabase Error ${response.error?.message}');
     }
     final gameInfo = response.data as List;
-    final allGames = gameInfo.map((gi) => infoFromRow(gi)).toList();
+    // ignore: unnecessary_lambdas
+    final allGames = gameInfo.map((d) => infoFromRow(d)).toList();
     _supaLogger.info('All Games: $allGames');
     return allGames.lock;
   }
@@ -134,7 +135,7 @@ class SupabaseGameClient extends GameClient {
         print('_______________\n\n\n\n\n\n\n');
         _supaLogger.info('$d');
         print('_______________\n\n\n\n\n\n\n');
-      }).subscribe((e, {String? errorMsg}) => print('$e, $errorMsg'));
+      }).subscribe((e, {errorMsg}) => print('$e, $errorMsg'));
       print(_gameSub.topic);
       _gameSub.onError(print);
 

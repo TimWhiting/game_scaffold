@@ -134,7 +134,7 @@ class _$_Player implements _Player {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) ||
         (other is _Player &&
             (identical(other.id, id) ||

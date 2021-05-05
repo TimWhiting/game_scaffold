@@ -1,8 +1,9 @@
 import 'dart:async';
+
 import 'package:game_scaffold_dart/src/core/clients/socket_io/channels.dart';
+import 'package:logging/logging.dart';
 // ignore: import_of_legacy_library_into_null_safe, library_prefixes
 import 'package:socket_io/socket_io.dart' as IO;
-import 'package:logging/logging.dart';
 
 import '../../core.dart';
 import '../../core/backend.dart';
@@ -91,7 +92,7 @@ class GameServer {
     _serverLogger.info('Listening on namespace /$_gameId');
     _socket.on(
       IOChannel.connection.string,
-      (client) => _handleClientConnection(client),
+      _handleClientConnection,
     );
   }
 
@@ -111,7 +112,7 @@ class GameServer {
     );
     client.on(
       IOChannel.event.string,
-      (data) => _handleRequest(data),
+      _handleRequest,
     );
     if (_gameState.gameState != null) {
       _serverLogger.info('Sending first update');
@@ -167,7 +168,7 @@ class GameServer {
     }
   }
 
-  void _handleDisconnect(IO.Socket socket, PlayerID id, dynamic reason) {
+  void _handleDisconnect(IO.Socket socket, PlayerID id, reason) {
     _serverLogger.info('Client disconnected from $_gameId namespace $reason');
     _clients[id] = null;
   }

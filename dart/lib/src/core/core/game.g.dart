@@ -62,7 +62,7 @@ K _$enumDecode<K, V>(
 
 K? _$enumDecodeNullable<K, V>(
   Map<K, V> enumValues,
-  dynamic source, {
+  source, {
   K? unknownValue,
 }) {
   if (source == null) {

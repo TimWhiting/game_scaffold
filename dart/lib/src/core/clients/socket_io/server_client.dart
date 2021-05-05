@@ -18,9 +18,7 @@ class IOServerClient extends ServerClient {
     required this.address,
     required PlayerID playerID,
   }) : super(read, playerID) {
-    Future.delayed(Duration(milliseconds: 10), () {
-      connect();
-    });
+    Future.delayed(Duration(milliseconds: 10), connect);
   }
 
   final GameAddress address;

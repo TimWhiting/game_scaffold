@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 import 'package:riverpod/riverpod.dart';
-
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import '../../../../game_scaffold_dart.dart';
 import '../../core.dart';
 import '../game_client.dart';
 import '../providers.dart';
@@ -15,7 +15,7 @@ class IOGameClient extends GameClient {
   IOGameClient(
       {required Reader read, required this.address, required PlayerID playerID})
       : super(playerID, read) {
-    Future.delayed(Duration(milliseconds: 100), _ensureConnected);
+    Future.delayed(const Duration(milliseconds: 100), _ensureConnected);
   }
   final GameAddress address;
 
@@ -72,6 +72,7 @@ class IOGameClient extends GameClient {
       logger.warning('Error: $error');
       game.gameError = error;
     });
+    // ignore: unnecessary_lambdas
     _socket!.on(IOChannel.lobby.string, (d) => _onLobby(d));
   }
 

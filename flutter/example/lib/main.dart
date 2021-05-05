@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:game_scaffold/game_scaffold.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:game_scaffold_games/games.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
 void main() {
@@ -45,14 +45,14 @@ class TicTacToeWidget extends StatelessWidget {
       body: Row(children: [
         Expanded(
           child: ProviderScope(
-            overrides: [playerIDProvider.overrideAs(((watch) => P1))],
+            overrides: [playerIDProvider.overrideAs((watch) => P1)],
             child: Player(),
           ),
         ),
         Container(width: 10, color: Colors.black),
         Expanded(
           child: ProviderScope(
-            overrides: [playerIDProvider.overrideAs(((watch) => P2))],
+            overrides: [playerIDProvider.overrideAs((watch) => P2)],
             child: Player(),
           ),
         ),
@@ -159,7 +159,6 @@ class GameWidget extends GameHookWidget {
       appBar: AppBar(),
       body: Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text('$gameState'),
             SizedBox(height: 20),

@@ -121,7 +121,7 @@ class _$_GameEventGame extends _GameEventGame {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) ||
         (other is _GameEventGame &&
             (identical(other.event, event) ||
@@ -246,7 +246,7 @@ class _$_GameEventGeneral extends _GameEventGeneral {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) ||
         (other is _GameEventGeneral &&
             (identical(other.event, event) ||

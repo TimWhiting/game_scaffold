@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:game_scaffold_dart/src/core/core/generic.dart';
+import 'generic.dart';
 part 'events.freezed.dart';
 
 // The type of the event

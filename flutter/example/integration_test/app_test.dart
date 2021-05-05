@@ -5,11 +5,10 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:example/main.dart' as app;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-
-import 'package:example/main.dart' as app;
 
 final p1Create = Key('Create Game Button 0');
 
@@ -22,7 +21,7 @@ void main() {
     return text.data!.substring(codestart, codestart + 4);
   }
 
-  testWidgets('Create Game Works', (WidgetTester tester) async {
+  testWidgets('Create Game Works', (tester) async {
     app.main();
     await tester.pumpAndSettle();
     // Create a game
@@ -34,7 +33,7 @@ void main() {
     expect(gameId, isNotEmpty);
   });
 
-  testWidgets('Join Game Works', (WidgetTester tester) async {
+  testWidgets('Join Game Works', (tester) async {
     app.main();
     // Create a Game
     await tester.pumpAndSettle();
@@ -49,7 +48,7 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('Playing Tic Tac Toe Works', (WidgetTester tester) async {
+  testWidgets('Playing Tic Tac Toe Works', (tester) async {
     app.main();
     // Create a Game
     await tester.pumpAndSettle();

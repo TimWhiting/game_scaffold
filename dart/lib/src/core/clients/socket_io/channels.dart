@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:enum_to_string/enum_to_string.dart';
 // ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:enum_to_string/enum_to_string.dart';
 
 /// Options for a socket io server
 final socketIOOpts = <String, dynamic>{

@@ -37,7 +37,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
 
   TicTacToeGame _nextPlayerOrEndRound() {
     var gGame = generic.nextPlayer();
-    if (playerIDs.any((p) => isWinner(p)) || board.every((l) => l != null)) {
+    if (playerIDs.any(isWinner) || board.every((l) => l != null)) {
       if (round == 2) {
         gGame = gGame.finishRound(
           {

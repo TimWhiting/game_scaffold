@@ -149,7 +149,7 @@ class _$GameValue<T extends Game<Event>> extends GameValue<T> {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) ||
         (other is GameValue<T> &&
             (identical(other.game, game) ||
@@ -286,7 +286,7 @@ class _$GameError<T extends Game<Event>> extends GameError<T> {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) ||
         (other is GameError<T> &&
             (identical(other.message, message) ||

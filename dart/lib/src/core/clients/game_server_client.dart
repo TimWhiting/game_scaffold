@@ -3,7 +3,9 @@ import 'package:riverpod/riverpod.dart';
 import '../client.dart';
 import '../core.dart';
 
+/// The GameServerClient interface
 class GameServerClient {
+  /// The GameServerClient interface
   GameServerClient(this.read, this._gClient, this._sClient);
 
   final GameClient _gClient;
@@ -15,7 +17,10 @@ class GameServerClient {
   /// The [gameCode] of the game the client has joined
   GameCode get gameCode => _gClient.gameCode;
 
+  /// The [Reader] for the game
   Reader read;
+
+  /// Gets the game for the [playerID]
   GameReader get game => read.gameFor(playerID);
 
   /// Causes the client to exit the game
@@ -23,12 +28,12 @@ class GameServerClient {
 
   /// Registers the client with the game server with the optionally provided [code]
   ///
-  /// Specifying [code] is just shorthand for updating the [gameCodeProvider]
+  /// Specifying [code] is just shorthand for updating the `gameCodeProvider`
   Future<void> register({GameCode? code}) async {
     if (code != null) {
       read.gameFor(playerID).gameCode = code;
     }
-    return await _gClient.register();
+    return _gClient.register();
   }
 
   /// Sends [event] to the game server
@@ -52,7 +57,7 @@ class GameServerClient {
 
   /// Creates a game on the server
   ///
-  /// Specifying [config] is just a shorthand for updating the [gameConfigProvider]
+  /// Specifying [config] is just a shorthand for updating `gameConfigProvider`
   Future<GameCode> createGame({GameConfig? config}) async {
     if (config != null) {
       read.gameFor(playerID).gameConfig = config;
@@ -63,12 +68,12 @@ class GameServerClient {
 
   /// Deletes the game on the server
   ///
-  /// Specifying [code] is just shorthand for updating the [gameCodeProvider]
+  /// Specifying [code] is just shorthand for updating the `gameCodeProvider`
   Future<bool> deleteGame({GameCode? code}) async {
     if (code != null) {
       read.gameFor(playerID).gameCode = code;
     }
-    return await _sClient.deleteGame();
+    return _sClient.deleteGame();
   }
 
   /// Connects to the backend

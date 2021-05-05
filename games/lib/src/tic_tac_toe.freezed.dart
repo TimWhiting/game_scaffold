@@ -172,7 +172,7 @@ class _$_TicTacToeGame extends _TicTacToeGame {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) ||
         (other is _TicTacToeGame &&
             (identical(other.generic, generic) ||
@@ -352,7 +352,7 @@ class _$_TicTacToeGameEvent extends _TicTacToeGameEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) ||
         (other is _TicTacToeGameEvent &&
             (identical(other.player, player) ||

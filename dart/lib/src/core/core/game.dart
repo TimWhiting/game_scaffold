@@ -4,8 +4,8 @@ import 'package:json_annotation/json_annotation.dart';
 import '../backend/game_state.dart';
 import 'core.dart';
 import 'errors.dart';
-import 'extensions.dart';
 import 'events.dart';
+import 'extensions.dart';
 import 'generic.dart';
 import 'player.dart';
 
@@ -106,7 +106,7 @@ abstract class Game<E extends Event> {
   /// Registers the set of general events
   static void registerGeneralEvents() {
     _eventFromJsonFactory['GenericEvent'] =
-        (Map<String, dynamic> j) => GenericEvent.fromJson(j).asGameEvent;
+        (j) => GenericEvent.fromJson(j).asGameEvent;
   }
 
   /// Some private fields to keep track of information about registered games

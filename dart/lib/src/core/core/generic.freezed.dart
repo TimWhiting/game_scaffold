@@ -291,7 +291,7 @@ class _$_GenericGame extends _GenericGame {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) ||
         (other is _GenericGame &&
             (identical(other.players, players) ||
@@ -532,7 +532,7 @@ class _$_GenericEventUndo extends _GenericEventUndo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) || (other is _GenericEventUndo);
   }
 
@@ -639,7 +639,7 @@ class _$_GenericEventStart extends _GenericEventStart {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) || (other is _GenericEventStart);
   }
 
@@ -764,7 +764,7 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) ||
         (other is _GenericReadyNextRoundEvent &&
             (identical(other.player, player) ||
@@ -918,7 +918,7 @@ class _$GameMessage extends GameMessage {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(other) {
     return identical(this, other) ||
         (other is GameMessage &&
             (identical(other.message, message) ||

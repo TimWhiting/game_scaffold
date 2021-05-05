@@ -1,8 +1,9 @@
 import 'dart:io';
 
+import 'package:characters/characters.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:characters/characters.dart';
+
 import '../core.dart';
 
 /// Gets the home path based on the operating system, should only be used in server contexts
@@ -20,7 +21,7 @@ String get homeDir {
 final agentBackendGame = Provider((ref) => BackendProvider(ref.read, '0000'));
 final backendGameCodesProvider =
     StateProvider<IList<GameCode>>((ref) => <GameCode>[].lock);
-final ProviderFamily<BackendProvider, GameCode>? backendGamesProvider =
+final ProviderFamily<BackendProvider, GameCode> backendGamesProvider =
     Provider.family<BackendProvider, GameCode>((ref, code) {
   final bp = BackendProvider(ref.read, code);
   ref.onDispose(() {
@@ -66,7 +67,7 @@ class BackendProvider {
 
   /// Keeps track
   final configProvider =
-      StateProvider<GameConfig>((ref) => GameConfig(gameType: ''));
+      StateProvider<GameConfig>((ref) => const GameConfig(gameType: ''));
 
   /// Provides the [GameErrorNotifier] to keep track of errors of a game
   final errorProvider = StateNotifierProvider<GameErrorNotifier, GameError?>(
@@ -133,7 +134,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   ///
   /// In case of a [GenericEvent] this handles the implementation of handling the event
   void handleEvent(GameEvent event) {
-    print('${event.toJson()}');
+    // print('${event.toJson()}');
     try {
       _previousStates.add(state);
       final nextState = event.when(
@@ -147,7 +148,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
             if (state.readyPlayers.length > 1) {
               _previousStates.remove(state);
             }
-            var newState = state.copyWithGeneric((g) => g.addReadyPlayer(e));
+            final newState = state.copyWithGeneric((g) => g.addReadyPlayer(e));
             if (newState.readyPlayers.length == state.players.length) {
               return state
                   .moveNextRound(gameConfig, read)
@@ -169,6 +170,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
         read.gameError = nextState.error;
         _previousStates.removeLast();
       } else {
+        // ignore: cast_nullable_to_non_nullable
         state = nextState.value as T;
       }
     } catch (error, st) {
@@ -181,7 +183,7 @@ extension BackendReader on Reader {
   BackendGameReader get agentGame =>
       BackendGameReader(this, this(agentBackendGame));
   BackendGameReader backendGame(GameCode code) =>
-      BackendGameReader(this, this(backendGamesProvider!(code)));
+      BackendGameReader(this, this(backendGamesProvider(code)));
 }
 
 class BackendGameReader {
@@ -238,7 +240,7 @@ GameCode generateGameID(List<String> avoidList) {
   var gameid = '';
   while (gameid.length != 4 || avoidList.contains(gameid)) {
     gameid = ('BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle())
-        .join('')
+        .join()
         .substring(0, 4);
   }
   return gameid;
