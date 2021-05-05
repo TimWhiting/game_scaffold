@@ -1,12 +1,12 @@
 import 'package:collection/collection.dart';
-import 'package:game_scaffold/game_scaffold.dart';
 import 'package:logging/logging.dart';
 import 'package:realtime_client/realtime_client.dart' hide Logger;
 import 'package:riverpod/riverpod.dart';
-// ignore: import_of_legacy_library_into_null_safe
+// ignore: implementation_imports
 import 'package:supabase/src/supabase_query_builder.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:supabase/supabase.dart' hide Provider;
+// ignore_for_file: avoid_print
+import '../../game_scaffold.dart';
 
 const SupabaseLocation = 'supabase-server';
 
@@ -32,8 +32,9 @@ class SupabaseServerClient extends ServerClient {
           .severe('In create game Supabase Error ${response.error?.message}');
       return;
     }
+    // ignore: avoid_dynamic_calls
     final code = response.data[0]['id'];
-    game.gameCode = code;
+    game.gameCode = code as String;
     _supaLogger.info('GameCode: $code');
   }
 
@@ -61,17 +62,20 @@ class SupabaseServerClient extends ServerClient {
           .severe('In get game info Supabase Error ${response.error?.message}');
       return;
     }
+    // ignore: avoid_dynamic_calls
     final gameInfo = response.data[0] as Map<String, dynamic>;
     game.currentGameInfo = infoFromRow(gameInfo);
   }
 
   GameInfo infoFromRow(Map<String, dynamic> gameInfo) {
-    print(gameInfo);
-    final config = GameConfig.fromJson(gameInfo['config']);
-    final players =
-        (gameInfo['players'] as List).map((p) => Player.fromJson(p)).toIList();
+    // print(gameInfo);
+    final config =
+        GameConfig.fromJson(gameInfo['config'] as Map<String, dynamic>);
+    final players = (gameInfo['players'] as List)
+        .map((p) => Player.fromJson(p as Map<String, dynamic>))
+        .toIList();
     return GameInfo(
-      gameInfo['id'],
+      gameInfo['id'] as String,
       players.map((p) => p.nameOrID).toIList(),
       players.firstWhereOrNull((p) => p.id == playerID)?.nameOrID ?? '',
       config.adminId == playerID,
@@ -90,7 +94,8 @@ class SupabaseServerClient extends ServerClient {
     }
     final gameInfo = response.data as List;
     // ignore: unnecessary_lambdas
-    final allGames = gameInfo.map((d) => infoFromRow(d)).toList();
+    final allGames =
+        gameInfo.map((d) => infoFromRow(d as Map<String, dynamic>)).toList();
     _supaLogger.info('All Games: $allGames');
     return allGames.lock;
   }
@@ -122,11 +127,14 @@ class SupabaseGameClient extends GameClient {
         await gameDB.select('players, config').eq('id', gameCode).execute();
     if (result.error == null) {
       _supaLogger.info(result.data);
+      // ignore: avoid_dynamic_calls
       final oldPlayers = (result.data[0]['players'] as List)
-          .map((p) => Player.fromJson(p))
+          .map((p) => Player.fromJson(p as Map<String, dynamic>))
           .toList();
 
-      final gameConfig = GameConfig.fromJson(result.data[0]['config']);
+      final gameConfig =
+          // ignore: avoid_dynamic_calls
+          GameConfig.fromJson(result.data[0]['config'] as Map<String, dynamic>);
       // _supaClient.realtime.onOpen(() => print('Socket opened.'));
       // _supaClient.realtime.onClose((event) => print('Socket closed $event'));
       _supaClient.realtime.onError((error) => print('Socket error: $error'));

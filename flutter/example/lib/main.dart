@@ -133,6 +133,7 @@ class CreateOrJoinWidget extends GameHookWidget {
 }
 
 class LobbyWidget extends GameHookWidget {
+  const LobbyWidget({Key? key}) : super(key: key);
   @override
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final lobby = gameProvider.useLobbyInfo;
@@ -140,8 +141,8 @@ class LobbyWidget extends GameHookWidget {
       appBar: AppBar(),
       body: Center(
         child: Column(children: [
-          SizedBox(height: 40),
-          Text('Lobby'),
+          const SizedBox(height: 40),
+          const Text('Lobby'),
           Text('$lobby'),
         ]),
       ),
@@ -150,6 +151,7 @@ class LobbyWidget extends GameHookWidget {
 }
 
 class GameWidget extends GameHookWidget {
+  const GameWidget({Key? key}) : super(key: key);
   @override
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final gameState = gameProvider.useGameState as TicTacToeGame;
@@ -161,7 +163,7 @@ class GameWidget extends GameHookWidget {
         child: Column(
           children: [
             Text('$gameState'),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             for (final r in [0, 1, 2])
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -178,7 +180,7 @@ class GameWidget extends GameHookWidget {
                           width: 20,
                           height: 20,
                           color: Colors.white,
-                          margin: EdgeInsets.all(1),
+                          margin: const EdgeInsets.all(1),
                           child: Center(
                             child: Text(
                               gameState.board

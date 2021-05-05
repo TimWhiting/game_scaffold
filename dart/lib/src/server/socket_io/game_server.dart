@@ -108,7 +108,7 @@ class GameServer {
     _serverLogger.info('Game server namespace $_gameId connected to client');
     client.on(
       IOChannel.register.string,
-      (data) => _handleRegister(client, data),
+      (data) => _handleRegister(client, data as Map<String, dynamic>),
     );
     client.on(
       IOChannel.event.string,

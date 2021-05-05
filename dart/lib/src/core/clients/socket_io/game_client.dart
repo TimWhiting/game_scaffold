@@ -73,7 +73,8 @@ class IOGameClient extends GameClient {
       game.gameError = error;
     });
     // ignore: unnecessary_lambdas
-    _socket!.on(IOChannel.lobby.string, (d) => _onLobby(d));
+    _socket!
+        .on(IOChannel.lobby.string, (d) => _onLobby(d as Map<String, dynamic>));
   }
 
   @override

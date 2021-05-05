@@ -74,20 +74,20 @@ class IOServer {
     );
     client.on(
       IOChannel.creategame.string,
-      (config) => _createGame(client, config),
+      (config) => _createGame(client, config as Map<String, dynamic>),
     );
     client.on(
       IOChannel.getgames.string,
-      (clientId) => _getGames(client, clientId),
+      (clientId) => _getGames(client, clientId as String),
     );
     client.on(
       IOChannel.getgameinfo.string,
-      (id) => _getGameInfo(client, id),
+      (id) => _getGameInfo(client, id as String),
     );
 
     client.on(
       IOChannel.deletegame.string,
-      (id) => _deleteGame(client, id),
+      (id) => _deleteGame(client, id as String),
     );
   }
 

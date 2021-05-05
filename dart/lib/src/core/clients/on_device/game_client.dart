@@ -50,7 +50,7 @@ class NoServerGameClient extends GameClient {
       game.gameState = gameState;
       game.gameStatus = gameState.gameStatus;
     }, onError: (e) {
-      game.gameError = GameError(e, playerID);
+      game.gameError = GameError(e as String, playerID);
     });
     _se = backend.errorNotifier.stream.listen((gameError) {
       if (gameError == null || gameError.person == playerID) {
