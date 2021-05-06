@@ -83,20 +83,19 @@ const _$GameStatusEnumMap = {
   GameStatus.BetweenRounds: 'BetweenRounds',
 };
 
-_$_GenericEventUndo _$_$_GenericEventUndoFromJson(Map<String, dynamic> json) {
-  return _$_GenericEventUndo();
+_$GenericEventUndo _$_$GenericEventUndoFromJson(Map<String, dynamic> json) {
+  return _$GenericEventUndo();
 }
 
-Map<String, dynamic> _$_$_GenericEventUndoToJson(
-        _$_GenericEventUndo instance) =>
+Map<String, dynamic> _$_$GenericEventUndoToJson(_$GenericEventUndo instance) =>
     <String, dynamic>{};
 
-_$_GenericEventStart _$_$_GenericEventStartFromJson(Map<String, dynamic> json) {
-  return _$_GenericEventStart();
+_$GenericEventStart _$_$GenericEventStartFromJson(Map<String, dynamic> json) {
+  return _$GenericEventStart();
 }
 
-Map<String, dynamic> _$_$_GenericEventStartToJson(
-        _$_GenericEventStart instance) =>
+Map<String, dynamic> _$_$GenericEventStartToJson(
+        _$GenericEventStart instance) =>
     <String, dynamic>{};
 
 _$_GenericReadyNextRoundEvent _$_$_GenericReadyNextRoundEventFromJson(

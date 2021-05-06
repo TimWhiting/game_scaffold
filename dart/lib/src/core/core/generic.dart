@@ -168,10 +168,10 @@ class GenericEvent with _$GenericEvent implements Event {
   const GenericEvent._();
 
   /// Undo's the effects of the last event
-  const factory GenericEvent.undo() = _GenericEventUndo;
+  const factory GenericEvent.undo() = GenericEventUndo;
 
   /// Starts the game
-  const factory GenericEvent.start() = _GenericEventStart;
+  const factory GenericEvent.start() = GenericEventStart;
 
   /// Signals that [player] is ready for the next round
   const factory GenericEvent.readyNextRound(String player) =

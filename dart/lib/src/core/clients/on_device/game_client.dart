@@ -16,6 +16,7 @@ class NoServerGameClient extends GameClient {
   StreamSubscription<Game?>? _ss;
   StreamSubscription<GameError?>? _se;
   BackendGameReader get backend => read.backendGame(game.gameCode);
+  static final Map<String, List<void Function()>> _startListening = {};
   @override
   void exitGame() {
     game.gameStatus = GameStatus.NotJoined;
@@ -29,7 +30,8 @@ class NoServerGameClient extends GameClient {
     game.gameStatus = GameStatus.NotJoined;
     game.playerName = game.playerName == '' ? playerID : game.playerName;
     game.gameStatus = GameStatus.NotStarted;
-    _watchState();
+    _startListening.putIfAbsent(gameCode, () => []);
+    _startListening[gameCode]!.add(_watchState);
     final config = backend.gameConfig;
     if (_players.length == config.maxPlayers && config.autoStart) {
       sendEvent(const GenericEvent.start().asGameEvent);
@@ -61,6 +63,12 @@ class NoServerGameClient extends GameClient {
 
   @override
   void sendEvent(Event event) {
+    if (event is GenericEventStart && _startListening[gameCode] != null) {
+      for (final fcn in _startListening[gameCode]!) {
+        fcn();
+      }
+      _startListening[gameCode]?.clear();
+    }
     // print('${event.toJson()}');
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');

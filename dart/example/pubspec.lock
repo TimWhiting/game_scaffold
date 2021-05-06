@@ -224,14 +224,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.3.0"
+    version: "0.3.1"
   game_scaffold_games:
     dependency: "direct main"
     description:
       path: "../../games"
       relative: true
     source: path
-    version: "0.3.0+1"
+    version: "0.3.1"
   glob:
     dependency: transitive
     description:

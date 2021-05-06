@@ -123,16 +123,16 @@ packages:
   game_scaffold_dart:
     dependency: "direct main"
     description:
-      name: game_scaffold_dart
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../dart"
+      relative: true
+    source: path
     version: "0.3.1"
   game_scaffold_games:
     dependency: "direct dev"
     description:
-      name: game_scaffold_games
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../games"
+      relative: true
+    source: path
     version: "0.3.1"
   glob:
     dependency: transitive
