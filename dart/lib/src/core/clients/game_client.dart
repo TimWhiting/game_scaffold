@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import '../../../game_scaffold_dart.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
 
+import '../../../game_scaffold_dart.dart';
 import '../core.dart';
 
 /// A client for a particular game identified by [gameCode]

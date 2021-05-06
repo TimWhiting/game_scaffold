@@ -80,8 +80,7 @@ Future<void> loop(Reader read, GameCode code) async {
 }
 
 void printStateAndAction(Reader read, GameCode code) {
-  print(
-      'Player ${read.backendGame(code).gameState!.currentPlayer?.id}\'s turn');
+  print("Player ${read.backendGame(code).gameState!.currentPlayer?.id}'s turn");
   final gameState = read.backendGame(code).gameState as TicTacToeGame;
   String strFor(int index) => gameState.board[index] == P1
       ? 'X'
@@ -89,11 +88,7 @@ void printStateAndAction(Reader read, GameCode code) {
           ? '0'
           : ' ';
   String row(int startIndex) =>
-      strFor(startIndex) +
-      '|' +
-      strFor(startIndex + 1) +
-      '|' +
-      strFor(startIndex + 2);
+      '${strFor(startIndex)}|${strFor(startIndex + 1)}|${strFor(startIndex + 2)}';
   print('State: ');
   print(row(0));
   print('-----');

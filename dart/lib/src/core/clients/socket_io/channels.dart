@@ -33,9 +33,7 @@ enum IOChannel {
 
 extension IOChannelX on IOChannel {
   /// Retrieves the string for the enum
-  String get string {
-    return EnumToString.convertToString(this);
-  }
+  String get string => EnumToString.convertToString(this);
 
   /// Returns the corresponding response `IOChannel` for a particular channel
   ///

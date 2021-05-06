@@ -26,7 +26,6 @@ part 'generic.g.dart';
 /// * The current [round]
 @freezed
 class GenericGame with _$GenericGame {
-  const GenericGame._();
   const factory GenericGame(
     IList<Player> players,
     IList<PlayerID> readyPlayers,
@@ -36,9 +35,12 @@ class GenericGame with _$GenericGame {
     GameStatus gameStatus,
     int? currentPlayerIndex,
     int round,
+    // ignore: avoid_positional_boolean_parameters
     bool isMultiPly,
     bool isSimultaneousAction,
   ) = _GenericGame;
+  const GenericGame._();
+
   factory GenericGame.fromJson(Map<String, dynamic> map) =>
       _$GenericGameFromJson(map);
 

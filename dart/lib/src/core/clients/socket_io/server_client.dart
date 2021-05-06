@@ -18,7 +18,7 @@ class IOServerClient extends ServerClient {
     required this.address,
     required PlayerID playerID,
   }) : super(read, playerID) {
-    Future.delayed(Duration(milliseconds: 10), connect);
+    Future.delayed(const Duration(milliseconds: 10), connect);
   }
 
   final GameAddress address;
@@ -84,7 +84,7 @@ class IOServerClient extends ServerClient {
         (_) => game.gameStatus = GameStatus.NotConnected);
 
     final currentStatus = game.gameStatus;
-    await Future.delayed(Duration(milliseconds: 20));
+    await Future.delayed(const Duration(milliseconds: 20));
     if (currentStatus == GameStatus.NotConnected ||
         currentStatus == GameStatus.NotJoined) {
       scheduleMicrotask(() => game.gameStatus =

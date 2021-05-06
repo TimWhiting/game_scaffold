@@ -36,11 +36,11 @@ class NoServerGameClient extends GameClient {
     }
     for (final pID in _players) {
       read.gameFor(pID.id).lobbyInfo = GameInfo(
-        gameCode,
-        _players.map((p) => p.name).toIList(),
-        pID.name,
-        pID.id == backend.players.first.id,
-        config.gameType,
+        gameId: gameCode,
+        players: _players.map((p) => p.name).toIList(),
+        player: pID.name,
+        creator: pID.id == backend.players.first.id,
+        gameType: config.gameType,
       );
     }
   }
@@ -61,7 +61,7 @@ class NoServerGameClient extends GameClient {
 
   @override
   void sendEvent(Event event) {
-    print('${event.toJson()}');
+    // print('${event.toJson()}');
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
     backend.handleEvent(event.asGameEvent);

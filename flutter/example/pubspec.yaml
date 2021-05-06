@@ -6,20 +6,20 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+3
 
 environment:
-  sdk: '>=2.13.0-0 <3.0.0'
+  sdk: ">=2.13.0-0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  game_scaffold: any
   flutter_hooks: any
   flutter_riverpod: any
+  game_scaffold: any
+  game_scaffold_games: any
   hooks_riverpod: any
   logging: any
-  supabase: any
   postgrest: any
   realtime_client: any
-  game_scaffold_games: any
+  supabase: any
 
 dev_dependencies:
   flutter_test:

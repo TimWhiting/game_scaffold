@@ -78,15 +78,11 @@ extension GameX on Game {
 }
 
 extension GameMapExtensions<K, V> on IMap<K, V> {
-  IMap<K, S> mapValues<S>(S Function(MapEntry<K, V> entry) fn) {
-    return IMap({
-      for (final entry in entries) entry.key: fn(entry),
-    });
-  }
+  IMap<K, S> mapValues<S>(S Function(MapEntry<K, V> entry) fn) => IMap({
+        for (final entry in entries) entry.key: fn(entry),
+      });
 
-  IMap<S, V> mapKeys<S>(S Function(MapEntry<K, V> entry) fn) {
-    return IMap({
-      for (final entry in entries) fn(entry): entry.value,
-    });
-  }
+  IMap<S, V> mapKeys<S>(S Function(MapEntry<K, V> entry) fn) => IMap({
+        for (final entry in entries) fn(entry): entry.value,
+      });
 }

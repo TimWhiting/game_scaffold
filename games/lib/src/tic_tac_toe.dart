@@ -7,20 +7,20 @@ part 'tic_tac_toe.g.dart';
 
 @freezed
 class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
-  const TicTacToeGame._();
   const factory TicTacToeGame({
     required GenericGame generic,
     required IList<String?> board,
     @Default('tictactoe') String type,
   }) = _TicTacToeGame;
+  const TicTacToeGame._();
+
   factory TicTacToeGame.fromJson(Map<String, dynamic> map) =>
       _$TicTacToeGameFromJson(map);
 
   @override
   GameOrError<TicTacToeGame> next(
-      TicTacToeGameEvent event, BackendGameReader backendReader) {
-    return _handleMove(event.player, event.location);
-  }
+          TicTacToeGameEvent event, BackendGameReader backendReader) =>
+      _handleMove(event.player, event.location);
 
   GameOrError<TicTacToeGame> _handleMove(PlayerID player, int location) {
     if (player != currentPlayer?.id) {
@@ -52,39 +52,34 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
     return copyWith(generic: gGame);
   }
 
-  bool canMove(PlayerID player, int location) {
-    return location >= 0 && location < 9 && board[location] == null;
-  }
+  bool canMove(PlayerID player, int location) =>
+      location >= 0 && location < 9 && board[location] == null;
 
   @override
   TicTacToeGame moveNextRound(
-      GameConfig config, BackendGameReader backendReader) {
-    return TicTacToeGame(
-      generic: generic.finishRound(
-        {
-          players[0].id: points[players[0].id]!,
-          players[1].id: points[players[1].id]!
-        },
-      ),
-      board: List.filled(9, null).lock,
-    );
-  }
+          GameConfig config, BackendGameReader backendReader) =>
+      TicTacToeGame(
+        generic: generic.finishRound(
+          {
+            players[0].id: points[players[0].id]!,
+            players[1].id: points[players[1].id]!
+          },
+        ),
+        board: List.filled(9, null).lock,
+      );
 
   @override
-  TicTacToeGame copyWithGeneric(GenericGame Function(GenericGame p1) updates) {
-    return copyWith(generic: updates(generic));
-  }
+  TicTacToeGame copyWithGeneric(GenericGame Function(GenericGame p1) updates) =>
+      copyWith(generic: updates(generic));
 
-  IMap<String, double> get points {
-    return IMap({
-      for (final p in playerIDs)
-        p: isWinner(p)
-            ? 1.0
-            : isLoser(p)
-                ? 0.0
-                : .5,
-    });
-  }
+  IMap<String, double> get points => IMap({
+        for (final p in playerIDs)
+          p: isWinner(p)
+              ? 1.0
+              : isLoser(p)
+                  ? 0.0
+                  : .5,
+      });
 
   static final IList<IList<int>> winningLocationCombinations = [
     [0, 1, 2],
@@ -130,9 +125,10 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
 
 @freezed
 class TicTacToeGameEvent with _$TicTacToeGameEvent implements Event {
-  const TicTacToeGameEvent._();
   const factory TicTacToeGameEvent(PlayerID player, int location) =
       _TicTacToeGameEvent;
+  const TicTacToeGameEvent._();
+
   factory TicTacToeGameEvent.fromJson(Map<String, dynamic> map) =>
       _$TicTacToeGameEventFromJson(map);
   @override

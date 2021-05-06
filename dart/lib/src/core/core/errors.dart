@@ -16,6 +16,8 @@ class GameOrError<T extends Game> with _$GameOrError {
   /// Represets an error
   const factory GameOrError.error(String message, PlayerID person) =
       GameError<T>;
+  factory GameOrError.fromJson(Map<String, dynamic> json) =>
+      _$GameOrErrorFromJson(json);
 
   /// Returns whether this instance is an error
   bool get isError => this is GameError;
@@ -31,8 +33,6 @@ class GameOrError<T extends Game> with _$GameOrError {
 
   /// Returns whether this instance is a game
   bool get isGame => this is GameValue;
-  factory GameOrError.fromJson(Map<String, dynamic> json) =>
-      _$GameOrErrorFromJson(json);
 }
 
 extension GameOrErrorGameX<E extends Event> on Game<E> {

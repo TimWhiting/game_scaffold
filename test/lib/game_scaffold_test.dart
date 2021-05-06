@@ -34,7 +34,7 @@ void testGame<T extends Game>(
         read.gameFor(players.first.id).gameClient.startGame();
       }
     });
-    darttest.test(testName + '_Tests', () {
+    darttest.test('${testName}_Tests', () {
       test(GameTester<T>(read, players, code));
     });
   });
@@ -45,11 +45,11 @@ void testGame<T extends Game>(
 /// Just call [event] with your event, and a function that recieves a game and error
 /// and check the properties you want
 class GameTester<T extends Game> {
+  GameTester(this._read, this._players, this.code);
+
   final Reader _read;
   final List<Player> _players;
   final GameCode code;
-
-  GameTester(this._read, this._players, this.code);
 
   /// Event lets you test the [outcome] of an [event]
   ///

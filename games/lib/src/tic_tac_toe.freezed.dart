@@ -147,9 +147,8 @@ class __$TicTacToeGameCopyWithImpl<$Res>
   }
 }
 
-@JsonSerializable()
-
 /// @nodoc
+@JsonSerializable()
 class _$_TicTacToeGame extends _TicTacToeGame {
   const _$_TicTacToeGame(
       {required this.generic, required this.board, this.type = 'tictactoe'})
@@ -172,7 +171,7 @@ class _$_TicTacToeGame extends _TicTacToeGame {
   }
 
   @override
-  bool operator ==(other) {
+  bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _TicTacToeGame &&
             (identical(other.generic, generic) ||
@@ -332,9 +331,8 @@ class __$TicTacToeGameEventCopyWithImpl<$Res>
   }
 }
 
-@JsonSerializable()
-
 /// @nodoc
+@JsonSerializable()
 class _$_TicTacToeGameEvent extends _TicTacToeGameEvent {
   const _$_TicTacToeGameEvent(this.player, this.location) : super._();
 
@@ -352,7 +350,7 @@ class _$_TicTacToeGameEvent extends _TicTacToeGameEvent {
   }
 
   @override
-  bool operator ==(other) {
+  bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _TicTacToeGameEvent &&
             (identical(other.player, player) ||

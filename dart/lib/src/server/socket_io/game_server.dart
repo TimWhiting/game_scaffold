@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:game_scaffold_dart/src/core/clients/socket_io/channels.dart';
 import 'package:logging/logging.dart';
 // ignore: import_of_legacy_library_into_null_safe, library_prefixes
 import 'package:socket_io/socket_io.dart' as IO;
 
 import '../../core.dart';
 import '../../core/backend.dart';
+import '../../core/clients/socket_io/channels.dart';
 import 'server.dart';
 
 class GameServer {
@@ -60,6 +60,7 @@ class GameServer {
   IList<Player> get _players => _read.players;
   final _clients = <PlayerID, IO.Socket?>{};
   final _clientNames = <PlayerID, String>{};
+  // ignore: prefer_typing_uninitialized_variables
   final _socket;
 
   /// The callback to call when the game ends
@@ -90,6 +91,7 @@ class GameServer {
     _gameErrorListenerDisposer = _gameError.addListener(_sendError);
     _serverLogger.info('Creating Game Server');
     _serverLogger.info('Listening on namespace /$_gameId');
+    // ignore: avoid_dynamic_calls
     _socket.on(
       IOChannel.connection.string,
       _handleClientConnection,
@@ -97,11 +99,11 @@ class GameServer {
   }
 
   GameInfo gameInfo(PlayerID? id) => GameInfo(
-        _gameId,
-        _players.map((p) => p.name).toIList(),
-        _clientNames[id] ?? '',
-        isClientAdmin(id),
-        gameType,
+        gameId: _gameId,
+        players: _players.map((p) => p.name).toIList(),
+        player: _clientNames[id] ?? '',
+        creator: isClientAdmin(id),
+        gameType: gameType,
       );
 
   void _handleClientConnection(IO.Socket client) {
@@ -126,7 +128,7 @@ class GameServer {
 
     final name = data['name'] as String?;
     final id = data['id'] as PlayerID;
-    print('Client registered');
+    // print('Client registered');
 
     client.on(
       IOChannel.disconnect.string,
@@ -163,7 +165,7 @@ class GameServer {
       }
 
       if (_players.length == gameConfig.maxPlayers && gameConfig.autoStart) {
-        _gameState.handleEvent(GenericEvent.start().asGameEvent);
+        _gameState.handleEvent(const GenericEvent.start().asGameEvent);
       }
     }
   }
@@ -204,6 +206,7 @@ class GameServer {
     for (final client in [..._clients.values]) {
       client?.disconnect();
     }
+    // ignore: avoid_dynamic_calls
     _socket.clearListeners();
     for (final c in _clients.keys) {
       mainServer.removeClientFromGame(c, _gameId);

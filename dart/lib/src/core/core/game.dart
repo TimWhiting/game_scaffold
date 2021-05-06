@@ -16,6 +16,7 @@ part 'game.g.dart';
 
 typedef GameCode = String;
 typedef GameType = String;
+
 /// Abstract class that all games must inherit from
 abstract class Game<E extends Event> {
   Game();
@@ -160,8 +161,8 @@ enum GameStatus {
 @freezed
 class GameConfig with _$GameConfig {
   const factory GameConfig({
-    PlayerID? adminId,
     required GameType gameType,
+    PlayerID? adminId,
     @Default(NameSet.Basic) NameSet nameSet,
     @Default(false) bool customNames,
     @Default(15) int rounds,
@@ -186,13 +187,13 @@ class GameConfig with _$GameConfig {
 /// * Whether the player is the [creator] of the game
 @freezed
 class GameInfo with _$GameInfo {
-  const factory GameInfo(
-    GameCode gameId,
-    IList<PlayerID> players,
-    String player,
-    bool creator,
-    GameType gameType,
-  ) = _GameInfo;
+  const factory GameInfo({
+    required GameCode gameId,
+    required IList<PlayerID> players,
+    required String player,
+    required bool creator,
+    required GameType gameType,
+  }) = _GameInfo;
   factory GameInfo.fromJson(Map<String, dynamic> map) =>
       _$GameInfoFromJson(map);
 }

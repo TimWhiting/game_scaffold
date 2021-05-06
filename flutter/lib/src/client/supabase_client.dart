@@ -75,11 +75,11 @@ class SupabaseServerClient extends ServerClient {
         .map((p) => Player.fromJson(p as Map<String, dynamic>))
         .toIList();
     return GameInfo(
-      gameInfo['id'] as String,
-      players.map((p) => p.nameOrID).toIList(),
-      players.firstWhereOrNull((p) => p.id == playerID)?.nameOrID ?? '',
-      config.adminId == playerID,
-      config.gameType,
+      gameId: gameInfo['id'] as String,
+      players: players.map((p) => p.nameOrID).toIList(),
+      player: players.firstWhereOrNull((p) => p.id == playerID)?.nameOrID ?? '',
+      creator: config.adminId == playerID,
+      gameType: config.gameType,
     );
   }
 

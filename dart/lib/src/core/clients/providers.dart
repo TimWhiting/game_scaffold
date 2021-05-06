@@ -13,10 +13,6 @@ const defaultAddress = 'your game server ip';
 /// The provider that controls which game server address to connect to
 final selectedAddress = StateProvider<GameAddress>((ref) => defaultAddress);
 
-/// An enum for the location of the game server
-// enum GameServerLocation { OnDevice, IOServer, Firebase }
-// TODO: Fix this to be a typedef when non-function-type-aliases becomes available
-
 /// The provider that controls the [GameClient] and [ServerClient]
 /// implementation to use
 final gameLocationProvider =
@@ -43,7 +39,7 @@ final playerIDsProvider =
 class GameProvider {
   GameProvider(this.read, this.playerID) {
     Future.delayed(
-      Duration(milliseconds: 10),
+      const Duration(milliseconds: 10),
       () => read(playerIDsProvider).state =
           read(playerIDsProvider).state.add(playerID),
     );
@@ -301,4 +297,4 @@ extension GameReaderGameX on GameReader {
 
 /// Allows one config to write all players' configs
 final singleConfigProvider =
-    StateProvider<GameConfig>((ref) => GameConfig(gameType: ''));
+    StateProvider<GameConfig>((ref) => const GameConfig(gameType: ''));

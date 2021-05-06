@@ -13,66 +13,67 @@ void main() {
   Logger.root.clearListeners();
   Logger.root.level = Level.FINE;
   Logger.root.onRecord.listen((record) =>
+      // ignore: avoid_print
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
   runApp(ProviderScope(
     overrides: [
       gameLocationProvider
           .overrideWithProvider(StateProvider((_) => OnDeviceLocation)),
     ],
-    child: TicTacToeApp(),
+    child: const TicTacToeApp(),
   ));
 }
 
 class TicTacToeApp extends StatelessWidget {
+  const TicTacToeApp({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData.dark().copyWith(
-        primaryColor: Colors.blueGrey,
-      ),
-      home: TicTacToeWidget(),
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData.dark().copyWith(
+          primaryColor: Colors.blueGrey,
+        ),
+        home: const TicTacToeWidget(),
+      );
 }
 
 class TicTacToeWidget extends StatelessWidget {
-  const TicTacToeWidget();
+  const TicTacToeWidget({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-      body: Row(children: [
-        Expanded(
-          child: ProviderScope(
-            overrides: [playerIDProvider.overrideAs((watch) => P1)],
-            child: Player(),
+  Widget build(BuildContext context) => MaterialApp(
+          home: Scaffold(
+        body: Row(children: [
+          Expanded(
+            child: ProviderScope(
+              overrides: [playerIDProvider.overrideAs((watch) => P1)],
+              child: const Player(),
+            ),
           ),
-        ),
-        Container(width: 10, color: Colors.black),
-        Expanded(
-          child: ProviderScope(
-            overrides: [playerIDProvider.overrideAs((watch) => P2)],
-            child: Player(),
+          Container(width: 10, color: Colors.black),
+          Expanded(
+            child: ProviderScope(
+              overrides: [playerIDProvider.overrideAs((watch) => P2)],
+              child: const Player(),
+            ),
           ),
-        ),
-      ]),
-    ));
-  }
+        ]),
+      ));
 }
 
 class Player extends GameHookWidget {
+  const Player({Key? key}) : super(key: key);
+
   @override
-  Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
-    return GameNavigator(
-      connected: CreateOrJoinWidget(),
-      lobby: LobbyWidget(),
-      game: GameWidget(),
-    );
-  }
+  Widget buildWithGame(BuildContext context, GameProvider gameProvider) =>
+      const GameNavigator(
+        connected: CreateOrJoinWidget(),
+        lobby: LobbyWidget(),
+        game: GameWidget(),
+      );
 }
 
 class CreateOrJoinWidget extends GameHookWidget {
+  const CreateOrJoinWidget({Key? key}) : super(key: key);
+
   @override
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final playerID = gameProvider.playerID;
@@ -86,15 +87,15 @@ class CreateOrJoinWidget extends GameHookWidget {
       body: Center(
         child: Column(
           children: [
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Text('Player $playerID'),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (playerID == P1)
               ElevatedButton(
                 key: Key('Create Game Button $playerID'),
                 onPressed: () async {
                   final id = await context.gameClient.createGame(
-                    config: GameConfig(
+                    config: const GameConfig(
                       adminId: P1,
                       customNames: false,
                       gameType: 'tictactoe',
@@ -104,7 +105,7 @@ class CreateOrJoinWidget extends GameHookWidget {
                   );
                   await context.gameClient.register(code: id);
                 },
-                child: Text('Create Game'),
+                child: const Text('Create Game'),
               ),
             if (playerID == P2) ...[
               SizedBox(
@@ -112,14 +113,15 @@ class CreateOrJoinWidget extends GameHookWidget {
                 height: 30,
                 child: TextField(
                   textAlignVertical: TextAlignVertical.center,
-                  decoration: InputDecoration(hintText: 'Enter Game Code'),
-                  onChanged: (text) => context.setGameCode(text),
+                  decoration:
+                      const InputDecoration(hintText: 'Enter Game Code'),
+                  onChanged: (text) => context.gameCode = text,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () => context.gameClient.register(code: code),
-                child: Text('Join Game'),
+                child: const Text('Join Game'),
               )
             ],
             if (allGames.hasData)
@@ -194,13 +196,13 @@ class GameWidget extends GameHookWidget {
               ),
             if (gameStatus == GameStatus.BetweenRounds &&
                 !gameState.readyPlayers.contains(gameProvider.playerID)) ...[
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () => context.gameClient.newRound(),
-                child: Text('Next Round'),
+                child: const Text('Next Round'),
               ),
             ],
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text('$gameError'),
           ],
         ),

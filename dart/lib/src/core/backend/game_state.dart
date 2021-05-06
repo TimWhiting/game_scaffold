@@ -35,7 +35,7 @@ final ProviderFamily<BackendProvider, GameCode> backendGamesProvider =
 class BackendProvider {
   BackendProvider(this.read, this.code) {
     Future.delayed(
-        Duration(milliseconds: 10),
+        const Duration(milliseconds: 10),
         () => read(backendGameCodesProvider).state =
             read(backendGameCodesProvider).state.add(code));
   }
@@ -173,6 +173,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
         // ignore: cast_nullable_to_non_nullable
         state = nextState.value as T;
       }
+      // ignore: avoid_catches_without_on_clauses
     } catch (error, st) {
       _gameStateLogger.severe('$error $st');
     }

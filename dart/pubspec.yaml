@@ -1,28 +1,29 @@
 name: game_scaffold_dart
-description: A scaffold for game projects, taking care of server implementation and some general events
+description: A scaffold for game projects, taking care of server implementation
+  and some general events
 version: 0.3.1
 homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:
-  sdk: '>=2.13.0-0 <3.0.0'
+  sdk: ">=2.13.0-0 <3.0.0"
 
 dependencies:
-  riverpod: ^0.14.0+1
-  freezed_annotation: ^0.14.1
-  socket_io: ^1.0.0
-  json_annotation: ^4.0.0
-  stream: ^3.0.0
-  logging: ^1.0.1
-  socket_io_client: ^1.0.0
-  enum_to_string: ^2.0.1
-  collection: ^1.15.0
   characters: ^1.1.0
+  collection: ^1.15.0
+  enum_to_string: ^2.0.1
   fast_immutable_collections: ^5.0.0-dev.9
+  freezed_annotation: ^0.14.1
+  json_annotation: ^4.0.0
+  logging: ^1.0.1
+  riverpod: ^0.14.0+1
+  socket_io: ^1.0.0
+  socket_io_client: ^1.0.0
+  stream: ^3.0.0
 
 dev_dependencies:
-  json_serializable: ^4.1.1
-  freezed: ^0.14.1+2
   build_runner: ^1.12.2
+  freezed: ^0.14.1+2
+  json_serializable: ^4.1.1
   test: any
 
 scripts:

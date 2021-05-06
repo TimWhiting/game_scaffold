@@ -18,16 +18,6 @@ final _serverSocketOpts = <String, dynamic>{
 };
 
 class IOServer {
-  final bool debug;
-  final bool https;
-  final logger = Logger('IOServer');
-  final io = IO.Server(options: _serverSocketOpts);
-  final servers = <GameCode, GameServer>{};
-  final clients = <IO.Socket>{};
-  final container = ProviderContainer();
-
-  /// Keeps track of a set of games that a client is a part of by client id
-  final _clientGames = <PlayerID, Set<GameCode>>{};
   IOServer({
     this.debug = false,
     this.https = false,
@@ -37,8 +27,8 @@ class IOServer {
   }) {
     final server = StreamServer();
     if (https) {
-      assert(pathToPem != null);
-      assert(pathToRsa != null);
+      assert(pathToPem != null, 'Https requires pathToPem');
+      assert(pathToRsa != null, 'Https requires pathToRsa');
 
       final security = SecurityContext()
         ..useCertificateChain(pathToPem!)
@@ -59,9 +49,20 @@ class IOServer {
       if (record.loggerName.startsWith('socket_io')) {
         return;
       }
+      // ignore: avoid_print
       print('[${record.level.name}]: ${record.loggerName} ${record.message}');
     });
   }
+  final bool debug;
+  final bool https;
+  final logger = Logger('IOServer');
+  final io = IO.Server(options: _serverSocketOpts);
+  final servers = <GameCode, GameServer>{};
+  final clients = <IO.Socket>{};
+  final container = ProviderContainer();
+
+  /// Keeps track of a set of games that a client is a part of by client id
+  final _clientGames = <PlayerID, Set<GameCode>>{};
 
   void _handleClientConnection(
     IO.Socket client,
@@ -125,7 +126,7 @@ class IOServer {
   Future<void> _deleteGame(IO.Socket client, GameCode id) async {
     logger.info('Deleting game $id');
     servers[id]!.notifyKilled(client);
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     servers[id]!.killGame();
   }
 

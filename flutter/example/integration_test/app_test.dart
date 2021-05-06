@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-final p1Create = Key('Create Game Button 0');
+const p1Create = Key('Create Game Button 0');
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

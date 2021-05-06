@@ -8,8 +8,8 @@ part of 'game.dart';
 
 _$_GameConfig _$_$_GameConfigFromJson(Map<String, dynamic> json) {
   return _$_GameConfig(
-    adminId: json['adminId'] as String?,
     gameType: json['gameType'] as String,
+    adminId: json['adminId'] as String?,
     nameSet: _$enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ??
         NameSet.Basic,
     customNames: json['customNames'] as bool? ?? false,
@@ -23,8 +23,8 @@ _$_GameConfig _$_$_GameConfigFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$_$_GameConfigToJson(_$_GameConfig instance) =>
     <String, dynamic>{
-      'adminId': instance.adminId,
       'gameType': instance.gameType,
+      'adminId': instance.adminId,
       'nameSet': _$NameSetEnumMap[instance.nameSet],
       'customNames': instance.customNames,
       'rounds': instance.rounds,
@@ -62,7 +62,7 @@ K _$enumDecode<K, V>(
 
 K? _$enumDecodeNullable<K, V>(
   Map<K, V> enumValues,
-  source, {
+  dynamic source, {
   K? unknownValue,
 }) {
   if (source == null) {
@@ -77,11 +77,11 @@ const _$NameSetEnumMap = {
 
 _$_GameInfo _$_$_GameInfoFromJson(Map<String, dynamic> json) {
   return _$_GameInfo(
-    json['gameId'] as String,
-    IList.fromJson(json['players'], (value) => value as String),
-    json['player'] as String,
-    json['creator'] as bool,
-    json['gameType'] as String,
+    gameId: json['gameId'] as String,
+    players: IList.fromJson(json['players'], (value) => value as String),
+    player: json['player'] as String,
+    creator: json['creator'] as bool,
+    gameType: json['gameType'] as String,
   );
 }
 

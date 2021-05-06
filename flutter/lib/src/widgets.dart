@@ -17,16 +17,18 @@ abstract class GameHookWidget extends HookWidget {
 }
 
 class GameNavigator extends GameHookWidget {
-  const GameNavigator(
-      {Widget? disconnected,
-      required this.connected,
-      required this.lobby,
-      required this.game,
-      Widget? betweenRounds,
-      Widget? gameOver})
-      : disconnected = disconnected ?? connected,
+  const GameNavigator({
+    required this.connected,
+    required this.lobby,
+    required this.game,
+    Widget? disconnected,
+    Widget? betweenRounds,
+    Widget? gameOver,
+    Key? key,
+  })  : disconnected = disconnected ?? connected,
         betweenRounds = betweenRounds ?? game,
-        gameOver = gameOver ?? game;
+        gameOver = gameOver ?? game,
+        super(key: key);
   final Widget disconnected;
   final Widget connected;
   final Widget lobby;

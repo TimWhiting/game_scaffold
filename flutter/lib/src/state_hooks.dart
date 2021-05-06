@@ -32,17 +32,16 @@ extension BuildContextGameScaffoldX on BuildContext {
 
   /// Game setup information
   GameConfig get gameConfig => read(gameProvider.gameConfigProvider).state;
-  void setGameConfig(GameConfig config) =>
+  set gameConfig(GameConfig config) =>
       read(gameProvider.gameConfigProvider).state = config;
   String get gameCode => read(gameProvider.gameCodeProvider).state;
-  void setGameCode(String code) =>
-      read(gameProvider.gameCodeProvider).state = code;
+  set gameCode(String code) => read(gameProvider.gameCodeProvider).state = code;
 
   /// Game information
   Game? get gameState => read(gameProvider.gameStateProvider).state;
   GameError? get gameError => read(gameProvider.gameErrorProvider).state;
   GameStatus get gameStatus => read(gameProvider.gameStatusProvider).state;
-  void setGameStatus(GameStatus status) =>
+  set gameStatus(GameStatus status) =>
       read(gameProvider.gameStatusProvider).state = status;
   bool get gameTurn => read(gameProvider.gameTurnProvider);
   String get gameName => read(gameProvider.gameNameProvider);

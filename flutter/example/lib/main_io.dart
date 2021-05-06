@@ -6,10 +6,12 @@ import 'package:game_scaffold_games/games.dart';
 import 'package:logging/logging.dart';
 
 import 'main.dart';
+
 void main() {
   Logger.root.clearListeners();
   Logger.root.level = Level.INFO;
   Logger.root.onRecord.listen((record) =>
+      // ignore: avoid_print
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
   final _ = IOServer();
   Game.registerGeneralEvents();
@@ -22,6 +24,6 @@ void main() {
       selectedAddress.overrideWithProvider(
           StateProvider((_) => 'http://localhost:$defaultGamePort')),
     ],
-    child: TicTacToeApp(),
+    child: const TicTacToeApp(),
   ));
 }
