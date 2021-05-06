@@ -1,3 +1,7 @@
+## 0.3.2
+
+- Update no server client
+
 ## 0.3.1
 
 - Update packages

@@ -28,7 +28,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.0"
+    version: "2.6.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -98,7 +98,7 @@ packages:
       name: fast_immutable_collections
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0-dev.9"
+    version: "5.0.0-dev.11"
   file:
     dependency: transitive
     description:
@@ -147,7 +147,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.2"
+    version: "0.13.3"
   http_multi_server:
     dependency: transitive
     description:
@@ -434,7 +434,7 @@ packages:
       name: web_socket_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   webkit_inspection_protocol:
     dependency: transitive
     description:

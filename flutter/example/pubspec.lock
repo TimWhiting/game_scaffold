@@ -84,7 +84,7 @@ packages:
       name: fast_immutable_collections
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0-dev.9"
+    version: "5.0.0-dev.11"
   file:
     dependency: transitive
     description:
@@ -160,7 +160,7 @@ packages:
       name: gotrue
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1-dev.10"
+    version: "0.0.1-dev.11"
   hooks_riverpod:
     dependency: "direct main"
     description:
@@ -174,7 +174,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.2"
+    version: "0.13.3"
   http_parser:
     dependency: transitive
     description:
@@ -415,7 +415,7 @@ packages:
       name: web_socket_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   webdriver:
     dependency: transitive
     description:
