@@ -4,6 +4,7 @@ part 'events.freezed.dart';
 
 // The type of the event
 typedef EventType = String;
+
 /// Represents an event of a game
 ///
 /// Must associate itself with a particular [type] of game registered to the server
@@ -21,10 +22,10 @@ class GameEvent with _$GameEvent implements Event {
   const GameEvent._();
 
   /// Represents an [event] that is for a particlar [Game]
-  const factory GameEvent.game(Event event) = _GameEventGame;
+  const factory GameEvent.game(Event event) = GameEventGame;
 
   /// Represents an [event] that is one of the predefined [GenericEvent]s.
-  const factory GameEvent.general(GenericEvent event) = _GameEventGeneral;
+  const factory GameEvent.general(GenericEvent event) = GameEventGeneral;
 
   @override
   EventType get type => when(game: (_) => 'game', general: (_) => 'general');

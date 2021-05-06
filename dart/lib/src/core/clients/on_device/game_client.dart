@@ -55,11 +55,16 @@ class NoServerGameClient extends GameClient {
     }, onError: (e) {
       game.gameError = GameError(e as String, playerID);
     });
+
     _se = backend.errorNotifier.stream.listen((gameError) {
       if (gameError == null || gameError.person == playerID) {
         game.gameError = gameError;
       }
     });
+    final initialState = backend.gameNotifier.gameState;
+    game.gameState = initialState;
+    game.gameStatus = initialState.gameStatus;
+    game.gameError = backend.gameError;
   }
 
   @override
@@ -68,7 +73,9 @@ class NoServerGameClient extends GameClient {
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
     backend.handleEvent(event.asGameEvent);
-    if (event is GenericEventStart && _startListening[gameCode] != null) {
+    if (event is GameEventGeneral &&
+        event.event is GenericEventStart &&
+        _startListening[gameCode] != null) {
       logger.info('Starting');
       for (final fcn in _startListening[gameCode]!) {
         fcn();

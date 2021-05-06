@@ -116,10 +116,8 @@ class GameServer {
       IOChannel.event.string,
       _handleRequest,
     );
-    if (_gameState.gameState != null) {
-      _serverLogger.info('Sending first update');
-      _sendUpdates(_gameState.gameState);
-    }
+    _serverLogger.info('Sending first update');
+    _sendUpdates(_gameState.gameState);
   }
 
   void _handleRegister(IO.Socket client, Map<String, dynamic> data) {
@@ -141,7 +139,7 @@ class GameServer {
       _serverLogger.info('Client $id rejoining');
       _clients[id] = client;
       _clients[id]
-          ?.emit(IOChannel.gamestate.string, _gameState.gameState?.toJson());
+          ?.emit(IOChannel.gamestate.string, _gameState.gameState.toJson());
       return;
     }
     if (_clients.length > gameConfig.maxPlayers) {

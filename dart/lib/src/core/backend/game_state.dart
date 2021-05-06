@@ -126,7 +126,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   /// Remember to watch / listen to the state of the [GameStateNotifier]
   /// rather than just watching changes in the notifier itself, otherwise changes
   /// in the [gameState] will not trigger updates of the ui
-  T? get gameState => state;
+  T get gameState => state;
 
   /// Handles a [GameEvent] and updates the state accordingly
   ///

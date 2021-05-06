@@ -16,14 +16,14 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$GameEventTearOff {
   const _$GameEventTearOff();
 
-  _GameEventGame game(Event event) {
-    return _GameEventGame(
+  GameEventGame game(Event event) {
+    return GameEventGame(
       event,
     );
   }
 
-  _GameEventGeneral general(GenericEvent event) {
-    return _GameEventGeneral(
+  GameEventGeneral general(GenericEvent event) {
+    return GameEventGeneral(
       event,
     );
   }
@@ -49,14 +49,14 @@ mixin _$GameEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_GameEventGame value) game,
-    required TResult Function(_GameEventGeneral value) general,
+    required TResult Function(GameEventGame value) game,
+    required TResult Function(GameEventGeneral value) general,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GameEventGame value)? game,
-    TResult Function(_GameEventGeneral value)? general,
+    TResult Function(GameEventGame value)? game,
+    TResult Function(GameEventGeneral value)? general,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -78,28 +78,28 @@ class _$GameEventCopyWithImpl<$Res> implements $GameEventCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$GameEventGameCopyWith<$Res> {
-  factory _$GameEventGameCopyWith(
-          _GameEventGame value, $Res Function(_GameEventGame) then) =
-      __$GameEventGameCopyWithImpl<$Res>;
+abstract class $GameEventGameCopyWith<$Res> {
+  factory $GameEventGameCopyWith(
+          GameEventGame value, $Res Function(GameEventGame) then) =
+      _$GameEventGameCopyWithImpl<$Res>;
   $Res call({Event event});
 }
 
 /// @nodoc
-class __$GameEventGameCopyWithImpl<$Res> extends _$GameEventCopyWithImpl<$Res>
-    implements _$GameEventGameCopyWith<$Res> {
-  __$GameEventGameCopyWithImpl(
-      _GameEventGame _value, $Res Function(_GameEventGame) _then)
-      : super(_value, (v) => _then(v as _GameEventGame));
+class _$GameEventGameCopyWithImpl<$Res> extends _$GameEventCopyWithImpl<$Res>
+    implements $GameEventGameCopyWith<$Res> {
+  _$GameEventGameCopyWithImpl(
+      GameEventGame _value, $Res Function(GameEventGame) _then)
+      : super(_value, (v) => _then(v as GameEventGame));
 
   @override
-  _GameEventGame get _value => super._value as _GameEventGame;
+  GameEventGame get _value => super._value as GameEventGame;
 
   @override
   $Res call({
     Object? event = freezed,
   }) {
-    return _then(_GameEventGame(
+    return _then(GameEventGame(
       event == freezed
           ? _value.event
           : event // ignore: cast_nullable_to_non_nullable
@@ -109,8 +109,8 @@ class __$GameEventGameCopyWithImpl<$Res> extends _$GameEventCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_GameEventGame extends _GameEventGame {
-  const _$_GameEventGame(this.event) : super._();
+class _$GameEventGame extends GameEventGame {
+  const _$GameEventGame(this.event) : super._();
 
   @override
   final Event event;
@@ -123,7 +123,7 @@ class _$_GameEventGame extends _GameEventGame {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _GameEventGame &&
+        (other is GameEventGame &&
             (identical(other.event, event) ||
                 const DeepCollectionEquality().equals(other.event, event)));
   }
@@ -134,8 +134,8 @@ class _$_GameEventGame extends _GameEventGame {
 
   @JsonKey(ignore: true)
   @override
-  _$GameEventGameCopyWith<_GameEventGame> get copyWith =>
-      __$GameEventGameCopyWithImpl<_GameEventGame>(this, _$identity);
+  $GameEventGameCopyWith<GameEventGame> get copyWith =>
+      _$GameEventGameCopyWithImpl<GameEventGame>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -162,8 +162,8 @@ class _$_GameEventGame extends _GameEventGame {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_GameEventGame value) game,
-    required TResult Function(_GameEventGeneral value) general,
+    required TResult Function(GameEventGame value) game,
+    required TResult Function(GameEventGeneral value) general,
   }) {
     return game(this);
   }
@@ -171,8 +171,8 @@ class _$_GameEventGame extends _GameEventGame {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GameEventGame value)? game,
-    TResult Function(_GameEventGeneral value)? general,
+    TResult Function(GameEventGame value)? game,
+    TResult Function(GameEventGeneral value)? general,
     required TResult orElse(),
   }) {
     if (game != null) {
@@ -182,42 +182,41 @@ class _$_GameEventGame extends _GameEventGame {
   }
 }
 
-abstract class _GameEventGame extends GameEvent {
-  const factory _GameEventGame(Event event) = _$_GameEventGame;
-  const _GameEventGame._() : super._();
+abstract class GameEventGame extends GameEvent {
+  const factory GameEventGame(Event event) = _$GameEventGame;
+  const GameEventGame._() : super._();
 
   Event get event => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  _$GameEventGameCopyWith<_GameEventGame> get copyWith =>
+  $GameEventGameCopyWith<GameEventGame> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$GameEventGeneralCopyWith<$Res> {
-  factory _$GameEventGeneralCopyWith(
-          _GameEventGeneral value, $Res Function(_GameEventGeneral) then) =
-      __$GameEventGeneralCopyWithImpl<$Res>;
+abstract class $GameEventGeneralCopyWith<$Res> {
+  factory $GameEventGeneralCopyWith(
+          GameEventGeneral value, $Res Function(GameEventGeneral) then) =
+      _$GameEventGeneralCopyWithImpl<$Res>;
   $Res call({GenericEvent event});
 
   $GenericEventCopyWith<$Res> get event;
 }
 
 /// @nodoc
-class __$GameEventGeneralCopyWithImpl<$Res>
-    extends _$GameEventCopyWithImpl<$Res>
-    implements _$GameEventGeneralCopyWith<$Res> {
-  __$GameEventGeneralCopyWithImpl(
-      _GameEventGeneral _value, $Res Function(_GameEventGeneral) _then)
-      : super(_value, (v) => _then(v as _GameEventGeneral));
+class _$GameEventGeneralCopyWithImpl<$Res> extends _$GameEventCopyWithImpl<$Res>
+    implements $GameEventGeneralCopyWith<$Res> {
+  _$GameEventGeneralCopyWithImpl(
+      GameEventGeneral _value, $Res Function(GameEventGeneral) _then)
+      : super(_value, (v) => _then(v as GameEventGeneral));
 
   @override
-  _GameEventGeneral get _value => super._value as _GameEventGeneral;
+  GameEventGeneral get _value => super._value as GameEventGeneral;
 
   @override
   $Res call({
     Object? event = freezed,
   }) {
-    return _then(_GameEventGeneral(
+    return _then(GameEventGeneral(
       event == freezed
           ? _value.event
           : event // ignore: cast_nullable_to_non_nullable
@@ -234,8 +233,8 @@ class __$GameEventGeneralCopyWithImpl<$Res>
 }
 
 /// @nodoc
-class _$_GameEventGeneral extends _GameEventGeneral {
-  const _$_GameEventGeneral(this.event) : super._();
+class _$GameEventGeneral extends GameEventGeneral {
+  const _$GameEventGeneral(this.event) : super._();
 
   @override
   final GenericEvent event;
@@ -248,7 +247,7 @@ class _$_GameEventGeneral extends _GameEventGeneral {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _GameEventGeneral &&
+        (other is GameEventGeneral &&
             (identical(other.event, event) ||
                 const DeepCollectionEquality().equals(other.event, event)));
   }
@@ -259,8 +258,8 @@ class _$_GameEventGeneral extends _GameEventGeneral {
 
   @JsonKey(ignore: true)
   @override
-  _$GameEventGeneralCopyWith<_GameEventGeneral> get copyWith =>
-      __$GameEventGeneralCopyWithImpl<_GameEventGeneral>(this, _$identity);
+  $GameEventGeneralCopyWith<GameEventGeneral> get copyWith =>
+      _$GameEventGeneralCopyWithImpl<GameEventGeneral>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -287,8 +286,8 @@ class _$_GameEventGeneral extends _GameEventGeneral {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_GameEventGame value) game,
-    required TResult Function(_GameEventGeneral value) general,
+    required TResult Function(GameEventGame value) game,
+    required TResult Function(GameEventGeneral value) general,
   }) {
     return general(this);
   }
@@ -296,8 +295,8 @@ class _$_GameEventGeneral extends _GameEventGeneral {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GameEventGame value)? game,
-    TResult Function(_GameEventGeneral value)? general,
+    TResult Function(GameEventGame value)? game,
+    TResult Function(GameEventGeneral value)? general,
     required TResult orElse(),
   }) {
     if (general != null) {
@@ -307,12 +306,12 @@ class _$_GameEventGeneral extends _GameEventGeneral {
   }
 }
 
-abstract class _GameEventGeneral extends GameEvent {
-  const factory _GameEventGeneral(GenericEvent event) = _$_GameEventGeneral;
-  const _GameEventGeneral._() : super._();
+abstract class GameEventGeneral extends GameEvent {
+  const factory GameEventGeneral(GenericEvent event) = _$GameEventGeneral;
+  const GameEventGeneral._() : super._();
 
   GenericEvent get event => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  _$GameEventGeneralCopyWith<_GameEventGeneral> get copyWith =>
+  $GameEventGeneralCopyWith<GameEventGeneral> get copyWith =>
       throw _privateConstructorUsedError;
 }
