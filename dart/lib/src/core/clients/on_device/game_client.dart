@@ -48,6 +48,7 @@ class NoServerGameClient extends GameClient {
   }
 
   void _watchState() {
+    logger.info('Watching backend');
     _ss = backend.gameNotifier.stream.listen((gameState) {
       game.gameState = gameState;
       game.gameStatus = gameState.gameStatus;
@@ -63,16 +64,17 @@ class NoServerGameClient extends GameClient {
 
   @override
   void sendEvent(Event event) {
+    // print('${event.toJson()}');
+    final js = event.asGameEvent.toJson();
+    logger.info('Sending event $js');
+    backend.handleEvent(event.asGameEvent);
     if (event is GenericEventStart && _startListening[gameCode] != null) {
+      logger.info('Starting');
       for (final fcn in _startListening[gameCode]!) {
         fcn();
       }
       _startListening[gameCode]?.clear();
     }
-    // print('${event.toJson()}');
-    final js = event.asGameEvent.toJson();
-    logger.info('Sending event $js');
-    backend.handleEvent(event.asGameEvent);
   }
 
   @override
