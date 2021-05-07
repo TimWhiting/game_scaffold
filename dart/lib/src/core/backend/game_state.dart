@@ -172,6 +172,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
       } else {
         // ignore: cast_nullable_to_non_nullable
         state = nextState.value as T;
+        read.errorNotifier.clearError();
       }
       // ignore: avoid_catches_without_on_clauses
     } catch (error, st) {
