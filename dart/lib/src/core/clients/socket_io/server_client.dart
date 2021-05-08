@@ -76,19 +76,21 @@ class IOServerClient extends ServerClient {
   /// Connects to the backend
   @override
   Future<void> connect() async {
-    socket?.dispose();
-    socket = IO.io(address, socketIOOpts);
-    socket!.on(IOChannel.connection.string,
-        (_) => game.gameStatus = GameStatus.NotJoined);
-    socket!.on(IOChannel.disconnect.string,
-        (_) => game.gameStatus = GameStatus.NotConnected);
+    if (socket?.connected ?? false || socket?.io.uri != address) {
+      socket?.dispose();
+      socket = IO.io(address, socketIOOpts);
+      socket!.on(IOChannel.connection.string,
+          (_) => game.gameStatus = GameStatus.NotJoined);
+      socket!.on(IOChannel.disconnect.string,
+          (_) => game.gameStatus = GameStatus.NotConnected);
 
-    final currentStatus = game.gameStatus;
-    await Future.delayed(const Duration(milliseconds: 20));
-    if (currentStatus == GameStatus.NotConnected ||
-        currentStatus == GameStatus.NotJoined) {
-      scheduleMicrotask(() => game.gameStatus =
-          socket!.connected ? GameStatus.NotJoined : GameStatus.NotConnected);
+      final currentStatus = game.gameStatus;
+      await Future.delayed(const Duration(milliseconds: 20));
+      if (currentStatus == GameStatus.NotConnected ||
+          currentStatus == GameStatus.NotJoined) {
+        scheduleMicrotask(() => game.gameStatus =
+            socket!.connected ? GameStatus.NotJoined : GameStatus.NotConnected);
+      }
     }
     logger.info('Created ServerClient');
   }

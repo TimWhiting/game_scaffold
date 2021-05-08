@@ -40,6 +40,7 @@ class GameNavigator extends GameHookWidget {
   Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
     final gameStatus = gameProvider.useGameStatus;
     final pages = {GameStatus.NotConnected: disconnected};
+    print('${gameProvider.playerID} gameStatus $gameStatus');
     // print(
     //     'Building client ${gameProvider.playerID} with game status ${gameStatus}');
     if (gameStatus != GameStatus.NotConnected) {
@@ -60,7 +61,7 @@ class GameNavigator extends GameHookWidget {
     return Navigator(
       pages: pages.entries
           .map((entry) => MaterialPage(
-              key: Key('${entry.key}') as LocalKey?,
+              key: ValueKey(entry.key),
               child: entry.value,
               arguments: entry.key))
           .toList(),
