@@ -41,7 +41,7 @@ class IOServer {
     io.listen(server, _serverSocketOpts);
     io.on(
       IOChannel.connection.string,
-      _handleClientConnection,
+      (c) => _handleClientConnection(c as IO.Socket),
     );
     Logger.root.clearListeners();
     Logger.root.level = Level.FINE; // defaults to Level.INFO
