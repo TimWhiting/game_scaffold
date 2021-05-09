@@ -76,7 +76,7 @@ class IOServerClient extends ServerClient {
   /// Connects to the backend
   @override
   Future<void> connect() async {
-    if (socket?.connected ?? false || socket?.io.uri != address) {
+    if ((socket?.connected ?? true) || socket?.io.uri != address) {
       socket?.dispose();
       socket = IO.io(address, socketIOOpts);
       socket!.on(IOChannel.connection.string,
