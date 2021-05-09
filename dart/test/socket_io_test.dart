@@ -17,6 +17,6 @@ void main() {
         await client.createGame(config: const GameConfig(gameType: 'None'));
     expect(read.gameFor(P1).gameStatus, GameStatus.NotJoined);
     await client.register(code: code);
-    expect(read.gameFor(P1).gameStatus, GameStatus.NotStarted);
+    expect(read.gameFor(P1), GameStatus.NotStarted);
   });
 }
