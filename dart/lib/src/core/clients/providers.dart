@@ -15,13 +15,11 @@ final selectedAddress = StateProvider<GameAddress>((ref) => defaultAddress);
 
 /// The provider that controls the [GameClient] and [ServerClient]
 /// implementation to use
-final gameLocationProvider =
-    StateProvider<ServerLocation>((ref) => IOServerLocation);
+final gameLocationProvider = StateProvider<ServerLocation>((ref) => IOServerLocation);
 
 /// Provides an encapsulation of many providers related to a Game without having
 /// to have each of them be a `family` provider.
-final ProviderFamily<GameProvider, PlayerID> playerGameProvider =
-    Provider.family<GameProvider, PlayerID>((ref, id) {
+final ProviderFamily<GameProvider, PlayerID> playerGameProvider = Provider.family<GameProvider, PlayerID>((ref, id) {
   final gp = GameProvider(ref.read, id);
 
   ref.onDispose(() {
@@ -31,8 +29,7 @@ final ProviderFamily<GameProvider, PlayerID> playerGameProvider =
   });
   return gp;
 });
-final playerIDsProvider =
-    StateProvider<IList<PlayerID>>((ref) => <PlayerID>[].lock);
+final playerIDsProvider = StateProvider<IList<PlayerID>>((ref) => <PlayerID>[].lock);
 
 /// Provides an encapsulation of many providers without having to have each of
 /// them be a `family` provider.
@@ -40,8 +37,7 @@ class GameProvider {
   GameProvider(this.read, this.playerID) {
     Future.delayed(
       const Duration(milliseconds: 10),
-      () => read(playerIDsProvider).state =
-          read(playerIDsProvider).state.add(playerID),
+      () => read(playerIDsProvider).state = read(playerIDsProvider).state.add(playerID),
     );
   }
 
@@ -50,26 +46,22 @@ class GameProvider {
   final Reader read;
 
   /// Provides the game code for each client id
-  late final StateProvider<GameCode> _gameCodeProvider =
-      StateProvider((ref) => '');
+  late final StateProvider<GameCode> _gameCodeProvider = StateProvider((ref) => '');
 
   /// Provides the game code for each client id
   StateProvider<GameCode> get gameCodeProvider => _gameCodeProvider;
 
   /// Provides a [GameServerClient] that communicates with the game server and handles game events
-  Provider<GameServerClient> get gameServerClientProvider =>
-      _gameServerClientProvider;
+  Provider<GameServerClient> get gameServerClientProvider => _gameServerClientProvider;
 
   /// Provides game info for the currently selected game
-  late final StateProvider<GameInfo?> _gameInfoProvider =
-      StateProvider((ref) => null);
+  late final StateProvider<GameInfo?> _gameInfoProvider = StateProvider((ref) => null);
 
   /// Provides game info for the currently selected game
   StateProvider<GameInfo?> get gameInfoProvider => _gameInfoProvider;
 
   /// Provides game lobby info in the form of [GameInfo] for the lobby
-  late final StateProvider<GameInfo?> _gameLobbyProvider =
-      StateProvider((ref) => null);
+  late final StateProvider<GameInfo?> _gameLobbyProvider = StateProvider((ref) => null);
 
   /// Provides game lobby info in the form of [GameInfo] for the lobby
   StateProvider<GameInfo?> get gameLobbyProvider => _gameLobbyProvider;
@@ -77,7 +69,7 @@ class GameProvider {
   /// Provides the game info of all games that the client with the specified id
   /// is a part of
   late final FutureProvider<IList<GameInfo>> _gamesProvider = FutureProvider(
-    (ref) => ref.read(_gameServerClientProvider).getGames(),
+    (ref) => ref.watch(_gameServerClientProvider).getGames(),
   );
 
   /// Provides the game info of all games that the client with the specified id
@@ -85,22 +77,19 @@ class GameProvider {
   FutureProvider<IList<GameInfo>> get gamesProvider => _gamesProvider;
 
   /// Provides the game state for the current game of the client with specified id
-  late final StateProvider<Game?> _gameStateProvider =
-      StateProvider<Game?>((ref) => null);
+  late final StateProvider<Game?> _gameStateProvider = StateProvider<Game?>((ref) => null);
 
   /// Provides the game state for the current game of the client with specified id
   StateProvider<Game?> get gameStateProvider => _gameStateProvider;
 
   /// Provides the game error for the current game of the client with specified id
-  late final StateProvider<GameError?> _gameErrorProvider =
-      StateProvider<GameError?>((ref) => null);
+  late final StateProvider<GameError?> _gameErrorProvider = StateProvider<GameError?>((ref) => null);
 
   /// Provides the game error for the current game of the client with specified id
   StateProvider<GameError?> get gameErrorProvider => _gameErrorProvider;
 
   /// Provides the game status for the current game of the client with specified id
-  late final StateProvider<GameStatus> _gameStatusProvider =
-      StateProvider<GameStatus>(
+  late final StateProvider<GameStatus> _gameStatusProvider = StateProvider<GameStatus>(
     (ref) => GameStatus.NotConnected,
   );
 
@@ -110,8 +99,7 @@ class GameProvider {
   /// Provides whether it is the players turn for the current game of the client with the specified id
   late final Provider<bool> _gameTurnProvider = Provider<bool>(
     (ref) {
-      final currentPlayer =
-          ref.watch(_gameStateProvider).state!.currentPlayer?.id;
+      final currentPlayer = ref.watch(_gameStateProvider).state!.currentPlayer?.id;
       // Null indicates that all players can go simulataneously
       return currentPlayer == null || currentPlayer == playerID;
     },
@@ -136,43 +124,30 @@ class GameProvider {
   Provider<String> get gameNameProvider => _gameNameProvider;
 
   /// Provides the name for the players based on their player id
-  late final StateProvider<String?> _playerNameProvider =
-      StateProvider<String?>(
-    (ref) => ref
-        .watch(_gameStateProvider)
-        .state
-        ?.players
-        .firstWhereOrNull((p) => p.id == playerID)
-        ?.name,
+  late final StateProvider<String?> _playerNameProvider = StateProvider<String?>(
+    (ref) => ref.watch(_gameStateProvider).state?.players.firstWhereOrNull((p) => p.id == playerID)?.name,
   );
 
   /// Provides the name for the players based on their player id
   StateProvider<String?> get playerNameProvider => _playerNameProvider;
 
   /// Provides the [ServerClient] for each client id
-  late final Provider<ServerClient> _serverClientProvider =
-      Provider(_serverClientImpl);
+  late final Provider<ServerClient> _serverClientProvider = Provider(_serverClientImpl);
 
   ServerClient _serverClientImpl(ProviderReference ref) {
     final location = ref.watch(gameLocationProvider).state;
     final address = ref.watch(selectedAddress).state;
     if (location == IOServerLocation && address == defaultAddress) {
-      throw UnimplementedError(
-          'Please set the address for the remote server before connecting a game server client');
+      throw UnimplementedError('Please set the address for the remote server before connecting a game server client');
     }
-    final client = ServerClient.fromParams(
-        location: location,
-        read: ref.read,
-        address: address,
-        playerID: playerID);
+    final client = ServerClient.fromParams(location: location, read: ref.read, address: address, playerID: playerID);
 
     ref.onDispose(client.dispose);
     return client;
   }
 
   /// Provides a [GameServerClient] that communicates with the game server and handles game events
-  late final Provider<GameServerClient> _gameServerClientProvider =
-      Provider(_gameServerClientImpl);
+  late final Provider<GameServerClient> _gameServerClientProvider = Provider(_gameServerClientImpl);
 
   GameServerClient _gameServerClientImpl(ProviderReference ref) {
     final client = GameServerClient(
@@ -184,15 +159,13 @@ class GameProvider {
   }
 
   /// Provides a [GameClient] for the client with the specified id
-  late final Provider<GameClient> _gameClientProvider =
-      Provider(_gameClientImpl);
+  late final Provider<GameClient> _gameClientProvider = Provider(_gameClientImpl);
 
   GameClient _gameClientImpl(ProviderReference ref) {
     final location = ref.watch(gameLocationProvider).state;
     final address = ref.watch(selectedAddress).state;
     if (location == IOServerLocation && address == defaultAddress) {
-      throw UnimplementedError(
-          'Please set the address for the remote server before connecting a game server client');
+      throw UnimplementedError('Please set the address for the remote server before connecting a game server client');
     }
     final client = GameClient.fromParams(
       location: location,
@@ -205,8 +178,7 @@ class GameProvider {
   }
 
   void dispose() {
-    read(playerIDsProvider).state =
-        read(playerIDsProvider).state.remove(playerID);
+    read(playerIDsProvider).state = read(playerIDsProvider).state.remove(playerID);
   }
 }
 
@@ -216,8 +188,7 @@ class GameProvider {
 final playerIDProvider = ScopedProvider<PlayerID>((ref) => '');
 
 extension ReaderGameX on ScopedReader {
-  GameReader get game =>
-      GameReader(this, this(playerGameProvider(this(playerIDProvider))));
+  GameReader get game => GameReader(this, this(playerGameProvider(this(playerIDProvider))));
 }
 
 class GameReader {
@@ -232,15 +203,12 @@ extension GameReaderX on Reader {
   set address(GameAddress address) => this(selectedAddress).state = address;
   GameAddress get address => this(selectedAddress).state;
 
-  GameReader gameFor(PlayerID id) =>
-      GameReader(this, this(playerGameProvider(id)));
+  GameReader gameFor(PlayerID id) => GameReader(this, this(playerGameProvider(id)));
 
   /// Setup parameters
-  set clientImplementation(ServerLocation implementation) =>
-      this(gameLocationProvider).state = implementation;
+  set clientImplementation(ServerLocation implementation) => this(gameLocationProvider).state = implementation;
   ServerLocation get clientImplementation => this(gameLocationProvider).state;
-  set gameConfig(GameConfig config) =>
-      this(singleConfigProvider).state = config;
+  set gameConfig(GameConfig config) => this(singleConfigProvider).state = config;
   GameConfig get gameConfig => this(singleConfigProvider).state;
   IList<PlayerID> get playerIDs => this(playerIDsProvider).state;
 }
@@ -261,30 +229,25 @@ extension GameReaderGameX on GameReader {
 
   /// Server information
   GameInfo? get currentGameInfo => this(game._gameInfoProvider).state;
-  set currentGameInfo(GameInfo? info) =>
-      this(game._gameInfoProvider).state = info;
+  set currentGameInfo(GameInfo? info) => this(game._gameInfoProvider).state = info;
   GameInfo? get lobbyInfo => this(game._gameLobbyProvider).state;
   set lobbyInfo(GameInfo? info) => this(game._gameLobbyProvider).state = info;
   Future<IList<GameInfo>> get gameInfos => this(game._gamesProvider.future);
 
   /// Game setup information
   GameConfig get gameConfig => this(game._gameConfigProvider).state;
-  set gameConfig(GameConfig config) =>
-      this(game._gameConfigProvider).state = config;
+  set gameConfig(GameConfig config) => this(game._gameConfigProvider).state = config;
   GameCode get gameCode => this(game._gameCodeProvider).state;
   set gameCode(GameCode code) => this(game._gameCodeProvider).state = code;
 
   /// Game information
   Game? get gameState => this(game._gameStateProvider).state;
   set gameState(Game? g) => this(game._gameStateProvider).state = g;
-  StateController<Game?> get gameStateController =>
-      this(game._gameStateProvider);
+  StateController<Game?> get gameStateController => this(game._gameStateProvider);
   GameError? get gameError => this(game._gameErrorProvider).state;
-  set gameError(GameError? error) =>
-      this(game._gameErrorProvider).state = error;
+  set gameError(GameError? error) => this(game._gameErrorProvider).state = error;
   GameStatus get gameStatus => this(game._gameStatusProvider).state;
-  set gameStatus(GameStatus status) =>
-      this(game._gameStatusProvider).state = status;
+  set gameStatus(GameStatus status) => this(game._gameStatusProvider).state = status;
   bool? get gameTurn => this(game._gameTurnProvider);
   String? get gameName => this(game._gameNameProvider);
   String? get playerName => this(game._playerNameProvider).state;
@@ -292,5 +255,4 @@ extension GameReaderGameX on GameReader {
 }
 
 /// Allows one config to write all players' configs
-final singleConfigProvider =
-    StateProvider<GameConfig>((ref) => const GameConfig(gameType: ''));
+final singleConfigProvider = StateProvider<GameConfig>((ref) => const GameConfig(gameType: ''));
