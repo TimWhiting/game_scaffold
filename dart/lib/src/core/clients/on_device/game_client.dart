@@ -18,13 +18,14 @@ class NoServerGameClient extends GameClient {
   BackendGameReader get backend => read.backendGame(game.gameCode);
   static final Map<String, List<void Function()>> _startListening = {};
   @override
-  void exitGame() {
+  Future<bool> exitGame() async {
     game.gameStatus = GameStatus.NotJoined;
+    return true;
   }
 
   IList<Player> get _players => backend.players;
   @override
-  Future<void> register() async {
+  Future<bool> register() async {
     backend.players = _players.add(Player(playerID, name: game.playerName));
     game.gameStatus = GameStatus.NotJoined;
     game.playerName = game.playerName == '' ? playerID : game.playerName;
@@ -44,6 +45,7 @@ class NoServerGameClient extends GameClient {
         gameType: config.gameType,
       ));
     }
+    return true;
   }
 
   void _watchState() {
@@ -68,7 +70,7 @@ class NoServerGameClient extends GameClient {
   }
 
   @override
-  void sendEvent(Event event) {
+  Future<bool> sendEvent(Event event) async {
     // print('${event.toJson()}');
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
@@ -82,6 +84,7 @@ class NoServerGameClient extends GameClient {
       }
       _startListening[gameCode]?.clear();
     }
+    return true;
   }
 
   @override

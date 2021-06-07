@@ -25,12 +25,12 @@ class GameServerClient {
   GameReader get game => read.gameFor(playerID);
 
   /// Causes the client to exit the game
-  void exitGame() => _gClient.exitGame();
+  Future<bool> exitGame() => _gClient.exitGame();
 
   /// Registers the client with the game server with the optionally provided [code]
   ///
   /// Specifying [code] is just shorthand for updating the `gameCodeProvider`
-  Future<void> register({GameCode? code}) async {
+  Future<bool> register({GameCode? code}) async {
     if (code != null) {
       read.gameFor(playerID).gameCode = code;
     }
@@ -38,22 +38,22 @@ class GameServerClient {
   }
 
   /// Sends [event] to the game server
-  void sendEvent(Event event) => _gClient.sendEvent(event);
+  Future<bool> sendEvent(Event event) => _gClient.sendEvent(event);
 
   /// Sends a start event to the game server
-  void startGame() => _gClient.startGame();
+  Future<bool> startGame() => _gClient.startGame();
 
   /// Sends an undo event to the game server
-  void undo() => _gClient.undo();
+  Future<bool> undo() => _gClient.undo();
 
   /// Sends a new round event to the game server
-  void newRound() => _gClient.newRound();
+  Future<bool> newRound() => _gClient.newRound();
 
   /// Sends a message event to the game server
   ///
   /// Not currently implemented [to], a particular player the comment is directed
   /// towards
-  void sendMessage(String message, {PlayerID? to}) =>
+  Future<bool> sendMessage(String message, {PlayerID? to}) =>
       _gClient.sendMessage(message);
 
   /// Creates a game on the server

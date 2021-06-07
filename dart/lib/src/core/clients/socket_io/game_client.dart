@@ -33,16 +33,17 @@ class IOGameClient extends GameClient {
   }
 
   @override
-  void exitGame() {
+  Future<bool> exitGame() async {
     _socket!.off(IOChannel.error_channel.string);
     _socket!.off(IOChannel.gamestate.string);
     _socket!.off(IOChannel.lobby.string);
     logger.info('Exiting game');
     game.gameStatus = GameStatus.NotJoined;
+    return true;
   }
 
   @override
-  Future<void> register() async {
+  Future<bool> register() async {
     _ensureConnected();
     logger.info('Registering');
     game.gameStatus = GameStatus.NotJoined;
@@ -50,6 +51,7 @@ class IOGameClient extends GameClient {
     final assignedName = await _socket!
         .call(IOChannel.register, {'name': game.playerName, 'id': playerID});
     game.playerName = assignedName as String;
+    return true;
   }
 
   void _onLobby(Map<String, dynamic> lobby) {
@@ -78,10 +80,11 @@ class IOGameClient extends GameClient {
   }
 
   @override
-  void sendEvent(Event event) {
+  Future<bool> sendEvent(Event event) async {
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
-    _socket!.emit(IOChannel.event.string, js);
+    final result = await _socket!.call(IOChannel.event, js);
+    return result as bool;
   }
 
   @override

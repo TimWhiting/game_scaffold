@@ -22,6 +22,7 @@ enum IOChannel {
   gamecreated,
   deletegame,
   gamedeleted,
+  eventack,
   gameinfo,
   getgameinfo,
   name,
@@ -46,7 +47,6 @@ extension IOChannelX on IOChannel {
       case IOChannel.lobby:
       case IOChannel.error_channel:
       case IOChannel.gamestate:
-      case IOChannel.event:
       case IOChannel.connect:
       case IOChannel.connection:
       case IOChannel.gamecreated:
@@ -54,8 +54,11 @@ extension IOChannelX on IOChannel {
       case IOChannel.name:
       case IOChannel.disconnect:
       case IOChannel.allgames:
+      case IOChannel.eventack:
       case IOChannel.gamedeleted:
         throw error;
+      case IOChannel.event:
+        return IOChannel.eventack;
       case IOChannel.deletegame:
         return IOChannel.gamedeleted;
       case IOChannel.creategame:

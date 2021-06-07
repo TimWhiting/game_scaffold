@@ -117,12 +117,13 @@ class SupabaseGameClient extends GameClient {
   }
 
   @override
-  void exitGame() {
+  Future<bool> exitGame() {
     // TODO: implement exitGame
+    throw UnimplementedError('');
   }
 
   @override
-  Future<void> register() async {
+  Future<bool> register() async {
     var result =
         await gameDB.select('players, config').eq('id', gameCode).execute();
     if (result.error == null) {
@@ -149,7 +150,7 @@ class SupabaseGameClient extends GameClient {
 
       if (oldPlayers.any((p) => p.id == playerID)) {
         _supaLogger.info('Player $playerID Rejoining');
-        return;
+        return true;
       }
       final newPlayers = oldPlayers.lock
           .add(Player(playerID, name: read.gameFor(playerID).playerName));
@@ -175,10 +176,13 @@ class SupabaseGameClient extends GameClient {
       _supaLogger.info(result.error?.details);
       _supaLogger.info(result.error?.message);
     }
+    return true;
   }
 
   @override
-  void sendEvent(Event event) {}
+  Future<bool> sendEvent(Event event) async {
+    throw UnimplementedError('');
+  }
 
   static void registerImplementation() {
     GameClient.registerImplementation(

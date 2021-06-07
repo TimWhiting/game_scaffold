@@ -23,26 +23,26 @@ abstract class GameClient {
   GameReader get game => read.gameFor(playerID);
 
   /// Causes the client to exit the game
-  void exitGame();
+  Future<bool> exitGame();
 
   /// Registers the client with the game server
-  Future<void> register();
+  Future<bool> register();
 
   /// Sends [event] to the game server
-  void sendEvent(Event event);
+  Future<bool> sendEvent(Event event);
 
   /// Sends a start event to the game server
-  void startGame() => sendEvent(const GenericEvent.start().asGameEvent);
+  Future<bool> startGame() => sendEvent(const GenericEvent.start().asGameEvent);
 
   /// Sends an undo event to the game server
-  void undo() => sendEvent(const GenericEvent.undo().asGameEvent);
+  Future<bool> undo() => sendEvent(const GenericEvent.undo().asGameEvent);
 
   /// Sends a new round event to the game server
-  void newRound() =>
+  Future<bool> newRound() =>
       sendEvent(GenericEvent.readyNextRound(playerID).asGameEvent);
 
   /// Sends a message event to the game server
-  void sendMessage(String message) => sendEvent(
+  Future<bool> sendMessage(String message) => sendEvent(
       GenericEvent.message(message, from: playerID, to: null).asGameEvent);
 
   /// Disposes of the game client
