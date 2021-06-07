@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -45,7 +46,11 @@ abstract class GameClient {
       GenericEvent.message(message, from: playerID, to: null).asGameEvent);
 
   /// Disposes of the game client
-  void dispose();
+  @mustCallSuper
+  void dispose() {
+    gameStreamController.close();
+    lobbyStreamController.close();
+  }
 
   /// Registers a [GameClient] implementation for the given [location]
   static void registerImplementation<T extends GameClient>(
@@ -73,4 +78,14 @@ abstract class GameClient {
     }
     return impl(read, address, playerID);
   }
+
+  final StreamController<Game> gameStreamController =
+      StreamController.broadcast();
+  Stream<Game> gameStream() => gameStreamController.stream;
+
+  final StreamController<GameInfo> lobbyStreamController =
+      StreamController.broadcast();
+  Stream<GameInfo> gameLobby() => lobbyStreamController.stream;
+
+  final errorNotifier = GameErrorNotifier();
 }

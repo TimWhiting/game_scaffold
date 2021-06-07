@@ -56,7 +56,7 @@ class IOGameClient extends GameClient {
     final gameInfo = GameInfo.fromJson(lobby);
     game.gameStatus = GameStatus.NotStarted;
     logger.info('Got Lobby $gameInfo');
-    game.lobbyInfo = gameInfo;
+    lobbyStreamController.add(gameInfo);
   }
 
   void _watchState() {
@@ -64,13 +64,13 @@ class IOGameClient extends GameClient {
       _socket!.off(IOChannel.lobby.string);
       final gameState = Game.fromJson(data as Map<String, dynamic>);
       logger.info('Got gamestate $data');
-      game.gameState = gameState;
+      gameStreamController.add(gameState);
       game.gameStatus = gameState.gameStatus;
     });
     _socket!.on(IOChannel.error_channel.string, (data) {
       final error = GameError.fromJson(data as Map<String, dynamic>);
       logger.warning('Error: $error');
-      game.gameError = error;
+      errorNotifier.error = error;
     });
     // ignore: unnecessary_lambdas
     _socket!
@@ -89,6 +89,7 @@ class IOGameClient extends GameClient {
     exitGame();
     logger.info('Dispose');
     _socket!.dispose();
+    super.dispose();
   }
 
   static void registerImplementation() {

@@ -54,18 +54,18 @@ class SupabaseServerClient extends ServerClient {
     // I don't think anything needs to happen here because there are no listeners
   }
 
-  @override
-  Future<void> getGameInfo(String gameId) async {
-    final response = await gameDB.select().eq('id', gameId).execute();
-    if (response.error != null || response.count == 0) {
-      _supaLogger
-          .severe('In get game info Supabase Error ${response.error?.message}');
-      return;
-    }
-    // ignore: avoid_dynamic_calls
-    final gameInfo = response.data[0] as Map<String, dynamic>;
-    game.currentGameInfo = infoFromRow(gameInfo);
-  }
+  // @override
+  // Future<void> getGameInfo(String gameId) async {
+  //   final response = await gameDB.select().eq('id', gameId).execute();
+  //   if (response.error != null || response.count == 0) {
+  //     _supaLogger
+  //         .severe('In get game info Supabase Error ${response.error?.message}');
+  //     return;
+  //   }
+  //   // ignore: avoid_dynamic_calls
+  //   final gameInfo = response.data[0] as Map<String, dynamic>;
+  //   game.currentGameInfo = infoFromRow(gameInfo);
+  // }
 
   GameInfo infoFromRow(Map<String, dynamic> gameInfo) {
     // print(gameInfo);
@@ -152,7 +152,7 @@ class SupabaseGameClient extends GameClient {
         return;
       }
       final newPlayers = oldPlayers.lock
-          .add(Player(playerID, name: read.gameFor(playerID).playerName ?? ''));
+          .add(Player(playerID, name: read.gameFor(playerID).playerName));
       if (newPlayers.length == gameConfig.maxPlayers) {
         _supaLogger.info('Max Limit');
 

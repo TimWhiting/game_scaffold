@@ -25,8 +25,7 @@ class NoServerGameClient extends GameClient {
   IList<Player> get _players => backend.players;
   @override
   Future<void> register() async {
-    backend.players =
-        _players.add(Player(playerID, name: game.playerName ?? playerID));
+    backend.players = _players.add(Player(playerID, name: game.playerName));
     game.gameStatus = GameStatus.NotJoined;
     game.playerName = game.playerName == '' ? playerID : game.playerName;
     game.gameStatus = GameStatus.NotStarted;
@@ -37,34 +36,35 @@ class NoServerGameClient extends GameClient {
       sendEvent(const GenericEvent.start().asGameEvent);
     }
     for (final pID in _players) {
-      read.gameFor(pID.id).lobbyInfo = GameInfo(
+      lobbyStreamController.add(GameInfo(
         gameId: gameCode,
         players: _players.map((p) => p.name).toIList(),
         player: pID.name,
         creator: pID.id == backend.players.first.id,
         gameType: config.gameType,
-      );
+      ));
     }
   }
 
   void _watchState() {
     logger.info('Watching backend');
     _ss = backend.gameNotifier.stream.listen((gameState) {
-      game.gameState = gameState;
+      gameStreamController.add(gameState);
       game.gameStatus = gameState.gameStatus;
     }, onError: (e) {
-      game.gameError = GameError(e as String, playerID);
+      errorNotifier.error = GameError(e as String, playerID);
     });
 
     _se = backend.errorNotifier.stream.listen((gameError) {
       if (gameError == null || gameError.person == playerID) {
-        game.gameError = gameError;
+        errorNotifier.error = gameError;
       }
     });
     final initialState = backend.gameNotifier.gameState;
-    game.gameState = initialState;
+    gameStreamController.add(initialState);
     game.gameStatus = initialState.gameStatus;
-    game.gameError = backend.gameError;
+    final error = backend.gameError;
+    errorNotifier.error = error;
   }
 
   @override
@@ -89,6 +89,7 @@ class NoServerGameClient extends GameClient {
     _ss?.cancel();
     _se?.cancel();
     logger.info('Disposing game client');
+    super.dispose();
   }
 
   static void registerImplementation() {

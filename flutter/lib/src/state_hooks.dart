@@ -24,11 +24,10 @@ extension BuildContextGameScaffoldX on BuildContext {
       read(gameProvider.gameServerClientProvider);
 
   /// Server information
-  GameInfo? get currentGameInfo => read(gameProvider.gameInfoProvider).state;
-  GameInfo? get lobbyInfo => read(gameProvider.gameLobbyProvider).state;
+  AsyncValue<GameInfo> get lobbyInfo => read(gameProvider.gameLobbyProvider);
 
-  Future<IList<GameInfo>> get gameInfos =>
-      read(gameProvider.gamesProvider.future);
+  LoadingFuture<IList<GameInfo>> get gameInfos =>
+      read(gameProvider.gamesProvider);
 
   /// Game setup information
   GameConfig get gameConfig => read(gameProvider.gameConfigProvider).state;
@@ -38,8 +37,8 @@ extension BuildContextGameScaffoldX on BuildContext {
   set gameCode(String code) => read(gameProvider.gameCodeProvider).state = code;
 
   /// Game information
-  Game? get gameState => read(gameProvider.gameStateProvider).state;
-  GameError? get gameError => read(gameProvider.gameErrorProvider).state;
+  AsyncValue<Game> get gameState => read(gameProvider.gameStateProvider);
+  GameError? get gameError => read(gameProvider.gameErrorProvider);
   GameStatus get gameStatus => read(gameProvider.gameStatusProvider).state;
   set gameStatus(GameStatus status) =>
       read(gameProvider.gameStatusProvider).state = status;
@@ -53,10 +52,9 @@ extension GameProviderHooksX on GameProvider {
   GameServerClient get useGameClient => useProvider(gameServerClientProvider);
 
   /// Server information
-  GameInfo? get useCurrentGameInfo => useProvider(gameInfoProvider).state;
-  GameInfo? get useLobbyInfo => useProvider(gameLobbyProvider).state;
+  AsyncValue<GameInfo> get useLobbyInfo => useProvider(gameLobbyProvider);
 
-  Future<IList<GameInfo>> get useGameInfos => useProvider(gamesProvider.future);
+  LoadingFuture<IList<GameInfo>> get useGameInfos => useProvider(gamesProvider);
 
   /// Game setup information
   GameConfig get useGameConfig => useProvider(gameConfigProvider).state;
@@ -66,8 +64,8 @@ extension GameProviderHooksX on GameProvider {
   set gameCode(String code) => useProvider(gameCodeProvider).state = code;
 
   /// Game information
-  Game? get useGameState => useProvider(gameStateProvider).state;
-  GameError? get useGameError => useProvider(gameErrorProvider).state;
+  AsyncValue<Game> get useGameState => useProvider(gameStateProvider);
+  GameError? get useGameError => useProvider(gameErrorProvider);
   GameStatus get useGameStatus => useProvider(gameStatusProvider).state;
   bool get useGameTurn => useProvider(gameTurnProvider);
   String get useGameName => useProvider(gameNameProvider);
@@ -86,12 +84,10 @@ GameServerClient useGameClient(GameProvider g) =>
     useProvider(g.gameServerClientProvider);
 
 /// Server information
-GameInfo? useCurrentGameInfo(GameProvider g) =>
-    useProvider(g.gameInfoProvider).state;
-GameInfo? useLobbyInfo(GameProvider g) =>
-    useProvider(g.gameLobbyProvider).state;
-Future<IList<GameInfo>> useGameInfos(GameProvider g) =>
-    useProvider(g.gamesProvider.future);
+AsyncValue<GameInfo> useLobbyInfo(GameProvider g) =>
+    useProvider(g.gameLobbyProvider);
+LoadingFuture<IList<GameInfo>> useGameInfos(GameProvider g) =>
+    useProvider(g.gamesProvider);
 
 /// Game setup information
 GameConfig useGameConfig(GameProvider g) =>
@@ -99,9 +95,9 @@ GameConfig useGameConfig(GameProvider g) =>
 String useGameCode(GameProvider g) => useProvider(g.gameCodeProvider).state;
 
 /// Game information
-Game? useGameState(GameProvider g) => useProvider(g.gameStateProvider).state;
-GameError? useGameError(GameProvider g) =>
-    useProvider(g.gameErrorProvider).state;
+AsyncValue<Game> useGameState(GameProvider g) =>
+    useProvider(g.gameStateProvider);
+GameError? useGameError(GameProvider g) => useProvider(g.gameErrorProvider);
 GameStatus useGameStatus(GameProvider g) =>
     useProvider(g.gameStatusProvider).state;
 bool useGameTurn(GameProvider g) => useProvider(g.gameTurnProvider);

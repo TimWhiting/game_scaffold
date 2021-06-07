@@ -126,7 +126,7 @@ packages:
       path: "../dart"
       relative: true
     source: path
-    version: "0.3.1"
+    version: "0.3.4"
   game_scaffold_games:
     dependency: "direct dev"
     description:

@@ -26,11 +26,6 @@ class NoServerClient extends ServerClient {
   void dispose() {}
 
   @override
-  Future<void> getGameInfo(GameCode gameId) async {
-    // return read.backendGame(gameId).game
-  }
-
-  @override
   Future<IList<GameInfo>> getGames() async => <GameInfo>[].lock;
 
   static void registerImplementation() {

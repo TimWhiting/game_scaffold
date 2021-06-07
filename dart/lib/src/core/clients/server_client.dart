@@ -7,6 +7,7 @@ import '../core.dart';
 typedef ServerLocation = String;
 // TODO: Make this a URI
 typedef GameAddress = String;
+
 /// A Client that can contact the server to manage games
 ///
 /// The client can
@@ -34,9 +35,6 @@ abstract class ServerClient {
   /// Gets a list of games on the server
   Future<IList<GameInfo>> getGames();
 
-  /// Gets info about a particular game from the server
-  Future<void> getGameInfo(String gameId);
-
   /// Disposes of the [ServerClient] (i.e. disconnects from the server)
   void dispose();
 
@@ -48,7 +46,8 @@ abstract class ServerClient {
     _clientImplementations[location] = impl;
   }
 
-  static final Map<ServerLocation, ServerClient Function(Reader, GameAddress, PlayerID)>
+  static final Map<ServerLocation,
+          ServerClient Function(Reader, GameAddress, PlayerID)>
       _clientImplementations = {};
 
   /// Creates a [ServerClient] from the [location] [address] and [playerID]

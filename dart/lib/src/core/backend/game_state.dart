@@ -19,45 +19,21 @@ String get homeDir {
 }
 
 final agentBackendGame = Provider((ref) => BackendProvider(ref.read, '0000'));
-final backendGameCodesProvider =
-    StateProvider<IList<GameCode>>((ref) => <GameCode>[].lock);
+
 final ProviderFamily<BackendProvider, GameCode> backendGamesProvider =
-    Provider.family<BackendProvider, GameCode>((ref, code) {
-  final bp = BackendProvider(ref.read, code);
-  ref.onDispose(() {
-    if (ref.mounted) {
-      bp.dispose();
-    }
-  });
-  return bp;
-});
+    Provider.family<BackendProvider, GameCode>(
+        (ref, code) => BackendProvider(ref.read, code));
 
 class BackendProvider {
-  BackendProvider(this.read, this.code) {
-    Future.delayed(
-        const Duration(milliseconds: 10),
-        () => read(backendGameCodesProvider).state =
-            read(backendGameCodesProvider).state.add(code));
-  }
+  BackendProvider(this.read, this.code);
 
   /// The game [code] that uniquely identifies the providers in this BackendProvider
   final GameCode code;
   final Reader read;
-  late BackendGameReader backendReader = BackendGameReader(read, this);
-
-  void dispose() {
-    read(backendGameCodesProvider).state =
-        read(backendGameCodesProvider).state.remove(code);
-  }
-
-  /// Provides the initial state of the game
-  ///
-  /// Creates based on config from [gameConfigProvider] and
-  /// list of players from [playersProvider]
-  late Provider<Game> initialStateProvider = Provider<Game>(_initialStateImpl);
+  late final BackendGameReader backendReader = BackendGameReader(read, this);
 
   /// Provides the [GameStateNotifier] based on the [GameConfig] from [gameConfigProvider]
-  late StateNotifierProvider<GameStateNotifier, Game?> gameStateProvider =
+  late final StateNotifierProvider<GameStateNotifier, Game?> gameStateProvider =
       StateNotifierProvider<GameStateNotifier, Game?>(_gameStateNotifier);
 
   /// Keeps track of the players involved in the game on the server (or on the client) in the case of a local game
@@ -72,12 +48,6 @@ class BackendProvider {
   /// Provides the [GameErrorNotifier] to keep track of errors of a game
   final errorProvider = StateNotifierProvider<GameErrorNotifier, GameError?>(
       (ref) => GameErrorNotifier());
-
-  Game _initialStateImpl(ProviderReference ref) {
-    final gameConfig = ref.watch(configProvider).state;
-    final players = ref.watch(playersProvider).state;
-    return Game.getInitialState(gameConfig, players, backendReader);
-  }
 
   GameStateNotifier _gameStateNotifier(ProviderReference ref) {
     final gameConfig = ref.watch(configProvider).state;
@@ -235,7 +205,7 @@ extension BackendReaderX on BackendGameReader {
   ///
   /// It will create it based on the [PlayersProvider] and
   /// the [GameConfigProvider]
-  Game get initialState => this(game.initialStateProvider);
+  Game get initialState => Game.getInitialState(gameConfig, players, this);
 }
 
 GameCode generateGameID(List<String> avoidList) {

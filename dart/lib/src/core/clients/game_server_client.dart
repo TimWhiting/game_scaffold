@@ -1,5 +1,6 @@
 import 'package:riverpod/riverpod.dart';
 
+import '../backend.dart';
 import '../client.dart';
 import '../core.dart';
 
@@ -89,9 +90,9 @@ class GameServerClient {
   /// Gets a list of games on the server
   Future<IList<GameInfo>> getGames() => _sClient.getGames();
 
-  /// Gets info about a particular game from the server
-  Future<GameInfo> getGameInfo(GameCode gameId) async {
-    await _sClient.getGameInfo(gameId);
-    return read.gameFor(playerID).currentGameInfo!;
-  }
+  Stream<Game> gameStream() => _gClient.gameStream();
+
+  Stream<GameInfo> gameLobby() => _gClient.gameLobby();
+
+  GameErrorNotifier get errorNotifier => _gClient.errorNotifier;
 }

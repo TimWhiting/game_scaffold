@@ -26,7 +26,8 @@ Future<void> main() async {
     await Future.delayed(const Duration(milliseconds: 100));
     assert(ioServer.servers[gameCode]!.playerNames.length == 1,
         'One Player Joined');
-    assert(read.gameFor(P1).gameState?.gameStatus == GameStatus.Started,
+    assert(
+        read.gameFor(P1).gameState.data?.value.gameStatus == GameStatus.Started,
         'Game is Started');
   });
   assert(1 == 1, 'Success');

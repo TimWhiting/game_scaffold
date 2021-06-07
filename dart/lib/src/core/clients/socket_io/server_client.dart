@@ -55,13 +55,6 @@ class IOServerClient extends ServerClient {
   }
 
   @override
-  Future<void> getGameInfo(GameCode gameId) async {
-    await _ensureConnected();
-    final result = await socket!.call(IOChannel.getgameinfo, gameId);
-    game.currentGameInfo = result == '404' ? null : GameInfo.fromJson(result as Map<String, dynamic>);
-  }
-
-  @override
   void dispose() {
     logger.info('Dispose');
     socket?.dispose();
@@ -78,13 +71,18 @@ class IOServerClient extends ServerClient {
       if ((socket?.connected ?? true) || socket?.io.uri != address) {
         socket?.dispose();
         socket = IO.io(address, socketIOOpts);
-        socket!.on(IOChannel.connection.string, (_) => game.gameStatus = GameStatus.NotJoined);
-        socket!.on(IOChannel.disconnect.string, (_) => game.gameStatus = GameStatus.NotConnected);
+        socket!.on(IOChannel.connection.string,
+            (_) => game.gameStatus = GameStatus.NotJoined);
+        socket!.on(IOChannel.disconnect.string,
+            (_) => game.gameStatus = GameStatus.NotConnected);
 
         final currentStatus = game.gameStatus;
         await Future.delayed(const Duration(milliseconds: 20));
-        if (currentStatus == GameStatus.NotConnected || currentStatus == GameStatus.NotJoined) {
-          scheduleMicrotask(() => game.gameStatus = socket!.connected ? GameStatus.NotJoined : GameStatus.NotConnected);
+        if (currentStatus == GameStatus.NotConnected ||
+            currentStatus == GameStatus.NotJoined) {
+          scheduleMicrotask(() => game.gameStatus = socket!.connected
+              ? GameStatus.NotJoined
+              : GameStatus.NotConnected);
         }
       }
     });
@@ -103,7 +101,8 @@ class IOServerClient extends ServerClient {
   static void registerImplementation() {
     ServerClient.registerImplementation(
       IOServerLocation,
-      (read, address, id) => IOServerClient(read: read, address: address, playerID: id),
+      (read, address, id) =>
+          IOServerClient(read: read, address: address, playerID: id),
     );
   }
 }

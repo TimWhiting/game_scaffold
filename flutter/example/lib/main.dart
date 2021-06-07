@@ -80,8 +80,7 @@ class CreateOrJoinWidget extends GameHookWidget {
     final code = gameProvider.useGameCode;
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
     final _ = gameProvider.useGameClient;
-    final allGames =
-        useFuture(gameProvider.useGameInfos, initialData: <GameInfo>[].lock);
+    final allGames = gameProvider.useGameInfos;
 
     return Scaffold(
       body: Center(
@@ -125,7 +124,7 @@ class CreateOrJoinWidget extends GameHookWidget {
               )
             ],
             if (allGames.hasData)
-              for (final info in allGames.data!)
+              for (final info in allGames.value)
                 Text('Started Game: ${info.gameId}, Players: ${info.players}'),
           ],
         ),
