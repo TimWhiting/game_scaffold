@@ -49,9 +49,13 @@ class IOGameClient extends GameClient {
     game.gameStatus = GameStatus.NotJoined;
     _watchState();
     final assignedName = await _socket!
-        .call(IOChannel.register, {'name': game.playerName, 'id': playerID});
-    game.playerName = assignedName as String;
-    return true;
+            .call(IOChannel.register, {'name': game.playerName, 'id': playerID})
+        as String?;
+    if (assignedName != null) {
+      game.playerName = assignedName;
+      return true;
+    }
+    return false;
   }
 
   void _onLobby(Map<String, dynamic> lobby) {

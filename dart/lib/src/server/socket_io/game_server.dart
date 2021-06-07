@@ -142,11 +142,14 @@ class GameServer {
       _clients[id] = client;
       _clients[id]
           ?.emit(IOChannel.gamestate.string, _gameState.gameState.toJson());
+
+      _clients[id]?.emit(IOChannel.name.string, _clientNames[id]);
       return;
     }
     if (_clients.length > gameConfig.maxPlayers) {
       client.emit(IOChannel.error_channel.string,
           GameError('Too many players already, sorry', id));
+      _clients[id]?.emit(IOChannel.name.string);
     } else {
       if (gameConfig.customNames) {
         _serverLogger.info('Creating player with name $name');
@@ -154,6 +157,7 @@ class GameServer {
         _clientNames[id] = name ?? 'No name';
         _addPlayer(Player(id, name: name ?? 'No name'));
         mainServer.addClientToGame(id, _gameId);
+        _clients[id]?.emit(IOChannel.name.string, name);
       } else {
         _serverLogger.info('Creating player with random name');
         final name = _getRandomPlayer();
@@ -162,6 +166,7 @@ class GameServer {
         _clientNames[id] = name;
         _addPlayer(Player(id, name: name));
         mainServer.addClientToGame(id, _gameId);
+        _clients[id]?.emit(IOChannel.name.string, name);
       }
 
       if (_players.length == gameConfig.maxPlayers && gameConfig.autoStart) {

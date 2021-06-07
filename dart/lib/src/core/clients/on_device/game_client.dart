@@ -74,7 +74,7 @@ class NoServerGameClient extends GameClient {
     // print('${event.toJson()}');
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
-    backend.handleEvent(event.asGameEvent);
+    final result = backend.handleEvent(event.asGameEvent);
     if (event is GameEventGeneral &&
         event.event is GenericEventStart &&
         _startListening[gameCode] != null) {
@@ -84,7 +84,7 @@ class NoServerGameClient extends GameClient {
       }
       _startListening[gameCode]?.clear();
     }
-    return true;
+    return result;
   }
 
   @override

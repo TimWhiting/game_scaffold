@@ -103,7 +103,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   /// Delegates to the game implementation for a game specific event [E]
   ///
   /// In case of a [GenericEvent] this handles the implementation of handling the event
-  void handleEvent(GameEvent event) {
+  bool handleEvent(GameEvent event) {
     // print('${event.toJson()}');
     try {
       _previousStates.add(state);
@@ -143,11 +143,13 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
         // ignore: cast_nullable_to_non_nullable
         state = nextState.value as T;
         read.errorNotifier.clearError();
+        return true;
       }
       // ignore: avoid_catches_without_on_clauses
     } catch (error, st) {
       _gameStateLogger.severe('$error $st');
     }
+    return false;
   }
 }
 
@@ -199,7 +201,7 @@ extension BackendReaderX on BackendGameReader {
   GameStateNotifier get gameNotifier => this(game.gameStateProvider.notifier);
 
   /// On the  handles [event]
-  void handleEvent(GameEvent event) => gameNotifier.handleEvent(event);
+  bool handleEvent(GameEvent event) => gameNotifier.handleEvent(event);
 
   /// On the  gets the initial state for the [Game]
   ///
