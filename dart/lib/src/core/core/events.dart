@@ -27,6 +27,11 @@ class GameEvent with _$GameEvent implements Event {
   /// Represents an [event] that is one of the predefined [GenericEvent]s.
   const factory GameEvent.general(GenericEvent event) = GameEventGeneral;
 
+  GenericEvent? get genericEvent =>
+      (this is GameEventGeneral) ? (this as GameEventGeneral).event : null;
+  Event? get gameEvent =>
+      (this is GameEventGame) ? (this as GameEventGame).event : null;
+
   @override
   EventType get type => when(game: (_) => 'game', general: (_) => 'general');
 
