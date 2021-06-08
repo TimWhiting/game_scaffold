@@ -10,23 +10,42 @@ import '../clients.dart';
 class NoServerClient extends ServerClient {
   NoServerClient({required Reader read, required PlayerID playerID})
       : super(read, playerID);
-  static final games = <GameCode>[];
+  static final games = <GameCode, LocalGame>{};
   BackendGameReader get backend => read.backendGame(game.gameCode);
   @override
   Future<void> createGame() async {
     final gameCode = generateGameID([]);
     game.gameCode = gameCode;
     backend.gameConfig = game.gameConfig;
+    games[gameCode] = LocalGame(gameCode, playerID, backend);
   }
 
   @override
-  Future<bool> deleteGame() async => games.remove(game.gameCode);
+  Future<bool> deleteGame() async {
+    if (games.remove(game.gameCode) != null) {
+      return true;
+    }
+    return false;
+  }
 
   @override
   void dispose() {}
 
   @override
-  Future<IList<GameInfo>> getGames() async => <GameInfo>[].lock;
+  Future<IList<GameInfo>> getGames() async {
+    final gms =
+        games.values.where((g) => g.read.players.any((p) => p.id == playerID));
+    return [
+      for (final g in gms)
+        GameInfo(
+          gameId: g.gameCode,
+          player: g.read.players.firstWhere((p) => p.id == playerID).name,
+          players: g.read.players.map((p) => p.name).toIList(),
+          gameType: g.read.gameConfig.gameType,
+          creator: g.creator == playerID,
+        )
+    ].lock;
+  }
 
   static void registerImplementation() {
     ServerClient.registerImplementation(
@@ -34,4 +53,12 @@ class NoServerClient extends ServerClient {
       (read, address, id) => NoServerClient(read: read, playerID: id),
     );
   }
+}
+
+/// Keeps track of some metadata about a game for an [OnDeviceLocation] game
+class LocalGame {
+  LocalGame(this.gameCode, this.creator, this.read);
+  final GameCode gameCode;
+  final PlayerID creator;
+  final BackendGameReader read;
 }

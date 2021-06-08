@@ -38,13 +38,14 @@ extension BuildContextGameScaffoldX on BuildContext {
 
   /// Game information
   AsyncValue<Game> get gameState => read(gameProvider.gameStateProvider);
+  Game get game => gameState.data!.value;
   GameError? get gameError => read(gameProvider.gameErrorProvider);
   GameStatus get gameStatus => read(gameProvider.gameStatusProvider).state;
   set gameStatus(GameStatus status) =>
       read(gameProvider.gameStatusProvider).state = status;
   bool get gameTurn => read(gameProvider.gameTurnProvider);
   String get gameName => read(gameProvider.gameNameProvider);
-  String? get playerName => read(gameProvider.playerNameProvider).state;
+  String get playerName => read(gameProvider.playerNameProvider).state;
 }
 
 extension GameProviderHooksX on GameProvider {
@@ -64,12 +65,13 @@ extension GameProviderHooksX on GameProvider {
   set gameCode(String code) => useProvider(gameCodeProvider).state = code;
 
   /// Game information
-  AsyncValue<Game> get useGameState => useProvider(gameStateProvider);
+  AsyncValue<Game> get useGameStateAsync => useProvider(gameStateProvider);
+  Game get useGameState => useGameStateAsync.data!.value;
   GameError? get useGameError => useProvider(gameErrorProvider);
   GameStatus get useGameStatus => useProvider(gameStatusProvider).state;
   bool get useGameTurn => useProvider(gameTurnProvider);
   String get useGameName => useProvider(gameNameProvider);
-  String? get usePlayerName => useProvider(playerNameProvider).state;
+  String get usePlayerName => useProvider(playerNameProvider).state;
 }
 
 String usePlayerID() => useProvider(playerIDProvider);
@@ -95,12 +97,13 @@ GameConfig useGameConfig(GameProvider g) =>
 String useGameCode(GameProvider g) => useProvider(g.gameCodeProvider).state;
 
 /// Game information
-AsyncValue<Game> useGameState(GameProvider g) =>
+AsyncValue<Game> useGameStateAsync(GameProvider g) =>
     useProvider(g.gameStateProvider);
+Game useGameState(GameProvider g) =>
+    useProvider(g.gameStateProvider).data!.value;
 GameError? useGameError(GameProvider g) => useProvider(g.gameErrorProvider);
 GameStatus useGameStatus(GameProvider g) =>
     useProvider(g.gameStatusProvider).state;
 bool useGameTurn(GameProvider g) => useProvider(g.gameTurnProvider);
 String useGameName(GameProvider g) => useProvider(g.gameNameProvider);
-String? usePlayerName(GameProvider g) =>
-    useProvider(g.playerNameProvider).state;
+String usePlayerName(GameProvider g) => useProvider(g.playerNameProvider).state;

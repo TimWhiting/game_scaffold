@@ -219,12 +219,13 @@ extension GameReaderGameX on GameReader {
 
   /// Game information
   AsyncValue<Game> get gameState => this(game.gameStateProvider);
+  Game get lastGameState => gameState.data!.value;
   GameError? get gameError => this(game.gameErrorProvider);
   GameStatus get gameStatus => this(game.gameStatusProvider).state;
   set gameStatus(GameStatus status) =>
       this(game.gameStatusProvider).state = status;
-  bool? get gameTurn => this(game.gameTurnProvider);
-  String? get gameName => this(game.gameNameProvider);
+  bool get gameTurn => this(game.gameTurnProvider);
+  String get gameName => this(game.gameNameProvider);
   String get playerName => this(game.playerNameProvider).state;
   set playerName(String name) => this(game.playerNameProvider).state = name;
   void clearError() => gameClient.errorNotifier.clearError();

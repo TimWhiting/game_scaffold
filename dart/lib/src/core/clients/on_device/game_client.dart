@@ -34,7 +34,7 @@ class NoServerGameClient extends GameClient {
     _startListening[gameCode]!.add(_watchState);
     final config = backend.gameConfig;
     if (_players.length == config.maxPlayers && config.autoStart) {
-      sendEvent(const GenericEvent.start().asGameEvent);
+      await sendEvent(const GenericEvent.start().asGameEvent);
     }
     for (final pID in _players) {
       lobbyStreamController.add(GameInfo(
