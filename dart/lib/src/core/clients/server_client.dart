@@ -5,8 +5,8 @@ import '../../core.dart';
 import '../core.dart';
 
 typedef ServerLocation = String;
-// TODO: Make this a URI
-typedef GameAddress = String;
+
+typedef GameAddress = Uri;
 
 /// A Client that can contact the server to manage games
 ///

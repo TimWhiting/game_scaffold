@@ -22,7 +22,7 @@ Future<void> main() async {
     final gameCode = read.gameFor(P1).gameCode;
     final gameClient = read.gameFor(P1).gameClient;
     await gameClient.register();
-    gameClient.startGame();
+    await gameClient.startGame();
     await Future.delayed(const Duration(milliseconds: 100));
     assert(ioServer.servers[gameCode]!.playerNames.length == 1,
         'One Player Joined');
@@ -37,7 +37,7 @@ Future<void> main() async {
 Future<void> test(String testName, Future<void> Function(Reader) testFn) async {
   print('########## Started Test $testName #########');
   final read = ProviderContainer().read;
-  read.address = 'http://127.0.0.1:$defaultGamePort';
+  read.address = Uri.parse('http://127.0.0.1:$defaultGamePort');
   var serverClient = read.gameFor(P1).gameClient;
   const config = GameConfig(adminId: P1, gameType: 'tictactoe');
   read.gameFor(P1).gameConfig = config;

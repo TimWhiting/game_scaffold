@@ -10,7 +10,7 @@ void main() {
   });
   test('io', () async {
     read.clientImplementation = IOServerLocation;
-    read.address = 'http://localhost:$defaultGamePort';
+    read.address = Uri.parse('http://localhost:$defaultGamePort');
     expect(read.gameFor(P1).gameStatus, GameStatus.NotConnected);
     final client = read.gameFor(P1).gameClient;
     final code =

@@ -111,10 +111,6 @@ class SupabaseGameClient extends GameClient {
   SupabaseClient get _supaClient => read(supabaseProvider);
   SupabaseQueryBuilder get gameDB => _supaClient.from('Game');
   late RealtimeSubscription _gameSub;
-  @override
-  void dispose() {
-    // TODO: implement dispose
-  }
 
   @override
   Future<bool> exitGame() {

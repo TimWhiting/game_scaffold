@@ -1,17 +1,16 @@
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:game_scaffold_dart/src/core/backend/game_state.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../core.dart';
 import 'clients.dart';
 part 'providers.freezed.dart';
 
-/// The default port that is used for Game Clients
+/// The default port
 const defaultGamePort = 45912;
 
 /// The default address to determine if the address has been set
-const defaultAddress = 'your game server ip';
+final defaultAddress = Uri.parse('http://localhost:0');
 
 /// The provider that controls which game server address to connect to
 final selectedAddress = StateProvider<GameAddress>((ref) => defaultAddress);

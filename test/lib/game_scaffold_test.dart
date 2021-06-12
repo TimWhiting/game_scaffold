@@ -31,7 +31,7 @@ void testGame<T extends Game>(
       }
 
       if (read.gameFor(players.first.id).gameStatus != GameStatus.Started) {
-        read.gameFor(players.first.id).gameClient.startGame();
+        await read.gameFor(players.first.id).gameClient.startGame();
       }
     });
     darttest.test('${testName}_Tests', () {

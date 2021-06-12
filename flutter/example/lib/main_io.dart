@@ -22,7 +22,7 @@ void main() {
       gameLocationProvider
           .overrideWithProvider(StateProvider((ref) => IOServerLocation)),
       selectedAddress.overrideWithProvider(
-          StateProvider((_) => 'http://localhost:$defaultGamePort')),
+          StateProvider((_) => Uri.parse('http://localhost:$defaultGamePort'))),
     ],
     child: const TicTacToeApp(),
   ));

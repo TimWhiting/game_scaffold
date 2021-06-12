@@ -68,7 +68,9 @@ class IOServerClient extends ServerClient {
   @override
   Future<void> connect() async {
     scheduleMicrotask(() async {
-      if ((socket?.connected ?? true) || socket?.io.uri != address) {
+      logger.info('Connecting, old uri was: ${socket?.io.uri}');
+      if ((socket?.connected ?? true) ||
+          Uri.parse(socket?.io.uri ?? '') != address) {
         socket?.dispose();
         socket = IO.io(address, socketIOOpts);
         socket!.on(IOChannel.connection.string,

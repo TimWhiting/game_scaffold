@@ -41,7 +41,7 @@ Future<void> loop(Reader read, GameCode code) async {
     location = command!.split(',').map(int.tryParse).toList();
   } while (location.any((l) => l == null));
 
-  read.gameFor(player).gameClient.sendEvent(
+  await read.gameFor(player).gameClient.sendEvent(
         TicTacToeGameEvent(player, location[0]! * 3 + location[1]!),
       );
 
@@ -68,8 +68,8 @@ Future<void> loop(Reader read, GameCode code) async {
     }
     print('');
     if (gameState.roundOver) {
-      read.gameFor(P1).gameClient.newRound();
-      read.gameFor(P2).gameClient.newRound();
+      await read.gameFor(P1).gameClient.newRound();
+      await read.gameFor(P2).gameClient.newRound();
     } else {
       print('Finished');
       print('Player 0: ${gameState.totalScores[P1]}');

@@ -7,8 +7,8 @@ extension BuildContextGameScaffoldX on BuildContext {
   String get id => read(playerIDProvider);
 
   /// Setup parameters
-  set address(String address) => read(selectedAddress).state = address;
-  String get address => read(selectedAddress).state;
+  set address(Uri address) => read(selectedAddress).state = address;
+  Uri get address => read(selectedAddress).state;
   set singleGameConfig(GameConfig config) =>
       read(singleConfigProvider).state = config;
   GameConfig get singleGameConfig => read(singleConfigProvider).state;
@@ -77,7 +77,7 @@ extension GameProviderHooksX on GameProvider {
 String usePlayerID() => useProvider(playerIDProvider);
 
 /// Setup parameters
-String useAddress(String id) => useProvider(selectedAddress).state;
+Uri useAddress(String id) => useProvider(selectedAddress).state;
 
 GameProvider useGameProvider(String id) => useProvider(playerGameProvider(id));
 
