@@ -43,6 +43,8 @@ class GameProvider {
 
   /// Provides game lobby info in the form of [GameInfo] for the lobby
   late final StreamProvider<GameInfo> gameLobbyProvider = StreamProvider((ref) {
+    final _ = ref
+        .watch(gameCodeProvider); // Invalidate gameLobby on change of gameCode
     final client = ref.watch(gameServerClientProvider);
     return client.gameLobby();
   });
@@ -61,6 +63,7 @@ class GameProvider {
   /// Provides the game state for the current game of the client with specified id
   late final StreamProvider<Game> gameStateProvider =
       StreamProvider<Game>((ref) {
+    final _ = ref.watch(gameCodeProvider); // Invalidate on change of gameCode
     final client = ref.watch(gameServerClientProvider);
     return client.gameStream();
   });
@@ -68,6 +71,7 @@ class GameProvider {
   /// Provides the game error for the current game of the client with specified id
   late final gameErrorProvider =
       StateNotifierProvider<GameErrorNotifier, GameError?>((ref) {
+    final _ = ref.watch(gameCodeProvider); // Invalidate on change of gameCode
     final client = ref.watch(gameServerClientProvider);
     return client.errorNotifier;
   });
@@ -75,12 +79,16 @@ class GameProvider {
   /// Provides the game status for the current game of the client with specified id
   late final StateProvider<GameStatus> gameStatusProvider =
       StateProvider<GameStatus>(
-    (ref) => GameStatus.NotConnected,
+    (ref) {
+      final _ = ref.watch(gameCodeProvider); // Invalidate on change of gameCode
+      return GameStatus.NotConnected;
+    },
   );
 
   /// Provides whether it is the players turn for the current game of the client with the specified id
   late final Provider<bool> gameTurnProvider = Provider<bool>(
     (ref) {
+      final _ = ref.watch(gameCodeProvider); // Invalidate on change of gameCode
       final currentPlayer =
           ref.watch(gameStateProvider).data?.value.currentPlayer?.id;
       // Null indicates that all players can go simulataneously
