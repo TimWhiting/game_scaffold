@@ -21,4 +21,4 @@ dev_dependencies:
 #   game_scaffold_dart:
 #     path: ../dart
 scripts:
-  - gen: dart run build_runner build --enable-experiment=nonfunction-type-aliases
+  - gen: dart run build_runner build
