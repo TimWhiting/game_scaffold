@@ -101,7 +101,7 @@ class GameProvider {
   late final Provider<ServerClient> serverClientProvider =
       Provider(_serverClientImpl);
 
-  ServerClient _serverClientImpl(ProviderReference ref) {
+  ServerClient _serverClientImpl(ProviderRef ref) {
     final location = ref.watch(gameLocationProvider).state;
     final address = ref.watch(selectedAddress).state;
     if (location == IOServerLocation && address == defaultAddress) {
@@ -122,7 +122,7 @@ class GameProvider {
   late final Provider<GameServerClient> gameServerClientProvider =
       Provider(_gameServerClientImpl);
 
-  GameServerClient _gameServerClientImpl(ProviderReference ref) {
+  GameServerClient _gameServerClientImpl(ProviderRef ref) {
     final client = GameServerClient(
       ref.read,
       ref.watch(gameClientProvider),
@@ -135,7 +135,7 @@ class GameProvider {
   late final Provider<GameClient> gameClientProvider =
       Provider(_gameClientImpl);
 
-  GameClient _gameClientImpl(ProviderReference ref) {
+  GameClient _gameClientImpl(ProviderRef ref) {
     final location = ref.watch(gameLocationProvider).state;
     final address = ref.watch(selectedAddress).state;
     if (location == IOServerLocation && address == defaultAddress) {
@@ -170,7 +170,7 @@ class GameReader {
   GameReader(this.read, this.game);
   final Reader read;
   final GameProvider game;
-  T call<T>(RootProvider<Object, T> provider) => read(provider);
+  T call<T>(RootProvider<T> provider) => read(provider);
 }
 
 extension GameReaderX on Reader {

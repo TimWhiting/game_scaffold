@@ -49,7 +49,7 @@ class BackendProvider {
   final errorProvider = StateNotifierProvider<GameErrorNotifier, GameError?>(
       (ref) => GameErrorNotifier());
 
-  GameStateNotifier _gameStateNotifier(ProviderReference ref) {
+  GameStateNotifier _gameStateNotifier(StateNotifierProviderRef ref) {
     final gameConfig = ref.watch(configProvider).state;
     return GameStateNotifier(gameConfig, backendReader, code);
   }
@@ -147,7 +147,7 @@ class BackendGameReader {
   final Reader read;
   final BackendProvider game;
 
-  T call<T>(RootProvider<Object, T> provider) => read(provider);
+  T call<T>(RootProvider<T> provider) => read(provider);
 }
 
 extension BackendReaderX on BackendGameReader {

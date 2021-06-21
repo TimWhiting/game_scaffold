@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'state_hooks.dart';
 
-abstract class GameHookWidget extends HookWidget {
+abstract class GameHookWidget extends HookConsumerWidget {
   const GameHookWidget({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final playerID = usePlayerID();
-    final gameProvider = useGameProvider(playerID);
-    return buildWithGame(context, gameProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playerID = ref.watch(playerIDProvider);
+    final gameProvider = ref.watch(playerGameProvider(playerID));
+    return buildWithGame(context, ref, gameProvider);
   }
 
-  Widget buildWithGame(BuildContext context, GameProvider gameProvider);
+  Widget buildWithGame(
+      BuildContext context, WidgetRef ref, GameProvider gameProvider);
 }
 
 final navigationLogger = Logger('GameNavigator');
@@ -40,8 +42,9 @@ class GameNavigator extends GameHookWidget {
   final Widget gameOver;
 
   @override
-  Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
-    final gameStatus = gameProvider.useGameStatus;
+  Widget buildWithGame(
+      BuildContext context, WidgetRef ref, GameProvider gameProvider) {
+    final gameStatus = ref.watch(gameProvider.gameStatusProvider).state;
     final pages = {GameStatus.NotConnected: disconnected};
     navigationLogger
         .info('PlayerID: ${gameProvider.playerID} gameStatus: $gameStatus');
@@ -75,11 +78,11 @@ class GameNavigator extends GameHookWidget {
             status == GameStatus.BetweenRounds ||
             status == GameStatus.Started ||
             status == GameStatus.NotStarted) {
-          context.gameClient.exitGame();
+          ref.gameClient.exitGame();
           route.didPop(null);
           return true;
         } else if (status == GameStatus.NotJoined) {
-          context.gameClient.disconnect();
+          ref.gameClient.disconnect();
           return true;
         }
         return false;

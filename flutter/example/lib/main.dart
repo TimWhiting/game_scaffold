@@ -62,7 +62,8 @@ class Player extends GameHookWidget {
   const Player({Key? key}) : super(key: key);
 
   @override
-  Widget buildWithGame(BuildContext context, GameProvider gameProvider) =>
+  Widget buildWithGame(
+          BuildContext context, WidgetRef ref, GameProvider gameProvider) =>
       const GameNavigator(
         connected: CreateOrJoinWidget(),
         lobby: LobbyWidget(),
@@ -74,12 +75,13 @@ class CreateOrJoinWidget extends GameHookWidget {
   const CreateOrJoinWidget({Key? key}) : super(key: key);
 
   @override
-  Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
+  Widget buildWithGame(
+      BuildContext context, WidgetRef ref, GameProvider gameProvider) {
     final playerID = gameProvider.playerID;
-    final code = gameProvider.useGameCode;
+    final code = ref.watch(gameProvider.gameCodeProvider).state;
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
-    final _ = gameProvider.useGameClient;
-    final allGames = gameProvider.useGameInfos;
+    final gameClient = ref.watch(gameProvider.gameServerClientProvider);
+    final allGames = ref.watch(gameProvider.gamesProvider);
 
     return Scaffold(
       body: Center(
@@ -92,7 +94,7 @@ class CreateOrJoinWidget extends GameHookWidget {
               ElevatedButton(
                 key: Key('Create Game Button $playerID'),
                 onPressed: () async {
-                  final id = await context.gameClient.createGame(
+                  final id = await gameClient.createGame(
                     config: const GameConfig(
                       adminId: P1,
                       customNames: false,
@@ -101,7 +103,7 @@ class CreateOrJoinWidget extends GameHookWidget {
                       maxPlayers: 2,
                     ),
                   );
-                  await context.gameClient.register(code: id);
+                  await gameClient.register(code: id);
                 },
                 child: const Text('Create Game'),
               ),
@@ -113,12 +115,12 @@ class CreateOrJoinWidget extends GameHookWidget {
                   textAlignVertical: TextAlignVertical.center,
                   decoration:
                       const InputDecoration(hintText: 'Enter Game Code'),
-                  onChanged: (text) => context.gameCode = text,
+                  onChanged: (text) => ref.gameCode = text,
                 ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () => context.gameClient.register(code: code),
+                onPressed: () => ref.gameClient.register(code: code),
                 child: const Text('Join Game'),
               )
             ],
@@ -135,8 +137,9 @@ class CreateOrJoinWidget extends GameHookWidget {
 class LobbyWidget extends GameHookWidget {
   const LobbyWidget({Key? key}) : super(key: key);
   @override
-  Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
-    final lobby = gameProvider.useLobbyInfo;
+  Widget buildWithGame(
+      BuildContext context, WidgetRef ref, GameProvider gameProvider) {
+    final lobby = ref.watch(gameProvider.gameLobbyProvider);
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -153,10 +156,14 @@ class LobbyWidget extends GameHookWidget {
 class GameWidget extends GameHookWidget {
   const GameWidget({Key? key}) : super(key: key);
   @override
-  Widget buildWithGame(BuildContext context, GameProvider gameProvider) {
-    final gameState = gameProvider.useGameState as TicTacToeGame;
-    final gameStatus = gameProvider.useGameStatus;
-    final gameError = gameProvider.useGameError;
+  Widget buildWithGame(
+      BuildContext context, WidgetRef ref, GameProvider gameProvider) {
+    final gameState =
+        ref.watch(gameProvider.gameStateProvider) as TicTacToeGame;
+    final gameStatus = ref.watch(gameProvider.gameStatusProvider).state;
+    ref.listen(gameProvider.gameErrorProvider, (error) {
+      showDialog(context: context, builder: (c) => Text(error.toString()));
+    });
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -171,7 +178,7 @@ class GameWidget extends GameHookWidget {
                   for (final c in [0, 1, 2])
                     GestureDetector(
                       key: Key('${gameProvider.playerID} square $r $c'),
-                      onTap: () => context.gameClient.sendEvent(
+                      onTap: () => ref.gameClient.sendEvent(
                         TicTacToeGameEvent(gameProvider.playerID, r * 3 + c),
                       ),
                       child: ColoredBox(
@@ -196,12 +203,10 @@ class GameWidget extends GameHookWidget {
                 !gameState.readyPlayers.contains(gameProvider.playerID)) ...[
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () => context.gameClient.newRound(),
+                onPressed: () => ref.gameClient.newRound(),
                 child: const Text('Next Round'),
               ),
             ],
-            const SizedBox(height: 20),
-            Text('$gameError'),
           ],
         ),
       ),

@@ -15,7 +15,7 @@ dependencies:
   freezed_annotation: ^0.14.1
   json_annotation: ^4.0.0
   logging: ^1.0.1
-  riverpod: ^0.14.0+1
+  riverpod: ^1.0.0-dev.1
   socket_io: ^1.0.0
   socket_io_client: ^1.0.0
   stream: ^3.0.0
