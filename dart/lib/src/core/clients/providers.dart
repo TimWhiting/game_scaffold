@@ -109,7 +109,7 @@ class GameProvider {
   late final Provider<ServerClient> serverClientProvider =
       Provider(_serverClientImpl);
 
-  ServerClient _serverClientImpl(ProviderRef ref) {
+  ServerClient _serverClientImpl(ProviderRef<ServerClient> ref) {
     final location = ref.watch(gameLocationProvider).state;
     final address = ref.watch(selectedAddress).state;
     if (location == IOServerLocation && address == defaultAddress) {
@@ -117,10 +117,11 @@ class GameProvider {
           'Please set the address for the remote server before connecting a game server client');
     }
     final client = ServerClient.fromParams(
-        location: location,
-        read: ref.read,
-        address: address,
-        playerID: playerID);
+      location: location,
+      ref: ref,
+      address: address,
+      playerID: playerID,
+    );
 
     ref.onDispose(client.dispose);
     return client;
@@ -132,7 +133,7 @@ class GameProvider {
 
   GameServerClient _gameServerClientImpl(ProviderRef ref) {
     final client = GameServerClient(
-      ref.read,
+      ref,
       ref.watch(gameClientProvider),
       ref.watch(serverClientProvider),
     );
@@ -143,7 +144,7 @@ class GameProvider {
   late final Provider<GameClient> gameClientProvider =
       Provider(_gameClientImpl);
 
-  GameClient _gameClientImpl(ProviderRef ref) {
+  GameClient _gameClientImpl(ProviderRef<GameClient> ref) {
     final location = ref.watch(gameLocationProvider).state;
     final address = ref.watch(selectedAddress).state;
     if (location == IOServerLocation && address == defaultAddress) {
@@ -152,7 +153,7 @@ class GameProvider {
     }
     final client = GameClient.fromParams(
       location: location,
-      read: ref.read,
+      ref: ref,
       address: address,
       playerID: playerID,
     );
@@ -167,9 +168,9 @@ class GameProvider {
 /// Provides the player id for a particular section of the widget tree
 ///
 /// This is so that a multiplayer game within the same app can be played
-final playerIDProvider = ScopedProvider<PlayerID>((ref) => '');
+final playerIDProvider = Provider<PlayerID>((ref) => '');
 
-extension ReaderGameX on ScopedReader {
+extension ReaderGameX on Reader {
   GameReader get game =>
       GameReader(this, this(playerGameProvider(this(playerIDProvider))));
 }
@@ -178,7 +179,7 @@ class GameReader {
   GameReader(this.read, this.game);
   final Reader read;
   final GameProvider game;
-  T call<T>(RootProvider<T> provider) => read(provider);
+  T call<T>(ProviderBase<T> provider) => read(provider);
 }
 
 extension GameReaderX on Reader {

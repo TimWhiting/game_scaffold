@@ -8,8 +8,9 @@ import '../clients.dart';
 ///
 /// Warning implementation not complete or tested yet
 class NoServerClient extends ServerClient {
-  NoServerClient({required Reader read, required PlayerID playerID})
-      : super(read, playerID);
+  NoServerClient(
+      {required ProviderRef<ServerClient> ref, required PlayerID playerID})
+      : super(ref, playerID);
   static final games = <GameCode, LocalGame>{};
   BackendGameReader get backend => read.backendGame(game.gameCode);
   @override
@@ -50,7 +51,7 @@ class NoServerClient extends ServerClient {
   static void registerImplementation() {
     ServerClient.registerImplementation(
       OnDeviceLocation,
-      (read, address, id) => NoServerClient(read: read, playerID: id),
+      (ref, address, id) => NoServerClient(ref: ref, playerID: id),
     );
   }
 }

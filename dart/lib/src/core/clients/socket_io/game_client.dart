@@ -13,8 +13,10 @@ import 'channels.dart';
 /// The socket IO implementation of [GameClient]
 class IOGameClient extends GameClient {
   IOGameClient(
-      {required Reader read, required this.address, required PlayerID playerID})
-      : super(playerID, read) {
+      {required ProviderRef<GameClient> ref,
+      required this.address,
+      required PlayerID playerID})
+      : super(playerID, ref) {
     Future.delayed(const Duration(milliseconds: 100), _ensureConnected);
   }
   final GameAddress address;
@@ -102,8 +104,8 @@ class IOGameClient extends GameClient {
   static void registerImplementation() {
     GameClient.registerImplementation(
       IOServerLocation,
-      (read, address, id) =>
-          IOGameClient(address: address, read: read, playerID: id),
+      (ref, address, id) =>
+          IOGameClient(address: address, ref: ref, playerID: id),
     );
   }
 }

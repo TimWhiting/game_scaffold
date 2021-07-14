@@ -9,8 +9,9 @@ import '../core.dart';
 
 /// A client for a particular game identified by [gameCode]
 abstract class GameClient {
-  GameClient(this.playerID, this.read)
-      : logger = Logger('GameClient $playerID');
+  GameClient(this.playerID, this.ref)
+      : logger = Logger('GameClient $playerID'),
+        read = ref.read;
 
   /// The client's [playerID]
   final PlayerID playerID;
@@ -19,6 +20,7 @@ abstract class GameClient {
   GameCode get gameCode => read.gameFor(playerID).gameCode;
   final Logger logger;
 
+  final ProviderRef<GameClient> ref;
   final Reader read;
   GameReader get game => read.gameFor(playerID);
 
@@ -55,19 +57,21 @@ abstract class GameClient {
   /// Registers a [GameClient] implementation for the given [location]
   static void registerImplementation<T extends GameClient>(
     ServerLocation location,
-    T Function(Reader read, GameAddress address, PlayerID playerID) impl,
+    T Function(
+            ProviderRef<GameClient> ref, GameAddress address, PlayerID playerID)
+        impl,
   ) {
     _clientImplementations[location] = impl;
   }
 
   static final Map<ServerLocation,
-          GameClient Function(Reader, GameAddress, PlayerID)>
+          GameClient Function(ProviderRef<GameClient>, GameAddress, PlayerID)>
       _clientImplementations = {};
 
   /// Creates a [GameClient] with the parameters specified
   static GameClient fromParams({
     required ServerLocation location,
-    required Reader read,
+    required ProviderRef<GameClient> ref,
     required GameAddress address,
     required PlayerID playerID,
   }) {
@@ -76,7 +80,7 @@ abstract class GameClient {
       throw UnimplementedError(
           'No ServerClient implementation for $location defined');
     }
-    return impl(read, address, playerID);
+    return impl(ref, address, playerID);
   }
 
   final StreamController<Game> gameStreamController =

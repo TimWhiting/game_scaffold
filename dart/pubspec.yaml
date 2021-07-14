@@ -11,7 +11,7 @@ dependencies:
   characters: ^1.1.0
   collection: ^1.15.0
   enum_to_string: ^2.0.1
-  fast_immutable_collections: ^5.0.0-dev.9
+  fast_immutable_collections: ^5.0.5
   freezed_annotation: ^0.14.1
   json_annotation: ^4.0.0
   logging: ^1.0.1

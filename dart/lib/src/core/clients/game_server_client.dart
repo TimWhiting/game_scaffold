@@ -6,7 +6,7 @@ import '../core.dart';
 /// The GameServerClient interface
 class GameServerClient {
   /// The GameServerClient interface
-  GameServerClient(this.read, this._gClient, this._sClient);
+  GameServerClient(this.ref, this._gClient, this._sClient) : read = ref.read;
 
   final GameClient _gClient;
   final ServerClient _sClient;
@@ -16,6 +16,8 @@ class GameServerClient {
 
   /// The [gameCode] of the game the client has joined
   GameCode get gameCode => _gClient.gameCode;
+
+  ProviderRef ref;
 
   /// The [Reader] for the game
   Reader read;

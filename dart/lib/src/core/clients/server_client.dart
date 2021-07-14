@@ -16,13 +16,15 @@ typedef GameAddress = Uri;
 /// * Get Game Info
 /// * Get List of Games that [playerID] is a part of
 abstract class ServerClient {
-  ServerClient(this.read, this.playerID)
-      : logger = Logger('ServerClient $playerID');
+  ServerClient(this.ref, this.playerID)
+      : logger = Logger('ServerClient $playerID'),
+        read = ref.read;
 
   /// The id of the client
   final PlayerID playerID;
   GameReader get game => read.gameFor(playerID);
 
+  final ProviderRef<ServerClient> ref;
   final Reader read;
   final Logger logger;
 
@@ -41,19 +43,21 @@ abstract class ServerClient {
   /// Registers a particular implementation of [ServerClient] for the given [location]
   static void registerImplementation<T extends ServerClient>(
     ServerLocation location,
-    T Function(Reader, GameAddress, PlayerID) impl,
+    T Function(ProviderRef<ServerClient>, GameAddress, PlayerID) impl,
   ) {
     _clientImplementations[location] = impl;
   }
 
-  static final Map<ServerLocation,
-          ServerClient Function(Reader, GameAddress, PlayerID)>
+  static final Map<
+          ServerLocation,
+          ServerClient Function(
+              ProviderRef<ServerClient>, GameAddress, PlayerID)>
       _clientImplementations = {};
 
   /// Creates a [ServerClient] from the [location] [address] and [playerID]
   static ServerClient fromParams({
     required ServerLocation location,
-    required Reader read,
+    required ProviderRef<ServerClient> ref,
     required GameAddress address,
     required PlayerID playerID,
   }) {
@@ -62,7 +66,7 @@ abstract class ServerClient {
       throw UnimplementedError(
           'No ServerClient implementation for $location defined');
     }
-    return impl(read, address, playerID);
+    return impl(ref, address, playerID);
   }
 
   /// Connects to the backend

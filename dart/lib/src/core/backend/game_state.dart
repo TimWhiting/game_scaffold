@@ -147,7 +147,7 @@ class BackendGameReader {
   final Reader read;
   final BackendProvider game;
 
-  T call<T>(RootProvider<T> provider) => read(provider);
+  T call<T>(ProviderBase<T> provider) => read(provider);
 }
 
 extension BackendReaderX on BackendGameReader {

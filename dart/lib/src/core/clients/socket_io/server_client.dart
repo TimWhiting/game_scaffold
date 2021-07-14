@@ -14,10 +14,10 @@ import 'channels.dart';
 /// The socket IO implementation of [ServerClient]
 class IOServerClient extends ServerClient {
   IOServerClient({
-    required Reader read,
+    required ProviderRef<ServerClient> ref,
     required this.address,
     required PlayerID playerID,
-  }) : super(read, playerID) {
+  }) : super(ref, playerID) {
     Future.delayed(const Duration(milliseconds: 10), connect);
   }
 
@@ -103,8 +103,8 @@ class IOServerClient extends ServerClient {
   static void registerImplementation() {
     ServerClient.registerImplementation(
       IOServerLocation,
-      (read, address, id) =>
-          IOServerClient(read: read, address: address, playerID: id),
+      (ref, address, id) =>
+          IOServerClient(ref: ref, address: address, playerID: id),
     );
   }
 }
