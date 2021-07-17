@@ -140,8 +140,12 @@ class GameServer {
       // just update their client data
       _serverLogger.info('Client $id rejoining');
       _clients[id] = client;
-      _clients[id]
-          ?.emit(IOChannel.gamestate.string, _gameState.gameState.toJson());
+      if (_started) {
+        _clients[id]
+            ?.emit(IOChannel.gamestate.string, _gameState.gameState.toJson());
+      } else {
+        _clients[id]?.emit(IOChannel.lobby.string, gameInfo(id).toJson());
+      }
 
       _clients[id]?.emit(IOChannel.name.string, _clientNames[id]);
       return;

@@ -79,6 +79,7 @@ class GameNavigator extends GameHookWidget {
             status == GameStatus.Started ||
             status == GameStatus.NotStarted) {
           ref.gameClient.exitGame();
+          ref.gameInfoNotifier.refresh();
           route.didPop(null);
           return true;
         } else if (status == GameStatus.NotJoined) {

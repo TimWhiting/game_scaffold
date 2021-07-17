@@ -43,14 +43,18 @@ class TicTacToeWidget extends StatelessWidget {
         body: Row(children: [
           Expanded(
             child: ProviderScope(
-              overrides: [playerIDProvider.overrideAs((watch) => P1)],
+              overrides: [
+                playerIDProvider.overrideWithProvider(Provider((watch) => P1))
+              ],
               child: const Player(),
             ),
           ),
           Container(width: 10, color: Colors.black),
           Expanded(
             child: ProviderScope(
-              overrides: [playerIDProvider.overrideAs((watch) => P2)],
+              overrides: [
+                playerIDProvider.overrideWithProvider(Provider((watch) => P2))
+              ],
               child: const Player(),
             ),
           ),
@@ -126,7 +130,13 @@ class CreateOrJoinWidget extends GameHookWidget {
             ],
             if (allGames.hasData)
               for (final info in allGames.value)
-                Text('Started Game: ${info.gameId}, Players: ${info.players}'),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.gameClient.register(code: info.gameId);
+                  },
+                  child: Text(
+                      'Started Game: ${info.gameId}, Players: ${info.players}'),
+                ),
           ],
         ),
       ),
@@ -158,56 +168,66 @@ class GameWidget extends GameHookWidget {
   @override
   Widget buildWithGame(
       BuildContext context, WidgetRef ref, GameProvider gameProvider) {
-    final gameState =
-        ref.watch(gameProvider.gameStateProvider) as TicTacToeGame;
+    final gameState = ref.gameState;
     final gameStatus = ref.watch(gameProvider.gameStatusProvider).state;
     ref.listen(gameProvider.gameErrorProvider, (error) {
-      showDialog(context: context, builder: (c) => Text(error.toString()));
+      showDialog(
+        context: context,
+        builder: (c) => Dialog(
+          backgroundColor: Colors.white,
+          child: Text(error.toString()),
+        ),
+      );
     });
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Column(
-          children: [
-            Text('$gameState'),
-            const SizedBox(height: 20),
-            for (final r in [0, 1, 2])
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (final c in [0, 1, 2])
-                    GestureDetector(
-                      key: Key('${gameProvider.playerID} square $r $c'),
-                      onTap: () => ref.gameClient.sendEvent(
-                        TicTacToeGameEvent(gameProvider.playerID, r * 3 + c),
-                      ),
-                      child: ColoredBox(
-                        color: Colors.black,
-                        child: Container(
-                          width: 20,
-                          height: 20,
-                          color: Colors.white,
-                          margin: const EdgeInsets.all(1),
-                          child: Center(
-                            child: Text(
-                              gameState.board
-                                  .xOrO(gameProvider.playerID, r * 3 + c),
+    return gameState.when(
+      error: (e, st) => Text('$e, $st'),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      data: (g) => Scaffold(
+        appBar: AppBar(),
+        body: Center(
+          child: Column(
+            children: [
+              Text('$gameState'),
+              const SizedBox(height: 20),
+              for (final r in [0, 1, 2])
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (final c in [0, 1, 2])
+                      GestureDetector(
+                        key: Key('${gameProvider.playerID} square $r $c'),
+                        onTap: () => ref.gameClient.sendEvent(
+                          TicTacToeGameEvent(gameProvider.playerID, r * 3 + c),
+                        ),
+                        child: ColoredBox(
+                          color: Colors.black,
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            color: Colors.white,
+                            margin: const EdgeInsets.all(1),
+                            child: Center(
+                              child: Text(
+                                (g as TicTacToeGame)
+                                    .board
+                                    .xOrO(gameProvider.playerID, r * 3 + c),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                ],
-              ),
-            if (gameStatus == GameStatus.BetweenRounds &&
-                !gameState.readyPlayers.contains(gameProvider.playerID)) ...[
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => ref.gameClient.newRound(),
-                child: const Text('Next Round'),
-              ),
+                  ],
+                ),
+              if (gameStatus == GameStatus.BetweenRounds &&
+                  !g.readyPlayers.contains(gameProvider.playerID)) ...[
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => ref.gameClient.newRound(),
+                  child: const Text('Next Round'),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

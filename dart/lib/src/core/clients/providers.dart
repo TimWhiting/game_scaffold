@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
@@ -217,6 +219,8 @@ extension GameReaderGameX on GameReader {
   /// Server information
   AsyncValue<GameInfo> get lobbyInfo => this(game.gameLobbyProvider);
   LoadingFuture<IList<GameInfo>> get gameInfos => this(game.gamesProvider);
+  LastOrLoadingStateNotifier<IList<GameInfo>> get gameInfoNotifier =>
+      this(game.gamesProvider.notifier);
 
   /// Game setup information
   GameConfig get gameConfig => this(game.gameConfigProvider).state;
@@ -246,7 +250,7 @@ final singleConfigProvider =
 class LastOrLoadingStateNotifier<T> extends StateNotifier<LoadingFuture<T>> {
   LastOrLoadingStateNotifier(this._creator)
       : super(const LoadingFuture.loading()) {
-    refresh();
+    scheduleMicrotask(refresh);
   }
   final Future<T> Function() _creator;
   Future<T> refresh() async {

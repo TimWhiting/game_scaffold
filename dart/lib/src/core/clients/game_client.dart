@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
-
+import 'package:rxdart/rxdart.dart';
 import '../../../game_scaffold_dart.dart';
 import '../core.dart';
 
@@ -83,12 +83,10 @@ abstract class GameClient {
     return impl(ref, address, playerID);
   }
 
-  final StreamController<Game> gameStreamController =
-      StreamController.broadcast();
+  final BehaviorSubject<Game> gameStreamController = BehaviorSubject();
   Stream<Game> gameStream() => gameStreamController.stream;
 
-  final StreamController<GameInfo> lobbyStreamController =
-      StreamController.broadcast();
+  final BehaviorSubject<GameInfo> lobbyStreamController = BehaviorSubject();
   Stream<GameInfo> gameLobby() => lobbyStreamController.stream;
 
   final errorNotifier = GameErrorNotifier();

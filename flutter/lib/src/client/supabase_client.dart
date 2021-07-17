@@ -15,7 +15,8 @@ final supabaseProvider = Provider<SupabaseClient>(
     (ref) => throw UnimplementedError('Please Override Supabase Provider'));
 
 class SupabaseServerClient extends ServerClient {
-  SupabaseServerClient(Reader read, String playerID) : super(read, playerID);
+  SupabaseServerClient(ProviderRef<ServerClient> ref, String playerID)
+      : super(ref, playerID);
   SupabaseClient get _supaClient => read(supabaseProvider);
   SupabaseQueryBuilder get gameDB => _supaClient.from('Game');
   @override
@@ -101,13 +102,14 @@ class SupabaseServerClient extends ServerClient {
   }
 
   static void registerImplementation() {
-    ServerClient.registerImplementation(SupabaseLocation,
-        (reader, address, id) => SupabaseServerClient(reader, id));
+    ServerClient.registerImplementation(
+        SupabaseLocation, (ref, address, id) => SupabaseServerClient(ref, id));
   }
 }
 
 class SupabaseGameClient extends GameClient {
-  SupabaseGameClient(String playerID, Reader read) : super(playerID, read);
+  SupabaseGameClient(String playerID, ProviderRef<GameClient> ref)
+      : super(playerID, ref);
   SupabaseClient get _supaClient => read(supabaseProvider);
   SupabaseQueryBuilder get gameDB => _supaClient.from('Game');
   late RealtimeSubscription _gameSub;

@@ -161,7 +161,7 @@ packages:
       name: fast_immutable_collections
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0-dev.11"
+    version: "5.1.1"
   file:
     dependency: transitive
     description:
@@ -200,9 +200,9 @@ packages:
   game_scaffold_dart:
     dependency: "direct main"
     description:
-      name: game_scaffold_dart
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../dart"
+      relative: true
+    source: path
     version: "0.3.4"
   glob:
     dependency: transitive
@@ -350,7 +350,14 @@ packages:
       name: riverpod
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.0+3"
+    version: "1.0.0-dev.6"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.27.1"
   shelf:
     dependency: transitive
     description:
@@ -492,4 +499,4 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.13.0-0 <3.0.0"
+  dart: ">=2.13.0 <3.0.0"

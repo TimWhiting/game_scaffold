@@ -67,12 +67,13 @@ class IOServerClient extends ServerClient {
   /// Connects to the backend
   @override
   Future<void> connect() async {
+    final completer = Completer<void>();
     scheduleMicrotask(() async {
       logger.info('Connecting, old uri was: ${socket?.io.uri}');
       if ((socket?.connected ?? true) ||
           Uri.parse(socket?.io.uri ?? '') != address) {
         socket?.dispose();
-        socket = IO.io(address, socketIOOpts);
+        socket = IO.io(address.toString(), socketIOOpts);
         socket!.on(IOChannel.connection.string,
             (_) => game.gameStatus = GameStatus.NotJoined);
         socket!.on(IOChannel.disconnect.string,
@@ -87,8 +88,11 @@ class IOServerClient extends ServerClient {
               : GameStatus.NotConnected);
         }
       }
+      completer.complete();
     });
+
     logger.info('Created ServerClient');
+    return completer.future;
   }
 
   /// Disconnect from the backend
