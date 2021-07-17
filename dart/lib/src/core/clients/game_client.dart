@@ -88,6 +88,4 @@ abstract class GameClient {
 
   final BehaviorSubject<GameInfo> lobbyStreamController = BehaviorSubject();
   Stream<GameInfo> gameLobby() => lobbyStreamController.stream;
-
-  final errorNotifier = GameErrorNotifier();
 }

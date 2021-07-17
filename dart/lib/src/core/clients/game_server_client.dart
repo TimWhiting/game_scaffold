@@ -94,6 +94,4 @@ class GameServerClient {
   Stream<Game> gameStream() => _gClient.gameStream();
 
   Stream<GameInfo> gameLobby() => _gClient.gameLobby();
-
-  GameErrorNotifier get errorNotifier => _gClient.errorNotifier;
 }

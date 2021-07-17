@@ -72,11 +72,8 @@ class GameProvider {
 
   /// Provides the game error for the current game of the client with specified id
   late final gameErrorProvider =
-      StateNotifierProvider<GameErrorNotifier, GameError?>((ref) {
-    final _ = ref.watch(gameCodeProvider); // Invalidate on change of gameCode
-    final client = ref.watch(gameServerClientProvider);
-    return client.errorNotifier;
-  });
+      StateNotifierProvider<GameErrorNotifier, GameError?>(
+          (ref) => GameErrorNotifier());
 
   /// Provides the game status for the current game of the client with specified id
   late final StateProvider<GameStatus> gameStatusProvider =
@@ -233,6 +230,7 @@ extension GameReaderGameX on GameReader {
   AsyncValue<Game> get gameState => this(game.gameStateProvider);
   Game get lastGameState => gameState.data!.value;
   GameError? get gameError => this(game.gameErrorProvider);
+  GameErrorNotifier get errorNotifier => this(game.gameErrorProvider.notifier);
   GameStatus get gameStatus => this(game.gameStatusProvider).state;
   set gameStatus(GameStatus status) =>
       this(game.gameStatusProvider).state = status;
@@ -240,7 +238,7 @@ extension GameReaderGameX on GameReader {
   String get gameName => this(game.gameNameProvider);
   String get playerName => this(game.playerNameProvider).state;
   set playerName(String name) => this(game.playerNameProvider).state = name;
-  void clearError() => gameClient.errorNotifier.clearError();
+  void clearError() => this(game.gameErrorProvider.notifier).clearError();
 }
 
 /// Allows one config to write all players' configs

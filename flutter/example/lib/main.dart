@@ -62,30 +62,27 @@ class TicTacToeWidget extends StatelessWidget {
       ));
 }
 
-class Player extends GameHookWidget {
+class Player extends HookConsumerWidget {
   const Player({Key? key}) : super(key: key);
 
   @override
-  Widget buildWithGame(
-          BuildContext context, WidgetRef ref, GameProvider gameProvider) =>
-      const GameNavigator(
+  Widget build(BuildContext context, WidgetRef ref) => const GameNavigator(
         connected: CreateOrJoinWidget(),
         lobby: LobbyWidget(),
         game: GameWidget(),
       );
 }
 
-class CreateOrJoinWidget extends GameHookWidget {
+class CreateOrJoinWidget extends HookConsumerWidget {
   const CreateOrJoinWidget({Key? key}) : super(key: key);
 
   @override
-  Widget buildWithGame(
-      BuildContext context, WidgetRef ref, GameProvider gameProvider) {
-    final playerID = gameProvider.playerID;
-    final code = ref.watch(gameProvider.gameCodeProvider).state;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playerID = ref.playerID;
+    final code = ref.gameCode;
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
-    final gameClient = ref.watch(gameProvider.gameServerClientProvider);
-    final allGames = ref.watch(gameProvider.gamesProvider);
+    final gameClient = ref.gameClient;
+    final allGames = ref.gameInfos;
 
     return Scaffold(
       body: Center(
@@ -144,12 +141,11 @@ class CreateOrJoinWidget extends GameHookWidget {
   }
 }
 
-class LobbyWidget extends GameHookWidget {
+class LobbyWidget extends HookConsumerWidget {
   const LobbyWidget({Key? key}) : super(key: key);
   @override
-  Widget buildWithGame(
-      BuildContext context, WidgetRef ref, GameProvider gameProvider) {
-    final lobby = ref.watch(gameProvider.gameLobbyProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lobby = ref.watch(ref.gameProvider.gameLobbyProvider);
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -163,14 +159,13 @@ class LobbyWidget extends GameHookWidget {
   }
 }
 
-class GameWidget extends GameHookWidget {
+class GameWidget extends HookConsumerWidget {
   const GameWidget({Key? key}) : super(key: key);
   @override
-  Widget buildWithGame(
-      BuildContext context, WidgetRef ref, GameProvider gameProvider) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.gameState;
-    final gameStatus = ref.watch(gameProvider.gameStatusProvider).state;
-    ref.listen(gameProvider.gameErrorProvider, (error) {
+    final gameStatus = ref.gameStatus;
+    ref.listen(ref.gameProvider.gameErrorProvider, (error) {
       showDialog(
         context: context,
         builder: (c) => Dialog(
@@ -195,9 +190,9 @@ class GameWidget extends GameHookWidget {
                   children: [
                     for (final c in [0, 1, 2])
                       GestureDetector(
-                        key: Key('${gameProvider.playerID} square $r $c'),
+                        key: Key('${ref.playerID} square $r $c'),
                         onTap: () => ref.gameClient.sendEvent(
-                          TicTacToeGameEvent(gameProvider.playerID, r * 3 + c),
+                          TicTacToeGameEvent(ref.playerID, r * 3 + c),
                         ),
                         child: ColoredBox(
                           color: Colors.black,
@@ -210,7 +205,7 @@ class GameWidget extends GameHookWidget {
                               child: Text(
                                 (g as TicTacToeGame)
                                     .board
-                                    .xOrO(gameProvider.playerID, r * 3 + c),
+                                    .xOrO(ref.playerID, r * 3 + c),
                               ),
                             ),
                           ),
@@ -219,7 +214,7 @@ class GameWidget extends GameHookWidget {
                   ],
                 ),
               if (gameStatus == GameStatus.BetweenRounds &&
-                  !g.readyPlayers.contains(gameProvider.playerID)) ...[
+                  !g.readyPlayers.contains(ref.playerID)) ...[
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () => ref.gameClient.newRound(),

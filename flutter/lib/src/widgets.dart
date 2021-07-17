@@ -5,23 +5,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'state_hooks.dart';
 
-abstract class GameHookWidget extends HookConsumerWidget {
-  const GameHookWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final playerID = ref.watch(playerIDProvider);
-    final gameProvider = ref.watch(playerGameProvider(playerID));
-    return buildWithGame(context, ref, gameProvider);
-  }
-
-  Widget buildWithGame(
-      BuildContext context, WidgetRef ref, GameProvider gameProvider);
-}
-
 final navigationLogger = Logger('GameNavigator');
 
-class GameNavigator extends GameHookWidget {
+class GameNavigator extends HookConsumerWidget {
   const GameNavigator({
     required this.connected,
     required this.lobby,
@@ -42,12 +28,10 @@ class GameNavigator extends GameHookWidget {
   final Widget gameOver;
 
   @override
-  Widget buildWithGame(
-      BuildContext context, WidgetRef ref, GameProvider gameProvider) {
-    final gameStatus = ref.watch(gameProvider.gameStatusProvider).state;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gameStatus = ref.gameStatus;
     final pages = {GameStatus.NotConnected: disconnected};
-    navigationLogger
-        .info('PlayerID: ${gameProvider.playerID} gameStatus: $gameStatus');
+    navigationLogger.info('PlayerID: ${ref.playerID} gameStatus: $gameStatus');
 
     if (gameStatus != GameStatus.NotConnected) {
       pages[GameStatus.NotJoined] = connected;

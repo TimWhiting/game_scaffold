@@ -78,7 +78,7 @@ class IOGameClient extends GameClient {
     _socket!.on(IOChannel.error_channel.string, (data) {
       final error = GameError.fromJson(data as Map<String, dynamic>);
       logger.warning('Error: $error');
-      errorNotifier.error = error;
+      game.errorNotifier.error = error;
     });
     // ignore: unnecessary_lambdas
     _socket!

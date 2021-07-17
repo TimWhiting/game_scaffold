@@ -55,19 +55,19 @@ class NoServerGameClient extends GameClient {
       gameStreamController.add(gameState);
       game.gameStatus = gameState.gameStatus;
     }, onError: (e) {
-      errorNotifier.error = GameError(e as String, playerID);
+      game.errorNotifier.error = GameError(e as String, playerID);
     });
 
     _se = backend.errorNotifier.stream.listen((gameError) {
       if (gameError == null || gameError.person == playerID) {
-        errorNotifier.error = gameError;
+        game.errorNotifier.error = gameError;
       }
     });
     final initialState = backend.gameNotifier.gameState;
     gameStreamController.add(initialState);
     game.gameStatus = initialState.gameStatus;
     final error = backend.gameError;
-    errorNotifier.error = error;
+    game.errorNotifier.error = error;
   }
 
   @override
