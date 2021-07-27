@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
-// ignore: import_of_legacy_library_into_null_safe, library_prefixes
+
+// ignore: library_prefixes
 import 'package:socket_io/socket_io.dart' as IO;
+// ignore: implementation_imports, library_prefixes
+import 'package:socket_io/src/namespace.dart' as IO;
 
 import '../../core.dart';
 import '../../core/backend.dart';
@@ -60,7 +63,7 @@ class GameServer {
   final _clients = <PlayerID, IO.Socket?>{};
   final _clientNames = <PlayerID, String>{};
   // ignore: prefer_typing_uninitialized_variables
-  final _socket;
+  final IO.Namespace _socket;
 
   /// The callback to call when the game ends
   final void Function(GameCode) _onGameOver;
@@ -223,7 +226,6 @@ class GameServer {
     for (final client in [..._clients.values]) {
       client?.disconnect();
     }
-    // ignore: avoid_dynamic_calls
     _socket.clearListeners();
     for (final c in _clients.keys) {
       mainServer.removeClientFromGame(c, _gameId);

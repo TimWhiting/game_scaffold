@@ -126,7 +126,7 @@ class IOServer {
   Future<void> _deleteGame(IO.Socket client, GameCode id) async {
     logger.info('Deleting game $id');
     servers[id]!.notifyKilled(client);
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     servers[id]!.killGame();
   }
 
