@@ -27,25 +27,40 @@ Future<void> main() async {
     assert(ioServer.servers[gameCode]!.playerNames.length == 1,
         'One Player Joined');
     assert(
-        read.gameFor(P1).gameState.data?.value.gameStatus == GameStatus.Started,
+        read.gameFor(P1).gameState.asData?.value.gameStatus ==
+            GameStatus.Started,
         'Game is Started');
   });
   assert(1 == 1, 'Success');
   print('Success!');
 }
 
-Future<void> test(String testName, Future<void> Function(Reader) testFn) async {
+Future<void> test(
+    String testName, Future<void> Function(Readers) testFn) async {
   print('########## Started Test $testName #########');
-  final read = ProviderContainer().read;
-  read.address = Uri.parse('http://127.0.0.1:$defaultGamePort');
-  var serverClient = read.gameFor(P1).gameClient;
+  final root = ProviderContainer();
+  final readers = Readers({
+    P1: ProviderContainer(
+        parent: root, overrides: [playerIDProvider.overrideWithValue(P1)]).read,
+    P2: ProviderContainer(
+        parent: root, overrides: [playerIDProvider.overrideWithValue(P2)]).read
+  });
+  root.read.address = Uri.parse('http://127.0.0.1:$defaultGamePort');
+  var serverClient = readers.gameFor(P1).gameClient;
   const config = GameConfig(adminId: P1, gameType: 'tictactoe');
-  read.gameFor(P1).gameConfig = config;
+  readers.gameFor(P1).gameConfig = config;
   final code = await serverClient.createGame();
   await Future.delayed(const Duration(milliseconds: 100));
-  await testFn(read);
-  serverClient = read.gameFor(P1).gameClient;
+  await testFn(readers);
+  serverClient = readers.gameFor(P1).gameClient;
   final deleted = await serverClient.deleteGame();
   print(
       '########## Finished Test $testName GameCode: $code, deleted: $deleted ##########');
+}
+
+class Readers {
+  const Readers(this._readers);
+  final Map<String, dynamic> _readers;
+
+  Reader gameFor(String player) => _readers[player] as Reader;
 }
