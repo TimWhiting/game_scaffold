@@ -21,7 +21,7 @@ class SupabaseServerClient extends ServerClient {
   SupabaseQueryBuilder get gameDB => _supaClient.from('Game');
   @override
   Future<void> createGame() async {
-    final config = game.gameConfig.copyWith(adminId: playerID);
+    final config = read.gameConfig.copyWith(adminId: playerID);
 
     final response = await gameDB.insert({
       'id': generateGameID([]),
@@ -35,13 +35,13 @@ class SupabaseServerClient extends ServerClient {
     }
     // ignore: avoid_dynamic_calls
     final code = response.data[0]['id'];
-    game.gameCode = code as String;
+    read.gameCode = code as String;
     _supaLogger.info('GameCode: $code');
   }
 
   @override
   Future<bool> deleteGame() async {
-    final response = await gameDB.delete().eq('id', game.gameCode).execute();
+    final response = await gameDB.delete().eq('id', read.gameCode).execute();
     if (response.error != null) {
       _supaLogger
           .severe('In delete game Supabase Error ${response.error?.message}');
@@ -150,16 +150,16 @@ class SupabaseGameClient extends GameClient {
         _supaLogger.info('Player $playerID Rejoining');
         return true;
       }
-      final newPlayers = oldPlayers.lock
-          .add(Player(playerID, name: read.gameFor(playerID).playerName));
+      final newPlayers =
+          oldPlayers.lock.add(Player(playerID, name: read.playerName));
       if (newPlayers.length == gameConfig.maxPlayers) {
         _supaLogger.info('Max Limit');
 
         result = await gameDB
             .update({
               'players': newPlayers,
-              'state': Game.getInitialState(gameConfig, newPlayers,
-                  BackendGameReader(read, BackendProvider(read, gameCode)))
+              'state': Game.getInitialState(
+                  gameConfig, newPlayers, BackendReader(read))
             })
             .eq('id', gameCode)
             .execute();

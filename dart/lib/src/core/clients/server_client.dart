@@ -22,7 +22,6 @@ abstract class ServerClient {
 
   /// The id of the client
   final PlayerID playerID;
-  GameReader get game => read.gameFor(playerID);
 
   final ProviderRef<ServerClient> ref;
   final Reader read;

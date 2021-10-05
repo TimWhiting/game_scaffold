@@ -30,7 +30,7 @@ class IOGameClient extends GameClient {
       _socket = IO.io('$address/$gameCode', socketIOOpts);
       logger.info('Created Game Client Socket $gameCode');
       _lastGameCode = gameCode;
-      scheduleMicrotask(() => game.gameStatus = GameStatus.NotJoined);
+      scheduleMicrotask(() => read.gameStatus = GameStatus.NotJoined);
     }
   }
 
@@ -40,7 +40,7 @@ class IOGameClient extends GameClient {
     _socket!.off(IOChannel.gamestate.string);
     _socket!.off(IOChannel.lobby.string);
     logger.info('Exiting game');
-    game.gameStatus = GameStatus.NotJoined;
+    read.gameStatus = GameStatus.NotJoined;
     return true;
   }
 
@@ -48,13 +48,13 @@ class IOGameClient extends GameClient {
   Future<bool> register() async {
     _ensureConnected();
     logger.info('Registering');
-    game.gameStatus = GameStatus.NotJoined;
+    read.gameStatus = GameStatus.NotJoined;
     _watchState();
     final assignedName = await _socket!
-            .call(IOChannel.register, {'name': game.playerName, 'id': playerID})
+            .call(IOChannel.register, {'name': read.playerName, 'id': playerID})
         as String?;
     if (assignedName != null) {
-      game.playerName = assignedName;
+      read.playerName = assignedName;
       return true;
     }
     return false;
@@ -62,7 +62,7 @@ class IOGameClient extends GameClient {
 
   void _onLobby(Map<String, dynamic> lobby) {
     final gameInfo = GameInfo.fromJson(lobby);
-    game.gameStatus = GameStatus.NotStarted;
+    read.gameStatus = GameStatus.NotStarted;
     logger.info('Got Lobby $gameInfo');
     lobbyStreamController.add(gameInfo);
   }
@@ -73,12 +73,12 @@ class IOGameClient extends GameClient {
       final gameState = Game.fromJson(data as Map<String, dynamic>);
       logger.info('Got gamestate $data');
       gameStreamController.add(gameState);
-      game.gameStatus = gameState.gameStatus;
+      read.gameStatus = gameState.gameStatus;
     });
     _socket!.on(IOChannel.error_channel.string, (data) {
       final error = GameError.fromJson(data as Map<String, dynamic>);
       logger.warning('Error: $error');
-      game.errorNotifier.error = error;
+      read.errorNotifier.error = error;
     });
     // ignore: unnecessary_lambdas
     _socket!

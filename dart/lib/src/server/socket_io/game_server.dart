@@ -57,7 +57,7 @@ class GameServer {
   /// Gets the client's name corresponding to [id]
   String? getClientName(PlayerID id) => _clientNames[id];
 
-  final BackendGameReader _read;
+  final BackendReader _read;
   final GameCode _gameId;
   IList<Player> get _players => _read.players;
   final _clients = <PlayerID, IO.Socket?>{};
@@ -256,7 +256,7 @@ class GameServer {
   String _getRandomPlayer() => ((Set.of(nameSets[gameConfig.nameSet]!)
           .difference(_clientNames.values.toSet()))
       .toList()
-        ..shuffle())[0];
+    ..shuffle())[0];
 
   /// Dispose of all resources, and then notify the creator of the Game
   void killGame() {

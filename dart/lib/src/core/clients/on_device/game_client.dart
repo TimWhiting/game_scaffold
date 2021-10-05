@@ -16,21 +16,21 @@ class NoServerGameClient extends GameClient {
       : super(playerID, ref);
   StreamSubscription<Game?>? _ss;
   StreamSubscription<GameError?>? _se;
-  BackendGameReader get backend => read.backendGame(game.gameCode);
+  BackendReader get backend => BackendReader(read);
   static final Map<String, List<void Function()>> _startListening = {};
   @override
   Future<bool> exitGame() async {
-    game.gameStatus = GameStatus.NotJoined;
+    read.gameStatus = GameStatus.NotJoined;
     return true;
   }
 
   IList<Player> get _players => backend.players;
   @override
   Future<bool> register() async {
-    backend.players = _players.add(Player(playerID, name: game.playerName));
-    game.gameStatus = GameStatus.NotJoined;
-    game.playerName = game.playerName == '' ? playerID : game.playerName;
-    game.gameStatus = GameStatus.NotStarted;
+    backend.players = _players.add(Player(playerID, name: read.playerName));
+    read.gameStatus = GameStatus.NotJoined;
+    read.playerName = read.playerName == '' ? playerID : read.playerName;
+    read.gameStatus = GameStatus.NotStarted;
     _startListening.putIfAbsent(gameCode, () => []);
     _startListening[gameCode]!.add(_watchState);
     final config = backend.gameConfig;
@@ -53,21 +53,21 @@ class NoServerGameClient extends GameClient {
     logger.info('Watching backend');
     _ss = backend.gameNotifier.stream.listen((gameState) {
       gameStreamController.add(gameState);
-      game.gameStatus = gameState.gameStatus;
+      read.gameStatus = gameState.gameStatus;
     }, onError: (e) {
-      game.errorNotifier.error = GameError(e as String, playerID);
+      read.errorNotifier.error = GameError(e as String, playerID);
     });
 
     _se = backend.errorNotifier.stream.listen((gameError) {
       if (gameError == null || gameError.person == playerID) {
-        game.errorNotifier.error = gameError;
+        read.errorNotifier.error = gameError;
       }
     });
     final initialState = backend.gameNotifier.gameState;
     gameStreamController.add(initialState);
-    game.gameStatus = initialState.gameStatus;
+    read.gameStatus = initialState.gameStatus;
     final error = backend.gameError;
-    game.errorNotifier.error = error;
+    read.errorNotifier.error = error;
   }
 
   @override

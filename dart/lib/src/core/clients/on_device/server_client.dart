@@ -12,18 +12,18 @@ class NoServerClient extends ServerClient {
       {required ProviderRef<ServerClient> ref, required PlayerID playerID})
       : super(ref, playerID);
   static final games = <GameCode, LocalGame>{};
-  BackendGameReader get backend => read.backendGame(game.gameCode);
+  BackendReader get backend => BackendReader(read);
   @override
   Future<void> createGame() async {
     final gameCode = generateGameID([]);
-    game.gameCode = gameCode;
-    backend.gameConfig = game.gameConfig;
+    read.gameCode = gameCode;
+    backend.gameConfig = read.gameConfig;
     games[gameCode] = LocalGame(gameCode, playerID, backend);
   }
 
   @override
   Future<bool> deleteGame() async {
-    if (games.remove(game.gameCode) != null) {
+    if (games.remove(read.gameCode) != null) {
       return true;
     }
     return false;
@@ -61,5 +61,5 @@ class LocalGame {
   LocalGame(this.gameCode, this.creator, this.read);
   final GameCode gameCode;
   final PlayerID creator;
-  final BackendGameReader read;
+  final BackendReader read;
 }

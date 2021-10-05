@@ -17,12 +17,11 @@ abstract class GameClient {
   final PlayerID playerID;
 
   /// The [gameCode] of the game the client has joined
-  GameCode get gameCode => read.gameFor(playerID).gameCode;
+  GameCode get gameCode => read.gameCode;
   final Logger logger;
 
   final ProviderRef<GameClient> ref;
   final Reader read;
-  GameReader get game => read.gameFor(playerID);
 
   /// Causes the client to exit the game
   Future<bool> exitGame();

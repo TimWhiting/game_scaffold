@@ -22,9 +22,6 @@ class GameServerClient {
   /// The [Reader] for the game
   Reader read;
 
-  /// Gets the game for the [playerID]
-  GameReader get game => read.gameFor(playerID);
-
   /// Causes the client to exit the game
   Future<bool> exitGame() => _gClient.exitGame();
 
@@ -33,7 +30,7 @@ class GameServerClient {
   /// Specifying [code] is just shorthand for updating the `gameCodeProvider`
   Future<bool> register({GameCode? code}) async {
     if (code != null) {
-      read.gameFor(playerID).gameCode = code;
+      read.gameCode = code;
     }
     return _gClient.register();
   }
@@ -62,10 +59,10 @@ class GameServerClient {
   /// Specifying [config] is just a shorthand for updating `gameConfigProvider`
   Future<GameCode> createGame({GameConfig? config}) async {
     if (config != null) {
-      read.gameFor(playerID).gameConfig = config;
+      read.gameConfig = config;
     }
     await _sClient.createGame();
-    return read.gameFor(playerID).gameCode;
+    return read.gameCode;
   }
 
   /// Deletes the game on the server
@@ -73,7 +70,7 @@ class GameServerClient {
   /// Specifying [code] is just shorthand for updating the `gameCodeProvider`
   Future<bool> deleteGame({GameCode? code}) async {
     if (code != null) {
-      read.gameFor(playerID).gameCode = code;
+      read.gameCode = code;
     }
     return _sClient.deleteGame();
   }

@@ -145,7 +145,7 @@ class LobbyWidget extends HookConsumerWidget {
   const LobbyWidget({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lobby = ref.watch(ref.gameProvider.gameLobbyProvider);
+    final lobby = ref.watchLobbyInfo;
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -165,7 +165,7 @@ class GameWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.gameState;
     final gameStatus = ref.gameStatus;
-    ref.listen(ref.gameProvider.gameErrorProvider, (error) {
+    ref.listen(gameErrorProvider, (error) {
       showDialog(
         context: context,
         builder: (c) => Dialog(

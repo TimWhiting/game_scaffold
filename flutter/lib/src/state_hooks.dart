@@ -20,61 +20,46 @@ extension WidgetRefGameScaffoldX on WidgetRef {
       read(gameLocationProvider).state = implementation;
   String get watchClientImplementation => watch(gameLocationProvider).state;
   String get clientImplementation => read(gameLocationProvider).state;
-  GameProvider get gameProvider => read(playerGameProvider(playerID));
-  GameProvider get watchGameProvider =>
-      watch(playerGameProvider(watchPlayerID));
 
   /// Client
-  GameServerClient get watchGameClient =>
-      watch(watchGameProvider.gameServerClientProvider);
-  GameServerClient get gameClient =>
-      read(gameProvider.gameServerClientProvider);
+  GameServerClient get watchGameClient => watch(gameServerClientProvider);
+  GameServerClient get gameClient => read(gameServerClientProvider);
 
   /// Server information
-  AsyncValue<GameInfo> get lobbyInfo => read(gameProvider.gameLobbyProvider);
-  AsyncValue<GameInfo> get watchLobbyInfo =>
-      watch(watchGameProvider.gameLobbyProvider);
+  AsyncValue<GameInfo> get lobbyInfo => read(gameLobbyProvider);
+  AsyncValue<GameInfo> get watchLobbyInfo => watch(gameLobbyProvider);
 
-  LoadingFuture<IList<GameInfo>> get gameInfos =>
-      read(gameProvider.gamesProvider);
-  LoadingFuture<IList<GameInfo>> get watchGameInfos =>
-      watch(watchGameProvider.gamesProvider);
+  LoadingFuture<IList<GameInfo>> get gameInfos => read(gamesProvider);
+  LoadingFuture<IList<GameInfo>> get watchGameInfos => watch(gamesProvider);
   LastOrLoadingStateNotifier<IList<GameInfo>> get watchGameInfoNotifier =>
-      watch(watchGameProvider.gamesProvider.notifier);
+      watch(gamesProvider.notifier);
   LastOrLoadingStateNotifier<IList<GameInfo>> get gameInfoNotifier =>
-      read(gameProvider.gamesProvider.notifier);
+      read(gamesProvider.notifier);
 
   /// Game setup information
-  GameConfig get gameConfig => read(gameProvider.gameConfigProvider).state;
-  GameConfig get watchGameConfig =>
-      watch(watchGameProvider.gameConfigProvider).state;
-  set gameConfig(GameConfig config) =>
-      read(gameProvider.gameConfigProvider).state = config;
-  String get gameCode => read(gameProvider.gameCodeProvider).state;
-  String get watchGameCode => watch(watchGameProvider.gameCodeProvider).state;
-  set gameCode(String code) => read(gameProvider.gameCodeProvider).state = code;
+  GameConfig get gameConfig => read(gameConfigProvider).state;
+  GameConfig get watchGameConfig => watch(gameConfigProvider).state;
+  set gameConfig(GameConfig config) => read(gameConfigProvider).state = config;
+  String get gameCode => read(gameCodeProvider).state;
+  String get watchGameCode => watch(gameCodeProvider).state;
+  set gameCode(String code) => read(gameCodeProvider).state = code;
 
   /// Game information
-  AsyncValue<Game> get gameState => read(gameProvider.gameStateProvider);
-  AsyncValue<Game> get watchGameState =>
-      watch(watchGameProvider.gameStateProvider);
-  Game get game => gameState.data!.value;
-  Game get watchGame => watchGameState.data!.value;
-  GameError? get gameError => read(gameProvider.gameErrorProvider);
-  GameError? get watchGameError => watch(watchGameProvider.gameErrorProvider);
-  GameStatus get gameStatus => read(gameProvider.gameStatusProvider).state;
-  GameStatus get watchGameStatus =>
-      watch(watchGameProvider.gameStatusProvider).state;
+  AsyncValue<Game> get gameState => read(gameStateProvider);
+  AsyncValue<Game> get watchGameState => watch(gameStateProvider);
+  Game get game => gameState.asData!.value;
+  Game get watchGame => watchGameState.asData!.value;
+  GameError? get gameError => read(gameErrorProvider);
+  GameError? get watchGameError => watch(gameErrorProvider);
+  GameStatus get gameStatus => read(gameStatusProvider).state;
+  GameStatus get watchGameStatus => watch(gameStatusProvider).state;
 
-  set gameStatus(GameStatus status) =>
-      read(gameProvider.gameStatusProvider).state = status;
-  bool get gameTurn => read(gameProvider.gameTurnProvider);
-  bool get watchGameTurn => watch(watchGameProvider.gameTurnProvider);
-  String get gameName => read(gameProvider.gameNameProvider);
-  String get watchGameName => watch(watchGameProvider.gameNameProvider);
-  String get playerName => read(gameProvider.playerNameProvider).state;
-  String get watchPlayerName =>
-      watch(watchGameProvider.playerNameProvider).state;
-  set playerName(String name) =>
-      read(gameProvider.playerNameProvider).state = name;
+  set gameStatus(GameStatus status) => read(gameStatusProvider).state = status;
+  bool get gameTurn => read(gameTurnProvider);
+  bool get watchGameTurn => watch(gameTurnProvider);
+  String get gameName => read(gameNameProvider);
+  String get watchGameName => watch(gameNameProvider);
+  String get playerName => read(playerNameProvider).state;
+  String get watchPlayerName => watch(playerNameProvider).state;
+  set playerName(String name) => read(playerNameProvider).state = name;
 }

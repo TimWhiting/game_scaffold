@@ -18,42 +18,39 @@ String get homeDir {
   return Platform.environment['HOME']!;
 }
 
-final agentBackendGame = Provider((ref) => BackendProvider(ref.read, '0000'));
+final backendGameCodeProvider = Provider((ref) => '0000');
 
-final ProviderFamily<BackendProvider, GameCode> backendGamesProvider =
-    Provider.family<BackendProvider, GameCode>(
-        (ref, code) => BackendProvider(ref.read, code));
-
-class BackendProvider {
-  BackendProvider(this.read, this.code);
-
-  /// The game [code] that uniquely identifies the providers in this BackendProvider
-  final GameCode code;
-  final Reader read;
-  late final BackendGameReader backendReader = BackendGameReader(read, this);
-
-  /// Provides the [GameStateNotifier] based on the [GameConfig] from [gameConfigProvider]
-  late final StateNotifierProvider<GameStateNotifier, Game?> gameStateProvider =
-      StateNotifierProvider<GameStateNotifier, Game?>(_gameStateNotifier);
-
-  /// Keeps track of the players involved in the game on the server (or on the client) in the case of a local game
-  final playersProvider = StateProvider<IList<Player>>(
-    (ref) => <Player>[].lock,
-  );
-
-  /// Keeps track
-  final configProvider =
-      StateProvider<GameConfig>((ref) => const GameConfig(gameType: ''));
-
-  /// Provides the [GameErrorNotifier] to keep track of errors of a game
-  final errorProvider = StateNotifierProvider<GameErrorNotifier, GameError?>(
-      (ref) => GameErrorNotifier());
-
-  GameStateNotifier _gameStateNotifier(StateNotifierProviderRef ref) {
+/// Provides the [GameStateNotifier] based on the [GameConfig] from [gameConfigProvider]
+final StateNotifierProvider<GameStateNotifier, Game?> backendGameStateProvider =
+    StateNotifierProvider<GameStateNotifier, Game?>(
+  (ref) {
     final gameConfig = ref.watch(configProvider).state;
-    return GameStateNotifier(gameConfig, backendReader, code);
-  }
-}
+    return GameStateNotifier(
+      gameConfig,
+      BackendReader(ref.read),
+      ref.watch(backendGameCodeProvider),
+    );
+  },
+  dependencies: [backendGameCodeProvider],
+);
+
+/// Keeps track of the players involved in the game on the server (or on the client) in the case of a local game
+final playersProvider = StateProvider<IList<Player>>(
+  (ref) => <Player>[].lock,
+  dependencies: [backendGameCodeProvider],
+);
+
+/// Keeps track
+final configProvider = StateProvider<GameConfig>(
+  (ref) => const GameConfig(gameType: ''),
+  dependencies: [backendGameCodeProvider],
+);
+
+/// Provides the [GameErrorNotifier] to keep track of errors of a game
+final errorProvider = StateNotifierProvider<GameErrorNotifier, GameError?>(
+  (ref) => GameErrorNotifier(),
+  dependencies: [backendGameCodeProvider],
+);
 
 /// A [StateNotifier] that handles events for a particular game, delegating to the game's implementation for non generic events
 class GameStateNotifier<E extends Event, T extends Game<E>>
@@ -62,7 +59,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
       : _gameStateLogger = Logger('GameStateNotifier $code'),
         super(read.initialState as T);
   final Logger _gameStateLogger;
-  final BackendGameReader read;
+  final BackendReader read;
 
   /// The [code] of this game
   final GameCode code;
@@ -135,37 +132,27 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   }
 }
 
-extension BackendReader on Reader {
-  BackendGameReader get agentGame =>
-      BackendGameReader(this, this(agentBackendGame));
-  BackendGameReader backendGame(GameCode code) =>
-      BackendGameReader(this, this(backendGamesProvider(code)));
+class BackendReader {
+  BackendReader(this.reader);
+  final Reader reader;
+  T call<T>(ProviderBase<T> provider) => reader(provider);
 }
 
-class BackendGameReader {
-  BackendGameReader(this.read, this.game);
-  final Reader read;
-  final BackendProvider game;
-
-  T call<T>(ProviderBase<T> provider) => read(provider);
-}
-
-extension BackendReaderX on BackendGameReader {
+extension BackendReaderX on BackendReader {
   /// On the backend gets the list of [Player]s
-  IList<Player> get players => this(game.playersProvider).state;
+  IList<Player> get players => this(playersProvider).state;
 
   /// On the  sets the players to [players]
-  set players(IList<Player> players) =>
-      this(game.playersProvider).state = players;
+  set players(IList<Player> players) => this(playersProvider).state = players;
 
   /// On the  gets the [GameConfig]
-  GameConfig get gameConfig => this(game.configProvider).state;
+  GameConfig get gameConfig => this(configProvider).state;
 
   /// On the  sets the [GameConfig]
-  set gameConfig(GameConfig config) => this(game.configProvider).state = config;
+  set gameConfig(GameConfig config) => this(configProvider).state = config;
 
   /// On the  gets the latest [GameError]
-  GameError? get gameError => this(game.errorProvider);
+  GameError? get gameError => this(errorProvider);
 
   /// On the  sets the [GameError]
   set gameError(GameError? error) => errorNotifier.error = error;
@@ -174,13 +161,13 @@ extension BackendReaderX on BackendGameReader {
   void clearError() => errorNotifier.clearError();
 
   /// On the  gets the error notifier
-  GameErrorNotifier get errorNotifier => this(game.errorProvider.notifier);
+  GameErrorNotifier get errorNotifier => this(errorProvider.notifier);
 
   /// On the  gets the latest [Game] state
-  Game? get gameState => this(game.gameStateProvider);
+  Game? get gameState => this(backendGameStateProvider);
 
   /// On the  gets the [GameStateNotifier]
-  GameStateNotifier get gameNotifier => this(game.gameStateProvider.notifier);
+  GameStateNotifier get gameNotifier => this(backendGameStateProvider.notifier);
 
   /// On the  handles [event]
   bool handleEvent(GameEvent event) => gameNotifier.handleEvent(event);

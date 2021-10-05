@@ -113,11 +113,14 @@ class IOServer {
     logger.fine('Creating game');
     final gameConfig = GameConfig.fromJson(config);
     final gameid = generateGameID(servers.keys.toList());
-    // TODO: Use a Map of BackendGameProvider instead of container.read
-    // See: https://github.com/rrousselGit/river_pod/issues/348
-    container.read.backendGame(gameid).gameConfig = gameConfig;
+    final scopedContainer = ProviderContainer(
+      parent: container,
+      overrides: [backendGameCodeProvider.overrideWithValue(gameid)],
+    );
+    final backendReader = BackendReader(scopedContainer.read);
+    backendReader.gameConfig = gameConfig;
     final server = GameServer(
-        io, this, container.read.backendGame(gameid), gameid, servers.remove,
+        io, this, BackendReader(scopedContainer.read), gameid, servers.remove,
         debug: debug);
     servers[server.gameID] = server;
     client.emit(IOChannel.gamecreated.string, server.gameID);
