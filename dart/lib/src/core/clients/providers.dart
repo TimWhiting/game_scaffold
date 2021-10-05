@@ -216,6 +216,7 @@ extension GameReaderGameX on Reader {
 
   /// Game information
   AsyncValue<Game> get gameState => this(gameStateProvider);
+  Stream<Game> get gameStateStream => this(gameStateProvider.stream);
   Game get lastGameState => gameState.asData!.value;
   GameError? get gameError => this(gameErrorProvider);
   GameErrorNotifier get errorNotifier => this(gameErrorProvider.notifier);
