@@ -21,7 +21,7 @@ class SupabaseServerClient extends ServerClient {
   SupabaseQueryBuilder get gameDB => _supaClient.from('Game');
   @override
   Future<void> createGame() async {
-    final config = read.gameConfig.copyWith(adminId: playerID);
+    final config = read.config.copyWith(adminId: playerID);
 
     final response = await gameDB.insert({
       'id': generateGameID([]),
@@ -35,13 +35,13 @@ class SupabaseServerClient extends ServerClient {
     }
     // ignore: avoid_dynamic_calls
     final code = response.data[0]['id'];
-    read.gameCode = code as String;
+    read.code = code as String;
     _supaLogger.info('GameCode: $code');
   }
 
   @override
   Future<bool> deleteGame() async {
-    final response = await gameDB.delete().eq('id', read.gameCode).execute();
+    final response = await gameDB.delete().eq('id', read.code).execute();
     if (response.error != null) {
       _supaLogger
           .severe('In delete game Supabase Error ${response.error?.message}');

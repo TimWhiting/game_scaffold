@@ -16,24 +16,32 @@ class NoServerGameClient extends GameClient {
       : super(playerID, ref);
   StreamSubscription<Game?>? _ss;
   StreamSubscription<GameError?>? _se;
-  BackendReader get backend => BackendReader(read);
   static final Map<String, List<void Function()>> _startListening = {};
   @override
   Future<bool> exitGame() async {
-    read.gameStatus = GameStatus.NotJoined;
+    gameStatus = GameStatus.NotJoined;
     return true;
   }
 
-  IList<Player> get _players => backend.players;
+  set gameStatus(GameStatus status) {
+    read(GameProviders.status).state = status;
+  }
+
+  GameStatus get gameStatus => read(GameProviders.status).state;
+  IList<Player> get _players => read(BackendProviders.players).state;
   @override
   Future<bool> register() async {
-    backend.players = _players.add(Player(playerID, name: read.playerName));
-    read.gameStatus = GameStatus.NotJoined;
-    read.playerName = read.playerName == '' ? playerID : read.playerName;
-    read.gameStatus = GameStatus.NotStarted;
+    read(BackendProviders.players).state = _players
+        .add(Player(playerID, name: read(GameProviders.playerName).state));
+    gameStatus = GameStatus.NotJoined;
+    read(GameProviders.playerName).state =
+        read(GameProviders.playerName).state == ''
+            ? playerID
+            : read(GameProviders.playerName).state;
+    gameStatus = GameStatus.NotStarted;
     _startListening.putIfAbsent(gameCode, () => []);
     _startListening[gameCode]!.add(_watchState);
-    final config = backend.gameConfig;
+    final config = read(GameProviders.config).state;
     if (_players.length == config.maxPlayers && config.autoStart) {
       await sendEvent(const GenericEvent.start().asGameEvent);
     }
@@ -42,7 +50,7 @@ class NoServerGameClient extends GameClient {
         gameId: gameCode,
         players: _players.map((p) => p.name).toIList(),
         player: pID.name,
-        creator: pID.id == backend.players.first.id,
+        creator: pID.id == read(BackendProviders.players).state.first.id,
         gameType: config.gameType,
       ));
     }
@@ -51,23 +59,24 @@ class NoServerGameClient extends GameClient {
 
   void _watchState() {
     logger.info('Watching backend');
-    _ss = backend.gameNotifier.stream.listen((gameState) {
+    _ss = read(BackendProviders.state.notifier).stream.listen((gameState) {
       gameStreamController.add(gameState);
-      read.gameStatus = gameState.gameStatus;
+      read(GameProviders.status).state = gameState.status;
     }, onError: (e) {
-      read.errorNotifier.error = GameError(e as String, playerID);
+      read(GameProviders.error.notifier).error =
+          GameError(e as String, playerID);
     });
 
-    _se = backend.errorNotifier.stream.listen((gameError) {
+    _se = read(BackendProviders.error.notifier).stream.listen((gameError) {
       if (gameError == null || gameError.person == playerID) {
-        read.errorNotifier.error = gameError;
+        read(GameProviders.error.notifier).error = gameError;
       }
     });
-    final initialState = backend.gameNotifier.gameState;
+    final initialState = read(BackendProviders.state.notifier).gameState;
     gameStreamController.add(initialState);
-    read.gameStatus = initialState.gameStatus;
-    final error = backend.gameError;
-    read.errorNotifier.error = error;
+    read(GameProviders.status).state = initialState.status;
+    final error = read(BackendProviders.error.notifier).error;
+    read(GameProviders.error.notifier).error = error;
   }
 
   @override
@@ -75,7 +84,8 @@ class NoServerGameClient extends GameClient {
     // print('${event.toJson()}');
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
-    final result = backend.handleEvent(event.asGameEvent);
+    final result =
+        read(BackendProviders.state.notifier).handleEvent(event.asGameEvent);
     if (event is GameEventGeneral &&
         event.event is GenericEventStart &&
         _startListening[gameCode] != null) {
@@ -98,7 +108,7 @@ class NoServerGameClient extends GameClient {
 
   static void registerImplementation() {
     GameClient.registerImplementation(
-      OnDeviceLocation,
+      OnDeviceClient,
       (ref, address, id) => NoServerGameClient(ref: ref, playerID: id),
     );
   }

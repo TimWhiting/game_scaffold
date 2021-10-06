@@ -11,4 +11,4 @@ void registerOnDeviceClients() {
 }
 
 /// Location that corresponds to running the game on-device
-const OnDeviceLocation = 'on-device';
+const OnDeviceClient = 'on-device';

@@ -12,18 +12,22 @@ class NoServerClient extends ServerClient {
       {required ProviderRef<ServerClient> ref, required PlayerID playerID})
       : super(ref, playerID);
   static final games = <GameCode, LocalGame>{};
-  BackendReader get backend => BackendReader(read);
   @override
-  Future<void> createGame() async {
+  Future<String> createGame() async {
     final gameCode = generateGameID([]);
-    read.gameCode = gameCode;
-    backend.gameConfig = read.gameConfig;
-    games[gameCode] = LocalGame(gameCode, playerID, backend);
+    read(GameProviders.code).state = gameCode;
+    final backendRead = ProviderContainer(overrides: [
+      GameProviders.code.overrideWithValue(StateController(gameCode))
+    ]).read;
+    backendRead(BackendProviders.config).state =
+        read(GameProviders.config).state;
+    games[gameCode] = LocalGame(gameCode, playerID, backendRead);
+    return gameCode;
   }
 
   @override
   Future<bool> deleteGame() async {
-    if (games.remove(read.gameCode) != null) {
+    if (games.remove(read(GameProviders.code).state) != null) {
       return true;
     }
     return false;
@@ -34,15 +38,23 @@ class NoServerClient extends ServerClient {
 
   @override
   Future<IList<GameInfo>> getGames() async {
-    final gms =
-        games.values.where((g) => g.read.players.any((p) => p.id == playerID));
+    final gms = games.values.where((g) =>
+        g.read(BackendProviders.players).state.any((p) => p.id == playerID));
     return [
       for (final g in gms)
         GameInfo(
           gameId: g.gameCode,
-          player: g.read.players.firstWhere((p) => p.id == playerID).name,
-          players: g.read.players.map((p) => p.name).toIList(),
-          gameType: g.read.gameConfig.gameType,
+          player: g
+              .read(BackendProviders.players)
+              .state
+              .firstWhere((p) => p.id == playerID)
+              .name,
+          players: g
+              .read(BackendProviders.players)
+              .state
+              .map((p) => p.name)
+              .toIList(),
+          gameType: g.read(BackendProviders.config).state.gameType,
           creator: g.creator == playerID,
         )
     ].lock;
@@ -50,16 +62,16 @@ class NoServerClient extends ServerClient {
 
   static void registerImplementation() {
     ServerClient.registerImplementation(
-      OnDeviceLocation,
+      OnDeviceClient,
       (ref, address, id) => NoServerClient(ref: ref, playerID: id),
     );
   }
 }
 
-/// Keeps track of some metadata about a game for an [OnDeviceLocation] game
+/// Keeps track of some metadata about a game for an [OnDeviceClient] game
 class LocalGame {
   LocalGame(this.gameCode, this.creator, this.read);
   final GameCode gameCode;
   final PlayerID creator;
-  final BackendReader read;
+  final Reader read;
 }

@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../backend/game_state.dart';
 import 'core.dart';
@@ -30,7 +31,7 @@ abstract class Game<E extends Event> {
   /// So make the error as informative as possible. This method should return a copy of the state if
   /// undo functionality needs to work. (i.e. the class should be immutable), for high performance you can
   /// make the changes and just return the changed instance itself, but undo functionality won't work.
-  GameOrError next(E event, BackendReader backendReader);
+  GameOrError next(E event, Reader backendReader);
 
   /// Copies the state of the game with generic replaced by the function applying updates to the most recent copy of generic
   ///
@@ -46,7 +47,7 @@ abstract class Game<E extends Event> {
 
   /// Logic to apply after all players have consented they want to play another round
   /// to initialize the next round
-  Game moveNextRound(GameConfig config, BackendReader backendReader);
+  Game moveNextRound(GameConfig config, Reader backendReader);
 
   /// Serializes the state for consumption by the frontend
   Map<String, dynamic> toJson();
@@ -59,7 +60,7 @@ abstract class Game<E extends Event> {
     GameType type, {
     required String name,
     required Q Function(Map<String, dynamic>) fromJson,
-    required T Function(GameConfig, IList<Player>, BackendReader) initialState,
+    required T Function(GameConfig, IList<Player>, Reader) initialState,
     required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
     Q Function(T)? toClientView,
   }) {
@@ -83,8 +84,8 @@ abstract class Game<E extends Event> {
   static Game toClientView(Game g) => _toClientViews[g.type]!(g);
 
   /// Will get the initial state for a particular configuration
-  static Game getInitialState(GameConfig gameConfig, IList<Player> players,
-      BackendReader backendReader) {
+  static Game getInitialState(
+      GameConfig gameConfig, IList<Player> players, Reader backendReader) {
     final initState = _initialStates[gameConfig.gameType];
     if (initState == null) {
       throw UnimplementedError(
@@ -126,8 +127,7 @@ abstract class Game<E extends Event> {
   static final Map<GameType, String> gameNames = {};
 
   /// Stores the function to create the initial state of the game
-  static final Map<GameType,
-          Game Function(GameConfig, IList<Player>, BackendReader)>
+  static final Map<GameType, Game Function(GameConfig, IList<Player>, Reader)>
       _initialStates = {};
 }
 

@@ -4,7 +4,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../core.dart';
 import '../core.dart';
 
-typedef ServerLocation = String;
+typedef ClientType = String;
 
 typedef GameAddress = Uri;
 
@@ -28,7 +28,7 @@ abstract class ServerClient {
   final Logger logger;
 
   /// Creates a game on the server
-  Future<void> createGame();
+  Future<GameCode> createGame();
 
   /// Deletes the game on the server
   Future<bool> deleteGame();
@@ -41,21 +41,21 @@ abstract class ServerClient {
 
   /// Registers a particular implementation of [ServerClient] for the given [location]
   static void registerImplementation<T extends ServerClient>(
-    ServerLocation location,
+    ClientType location,
     T Function(ProviderRef<ServerClient>, GameAddress, PlayerID) impl,
   ) {
     _clientImplementations[location] = impl;
   }
 
   static final Map<
-          ServerLocation,
+          ClientType,
           ServerClient Function(
               ProviderRef<ServerClient>, GameAddress, PlayerID)>
       _clientImplementations = {};
 
   /// Creates a [ServerClient] from the [location] [address] and [playerID]
   static ServerClient fromParams({
-    required ServerLocation location,
+    required ClientType location,
     required ProviderRef<ServerClient> ref,
     required GameAddress address,
     required PlayerID playerID,

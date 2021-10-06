@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'markov.dart';
 
@@ -101,14 +102,13 @@ class __$MatrixCopyWithImpl<$Res> extends _$MatrixCopyWithImpl<$Res>
   }
 }
 
-@JsonSerializable()
-
 /// @nodoc
+@JsonSerializable()
 class _$_Matrix implements _Matrix {
   const _$_Matrix(this.rewards);
 
   factory _$_Matrix.fromJson(Map<String, dynamic> json) =>
-      _$_$_MatrixFromJson(json);
+      _$$_MatrixFromJson(json);
 
   @override
   final List<List<Reward>> rewards;
@@ -137,7 +137,7 @@ class _$_Matrix implements _Matrix {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_MatrixToJson(this);
+    return _$$_MatrixToJson(this);
   }
 }
 
@@ -187,6 +187,11 @@ mixin _$JointAction {
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(int p1, int p2)? twoPlayer,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int p1, int p2)? twoPlayer,
     required TResult orElse(),
@@ -195,6 +200,11 @@ mixin _$JointAction {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_JointAction value) twoPlayer,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_JointAction value)? twoPlayer,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -281,14 +291,13 @@ class __$JointActionCopyWithImpl<$Res> extends _$JointActionCopyWithImpl<$Res>
   }
 }
 
-@JsonSerializable()
-
 /// @nodoc
+@JsonSerializable()
 class _$_JointAction implements _JointAction {
   const _$_JointAction({required this.p1, required this.p2});
 
   factory _$_JointAction.fromJson(Map<String, dynamic> json) =>
-      _$_$_JointActionFromJson(json);
+      _$$_JointActionFromJson(json);
 
   @override
   final int p1;
@@ -331,6 +340,14 @@ class _$_JointAction implements _JointAction {
 
   @override
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(int p1, int p2)? twoPlayer,
+  }) {
+    return twoPlayer?.call(p1, p2);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(int p1, int p2)? twoPlayer,
     required TResult orElse(),
@@ -351,6 +368,14 @@ class _$_JointAction implements _JointAction {
 
   @override
   @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(_JointAction value)? twoPlayer,
+  }) {
+    return twoPlayer?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_JointAction value)? twoPlayer,
     required TResult orElse(),
@@ -363,7 +388,7 @@ class _$_JointAction implements _JointAction {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_JointActionToJson(this);
+    return _$$_JointActionToJson(this);
   }
 }
 
@@ -485,14 +510,13 @@ class __$RewardCopyWithImpl<$Res> extends _$RewardCopyWithImpl<$Res>
   }
 }
 
-@JsonSerializable()
-
 /// @nodoc
+@JsonSerializable()
 class _$_Reward implements _Reward {
   const _$_Reward({required this.p1, required this.p2});
 
   factory _$_Reward.fromJson(Map<String, dynamic> json) =>
-      _$_$_RewardFromJson(json);
+      _$$_RewardFromJson(json);
 
   @override
   final double p1;
@@ -527,7 +551,7 @@ class _$_Reward implements _Reward {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_RewardToJson(this);
+    return _$$_RewardToJson(this);
   }
 }
 

@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'events.dart';
 
@@ -41,6 +42,12 @@ mixin _$GameEvent {
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(Event event)? game,
+    TResult Function(GenericEvent event)? general,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Event event)? game,
     TResult Function(GenericEvent event)? general,
@@ -51,6 +58,12 @@ mixin _$GameEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(GameEventGame value) game,
     required TResult Function(GameEventGeneral value) general,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(GameEventGame value)? game,
+    TResult Function(GameEventGeneral value)? general,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -109,6 +122,7 @@ class _$GameEventGameCopyWithImpl<$Res> extends _$GameEventCopyWithImpl<$Res>
 }
 
 /// @nodoc
+
 class _$GameEventGame extends GameEventGame {
   const _$GameEventGame(this.event) : super._();
 
@@ -148,6 +162,15 @@ class _$GameEventGame extends GameEventGame {
 
   @override
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(Event event)? game,
+    TResult Function(GenericEvent event)? general,
+  }) {
+    return game?.call(event);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Event event)? game,
     TResult Function(GenericEvent event)? general,
@@ -166,6 +189,15 @@ class _$GameEventGame extends GameEventGame {
     required TResult Function(GameEventGeneral value) general,
   }) {
     return game(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(GameEventGame value)? game,
+    TResult Function(GameEventGeneral value)? general,
+  }) {
+    return game?.call(this);
   }
 
   @override
@@ -233,6 +265,7 @@ class _$GameEventGeneralCopyWithImpl<$Res> extends _$GameEventCopyWithImpl<$Res>
 }
 
 /// @nodoc
+
 class _$GameEventGeneral extends GameEventGeneral {
   const _$GameEventGeneral(this.event) : super._();
 
@@ -272,6 +305,15 @@ class _$GameEventGeneral extends GameEventGeneral {
 
   @override
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(Event event)? game,
+    TResult Function(GenericEvent event)? general,
+  }) {
+    return general?.call(event);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Event event)? game,
     TResult Function(GenericEvent event)? general,
@@ -290,6 +332,15 @@ class _$GameEventGeneral extends GameEventGeneral {
     required TResult Function(GameEventGeneral value) general,
   }) {
     return general(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(GameEventGame value)? game,
+    TResult Function(GameEventGeneral value)? general,
+  }) {
+    return general?.call(this);
   }
 
   @override

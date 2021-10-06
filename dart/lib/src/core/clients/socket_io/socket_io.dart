@@ -11,4 +11,4 @@ void registerIOClients() {
 }
 
 /// Location that corresponds to using an io-server for the backend
-const IOServerLocation = 'io-server';
+const IOClient = 'io-server';

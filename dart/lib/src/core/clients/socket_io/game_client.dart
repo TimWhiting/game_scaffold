@@ -30,7 +30,7 @@ class IOGameClient extends GameClient {
       _socket = IO.io('$address/$gameCode', socketIOOpts);
       logger.info('Created Game Client Socket $gameCode');
       _lastGameCode = gameCode;
-      scheduleMicrotask(() => read.gameStatus = GameStatus.NotJoined);
+      scheduleMicrotask(() => gameStatus = GameStatus.NotJoined);
     }
   }
 
@@ -40,21 +40,27 @@ class IOGameClient extends GameClient {
     _socket!.off(IOChannel.gamestate.string);
     _socket!.off(IOChannel.lobby.string);
     logger.info('Exiting game');
-    read.gameStatus = GameStatus.NotJoined;
+    gameStatus = GameStatus.NotJoined;
     return true;
   }
 
+  set gameStatus(GameStatus status) {
+    read(GameProviders.status).state = status;
+  }
+
+  GameStatus get gameStatus => read(GameProviders.status).state;
   @override
   Future<bool> register() async {
     _ensureConnected();
     logger.info('Registering');
-    read.gameStatus = GameStatus.NotJoined;
+    gameStatus = GameStatus.NotJoined;
     _watchState();
-    final assignedName = await _socket!
-            .call(IOChannel.register, {'name': read.playerName, 'id': playerID})
-        as String?;
+    final assignedName = await _socket!.call(IOChannel.register, {
+      'name': read(GameProviders.playerName).state,
+      'id': playerID
+    }) as String?;
     if (assignedName != null) {
-      read.playerName = assignedName;
+      read(GameProviders.playerName).state = assignedName;
       return true;
     }
     return false;
@@ -62,7 +68,7 @@ class IOGameClient extends GameClient {
 
   void _onLobby(Map<String, dynamic> lobby) {
     final gameInfo = GameInfo.fromJson(lobby);
-    read.gameStatus = GameStatus.NotStarted;
+    gameStatus = GameStatus.NotStarted;
     logger.info('Got Lobby $gameInfo');
     lobbyStreamController.add(gameInfo);
   }
@@ -73,12 +79,12 @@ class IOGameClient extends GameClient {
       final gameState = Game.fromJson(data as Map<String, dynamic>);
       logger.info('Got gamestate $data');
       gameStreamController.add(gameState);
-      read.gameStatus = gameState.gameStatus;
+      gameStatus = gameState.status;
     });
     _socket!.on(IOChannel.error_channel.string, (data) {
       final error = GameError.fromJson(data as Map<String, dynamic>);
       logger.warning('Error: $error');
-      read.errorNotifier.error = error;
+      read(GameProviders.error.notifier).error = error;
     });
     // ignore: unnecessary_lambdas
     _socket!
@@ -103,7 +109,7 @@ class IOGameClient extends GameClient {
 
   static void registerImplementation() {
     GameClient.registerImplementation(
-      IOServerLocation,
+      IOClient,
       (ref, address, id) =>
           IOGameClient(address: address, ref: ref, playerID: id),
     );

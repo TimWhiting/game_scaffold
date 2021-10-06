@@ -22,7 +22,7 @@ class GameServer {
     this.timeout = const Duration(hours: 2),
     this.debug = true,
   })  : _socket = _io.of('/$_gameId'),
-        _gameError = _read.errorNotifier,
+        _gameError = _read(BackendProviders.error.notifier),
         _serverLogger = Logger('GameServer $_gameId') {
     _initServer();
   }
@@ -43,7 +43,7 @@ class GameServer {
   GameCode get gameID => _gameId;
 
   /// Gets [GameConfig] of this game
-  GameConfig get gameConfig => _read.gameConfig;
+  GameConfig get gameConfig => _read(BackendProviders.config).state;
 
   /// Gets the game's type from the config
   GameType get gameType => gameConfig.gameType;
@@ -57,9 +57,9 @@ class GameServer {
   /// Gets the client's name corresponding to [id]
   String? getClientName(PlayerID id) => _clientNames[id];
 
-  final BackendReader _read;
+  final Reader _read;
   final GameCode _gameId;
-  IList<Player> get _players => _read.players;
+  IList<Player> get _players => _read(BackendProviders.players).state;
   final _clients = <PlayerID, IO.Socket?>{};
   final _clientNames = <PlayerID, String>{};
   // ignore: prefer_typing_uninitialized_variables
@@ -69,7 +69,8 @@ class GameServer {
   final void Function(GameCode) _onGameOver;
 
   /// The notifier for the game state
-  late final GameStateNotifier _gameState = _read.gameNotifier;
+  late final GameStateNotifier _gameState =
+      _read(BackendProviders.state.notifier);
 
   /// The notifier for errors of the game
   final GameErrorNotifier _gameError;
@@ -194,7 +195,7 @@ class GameServer {
   }
 
   void _addPlayer(Player player) {
-    _read.players = _players.add(player);
+    _read(BackendProviders.players).state = _players.add(player);
     _serverLogger.info('Notifying ${_clients.length} clients of added player');
     for (final client in _clients.entries) {
       client.value?.emit(IOChannel.lobby.string, gameInfo(client.key).toJson());
@@ -212,7 +213,7 @@ class GameServer {
 
       client.value?.emit(IOChannel.gamestate.string, json);
     }
-    if (state.gameStatus == GameStatus.Finished) {
+    if (state.status == GameStatus.Finished) {
       killGame();
     }
   }

@@ -6,25 +6,26 @@ part of 'generic.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_GenericGame _$_$_GenericGameFromJson(Map<String, dynamic> json) {
-  return _$_GenericGame(
-    IList.fromJson(json['players'],
-        (value) => Player.fromJson(value as Map<String, dynamic>)),
-    IList.fromJson(json['readyPlayers'], (value) => value as String),
-    IList.fromJson(json['allRoundScores'],
-        (value) => IList.fromJson(value, (value) => (value as num).toDouble())),
-    DateTime.parse(json['time'] as String),
-    IList.fromJson(json['messages'],
-        (value) => GameMessage.fromJson(value as Map<String, dynamic>)),
-    _$enumDecode(_$GameStatusEnumMap, json['gameStatus']),
-    json['currentPlayerIndex'] as int?,
-    json['round'] as int,
-    json['isMultiPly'] as bool,
-    json['isSimultaneousAction'] as bool,
-  );
-}
+_$_GenericGame _$$_GenericGameFromJson(Map<String, dynamic> json) =>
+    _$_GenericGame(
+      IList<Player>.fromJson(json['players'],
+          (value) => Player.fromJson(value as Map<String, dynamic>)),
+      IList<String>.fromJson(json['readyPlayers'], (value) => value as String),
+      IList<IList<double>>.fromJson(
+          json['allRoundScores'],
+          (value) => IList<double>.fromJson(
+              value, (value) => (value as num).toDouble())),
+      DateTime.parse(json['time'] as String),
+      IList<GameMessage>.fromJson(json['messages'],
+          (value) => GameMessage.fromJson(value as Map<String, dynamic>)),
+      _$enumDecode(_$GameStatusEnumMap, json['status']),
+      json['currentPlayerIndex'] as int?,
+      json['round'] as int,
+      json['isMultiPly'] as bool,
+      json['isSimultaneousAction'] as bool,
+    );
 
-Map<String, dynamic> _$_$_GenericGameToJson(_$_GenericGame instance) =>
+Map<String, dynamic> _$$_GenericGameToJson(_$_GenericGame instance) =>
     <String, dynamic>{
       'players': instance.players.toJson(
         (value) => value,
@@ -41,7 +42,7 @@ Map<String, dynamic> _$_$_GenericGameToJson(_$_GenericGame instance) =>
       'messages': instance.messages.toJson(
         (value) => value,
       ),
-      'gameStatus': _$GameStatusEnumMap[instance.gameStatus],
+      'status': _$GameStatusEnumMap[instance.status],
       'currentPlayerIndex': instance.currentPlayerIndex,
       'round': instance.round,
       'isMultiPly': instance.isMultiPly,
@@ -83,43 +84,38 @@ const _$GameStatusEnumMap = {
   GameStatus.BetweenRounds: 'BetweenRounds',
 };
 
-_$GenericEventUndo _$_$GenericEventUndoFromJson(Map<String, dynamic> json) {
-  return _$GenericEventUndo();
-}
+_$GenericEventUndo _$$GenericEventUndoFromJson(Map<String, dynamic> json) =>
+    _$GenericEventUndo();
 
-Map<String, dynamic> _$_$GenericEventUndoToJson(_$GenericEventUndo instance) =>
+Map<String, dynamic> _$$GenericEventUndoToJson(_$GenericEventUndo instance) =>
     <String, dynamic>{};
 
-_$GenericEventStart _$_$GenericEventStartFromJson(Map<String, dynamic> json) {
-  return _$GenericEventStart();
-}
+_$GenericEventStart _$$GenericEventStartFromJson(Map<String, dynamic> json) =>
+    _$GenericEventStart();
 
-Map<String, dynamic> _$_$GenericEventStartToJson(
-        _$GenericEventStart instance) =>
+Map<String, dynamic> _$$GenericEventStartToJson(_$GenericEventStart instance) =>
     <String, dynamic>{};
 
-_$_GenericReadyNextRoundEvent _$_$_GenericReadyNextRoundEventFromJson(
-    Map<String, dynamic> json) {
-  return _$_GenericReadyNextRoundEvent(
-    json['player'] as String,
-  );
-}
+_$_GenericReadyNextRoundEvent _$$_GenericReadyNextRoundEventFromJson(
+        Map<String, dynamic> json) =>
+    _$_GenericReadyNextRoundEvent(
+      json['player'] as String,
+    );
 
-Map<String, dynamic> _$_$_GenericReadyNextRoundEventToJson(
+Map<String, dynamic> _$$_GenericReadyNextRoundEventToJson(
         _$_GenericReadyNextRoundEvent instance) =>
     <String, dynamic>{
       'player': instance.player,
     };
 
-_$GameMessage _$_$GameMessageFromJson(Map<String, dynamic> json) {
-  return _$GameMessage(
-    json['message'] as String,
-    from: json['from'] as String,
-    to: json['to'] as String?,
-  );
-}
+_$GameMessage _$$GameMessageFromJson(Map<String, dynamic> json) =>
+    _$GameMessage(
+      json['message'] as String,
+      from: json['from'] as String,
+      to: json['to'] as String?,
+    );
 
-Map<String, dynamic> _$_$GameMessageToJson(_$GameMessage instance) =>
+Map<String, dynamic> _$$GameMessageToJson(_$GameMessage instance) =>
     <String, dynamic>{
       'message': instance.message,
       'from': instance.from,

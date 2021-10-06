@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'errors.dart';
 
@@ -14,14 +15,15 @@ final _privateConstructorUsedError = UnsupportedError(
 
 GameOrError<T> _$GameOrErrorFromJson<T extends Game<Event>>(
     Map<String, dynamic> json) {
-  switch (json['runtimeType'] as String) {
+  switch (json['runtimeType'] as String?) {
     case 'game':
       return GameValue<T>.fromJson(json);
     case 'error':
       return GameError<T>.fromJson(json);
 
     default:
-      throw FallThroughError();
+      throw CheckedFromJsonException(json, 'runtimeType', 'GameOrError',
+          'Invalid union type "${json['runtimeType']}"!');
   }
 }
 
@@ -59,6 +61,12 @@ mixin _$GameOrError<T extends Game<Event>> {
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(@GameConverter() T game)? game,
+    TResult Function(String message, String person)? error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(@GameConverter() T game)? game,
     TResult Function(String message, String person)? error,
@@ -69,6 +77,12 @@ mixin _$GameOrError<T extends Game<Event>> {
   TResult map<TResult extends Object?>({
     required TResult Function(GameValue<T> value) game,
     required TResult Function(GameError<T> value) error,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(GameValue<T> value)? game,
+    TResult Function(GameError<T> value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -130,14 +144,13 @@ class _$GameValueCopyWithImpl<T extends Game<Event>, $Res>
   }
 }
 
-@JsonSerializable()
-
 /// @nodoc
+@JsonSerializable()
 class _$GameValue<T extends Game<Event>> extends GameValue<T> {
   const _$GameValue(@GameConverter() this.game) : super._();
 
   factory _$GameValue.fromJson(Map<String, dynamic> json) =>
-      _$_$GameValueFromJson(json);
+      _$$GameValueFromJson(json);
 
   @override
   @GameConverter()
@@ -176,6 +189,15 @@ class _$GameValue<T extends Game<Event>> extends GameValue<T> {
 
   @override
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(@GameConverter() T game)? game,
+    TResult Function(String message, String person)? error,
+  }) {
+    return game?.call(this.game);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(@GameConverter() T game)? game,
     TResult Function(String message, String person)? error,
@@ -198,6 +220,15 @@ class _$GameValue<T extends Game<Event>> extends GameValue<T> {
 
   @override
   @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(GameValue<T> value)? game,
+    TResult Function(GameError<T> value)? error,
+  }) {
+    return game?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GameValue<T> value)? game,
     TResult Function(GameError<T> value)? error,
@@ -211,7 +242,7 @@ class _$GameValue<T extends Game<Event>> extends GameValue<T> {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$GameValueToJson(this)..['runtimeType'] = 'game';
+    return _$$GameValueToJson(this)..['runtimeType'] = 'game';
   }
 }
 
@@ -266,14 +297,13 @@ class _$GameErrorCopyWithImpl<T extends Game<Event>, $Res>
   }
 }
 
-@JsonSerializable()
-
 /// @nodoc
+@JsonSerializable()
 class _$GameError<T extends Game<Event>> extends GameError<T> {
   const _$GameError(this.message, this.person) : super._();
 
   factory _$GameError.fromJson(Map<String, dynamic> json) =>
-      _$_$GameErrorFromJson(json);
+      _$$GameErrorFromJson(json);
 
   @override
   final String message;
@@ -318,6 +348,15 @@ class _$GameError<T extends Game<Event>> extends GameError<T> {
 
   @override
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(@GameConverter() T game)? game,
+    TResult Function(String message, String person)? error,
+  }) {
+    return error?.call(message, person);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(@GameConverter() T game)? game,
     TResult Function(String message, String person)? error,
@@ -340,6 +379,15 @@ class _$GameError<T extends Game<Event>> extends GameError<T> {
 
   @override
   @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(GameValue<T> value)? game,
+    TResult Function(GameError<T> value)? error,
+  }) {
+    return error?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GameValue<T> value)? game,
     TResult Function(GameError<T> value)? error,
@@ -353,7 +401,7 @@ class _$GameError<T extends Game<Event>> extends GameError<T> {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$GameErrorToJson(this)..['runtimeType'] = 'error';
+    return _$$GameErrorToJson(this)..['runtimeType'] = 'error';
   }
 }
 

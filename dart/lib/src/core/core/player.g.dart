@@ -6,14 +6,12 @@ part of 'player.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Player _$_$_PlayerFromJson(Map<String, dynamic> json) {
-  return _$_Player(
-    json['id'] as String,
-    name: json['name'] as String? ?? '',
-  );
-}
+_$_Player _$$_PlayerFromJson(Map<String, dynamic> json) => _$_Player(
+      json['id'] as String,
+      name: json['name'] as String? ?? '',
+    );
 
-Map<String, dynamic> _$_$_PlayerToJson(_$_Player instance) => <String, dynamic>{
+Map<String, dynamic> _$$_PlayerToJson(_$_Player instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
     };

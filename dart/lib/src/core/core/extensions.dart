@@ -45,7 +45,7 @@ extension GameX on Game {
   IList<GameMessage> get messages => generic.messages;
 
   /// Gets the status of the game
-  GameStatus get gameStatus => generic.gameStatus;
+  GameStatus get status => generic.status;
 
   /// Gets the current round number
   int get round => generic.round;

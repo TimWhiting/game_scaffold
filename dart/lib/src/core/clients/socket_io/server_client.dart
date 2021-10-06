@@ -25,11 +25,12 @@ class IOServerClient extends ServerClient {
   IO.Socket? socket;
 
   @override
-  Future<void> createGame() async {
-    final gameConfig = read.gameConfig;
+  Future<String> createGame() async {
+    final gameConfig = read(GameProviders.config).state;
     logger.fine('Creating game $gameConfig');
     final gameCode = await _createGame(gameConfig);
-    read.gameCode = gameCode;
+    read(GameProviders.code).state = gameCode;
+    return gameCode;
   }
 
   Future<GameCode> _createGame(GameConfig config) async {
@@ -41,7 +42,8 @@ class IOServerClient extends ServerClient {
   @override
   Future<bool> deleteGame() async {
     await _ensureConnected();
-    final result = await socket!.call(IOChannel.deletegame, read.gameCode);
+    final result = await socket!
+        .call(IOChannel.deletegame, read(GameProviders.code).state);
     return result as bool;
   }
 
@@ -64,6 +66,12 @@ class IOServerClient extends ServerClient {
     await connect();
   }
 
+  set gameStatus(GameStatus status) {
+    read(GameProviders.status).state = status;
+  }
+
+  GameStatus get gameStatus => read(GameProviders.status).state;
+
   /// Connects to the backend
   @override
   Future<void> connect() async {
@@ -75,15 +83,14 @@ class IOServerClient extends ServerClient {
         socket?.dispose();
         socket = IO.io(address.toString(), socketIOOpts);
         socket!.on(IOChannel.connection.string,
-            (_) => read.gameStatus = GameStatus.NotJoined);
+            (_) => gameStatus = GameStatus.NotJoined);
         socket!.on(IOChannel.disconnect.string,
-            (_) => read.gameStatus = GameStatus.NotConnected);
-
-        final currentStatus = read.gameStatus;
+            (_) => gameStatus = GameStatus.NotConnected);
         await Future.delayed(const Duration(milliseconds: 20));
+        final currentStatus = gameStatus;
         if (currentStatus == GameStatus.NotConnected ||
             currentStatus == GameStatus.NotJoined) {
-          scheduleMicrotask(() => read.gameStatus = socket!.connected
+          scheduleMicrotask(() => gameStatus = socket!.connected
               ? GameStatus.NotJoined
               : GameStatus.NotConnected);
         }
@@ -101,12 +108,12 @@ class IOServerClient extends ServerClient {
   @override
   Future<void> disconnect() async {
     socket?.dispose();
-    read.gameStatus = GameStatus.NotConnected;
+    gameStatus = GameStatus.NotConnected;
   }
 
   static void registerImplementation() {
     ServerClient.registerImplementation(
-      IOServerLocation,
+      IOClient,
       (ref, address, id) =>
           IOServerClient(ref: ref, address: address, playerID: id),
     );

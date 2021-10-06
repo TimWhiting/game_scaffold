@@ -19,7 +19,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
 
   @override
   GameOrError<TicTacToeGame> next(
-          TicTacToeGameEvent event, BackendReader backendReader) =>
+          TicTacToeGameEvent event, Reader backendReader) =>
       _handleMove(event.player, event.location);
 
   GameOrError<TicTacToeGame> _handleMove(PlayerID player, int location) {
@@ -56,7 +56,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
       location >= 0 && location < 9 && board[location] == null;
 
   @override
-  TicTacToeGame moveNextRound(GameConfig config, BackendReader backendReader) =>
+  TicTacToeGame moveNextRound(GameConfig config, Reader backendReader) =>
       TicTacToeGame(
         generic: generic.finishRound(
           {

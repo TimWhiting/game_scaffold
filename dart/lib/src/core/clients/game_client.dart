@@ -17,7 +17,7 @@ abstract class GameClient {
   final PlayerID playerID;
 
   /// The [gameCode] of the game the client has joined
-  GameCode get gameCode => read.gameCode;
+  GameCode get gameCode => read(GameProviders.code).state;
   final Logger logger;
 
   final ProviderRef<GameClient> ref;
@@ -55,7 +55,7 @@ abstract class GameClient {
 
   /// Registers a [GameClient] implementation for the given [location]
   static void registerImplementation<T extends GameClient>(
-    ServerLocation location,
+    ClientType location,
     T Function(
             ProviderRef<GameClient> ref, GameAddress address, PlayerID playerID)
         impl,
@@ -63,13 +63,13 @@ abstract class GameClient {
     _clientImplementations[location] = impl;
   }
 
-  static final Map<ServerLocation,
+  static final Map<ClientType,
           GameClient Function(ProviderRef<GameClient>, GameAddress, PlayerID)>
       _clientImplementations = {};
 
   /// Creates a [GameClient] with the parameters specified
   static GameClient fromParams({
-    required ServerLocation location,
+    required ClientType location,
     required ProviderRef<GameClient> ref,
     required GameAddress address,
     required PlayerID playerID,

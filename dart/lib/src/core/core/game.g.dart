@@ -6,22 +6,21 @@ part of 'game.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_GameConfig _$_$_GameConfigFromJson(Map<String, dynamic> json) {
-  return _$_GameConfig(
-    gameType: json['gameType'] as String,
-    adminId: json['adminId'] as String?,
-    nameSet: _$enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ??
-        NameSet.Basic,
-    customNames: json['customNames'] as bool? ?? false,
-    rounds: json['rounds'] as int? ?? 15,
-    minPlayers: json['minPlayers'] as int? ?? 1,
-    maxPlayers: json['maxPlayers'] as int? ?? 10,
-    autoStart: json['autoStart'] as bool? ?? true,
-    options: json['options'] as Map<String, dynamic>?,
-  );
-}
+_$_GameConfig _$$_GameConfigFromJson(Map<String, dynamic> json) =>
+    _$_GameConfig(
+      gameType: json['gameType'] as String,
+      adminId: json['adminId'] as String?,
+      nameSet: _$enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ??
+          NameSet.Basic,
+      customNames: json['customNames'] as bool? ?? false,
+      rounds: json['rounds'] as int? ?? 15,
+      minPlayers: json['minPlayers'] as int? ?? 1,
+      maxPlayers: json['maxPlayers'] as int? ?? 10,
+      autoStart: json['autoStart'] as bool? ?? true,
+      options: json['options'] as Map<String, dynamic>?,
+    );
 
-Map<String, dynamic> _$_$_GameConfigToJson(_$_GameConfig instance) =>
+Map<String, dynamic> _$$_GameConfigToJson(_$_GameConfig instance) =>
     <String, dynamic>{
       'gameType': instance.gameType,
       'adminId': instance.adminId,
@@ -75,17 +74,16 @@ const _$NameSetEnumMap = {
   NameSet.Basic: 'Basic',
 };
 
-_$_GameInfo _$_$_GameInfoFromJson(Map<String, dynamic> json) {
-  return _$_GameInfo(
-    gameId: json['gameId'] as String,
-    players: IList.fromJson(json['players'], (value) => value as String),
-    player: json['player'] as String,
-    creator: json['creator'] as bool,
-    gameType: json['gameType'] as String,
-  );
-}
+_$_GameInfo _$$_GameInfoFromJson(Map<String, dynamic> json) => _$_GameInfo(
+      gameId: json['gameId'] as String,
+      players:
+          IList<String>.fromJson(json['players'], (value) => value as String),
+      player: json['player'] as String,
+      creator: json['creator'] as bool,
+      gameType: json['gameType'] as String,
+    );
 
-Map<String, dynamic> _$_$_GameInfoToJson(_$_GameInfo instance) =>
+Map<String, dynamic> _$$_GameInfoToJson(_$_GameInfo instance) =>
     <String, dynamic>{
       'gameId': instance.gameId,
       'players': instance.players.toJson(

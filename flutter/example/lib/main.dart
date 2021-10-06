@@ -16,8 +16,7 @@ void main() {
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
   runApp(ProviderScope(
     overrides: [
-      gameLocationProvider
-          .overrideWithProvider(StateProvider((_) => OnDeviceLocation)),
+      clientType.overrideWithValue(StateController(OnDeviceClient)),
     ],
     child: const TicTacToeApp(),
   ));
@@ -43,18 +42,14 @@ class TicTacToeWidget extends StatelessWidget {
         body: Row(children: [
           Expanded(
             child: ProviderScope(
-              overrides: [
-                playerIDProvider.overrideWithProvider(Provider((watch) => P1))
-              ],
+              overrides: [playerIDProvider.overrideWithValue(P1)],
               child: const Player(),
             ),
           ),
           Container(width: 10, color: Colors.black),
           Expanded(
             child: ProviderScope(
-              overrides: [
-                playerIDProvider.overrideWithProvider(Provider((watch) => P2))
-              ],
+              overrides: [playerIDProvider.overrideWithValue(P2)],
               child: const Player(),
             ),
           ),
@@ -78,11 +73,11 @@ class CreateOrJoinWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerID = ref.playerID;
-    final code = ref.gameCode;
+    final playerID = ref.watchPlayerID;
+    final code = ref.watchGameCode;
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
-    final gameClient = ref.gameClient;
-    final allGames = ref.gameInfos;
+    final gameClient = ref.watchGameClient;
+    final allGames = ref.watchGameInfos;
 
     return Scaffold(
       body: Center(
@@ -163,20 +158,22 @@ class GameWidget extends HookConsumerWidget {
   const GameWidget({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameState = ref.gameState;
-    final gameStatus = ref.gameStatus;
-    ref.listen(gameErrorProvider, (error) {
-      showDialog(
-        context: context,
-        builder: (c) => Dialog(
-          backgroundColor: Colors.white,
-          child: Text(error.toString()),
-        ),
-      );
+    final gameState = ref.watchGameState;
+    final gameStatus = ref.watchGameStatus;
+    ref.listen(error, (error) {
+      if (error != null) {
+        showDialog(
+          context: context,
+          builder: (c) => Dialog(
+            backgroundColor: Colors.white,
+            child: Text(error.toString()),
+          ),
+        );
+      }
     });
     return gameState.when(
-      error: (e, st) => Text('$e, $st'),
-      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, st, _) => Text('$e, $st'),
+      loading: (_) => const Center(child: CircularProgressIndicator()),
       data: (g) => Scaffold(
         appBar: AppBar(),
         body: Center(

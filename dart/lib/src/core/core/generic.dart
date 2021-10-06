@@ -21,7 +21,7 @@ part 'generic.g.dart';
 /// * A list of scores for all rounds [allRoundScores]
 /// * The [time] of the last game update
 /// * A list of [messages] that were sent
-/// * The current [gameStatus]
+/// * The current [status]
 /// * The [currentPlayerIndex]
 /// * The current [round]
 @freezed
@@ -32,7 +32,7 @@ class GenericGame with _$GenericGame {
     IList<IList<double>> allRoundScores,
     DateTime time,
     IList<GameMessage> messages,
-    GameStatus gameStatus,
+    GameStatus status,
     int? currentPlayerIndex,
     int round,
     // ignore: avoid_positional_boolean_parameters
@@ -105,10 +105,10 @@ class GenericGame with _$GenericGame {
           )));
 
   /// Gets whether the game is over
-  bool get gameOver => gameStatus == GameStatus.Finished;
+  bool get gameOver => status == GameStatus.Finished;
 
   /// Gets whether the round is over
-  bool get roundOver => gameStatus == GameStatus.BetweenRounds;
+  bool get roundOver => status == GameStatus.BetweenRounds;
 
   /// Returns a copy of the [GenericGame] with the next player in the player
   /// array as the current player
@@ -129,14 +129,14 @@ class GenericGame with _$GenericGame {
       );
 
   /// Returns a copy of the [GenericGame] with the [round] incremented,
-  /// [gameStatus] set to [GameStatus.Started] and optionally the
+  /// [status] set to [GameStatus.Started] and optionally the
   /// players' [scores] added to [allRoundScores]
   GenericGame finishRound([Map<PlayerID, double>? scores]) => scores != null
       ? updateScores(scores).copyWith(
           round: round + 1,
-          gameStatus: GameStatus.Started,
+          status: GameStatus.Started,
         )
-      : copyWith(round: round + 1, gameStatus: GameStatus.Started);
+      : copyWith(round: round + 1, status: GameStatus.Started);
 
   /// Returns a copy of the [GenericGame] with the [scores] added to
   /// [allRoundScores]
@@ -144,8 +144,8 @@ class GenericGame with _$GenericGame {
       allRoundScores:
           allRoundScores.add(players.map((p) => scores[p.id]!).toIList()));
 
-  /// Returns a copy of the [GenericGame] with the [gameStatus] updated to [status]
-  GenericGame updateStatus(GameStatus status) => copyWith(gameStatus: status);
+  /// Returns a copy of the [GenericGame] with the [status] updated to [status]
+  GenericGame updateStatus(GameStatus status) => copyWith(status: status);
 
   /// Shuffles the player list, and resets the [currentPlayerIndex] to the first
   GenericGame shufflePlayers() => copyWith(

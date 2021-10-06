@@ -11,15 +11,14 @@ Future<void> main(List<String> arguments) async {
   registerOnDeviceClients();
   final rootProvider = ProviderContainer();
   final read = rootProvider.read;
-  final backendGame = BackendReader(read);
   final p1Reader = ProviderContainer(
       parent: rootProvider,
-      overrides: [playerIDProvider.overrideWithValue(P1)]).read;
+      overrides: [GameProviders.playerIDProvider.overrideWithValue(P1)]).read;
   final p2Reader = ProviderContainer(
       parent: rootProvider,
-      overrides: [playerIDProvider.overrideWithValue(P2)]).read;
-  read.clientImplementation = OnDeviceLocation;
-  p1Reader.gameConfig = const GameConfig(
+      overrides: [GameProviders.playerIDProvider.overrideWithValue(P2)]).read;
+  read(GameProviders.clientType).state = OnDeviceClient;
+  const config = GameConfig(
     adminId: P1,
     customNames: false,
     gameType: 'tictactoe',
@@ -27,45 +26,43 @@ Future<void> main(List<String> arguments) async {
     maxPlayers: 2,
   );
 
-  final code = await p1Reader.gameClient.createGame();
-  await p1Reader.gameClient.register();
-  p2Reader.gameCode = code;
-  await p2Reader.gameClient.register();
+  final code = await p1Reader(GameProviders.client).createGame(config: config);
+  await p1Reader(GameProviders.client).register();
+  await p2Reader(GameProviders.client).register(code: code);
 
-  print(backendGame.gameState!.playerIDs);
-  print(backendGame.gameState!.gameStatus);
-  while (!backendGame.gameState!.gameOver) {
+  print(read(BackendProviders.state)!.playerIDs);
+  print(read(BackendProviders.state)!.status);
+  while (!read(BackendProviders.state)!.gameOver) {
     await loop(read, {P1: p1Reader, P2: p2Reader}, code);
   }
 }
 
 Future<void> loop(
     Reader read, Map<String, dynamic> playerReaders, GameCode code) async {
-  final backendGame = BackendReader(read);
   printStateAndAction(read, code);
-  final player = backendGame.gameState!.currentPlayer!.id;
+  final player = read(BackendProviders.state)!.currentPlayer!.id;
   List<int?> location;
   do {
     final command = stdin.readLineSync();
     location = command!.split(',').map(int.tryParse).toList();
   } while (location.any((l) => l == null));
 
-  await (playerReaders[player] as Reader).gameClient.sendEvent(
-        TicTacToeGameEvent(player, location[0]! * 3 + location[1]!),
-      );
+  await (playerReaders[player] as Reader)(GameProviders.client).sendEvent(
+    TicTacToeGameEvent(player, location[0]! * 3 + location[1]!),
+  );
 
   await Future.delayed(const Duration(milliseconds: 100));
-  final error = backendGame.gameError;
+  final error = read(BackendProviders.error);
   if (error != null) {
     print('');
     print('!!!!!!!!!!!');
     print(error);
     print('!!!!!!!!!!!');
     print('');
-    backendGame.clearError();
+    read(BackendProviders.error.notifier).clearError();
   }
-  final gameState = backendGame.gameState as TicTacToeGame;
-  print(gameState.gameStatus);
+  final gameState = read(BackendProviders.state) as TicTacToeGame;
+  print(gameState.status);
   if (gameState.gameOver || gameState.roundOver) {
     print('Round Over');
     if (gameState.isWinner(P1)) {
@@ -77,8 +74,8 @@ Future<void> loop(
     }
     print('');
     if (gameState.roundOver) {
-      await (playerReaders[P1] as Reader).gameClient.newRound();
-      await (playerReaders[P2] as Reader).gameClient.newRound();
+      await (playerReaders[P1] as Reader)(GameProviders.client).newRound();
+      await (playerReaders[P2] as Reader)(GameProviders.client).newRound();
     } else {
       print('Finished');
       print('Player 0: ${gameState.totalScores[P1]}');
@@ -89,8 +86,8 @@ Future<void> loop(
 }
 
 void printStateAndAction(Reader read, GameCode code) {
-  print("Player ${BackendReader(read).gameState!.currentPlayer?.id}'s turn");
-  final gameState = BackendReader(read).gameState as TicTacToeGame;
+  print("Player ${read(BackendProviders.state)!.currentPlayer?.id}'s turn");
+  final gameState = read(BackendProviders.state)! as TicTacToeGame;
   String strFor(int index) => gameState.board[index] == P1
       ? 'X'
       : gameState.board[index] == P2

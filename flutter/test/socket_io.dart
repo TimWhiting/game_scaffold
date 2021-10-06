@@ -9,26 +9,24 @@ Future<void> main() async {
   final ioServer = IOServer();
 
   await test('Created', (read) async {
-    final gameCode = read.gameFor(P1).gameCode;
+    final gameCode = read.gameFor(P1).code;
     assert(ioServer.servers[gameCode] != null, 'Game Server Created');
-    print(read.gameFor(P1).gameStatus);
-    assert(read.gameFor(P1).gameStatus == GameStatus.NotJoined,
+    print(read.gameFor(P1).status);
+    assert(read.gameFor(P1).status == GameStatus.NotJoined,
         'Game Starts out Not Joined');
   });
 
   await Future.delayed(const Duration(milliseconds: 100));
 
   await test('Registered Start Game', (read) async {
-    final gameCode = read.gameFor(P1).gameCode;
+    final gameCode = read.gameFor(P1).code;
     final gameClient = read.gameFor(P1).gameClient;
     await gameClient.register();
     await gameClient.startGame();
     await Future.delayed(const Duration(milliseconds: 100));
     assert(ioServer.servers[gameCode]!.playerNames.length == 1,
         'One Player Joined');
-    assert(
-        read.gameFor(P1).gameState.asData?.value.gameStatus ==
-            GameStatus.Started,
+    assert(read.gameFor(P1).state.asData?.value.status == GameStatus.Started,
         'Game is Started');
   });
   assert(1 == 1, 'Success');
@@ -48,7 +46,7 @@ Future<void> test(
   root.read.address = Uri.parse('http://127.0.0.1:$defaultGamePort');
   var serverClient = readers.gameFor(P1).gameClient;
   const config = GameConfig(adminId: P1, gameType: 'tictactoe');
-  readers.gameFor(P1).gameConfig = config;
+  readers.gameFor(P1).config = config;
   final code = await serverClient.createGame();
   await Future.delayed(const Duration(milliseconds: 100));
   await testFn(readers);

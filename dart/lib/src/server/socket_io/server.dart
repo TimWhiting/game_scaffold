@@ -115,12 +115,11 @@ class IOServer {
     final gameid = generateGameID(servers.keys.toList());
     final scopedContainer = ProviderContainer(
       parent: container,
-      overrides: [backendGameCodeProvider.overrideWithValue(gameid)],
+      overrides: [BackendProviders.code.overrideWithValue(gameid)],
     );
-    final backendReader = BackendReader(scopedContainer.read);
-    backendReader.gameConfig = gameConfig;
+    scopedContainer.read(BackendProviders.config).state = gameConfig;
     final server = GameServer(
-        io, this, BackendReader(scopedContainer.read), gameid, servers.remove,
+        io, this, scopedContainer.read, gameid, servers.remove,
         debug: debug);
     servers[server.gameID] = server;
     client.emit(IOChannel.gamecreated.string, server.gameID);

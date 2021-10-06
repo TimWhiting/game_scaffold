@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'providers.dart';
 
@@ -46,6 +47,13 @@ mixin _$LoadingFuture<T> {
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(T lastValue)? refreshing,
+    TResult Function(T value)? value,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(T lastValue)? refreshing,
@@ -58,6 +66,13 @@ mixin _$LoadingFuture<T> {
     required TResult Function(FutureLoading<T> value) loading,
     required TResult Function(FutureRefreshing<T> value) refreshing,
     required TResult Function(FutureValue<T> value) value,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(FutureLoading<T> value)? loading,
+    TResult Function(FutureRefreshing<T> value)? refreshing,
+    TResult Function(FutureValue<T> value)? value,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -107,6 +122,7 @@ class _$FutureLoadingCopyWithImpl<T, $Res>
 }
 
 /// @nodoc
+
 class _$FutureLoading<T> extends FutureLoading<T> {
   const _$FutureLoading() : super._();
 
@@ -135,6 +151,16 @@ class _$FutureLoading<T> extends FutureLoading<T> {
 
   @override
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(T lastValue)? refreshing,
+    TResult Function(T value)? value,
+  }) {
+    return loading?.call();
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(T lastValue)? refreshing,
@@ -155,6 +181,16 @@ class _$FutureLoading<T> extends FutureLoading<T> {
     required TResult Function(FutureValue<T> value) value,
   }) {
     return loading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(FutureLoading<T> value)? loading,
+    TResult Function(FutureRefreshing<T> value)? refreshing,
+    TResult Function(FutureValue<T> value)? value,
+  }) {
+    return loading?.call(this);
   }
 
   @override
@@ -210,6 +246,7 @@ class _$FutureRefreshingCopyWithImpl<T, $Res>
 }
 
 /// @nodoc
+
 class _$FutureRefreshing<T> extends FutureRefreshing<T> {
   const _$FutureRefreshing(this.lastValue) : super._();
 
@@ -251,6 +288,16 @@ class _$FutureRefreshing<T> extends FutureRefreshing<T> {
 
   @override
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(T lastValue)? refreshing,
+    TResult Function(T value)? value,
+  }) {
+    return refreshing?.call(lastValue);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(T lastValue)? refreshing,
@@ -271,6 +318,16 @@ class _$FutureRefreshing<T> extends FutureRefreshing<T> {
     required TResult Function(FutureValue<T> value) value,
   }) {
     return refreshing(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(FutureLoading<T> value)? loading,
+    TResult Function(FutureRefreshing<T> value)? refreshing,
+    TResult Function(FutureValue<T> value)? value,
+  }) {
+    return refreshing?.call(this);
   }
 
   @override
@@ -331,6 +388,7 @@ class _$FutureValueCopyWithImpl<T, $Res>
 }
 
 /// @nodoc
+
 class _$FutureValue<T> extends FutureValue<T> {
   const _$FutureValue(this.value) : super._();
 
@@ -371,6 +429,16 @@ class _$FutureValue<T> extends FutureValue<T> {
 
   @override
   @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(T lastValue)? refreshing,
+    TResult Function(T value)? value,
+  }) {
+    return value?.call(this.value);
+  }
+
+  @override
+  @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function(T lastValue)? refreshing,
@@ -391,6 +459,16 @@ class _$FutureValue<T> extends FutureValue<T> {
     required TResult Function(FutureValue<T> value) value,
   }) {
     return value(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(FutureLoading<T> value)? loading,
+    TResult Function(FutureRefreshing<T> value)? refreshing,
+    TResult Function(FutureValue<T> value)? value,
+  }) {
+    return value?.call(this);
   }
 
   @override

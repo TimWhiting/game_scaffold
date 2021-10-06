@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'dart:io';
 
 import 'package:characters/characters.dart';
@@ -18,48 +20,52 @@ String get homeDir {
   return Platform.environment['HOME']!;
 }
 
-final backendGameCodeProvider = Provider((ref) => '0000');
+class BackendProviders {
+  BackendProviders._();
+  static final code = Provider((ref) => '0000');
 
-/// Provides the [GameStateNotifier] based on the [GameConfig] from [gameConfigProvider]
-final StateNotifierProvider<GameStateNotifier, Game?> backendGameStateProvider =
-    StateNotifierProvider<GameStateNotifier, Game?>(
-  (ref) {
-    final gameConfig = ref.watch(configProvider).state;
-    return GameStateNotifier(
-      gameConfig,
-      BackendReader(ref.read),
-      ref.watch(backendGameCodeProvider),
-    );
-  },
-  dependencies: [backendGameCodeProvider],
-);
+  /// Provides the [GameStateNotifier] based on the [GameConfig] from [config]
+  static final StateNotifierProvider<GameStateNotifier, Game?> state =
+      StateNotifierProvider<GameStateNotifier, Game?>(
+    (ref) {
+      final gameConfig = ref.watch(config).state;
+      return GameStateNotifier(
+        gameConfig,
+        ref.read,
+        ref.watch(code),
+      );
+    },
+    dependencies: [code],
+  );
 
-/// Keeps track of the players involved in the game on the server (or on the client) in the case of a local game
-final playersProvider = StateProvider<IList<Player>>(
-  (ref) => <Player>[].lock,
-  dependencies: [backendGameCodeProvider],
-);
+  /// Keeps track of the players involved in the game on the server (or on the client) in the case of a local game
+  static final players = StateProvider<IList<Player>>(
+    (ref) => <Player>[].lock,
+    dependencies: [code],
+  );
 
-/// Keeps track
-final configProvider = StateProvider<GameConfig>(
-  (ref) => const GameConfig(gameType: ''),
-  dependencies: [backendGameCodeProvider],
-);
+  /// Keeps track
+  static final config = StateProvider<GameConfig>(
+    (ref) => const GameConfig(gameType: ''),
+    dependencies: [code],
+  );
 
-/// Provides the [GameErrorNotifier] to keep track of errors of a game
-final errorProvider = StateNotifierProvider<GameErrorNotifier, GameError?>(
-  (ref) => GameErrorNotifier(),
-  dependencies: [backendGameCodeProvider],
-);
+  /// Provides the [GameErrorNotifier] to keep track of errors of a game
+  static final error = StateNotifierProvider<GameErrorNotifier, GameError?>(
+    (ref) => GameErrorNotifier(),
+    dependencies: [code],
+  );
+}
 
 /// A [StateNotifier] that handles events for a particular game, delegating to the game's implementation for non generic events
 class GameStateNotifier<E extends Event, T extends Game<E>>
     extends StateNotifier<T> {
   GameStateNotifier(this.gameConfig, this.read, this.code)
       : _gameStateLogger = Logger('GameStateNotifier $code'),
-        super(read.initialState as T);
+        super(Game.getInitialState(
+            gameConfig, read(BackendProviders.players).state, read) as T);
   final Logger _gameStateLogger;
-  final BackendReader read;
+  final Reader read;
 
   /// The [code] of this game
   final GameCode code;
@@ -68,7 +74,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   final GameConfig gameConfig;
 
   /// A list of previous states
-  final List<T> _previousStates = [];
+  final _previousStates = <T>[];
 
   /// Returns the [state] of the game
   ///
@@ -92,7 +98,9 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
             _previousStates.removeLast();
             return _previousStates.removeLast().gameValue();
           },
-          start: () => read.initialState.gameValue(),
+          start: () => Game.getInitialState(
+                  gameConfig, read(BackendProviders.players).state, read)
+              .gameValue(),
           readyNextRound: (e) {
             if (state.readyPlayers.length > 1) {
               _previousStates.remove(state);
@@ -116,12 +124,12 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
         game: (e) => state.next(e as E, read),
       );
       if (nextState.isError) {
-        read.gameError = nextState.error;
+        read(BackendProviders.error.notifier).error = nextState.error;
         _previousStates.removeLast();
       } else {
         // ignore: cast_nullable_to_non_nullable
         state = nextState.value as T;
-        read.errorNotifier.clearError();
+        read(BackendProviders.error.notifier).clearError();
         return true;
       }
       // ignore: avoid_catches_without_on_clauses
@@ -130,53 +138,6 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
     }
     return false;
   }
-}
-
-class BackendReader {
-  BackendReader(this.reader);
-  final Reader reader;
-  T call<T>(ProviderBase<T> provider) => reader(provider);
-}
-
-extension BackendReaderX on BackendReader {
-  /// On the backend gets the list of [Player]s
-  IList<Player> get players => this(playersProvider).state;
-
-  /// On the  sets the players to [players]
-  set players(IList<Player> players) => this(playersProvider).state = players;
-
-  /// On the  gets the [GameConfig]
-  GameConfig get gameConfig => this(configProvider).state;
-
-  /// On the  sets the [GameConfig]
-  set gameConfig(GameConfig config) => this(configProvider).state = config;
-
-  /// On the  gets the latest [GameError]
-  GameError? get gameError => this(errorProvider);
-
-  /// On the  sets the [GameError]
-  set gameError(GameError? error) => errorNotifier.error = error;
-
-  /// on the  clears the lastest game error
-  void clearError() => errorNotifier.clearError();
-
-  /// On the  gets the error notifier
-  GameErrorNotifier get errorNotifier => this(errorProvider.notifier);
-
-  /// On the  gets the latest [Game] state
-  Game? get gameState => this(backendGameStateProvider);
-
-  /// On the  gets the [GameStateNotifier]
-  GameStateNotifier get gameNotifier => this(backendGameStateProvider.notifier);
-
-  /// On the  handles [event]
-  bool handleEvent(GameEvent event) => gameNotifier.handleEvent(event);
-
-  /// On the  gets the initial state for the [Game]
-  ///
-  /// It will create it based on the [PlayersProvider] and
-  /// the [GameConfigProvider]
-  Game get initialState => Game.getInitialState(gameConfig, players, this);
 }
 
 GameCode generateGameID(List<String> avoidList) {
