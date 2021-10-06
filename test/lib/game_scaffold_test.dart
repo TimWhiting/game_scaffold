@@ -10,7 +10,7 @@ import 'package:test/test.dart' as darttest;
 /// * [test] gives you access to a [GameTester] which allows you to test the game
 ///
 /// Uses the OnDevice clients
-@isTest
+@isTestGroup
 void testGame<T extends Game>(
   String testName, {
   required GameConfig config,
@@ -43,7 +43,7 @@ void testGame<T extends Game>(
             .startGame();
       }
     });
-    darttest.test('${testName}_Tests', () {
+    darttest.test(testName, () {
       test(GameTester<T>(root.read, readers, players, code));
     });
   });
@@ -89,12 +89,12 @@ class GameTester<T extends Game> {
   /// Returns the current game state
   ///
   /// If testing the outcome of an event prefer using [event]
-  T get game => read(GameProviders.state).value as T;
+  T get game => (readers[P1] as Reader)(GameProviders.state).value as T;
 
   /// Returns the current error state
   ///
   /// If testing the outcome of an event prefer using [event]
-  GameError? get error => read(GameProviders.error);
+  GameError? get error => (readers[P1] as Reader)(GameProviders.error);
 
   /// Advances to the next round, and checks the [expectation] of the game after
   /// the round has advanced

@@ -27,11 +27,13 @@ class NoServerGameClient extends GameClient {
     read(GameProviders.status).state = status;
   }
 
+  late Reader backendReader = NoServerClient.games[gameCode]!.read;
+
   GameStatus get gameStatus => read(GameProviders.status).state;
-  IList<Player> get _players => read(BackendProviders.players).state;
+  IList<Player> get _players => backendReader(BackendProviders.players).state;
   @override
   Future<bool> register() async {
-    read(BackendProviders.players).state = _players
+    backendReader(BackendProviders.players).state = _players
         .add(Player(playerID, name: read(GameProviders.playerName).state));
     gameStatus = GameStatus.NotJoined;
     read(GameProviders.playerName).state =
@@ -50,7 +52,8 @@ class NoServerGameClient extends GameClient {
         gameId: gameCode,
         players: _players.map((p) => p.name).toIList(),
         player: pID.name,
-        creator: pID.id == read(BackendProviders.players).state.first.id,
+        creator:
+            pID.id == backendReader(BackendProviders.players).state.first.id,
         gameType: config.gameType,
       ));
     }
@@ -59,7 +62,8 @@ class NoServerGameClient extends GameClient {
 
   void _watchState() {
     logger.info('Watching backend');
-    _ss = read(BackendProviders.state.notifier).stream.listen((gameState) {
+    _ss = backendReader(BackendProviders.state.notifier).stream.listen(
+        (gameState) {
       gameStreamController.add(gameState);
       read(GameProviders.status).state = gameState.status;
     }, onError: (e) {
@@ -67,15 +71,18 @@ class NoServerGameClient extends GameClient {
           GameError(e as String, playerID);
     });
 
-    _se = read(BackendProviders.error.notifier).stream.listen((gameError) {
+    _se = backendReader(BackendProviders.error.notifier)
+        .stream
+        .listen((gameError) {
       if (gameError == null || gameError.person == playerID) {
         read(GameProviders.error.notifier).error = gameError;
       }
     });
-    final initialState = read(BackendProviders.state.notifier).gameState;
+    final initialState =
+        backendReader(BackendProviders.state.notifier).gameState;
     gameStreamController.add(initialState);
     read(GameProviders.status).state = initialState.status;
-    final error = read(BackendProviders.error.notifier).error;
+    final error = backendReader(BackendProviders.error.notifier).error;
     read(GameProviders.error.notifier).error = error;
   }
 
@@ -84,8 +91,8 @@ class NoServerGameClient extends GameClient {
     // print('${event.toJson()}');
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
-    final result =
-        read(BackendProviders.state.notifier).handleEvent(event.asGameEvent);
+    final result = backendReader(BackendProviders.state.notifier)
+        .handleEvent(event.asGameEvent);
     if (event is GameEventGeneral &&
         event.event is GenericEventStart &&
         _startListening[gameCode] != null) {

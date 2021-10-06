@@ -39,9 +39,6 @@ class GameProviders {
   static final playerName =
       StateProvider<String>((ref) => '', dependencies: [playerIDProvider]);
 
-  static final playerIDs =
-      StateProvider<IList<PlayerID>>((ref) => <PlayerID>[].lock);
-
   /// Provides the game code for each client id
   static final StateProvider<GameCode> code =
       StateProvider((ref) => '', dependencies: [playerIDProvider]);
