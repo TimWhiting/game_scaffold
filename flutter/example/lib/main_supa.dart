@@ -30,12 +30,9 @@ void main() {
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
   runApp(ProviderScope(
     overrides: [
-      gameLocationProvider
-          .overrideWithProvider(StateProvider((ref) => SupabaseLocation)),
-      supabaseProvider.overrideWithProvider(
-        Provider(
-          (_) => SupabaseClient(url, key),
-        ),
+      clientType.overrideWithValue(StateController(SupabaseLocation)),
+      supabaseProvider.overrideWithValue(
+        SupabaseClient(url, key),
       ),
     ],
     child: const TicTacToeApp(),
