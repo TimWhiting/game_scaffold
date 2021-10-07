@@ -13,10 +13,10 @@ Future<void> main(List<String> arguments) async {
   final read = rootProvider.read;
   final p1Reader = ProviderContainer(
       parent: rootProvider,
-      overrides: [GameProviders.playerIDProvider.overrideWithValue(P1)]).read;
+      overrides: [GameProviders.playerID.overrideWithValue(P1)]).read;
   final p2Reader = ProviderContainer(
       parent: rootProvider,
-      overrides: [GameProviders.playerIDProvider.overrideWithValue(P2)]).read;
+      overrides: [GameProviders.playerID.overrideWithValue(P2)]).read;
   read(GameProviders.clientType).state = OnDeviceClient;
   const config = GameConfig(
     adminId: P1,

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
-import 'state_hooks.dart';
 
 final navigationLogger = Logger('GameNavigator');
 
@@ -29,9 +27,10 @@ class GameNavigator extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameStatus = ref.watchGameStatus;
+    final gameStatus = ref.watch(GameProviders.status).state;
     final pages = {GameStatus.NotConnected: disconnected};
-    navigationLogger.info('PlayerID: ${ref.playerID} gameStatus: $gameStatus');
+    navigationLogger.info(
+        'PlayerID: ${ref.read(GameProviders.playerID)} gameStatus: $gameStatus');
 
     if (gameStatus != GameStatus.NotConnected) {
       pages[GameStatus.NotJoined] = connected;
@@ -62,12 +61,12 @@ class GameNavigator extends HookConsumerWidget {
             status == GameStatus.BetweenRounds ||
             status == GameStatus.Started ||
             status == GameStatus.NotStarted) {
-          ref.gameClient.exitGame();
-          ref.gameInfoNotifier.refresh();
+          ref.read(GameProviders.client).exitGame();
+          ref.read(GameProviders.games.notifier).refresh();
           route.didPop(null);
           return true;
         } else if (status == GameStatus.NotJoined) {
-          ref.gameClient.disconnect();
+          ref.read(GameProviders.client).disconnect();
           return true;
         }
         return false;

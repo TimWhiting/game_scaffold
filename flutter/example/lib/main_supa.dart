@@ -30,7 +30,8 @@ void main() {
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
   runApp(ProviderScope(
     overrides: [
-      clientType.overrideWithValue(StateController(SupabaseLocation)),
+      GameProviders.clientType
+          .overrideWithValue(StateController(SupabaseLocation)),
       supabaseProvider.overrideWithValue(
         SupabaseClient(url, key),
       ),

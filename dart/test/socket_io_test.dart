@@ -11,10 +11,10 @@ void main() {
     read = rootProvider.read;
     p1Game = ProviderContainer(
         parent: rootProvider,
-        overrides: [GameProviders.playerIDProvider.overrideWithValue(P1)]).read;
+        overrides: [GameProviders.playerID.overrideWithValue(P1)]).read;
     p2Game = ProviderContainer(
         parent: rootProvider,
-        overrides: [GameProviders.playerIDProvider.overrideWithValue(P2)]).read;
+        overrides: [GameProviders.playerID.overrideWithValue(P2)]).read;
     registerIOClients();
   });
   test('io', () async {

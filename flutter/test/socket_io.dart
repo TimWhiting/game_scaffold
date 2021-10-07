@@ -39,9 +39,9 @@ Future<void> test(
   final root = ProviderContainer();
   final readers = Readers({
     P1: ProviderContainer(
-        parent: root, overrides: [playerIDProvider.overrideWithValue(P1)]).read,
+        parent: root, overrides: [playerID.overrideWithValue(P1)]).read,
     P2: ProviderContainer(
-        parent: root, overrides: [playerIDProvider.overrideWithValue(P2)]).read
+        parent: root, overrides: [playerID.overrideWithValue(P2)]).read
   });
   root.read.address = Uri.parse('http://127.0.0.1:$defaultGamePort');
   var serverClient = readers.gameFor(P1).gameClient;

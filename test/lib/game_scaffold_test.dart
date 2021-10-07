@@ -26,9 +26,9 @@ void testGame<T extends Game>(
       root.read(GameProviders.clientType).state = OnDeviceClient;
 
       for (final p in players) {
-        readers[p.id] = ProviderContainer(parent: root, overrides: [
-          GameProviders.playerIDProvider.overrideWithValue(p.id)
-        ]).read;
+        readers[p.id] = ProviderContainer(
+            parent: root,
+            overrides: [GameProviders.playerID.overrideWithValue(p.id)]).read;
       }
       code = await (readers[players.first.id] as Reader)(GameProviders.client)
           .createGame(config: config);
