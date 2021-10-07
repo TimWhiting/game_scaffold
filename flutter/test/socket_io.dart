@@ -9,24 +9,26 @@ Future<void> main() async {
   final ioServer = IOServer();
 
   await test('Created', (read) async {
-    final gameCode = read.gameFor(P1).code;
+    final gameCode = read.gameFor(P1)(GameProviders.code).state;
     assert(ioServer.servers[gameCode] != null, 'Game Server Created');
-    print(read.gameFor(P1).status);
-    assert(read.gameFor(P1).status == GameStatus.NotJoined,
-        'Game Starts out Not Joined');
+    final gameStatus = read.gameFor(P1)(GameProviders.status).state;
+    print(gameStatus);
+    assert(gameStatus == GameStatus.NotJoined, 'Game Starts out Not Joined');
   });
 
   await Future.delayed(const Duration(milliseconds: 100));
 
   await test('Registered Start Game', (read) async {
-    final gameCode = read.gameFor(P1).code;
-    final gameClient = read.gameFor(P1).gameClient;
+    final gameCode = read.gameFor(P1)(GameProviders.code).state;
+    final gameClient = read.gameFor(P1)(GameProviders.client);
     await gameClient.register();
     await gameClient.startGame();
     await Future.delayed(const Duration(milliseconds: 100));
     assert(ioServer.servers[gameCode]!.playerNames.length == 1,
         'One Player Joined');
-    assert(read.gameFor(P1).state.asData?.value.status == GameStatus.Started,
+    assert(
+        read.gameFor(P1)(GameProviders.state).asData?.value.status ==
+            GameStatus.Started,
         'Game is Started');
   });
   assert(1 == 1, 'Success');
@@ -39,18 +41,21 @@ Future<void> test(
   final root = ProviderContainer();
   final readers = Readers({
     P1: ProviderContainer(
-        parent: root, overrides: [playerID.overrideWithValue(P1)]).read,
+        parent: root,
+        overrides: [GameProviders.playerID.overrideWithValue(P1)]).read,
     P2: ProviderContainer(
-        parent: root, overrides: [playerID.overrideWithValue(P2)]).read
+        parent: root,
+        overrides: [GameProviders.playerID.overrideWithValue(P2)]).read
   });
-  root.read.address = Uri.parse('http://127.0.0.1:$defaultGamePort');
-  var serverClient = readers.gameFor(P1).gameClient;
+  root.read(GameProviders.remoteUri).state =
+      Uri.parse('http://127.0.0.1:$defaultGamePort');
+  var serverClient = readers.gameFor(P1)(GameProviders.client);
   const config = GameConfig(adminId: P1, gameType: 'tictactoe');
-  readers.gameFor(P1).config = config;
+  readers.gameFor(P1)(GameProviders.config).state = config;
   final code = await serverClient.createGame();
   await Future.delayed(const Duration(milliseconds: 100));
   await testFn(readers);
-  serverClient = readers.gameFor(P1).gameClient;
+  serverClient = readers.gameFor(P1)(GameProviders.client);
   final deleted = await serverClient.deleteGame();
   print(
       '########## Finished Test $testName GameCode: $code, deleted: $deleted ##########');

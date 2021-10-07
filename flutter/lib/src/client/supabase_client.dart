@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
-import 'package:realtime_client/realtime_client.dart' hide Logger;
+import 'package:realtime_client/realtime_client.dart';
 import 'package:riverpod/riverpod.dart';
 // ignore: implementation_imports
 import 'package:supabase/src/supabase_query_builder.dart';

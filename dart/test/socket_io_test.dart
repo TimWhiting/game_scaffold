@@ -5,16 +5,12 @@ void main() {
   final _ = IOServer();
   late Reader read;
   late Reader p1Game;
-  late Reader p2Game;
   setUp(() {
     final rootProvider = ProviderContainer();
     read = rootProvider.read;
     p1Game = ProviderContainer(
         parent: rootProvider,
         overrides: [GameProviders.playerID.overrideWithValue(P1)]).read;
-    p2Game = ProviderContainer(
-        parent: rootProvider,
-        overrides: [GameProviders.playerID.overrideWithValue(P2)]).read;
     registerIOClients();
   });
   test('io', () async {
