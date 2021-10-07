@@ -77,7 +77,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
     final playerID = ref.watch(GameProviders.playerID);
     final code = ref.watch(GameProviders.code).state;
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
-    final gameClient = ref.watch(GameProviders.client);
+    final gameClient = ref.read(GameProviders.client);
     final allGames = ref.watch(GameProviders.games);
 
     return Scaffold(
@@ -100,7 +100,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                       maxPlayers: 2,
                     ),
                   );
-                  await gameClient.register(code: id);
+                  await ref.read(GameProviders.client).register(code: id);
                 },
                 child: const Text('Create Game'),
               ),
@@ -118,8 +118,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () =>
-                    ref.read(GameProviders.client).register(code: code),
+                onPressed: () => gameClient.register(code: code),
                 child: const Text('Join Game'),
               )
             ],
@@ -127,7 +126,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
               for (final info in allGames.value)
                 ElevatedButton(
                   onPressed: () {
-                    ref.read(GameProviders.client).register(code: info.gameId);
+                    gameClient.register(code: info.gameId);
                   },
                   child: Text(
                       'Started Game: ${info.gameId}, Players: ${info.players}'),

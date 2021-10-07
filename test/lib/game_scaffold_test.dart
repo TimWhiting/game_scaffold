@@ -78,9 +78,7 @@ class GameTester<T extends Game> {
     final game = backendReader(BackendProviders.state) as T;
     final error = backendReader(BackendProviders.error) as GameError<T>?;
     if (error != null) {
-      NoServerClient.games[code]!
-          .read(BackendProviders.error.notifier)
-          .clearError();
+      backendReader(BackendProviders.error.notifier).clearError();
     }
     outcome(game, error);
   }

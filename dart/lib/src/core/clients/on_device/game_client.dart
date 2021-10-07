@@ -27,7 +27,8 @@ class NoServerGameClient extends GameClient {
     read(GameProviders.status).state = status;
   }
 
-  late Reader backendReader = NoServerClient.games[gameCode]!.read;
+  Reader get backendReader =>
+      NoServerClient.games[read(GameProviders.code).state]!.read;
 
   GameStatus get gameStatus => read(GameProviders.status).state;
   IList<Player> get _players => backendReader(BackendProviders.players).state;
@@ -43,10 +44,11 @@ class NoServerGameClient extends GameClient {
     gameStatus = GameStatus.NotStarted;
     _startListening.putIfAbsent(gameCode, () => []);
     _startListening[gameCode]!.add(_watchState);
-    final config = read(GameProviders.config).state;
+    final config = backendReader(BackendProviders.config).state;
     if (_players.length == config.maxPlayers && config.autoStart) {
       await sendEvent(const GenericEvent.start().asGameEvent);
     }
+
     for (final pID in _players) {
       lobbyStreamController.add(GameInfo(
         gameId: gameCode,
@@ -62,11 +64,16 @@ class NoServerGameClient extends GameClient {
 
   void _watchState() {
     logger.info('Watching backend');
+    print('Watching Backend');
+
     _ss = backendReader(BackendProviders.state.notifier).stream.listen(
         (gameState) {
+      print('New Game State $gameState');
       gameStreamController.add(gameState);
       read(GameProviders.status).state = gameState.status;
     }, onError: (e) {
+      print('New Error State $e');
+
       read(GameProviders.error.notifier).error =
           GameError(e as String, playerID);
     });
@@ -74,6 +81,7 @@ class NoServerGameClient extends GameClient {
     _se = backendReader(BackendProviders.error.notifier)
         .stream
         .listen((gameError) {
+      print('New Error State $gameError');
       if (gameError == null || gameError.person == playerID) {
         read(GameProviders.error.notifier).error = gameError;
       }

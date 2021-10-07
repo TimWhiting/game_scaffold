@@ -22,6 +22,7 @@ class NoServerClient extends ServerClient {
     backendRead(BackendProviders.config).state =
         read(GameProviders.config).state;
     games[gameCode] = LocalGame(gameCode, playerID, backendRead);
+
     return gameCode;
   }
 
