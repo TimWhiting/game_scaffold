@@ -15,7 +15,7 @@ void testGame<T extends Game>(
   String testName, {
   required GameConfig config,
   required List<Player> players,
-  required void Function(GameTester<T>) test,
+  required Future<void> Function(GameTester<T>) test,
 }) {
   darttest.group(testName, () {
     final root = ProviderContainer();
@@ -43,8 +43,8 @@ void testGame<T extends Game>(
             .startGame();
       }
     });
-    darttest.test(testName, () {
-      test(GameTester<T>(root.read, readers, players, code));
+    darttest.test(testName, () async {
+      await test(GameTester<T>(root.read, readers, players, code));
     });
   });
 }
@@ -60,6 +60,7 @@ class GameTester<T extends Game> {
   final GameCode code;
   final Reader read;
   final Map<PlayerID, dynamic> readers;
+  late final backendReader = NoServerClient.games[code]!.read;
 
   /// Event lets you test the [outcome] of an [event]
   ///
@@ -71,13 +72,11 @@ class GameTester<T extends Game> {
   /// });
   /// ```
   void event(Event event, Function(T, GameError<T>?) outcome) {
-    NoServerClient.games[code]!
-        .read(BackendProviders.state.notifier)
+    backendReader(BackendProviders.state.notifier)
         .handleEvent(event.asGameEvent);
 
-    final game = NoServerClient.games[code]!.read(BackendProviders.state) as T;
-    final error = NoServerClient.games[code]!.read(BackendProviders.error)
-        as GameError<T>?;
+    final game = backendReader(BackendProviders.state) as T;
+    final error = backendReader(BackendProviders.error) as GameError<T>?;
     if (error != null) {
       NoServerClient.games[code]!
           .read(BackendProviders.error.notifier)
@@ -89,12 +88,12 @@ class GameTester<T extends Game> {
   /// Returns the current game state
   ///
   /// If testing the outcome of an event prefer using [event]
-  T get game => (readers[P1] as Reader)(GameProviders.state).value as T;
+  T get game => backendReader(BackendProviders.state) as T;
 
   /// Returns the current error state
   ///
   /// If testing the outcome of an event prefer using [event]
-  GameError? get error => (readers[P1] as Reader)(GameProviders.error);
+  GameError? get error => backendReader(GameProviders.error);
 
   /// Advances to the next round, and checks the [expectation] of the game after
   /// the round has advanced

@@ -17,7 +17,7 @@ void main() {
       const Player(P1),
       const Player(P2),
     ],
-    test: (tester) {
+    test: (tester) async {
       final initialState = tester.game;
       expect(initialState.players.length, 2);
       expect(initialState.board.every((s) => s == null), true);
