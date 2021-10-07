@@ -64,15 +64,13 @@ class NoServerGameClient extends GameClient {
 
   void _watchState() {
     logger.info('Watching backend');
-    print('Watching Backend');
 
     _ss = backendReader(BackendProviders.state.notifier).stream.listen(
         (gameState) {
-      print('New Game State $gameState');
       gameStreamController.add(gameState);
       read(GameProviders.status).state = gameState.status;
     }, onError: (e) {
-      print('New Error State $e');
+      logger.shout('Unexpected Error State $e');
 
       read(GameProviders.error.notifier).error =
           GameError(e as String, playerID);
@@ -81,7 +79,7 @@ class NoServerGameClient extends GameClient {
     _se = backendReader(BackendProviders.error.notifier)
         .stream
         .listen((gameError) {
-      print('New Error State $gameError');
+      logger.warning('Error State $gameError');
       if (gameError == null || gameError.person == playerID) {
         read(GameProviders.error.notifier).error = gameError;
       }
