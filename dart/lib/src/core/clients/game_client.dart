@@ -57,7 +57,10 @@ abstract class GameClient {
   static void registerImplementation<T extends GameClient>(
     ClientType location,
     T Function(
-            ProviderRef<GameClient> ref, GameAddress address, PlayerID playerID)
+      ProviderRef<GameClient> ref,
+      GameAddress address,
+      PlayerID playerID,
+    )
         impl,
   ) {
     _clientImplementations[location] = impl;

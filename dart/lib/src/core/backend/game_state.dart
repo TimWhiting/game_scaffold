@@ -55,6 +55,12 @@ class BackendProviders {
     (ref) => GameErrorNotifier(),
     dependencies: [code],
   );
+
+  static final initialState = Provider<Game>(
+    (ref) => Game.getInitialState(
+        ref.watch(config).state, ref.watch(players).state, ref.read),
+    dependencies: [code],
+  );
 }
 
 /// A [StateNotifier] that handles events for a particular game, delegating to the game's implementation for non generic events
