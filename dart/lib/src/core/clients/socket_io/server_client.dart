@@ -26,10 +26,10 @@ class IOServerClient extends ServerClient {
 
   @override
   Future<String> createGame() async {
-    final gameConfig = read(GameProviders.config).state;
+    final gameConfig = read(GameProviders.config);
     logger.fine('Creating game $gameConfig');
     final gameCode = await _createGame(gameConfig);
-    read(GameProviders.code).state = gameCode;
+    read(GameProviders.code.notifier).state = gameCode;
     return gameCode;
   }
 
@@ -42,8 +42,8 @@ class IOServerClient extends ServerClient {
   @override
   Future<bool> deleteGame() async {
     await _ensureConnected();
-    final result = await socket!
-        .call(IOChannel.deletegame, read(GameProviders.code).state);
+    final result =
+        await socket!.call(IOChannel.deletegame, read(GameProviders.code));
     return result as bool;
   }
 
@@ -67,10 +67,10 @@ class IOServerClient extends ServerClient {
   }
 
   set gameStatus(GameStatus status) {
-    read(GameProviders.status).state = status;
+    read(GameProviders.status.notifier).state = status;
   }
 
-  GameStatus get gameStatus => read(GameProviders.status).state;
+  GameStatus get gameStatus => read(GameProviders.status);
 
   /// Connects to the backend
   @override

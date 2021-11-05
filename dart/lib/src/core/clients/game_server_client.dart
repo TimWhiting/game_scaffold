@@ -30,7 +30,7 @@ class GameServerClient {
   /// Specifying [code] is just shorthand for updating the `gameCodeProvider`
   Future<bool> register({GameCode? code}) async {
     if (code != null) {
-      read(GameProviders.code).state = code;
+      read(GameProviders.code.notifier).state = code;
     }
     return _gClient.register();
   }
@@ -59,10 +59,10 @@ class GameServerClient {
   /// Specifying [config] is just a shorthand for updating `gameConfigProvider`
   Future<String> createGame({GameConfig? config}) async {
     if (config != null) {
-      read(GameProviders.config).state = config;
+      read(GameProviders.config.notifier).state = config;
     }
     final code = await _sClient.createGame();
-    read(GameProviders.code).state = code;
+    read(GameProviders.code.notifier).state = code;
     return code;
   }
 
@@ -71,7 +71,7 @@ class GameServerClient {
   /// Specifying [code] is just shorthand for updating the `gameCodeProvider`
   Future<bool> deleteGame({GameCode? code}) {
     if (code != null) {
-      read(GameProviders.code).state = code;
+      read(GameProviders.code.notifier).state = code;
     }
 
     return _sClient.deleteGame();

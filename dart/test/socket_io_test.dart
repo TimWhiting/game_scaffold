@@ -14,15 +14,15 @@ void main() {
     registerIOClients();
   });
   test('io', () async {
-    read(GameProviders.clientType).state = IOClient;
-    read(GameProviders.remoteUri).state =
+    read(GameProviders.clientType.notifier).state = IOClient;
+    read(GameProviders.remoteUri.notifier).state =
         Uri.parse('http://localhost:$defaultGamePort');
 
-    expect(p1Game(GameProviders.status).state, GameStatus.NotConnected);
+    expect(p1Game(GameProviders.status), GameStatus.NotConnected);
     final client = p1Game(GameProviders.client);
     final code =
         await client.createGame(config: const GameConfig(gameType: 'None'));
-    expect(p1Game(GameProviders.status).state, GameStatus.NotJoined);
+    expect(p1Game(GameProviders.status), GameStatus.NotJoined);
     await client.register(code: code);
     expect(p1Game, GameStatus.NotStarted);
   });

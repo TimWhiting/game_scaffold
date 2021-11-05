@@ -43,7 +43,7 @@ class GameServer {
   GameCode get gameID => _gameId;
 
   /// Gets [GameConfig] of this game
-  GameConfig get gameConfig => _read(BackendProviders.config).state;
+  GameConfig get gameConfig => _read(BackendProviders.config);
 
   /// Gets the game's type from the config
   GameType get gameType => gameConfig.gameType;
@@ -59,7 +59,7 @@ class GameServer {
 
   final Reader _read;
   final GameCode _gameId;
-  IList<Player> get _players => _read(BackendProviders.players).state;
+  IList<Player> get _players => _read(BackendProviders.players);
   final _clients = <PlayerID, IO.Socket?>{};
   final _clientNames = <PlayerID, String>{};
   // ignore: prefer_typing_uninitialized_variables
@@ -195,7 +195,7 @@ class GameServer {
   }
 
   void _addPlayer(Player player) {
-    _read(BackendProviders.players).state = _players.add(player);
+    _read(BackendProviders.players.notifier).state = _players.add(player);
     _serverLogger.info('Notifying ${_clients.length} clients of added player');
     for (final client in _clients.entries) {
       client.value?.emit(IOChannel.lobby.string, gameInfo(client.key).toJson());

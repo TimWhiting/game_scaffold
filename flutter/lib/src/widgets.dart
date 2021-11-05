@@ -27,7 +27,7 @@ class GameNavigator extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameStatus = ref.watch(GameProviders.status).state;
+    final gameStatus = ref.watch(GameProviders.status);
     final pages = {GameStatus.NotConnected: disconnected};
     navigationLogger.info(
         'PlayerID: ${ref.read(GameProviders.playerID)} gameStatus: $gameStatus');

@@ -24,27 +24,26 @@ class NoServerGameClient extends GameClient {
   }
 
   set gameStatus(GameStatus status) {
-    read(GameProviders.status).state = status;
+    read(GameProviders.status.notifier).state = status;
   }
 
   Reader get backendReader =>
-      NoServerClient.games[read(GameProviders.code).state]!.read;
+      NoServerClient.games[read(GameProviders.code)]!.read;
 
-  GameStatus get gameStatus => read(GameProviders.status).state;
-  IList<Player> get _players => backendReader(BackendProviders.players).state;
+  GameStatus get gameStatus => read(GameProviders.status);
+  IList<Player> get _players => backendReader(BackendProviders.players);
   @override
   Future<bool> register() async {
-    backendReader(BackendProviders.players).state = _players
-        .add(Player(playerID, name: read(GameProviders.playerName).state));
+    backendReader(BackendProviders.players.notifier).state =
+        _players.add(Player(playerID, name: read(GameProviders.playerName)));
     gameStatus = GameStatus.NotJoined;
-    read(GameProviders.playerName).state =
-        read(GameProviders.playerName).state == ''
-            ? playerID
-            : read(GameProviders.playerName).state;
+    read(GameProviders.playerName.notifier).update(
+        (prev) => prev == '' ? playerID : prev); // TODO: Why is it this way
+
     gameStatus = GameStatus.NotStarted;
     _startListening.putIfAbsent(gameCode, () => []);
     _startListening[gameCode]!.add(_watchState);
-    final config = backendReader(BackendProviders.config).state;
+    final config = backendReader(BackendProviders.config);
     if (_players.length == config.maxPlayers && config.autoStart) {
       await sendEvent(const GenericEvent.start().asGameEvent);
     }
@@ -54,8 +53,8 @@ class NoServerGameClient extends GameClient {
         gameId: gameCode,
         players: _players.map((p) => p.name).toIList(),
         player: pID.name,
-        creator:
-            pID.id == backendReader(BackendProviders.players).state.first.id,
+        creator: pID.id ==
+            backendReader(BackendProviders.players.state).state.first.id,
         gameType: config.gameType,
       ));
     }
@@ -68,7 +67,7 @@ class NoServerGameClient extends GameClient {
     _ss = backendReader(BackendProviders.state.notifier).stream.listen(
         (gameState) {
       gameStreamController.add(gameState);
-      read(GameProviders.status).state = gameState.status;
+      read(GameProviders.status.notifier).state = gameState.status;
     }, onError: (e) {
       logger.shout('Unexpected Error State $e');
 
@@ -87,7 +86,7 @@ class NoServerGameClient extends GameClient {
     final initialState =
         backendReader(BackendProviders.state.notifier).gameState;
     gameStreamController.add(initialState);
-    read(GameProviders.status).state = initialState.status;
+    read(GameProviders.status.notifier).state = initialState.status;
     final error = backendReader(BackendProviders.error.notifier).error;
     read(GameProviders.error.notifier).error = error;
   }

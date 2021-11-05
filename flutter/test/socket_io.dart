@@ -9,9 +9,9 @@ Future<void> main() async {
   final ioServer = IOServer();
 
   await test('Created', (read) async {
-    final gameCode = read.gameFor(P1)(GameProviders.code).state;
+    final gameCode = read.gameFor(P1)(GameProviders.code);
     assert(ioServer.servers[gameCode] != null, 'Game Server Created');
-    final gameStatus = read.gameFor(P1)(GameProviders.status).state;
+    final gameStatus = read.gameFor(P1)(GameProviders.status);
     print(gameStatus);
     assert(gameStatus == GameStatus.NotJoined, 'Game Starts out Not Joined');
   });
@@ -19,7 +19,7 @@ Future<void> main() async {
   await Future.delayed(const Duration(milliseconds: 100));
 
   await test('Registered Start Game', (read) async {
-    final gameCode = read.gameFor(P1)(GameProviders.code).state;
+    final gameCode = read.gameFor(P1)(GameProviders.code);
     final gameClient = read.gameFor(P1)(GameProviders.client);
     await gameClient.register();
     await gameClient.startGame();
@@ -47,11 +47,11 @@ Future<void> test(
         parent: root,
         overrides: [GameProviders.playerID.overrideWithValue(P2)]).read
   });
-  root.read(GameProviders.remoteUri).state =
+  root.read(GameProviders.remoteUri.notifier).state =
       Uri.parse('http://127.0.0.1:$defaultGamePort');
   var serverClient = readers.gameFor(P1)(GameProviders.client);
   const config = GameConfig(adminId: P1, gameType: 'tictactoe');
-  readers.gameFor(P1)(GameProviders.config).state = config;
+  readers.gameFor(P1)(GameProviders.config.notifier).state = config;
   final code = await serverClient.createGame();
   await Future.delayed(const Duration(milliseconds: 100));
   await testFn(readers);

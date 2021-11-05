@@ -75,7 +75,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerID = ref.watch(GameProviders.playerID);
-    final code = ref.watch(GameProviders.code).state;
+    final code = ref.watch(GameProviders.code);
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
     final gameClient = ref.read(GameProviders.client);
     final allGames = ref.watch(GameProviders.games);
@@ -113,7 +113,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                   decoration:
                       const InputDecoration(hintText: 'Enter Game Code'),
                   onChanged: (text) =>
-                      ref.read(GameProviders.code).state = text,
+                      ref.read(GameProviders.code.notifier).state = text,
                 ),
               ),
               const SizedBox(height: 20),
@@ -161,9 +161,9 @@ class GameWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(GameProviders.state);
-    final gameStatus = ref.watch(GameProviders.status).state;
+    final gameStatus = ref.watch(GameProviders.status);
     final playerID = ref.watch(GameProviders.playerID);
-    ref.listen(GameProviders.error, (error) {
+    ref.listen<GameError?>(GameProviders.error, (prevError, error) {
       if (error != null) {
         showDialog(
           context: context,
@@ -175,8 +175,8 @@ class GameWidget extends HookConsumerWidget {
       }
     });
     return gameState.when(
-      error: (e, st, _) => Text('$e, $st'),
-      loading: (_) => const Center(child: CircularProgressIndicator()),
+      error: (e, st) => Text('$e, $st'),
+      loading: () => const Center(child: CircularProgressIndicator()),
       data: (g) => Scaffold(
         appBar: AppBar(),
         body: Center(

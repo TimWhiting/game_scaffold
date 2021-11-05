@@ -15,12 +15,12 @@ class NoServerClient extends ServerClient {
   @override
   Future<String> createGame() async {
     final gameCode = generateGameID([]);
-    read(GameProviders.code).state = gameCode;
+    read(GameProviders.code.notifier).state = gameCode;
     final backendRead = ProviderContainer(overrides: [
       GameProviders.code.overrideWithValue(StateController(gameCode))
     ]).read;
-    backendRead(BackendProviders.config).state =
-        read(GameProviders.config).state;
+    backendRead(BackendProviders.config.notifier).state =
+        read(GameProviders.config);
     games[gameCode] = LocalGame(gameCode, playerID, backendRead);
 
     return gameCode;
@@ -28,7 +28,7 @@ class NoServerClient extends ServerClient {
 
   @override
   Future<bool> deleteGame() async {
-    if (games.remove(read(GameProviders.code).state) != null) {
+    if (games.remove(read(GameProviders.code)) != null) {
       return true;
     }
     return false;
@@ -39,23 +39,19 @@ class NoServerClient extends ServerClient {
 
   @override
   Future<IList<GameInfo>> getGames() async {
-    final gms = games.values.where((g) =>
-        g.read(BackendProviders.players).state.any((p) => p.id == playerID));
+    final gms = games.values.where(
+        (g) => g.read(BackendProviders.players).any((p) => p.id == playerID));
     return [
       for (final g in gms)
         GameInfo(
           gameId: g.gameCode,
           player: g
               .read(BackendProviders.players)
-              .state
               .firstWhere((p) => p.id == playerID)
               .name,
-          players: g
-              .read(BackendProviders.players)
-              .state
-              .map((p) => p.name)
-              .toIList(),
-          gameType: g.read(BackendProviders.config).state.gameType,
+          players:
+              g.read(BackendProviders.players).map((p) => p.name).toIList(),
+          gameType: g.read(BackendProviders.config).gameType,
           creator: g.creator == playerID,
         )
     ].lock;

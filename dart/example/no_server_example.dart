@@ -17,7 +17,7 @@ Future<void> main(List<String> arguments) async {
   final p2Reader = ProviderContainer(
       parent: rootProvider,
       overrides: [GameProviders.playerID.overrideWithValue(P2)]).read;
-  read(GameProviders.clientType).state = OnDeviceClient;
+  read(GameProviders.clientType.notifier).state = OnDeviceClient;
   const config = GameConfig(
     adminId: P1,
     customNames: false,

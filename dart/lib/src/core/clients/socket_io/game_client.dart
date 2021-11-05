@@ -45,22 +45,20 @@ class IOGameClient extends GameClient {
   }
 
   set gameStatus(GameStatus status) {
-    read(GameProviders.status).state = status;
+    read(GameProviders.status.notifier).state = status;
   }
 
-  GameStatus get gameStatus => read(GameProviders.status).state;
+  GameStatus get gameStatus => read(GameProviders.status);
   @override
   Future<bool> register() async {
     _ensureConnected();
     logger.info('Registering');
     gameStatus = GameStatus.NotJoined;
     _watchState();
-    final assignedName = await _socket!.call(IOChannel.register, {
-      'name': read(GameProviders.playerName).state,
-      'id': playerID
-    }) as String?;
+    final assignedName = await _socket!.call(IOChannel.register,
+        {'name': read(GameProviders.playerName), 'id': playerID}) as String?;
     if (assignedName != null) {
-      read(GameProviders.playerName).state = assignedName;
+      read(GameProviders.playerName.notifier).state = assignedName;
       return true;
     }
     return false;

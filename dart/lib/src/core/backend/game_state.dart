@@ -28,14 +28,14 @@ class BackendProviders {
   static final StateNotifierProvider<GameStateNotifier, Game?> state =
       StateNotifierProvider<GameStateNotifier, Game?>(
     (ref) {
-      final gameConfig = ref.watch(config).state;
+      final gameConfig = ref.watch(config);
       return GameStateNotifier(
         gameConfig,
         ref.read,
         ref.watch(code),
       );
     },
-    dependencies: [code],
+    dependencies: [code, config],
   );
 
   /// Keeps track of the players involved in the game on the server (or on the client) in the case of a local game
@@ -57,9 +57,9 @@ class BackendProviders {
   );
 
   static final initialState = Provider<Game>(
-    (ref) => Game.getInitialState(
-        ref.watch(config).state, ref.watch(players).state, ref.read),
-    dependencies: [code],
+    (ref) =>
+        Game.getInitialState(ref.watch(config), ref.watch(players), ref.read),
+    dependencies: [code, config, players],
   );
 }
 
@@ -69,7 +69,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   GameStateNotifier(this.gameConfig, this.read, this.code)
       : _gameStateLogger = Logger('GameStateNotifier $code'),
         super(Game.getInitialState(
-            gameConfig, read(BackendProviders.players).state, read) as T);
+            gameConfig, read(BackendProviders.players), read) as T);
   final Logger _gameStateLogger;
   final Reader read;
 
@@ -105,7 +105,7 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
             return _previousStates.removeLast().gameValue();
           },
           start: () => Game.getInitialState(
-                  gameConfig, read(BackendProviders.players).state, read)
+                  gameConfig, read(BackendProviders.players), read)
               .gameValue(),
           readyNextRound: (e) {
             if (state.readyPlayers.length > 1) {

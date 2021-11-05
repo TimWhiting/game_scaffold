@@ -21,7 +21,7 @@ class SupabaseServerClient extends ServerClient {
   SupabaseQueryBuilder get gameDB => _supaClient.from('Game');
   @override
   Future<String> createGame() async {
-    final config = read(GameProviders.config).state.copyWith(adminId: playerID);
+    final config = read(GameProviders.config).copyWith(adminId: playerID);
 
     final response = await gameDB.insert({
       'id': generateGameID([]),
@@ -35,17 +35,15 @@ class SupabaseServerClient extends ServerClient {
     }
     // ignore: avoid_dynamic_calls
     final code = response.data[0]['id'];
-    read(GameProviders.code).state = code as String;
+    read(GameProviders.code.notifier).state = code as String;
     _supaLogger.info('GameCode: $code');
     return code;
   }
 
   @override
   Future<bool> deleteGame() async {
-    final response = await gameDB
-        .delete()
-        .eq('id', read(GameProviders.code).state)
-        .execute();
+    final response =
+        await gameDB.delete().eq('id', read(GameProviders.code)).execute();
     if (response.error != null) {
       _supaLogger
           .severe('In delete game Supabase Error ${response.error?.message}');
@@ -155,7 +153,7 @@ class SupabaseGameClient extends GameClient {
         return true;
       }
       final newPlayers = oldPlayers.lock
-          .add(Player(playerID, name: read(GameProviders.playerName).state));
+          .add(Player(playerID, name: read(GameProviders.playerName)));
       if (newPlayers.length == gameConfig.maxPlayers) {
         _supaLogger.info('Max Limit');
 

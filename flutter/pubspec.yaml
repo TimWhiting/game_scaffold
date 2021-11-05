@@ -12,13 +12,13 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_hooks: ^0.18.0
-  flutter_riverpod: ^1.0.0-dev.6
+  flutter_riverpod: ^1.0.0
   game_scaffold_dart: ^0.3.3
-  hooks_riverpod: ^1.0.0-dev.6
+  hooks_riverpod: ^1.0.0
   logging: ^1.0.0
   postgrest: ^0.1.8
   realtime_client: ^0.1.11
-  riverpod: ^1.0.0-dev.6
+  riverpod: ^1.0.0
   supabase: ^0.2.7
 
 dev_dependencies:

@@ -17,7 +17,7 @@ abstract class GameClient {
   final PlayerID playerID;
 
   /// The [gameCode] of the game the client has joined
-  GameCode get gameCode => read(GameProviders.code).state;
+  GameCode get gameCode => read(GameProviders.code);
   final Logger logger;
 
   final ProviderRef<GameClient> ref;

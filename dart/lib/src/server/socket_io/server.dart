@@ -117,7 +117,7 @@ class IOServer {
       parent: container,
       overrides: [BackendProviders.code.overrideWithValue(gameid)],
     );
-    scopedContainer.read(BackendProviders.config).state = gameConfig;
+    scopedContainer.read(BackendProviders.config.notifier).state = gameConfig;
     final server = GameServer(
         io, this, scopedContainer.read, gameid, servers.remove,
         debug: debug);

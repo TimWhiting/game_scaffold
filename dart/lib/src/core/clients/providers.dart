@@ -50,7 +50,7 @@ class GameProviders {
       final c = ref.watch(client);
       return c.gameLobby();
     },
-    dependencies: [playerID],
+    dependencies: [client, code],
   );
 
   /// Provides the game info of all games that the client with the specified id
@@ -62,7 +62,7 @@ class GameProviders {
       final c = ref.watch(client);
       return LastOrLoadingStateNotifier(c.getGames);
     },
-    dependencies: [playerID],
+    dependencies: [client],
   );
 
   /// Provides the game state for the current game of the client with specified id
@@ -72,7 +72,7 @@ class GameProviders {
       final c = ref.watch(client);
       return c.gameStream();
     },
-    dependencies: [playerID],
+    dependencies: [code, client],
   );
 
   /// Provides the game error for the current game of the client with specified id
@@ -99,27 +99,27 @@ class GameProviders {
       // Null indicates that all players can go simulataneously
       return currentPlayer == null || currentPlayer == pID;
     },
-    dependencies: [playerID],
+    dependencies: [playerID, state, code],
   );
 
   /// Provides the way to configure the game for starting
   static final StateProvider<GameConfig> config = StateProvider<GameConfig>(
-    (ref) => ref.watch(singleConfig).state,
-    dependencies: [playerID],
+    (ref) => ref.watch(singleConfig),
+    dependencies: [singleConfig],
   );
 
   /// Provides the game type's name for the game specified by [config]
   static final Provider<String> gameType = Provider<String>(
     (ref) => ref.watch(state).asData?.value.type.name ?? '',
-    dependencies: [playerID],
+    dependencies: [state],
   );
 
   /// Provides the [ServerClient] for each client id
   static final Provider<ServerClient> serverClient = Provider(
     (ref) {
       final pID = ref.watch(playerID);
-      final location = ref.watch(clientType).state;
-      final address = ref.watch(remoteUri).state;
+      final location = ref.watch(clientType);
+      final address = ref.watch(remoteUri);
       if (location == IOClient && address == defaultAddress) {
         throw UnimplementedError(
             'Please set the address for the remote server before connecting a game server client');
@@ -134,7 +134,7 @@ class GameProviders {
       ref.onDispose(client.dispose);
       return client;
     },
-    dependencies: [playerID],
+    dependencies: [playerID, clientType, remoteUri],
   );
 
   /// Provides a [GameServerClient] that communicates with the game server and handles game events
@@ -147,15 +147,15 @@ class GameProviders {
       );
       return c;
     },
-    dependencies: [playerID],
+    dependencies: [gameClient, serverClient],
   );
 
   /// Provides a [GameClient] for the client with the specified id
   static final Provider<GameClient> gameClient = Provider(
     (ref) {
       final pID = ref.watch(playerID);
-      final location = ref.watch(clientType).state;
-      final address = ref.watch(remoteUri).state;
+      final location = ref.watch(clientType);
+      final address = ref.watch(remoteUri);
       if (location == IOClient && address == defaultAddress) {
         throw UnimplementedError(
             'Please set the address for the remote server before connecting a game server client');
@@ -169,7 +169,7 @@ class GameProviders {
       ref.onDispose(client.dispose);
       return client;
     },
-    dependencies: [playerID],
+    dependencies: [playerID, clientType, remoteUri],
   );
 }
 

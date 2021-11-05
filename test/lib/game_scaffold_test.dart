@@ -23,7 +23,7 @@ void testGame<T extends Game>(
 
     late GameCode code;
     darttest.setUp(() async {
-      root.read(GameProviders.clientType).state = OnDeviceClient;
+      root.read(GameProviders.clientType.notifier).state = OnDeviceClient;
 
       for (final p in players) {
         readers[p.id] = ProviderContainer(
@@ -37,7 +37,7 @@ void testGame<T extends Game>(
             .register(code: code);
       }
 
-      if ((readers[players.first.id] as Reader)(GameProviders.status).state !=
+      if ((readers[players.first.id] as Reader)(GameProviders.status) !=
           GameStatus.Started) {
         await (readers[players.first.id] as Reader)(GameProviders.client)
             .startGame();
