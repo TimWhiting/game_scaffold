@@ -14,12 +14,12 @@ Future<void> main(List<String> arguments) async {
   final p1Reader = ProviderContainer(
       parent: rootProvider,
       overrides: [GameProviders.playerID.overrideWithValue(P1)]).read;
-  final p2Reader = ProviderContainer(
+  final p2Ref = ProviderContainer(
       parent: rootProvider,
-      overrides: [GameProviders.playerID.overrideWithValue(P2)]).read;
+      overrides: [GameProviders.playerID.overrideWithValue(P2)]);
   read(GameProviders.clientType.notifier).state = OnDeviceClient;
   const config = GameConfig(
-    adminId: P1,
+    adminID: P1,
     customNames: false,
     gameType: 'tictactoe',
     rounds: 2,
@@ -28,19 +28,47 @@ Future<void> main(List<String> arguments) async {
 
   final code = await p1Reader(GameProviders.client).createGame(config: config);
   await p1Reader(GameProviders.client).register();
-  await p2Reader(GameProviders.client).register(code: code);
+  await p2Ref.read(GameProviders.client).register(code: code);
 
-  print(read(BackendProviders.state)!.playerIDs);
-  print(read(BackendProviders.state)!.status);
-  while (!read(BackendProviders.state)!.gameOver) {
-    await loop(read, {P1: p1Reader, P2: p2Reader}, code);
-  }
+  print(read(GameProviders.lobby));
+  late ProviderSubscription sub;
+  sub =
+      p2Ref.listen<AsyncValue<Game>>(GameProviders.state, (last, value) async {
+    if (value.asData?.value.gameOver ?? false) {
+      sub.close();
+      return;
+    }
+    final gameState = value.value! as TicTacToeGame;
+    print(gameState.status);
+    if (gameState.gameOver || gameState.roundOver) {
+      print('Round Over');
+      if (gameState.isWinner(P1)) {
+        print('Player 0 Wins!');
+      } else if (gameState.isWinner(P2)) {
+        print('Player 1 Wins!');
+      } else {
+        print('Draw');
+      }
+      print('');
+      if (gameState.roundOver) {
+        await p1Reader(GameProviders.client).newRound();
+        await p2Ref.read(GameProviders.client).newRound();
+      } else {
+        print('Finished');
+        print('Player 0: ${gameState.totalScores[P1]}');
+        print('Player 1: ${gameState.totalScores[P2]}');
+        exit(0);
+      }
+    } else {
+      await loop(value.value!, read, {P1: p1Reader, P2: p2Ref.read}, code);
+    }
+  });
 }
 
-Future<void> loop(
-    Reader read, Map<String, dynamic> playerReaders, GameCode code) async {
-  printStateAndAction(read, code);
-  final player = read(BackendProviders.state)!.currentPlayer!.id;
+Future<void> loop(Game state, Reader read, Map<String, dynamic> playerReaders,
+    GameCode code) async {
+  printStateAndAction(state, read, code);
+  final player = state.currentPlayer!.id;
   List<int?> location;
   do {
     final command = stdin.readLineSync();
@@ -52,42 +80,21 @@ Future<void> loop(
   );
 
   await Future.delayed(const Duration(milliseconds: 100));
-  final error = read(BackendProviders.error);
+  final error = (playerReaders[player] as Reader)(GameProviders.error);
   if (error != null) {
     print('');
     print('!!!!!!!!!!!');
     print(error);
     print('!!!!!!!!!!!');
     print('');
-    read(BackendProviders.error.notifier).clearError();
-  }
-  final gameState = read(BackendProviders.state) as TicTacToeGame;
-  print(gameState.status);
-  if (gameState.gameOver || gameState.roundOver) {
-    print('Round Over');
-    if (gameState.isWinner(P1)) {
-      print('Player 0 Wins!');
-    } else if (gameState.isWinner(P2)) {
-      print('Player 1 Wins!');
-    } else {
-      print('Draw');
-    }
-    print('');
-    if (gameState.roundOver) {
-      await (playerReaders[P1] as Reader)(GameProviders.client).newRound();
-      await (playerReaders[P2] as Reader)(GameProviders.client).newRound();
-    } else {
-      print('Finished');
-      print('Player 0: ${gameState.totalScores[P1]}');
-      print('Player 1: ${gameState.totalScores[P2]}');
-      exit(0);
-    }
+    (playerReaders[player] as Reader)(GameProviders.error.notifier)
+        .clearError();
   }
 }
 
-void printStateAndAction(Reader read, GameCode code) {
-  print("Player ${read(BackendProviders.state)!.currentPlayer?.id}'s turn");
-  final gameState = read(BackendProviders.state)! as TicTacToeGame;
+void printStateAndAction(Game state, Reader read, GameCode code) {
+  print("Player ${state.currentPlayer?.id}'s turn");
+  final gameState = state as TicTacToeGame;
   String strFor(int index) => gameState.board[index] == P1
       ? 'X'
       : gameState.board[index] == P2

@@ -50,7 +50,7 @@ Future<void> test(
   root.read(GameProviders.remoteUri.notifier).state =
       Uri.parse('http://127.0.0.1:$defaultGamePort');
   var serverClient = readers.gameFor(P1)(GameProviders.client);
-  const config = GameConfig(adminId: P1, gameType: 'tictactoe');
+  const config = GameConfig(adminID: P1, gameType: 'tictactoe');
   readers.gameFor(P1)(GameProviders.config.notifier).state = config;
   final code = await serverClient.createGame();
   await Future.delayed(const Duration(milliseconds: 100));

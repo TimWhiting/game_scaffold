@@ -93,7 +93,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                 onPressed: () async {
                   final id = await gameClient.createGame(
                     config: const GameConfig(
-                      adminId: P1,
+                      adminID: P1,
                       customNames: false,
                       gameType: 'tictactoe',
                       rounds: 2,
