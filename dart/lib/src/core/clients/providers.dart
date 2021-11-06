@@ -25,23 +25,37 @@ class GameProviders {
   /// Provides the player id for a particular section of the widget tree
   ///
   /// This is so that a multiplayer game within the same app can be played
-  static final playerID = Provider<PlayerID>((ref) => '');
+  static final playerID = Provider<PlayerID>(
+    (ref) => '',
+    name: 'PlayerID',
+  );
 
   /// Allows one config to write all players' configs
-  static final singleConfig =
-      StateProvider<GameConfig>((ref) => const GameConfig(gameType: ''));
+  static final singleConfig = StateProvider<GameConfig>(
+    (ref) => const GameConfig(gameType: ''),
+    name: 'SingleGameConfig',
+  );
 
   /// The provider that controls the [GameClient] and [ServerClient]
   /// implementation to use
-  static final clientType = StateProvider<ClientType>((ref) => IOClient);
+  static final clientType = StateProvider<ClientType>(
+    (ref) => IOClient,
+    name: 'ClientType',
+  );
 
   /// Provides the player's name
-  static final playerName =
-      StateProvider<String>((ref) => '', dependencies: [playerID]);
+  static final playerName = StateProvider<String>(
+    (ref) => '',
+    dependencies: [playerID],
+    name: 'PlayerName',
+  );
 
   /// Provides the game code for each client id
-  static final StateProvider<GameCode> code =
-      StateProvider((ref) => '', dependencies: [playerID]);
+  static final StateProvider<GameCode> code = StateProvider(
+    (ref) => '',
+    dependencies: [playerID],
+    name: 'GameCode',
+  );
 
   /// Provides game lobby info in the form of [GameInfo] for the lobby
   static final StreamProvider<GameInfo> lobby = StreamProvider(
@@ -51,6 +65,7 @@ class GameProviders {
       return c.gameLobby();
     },
     dependencies: [client, code],
+    name: 'Lobby',
   );
 
   /// Provides the game info of all games that the client with the specified id
@@ -63,6 +78,7 @@ class GameProviders {
       return LastOrLoadingStateNotifier(c.getGames);
     },
     dependencies: [client],
+    name: 'ActiveGames',
   );
 
   /// Provides the game state for the current game of the client with specified id
@@ -73,12 +89,14 @@ class GameProviders {
       return c.gameStream();
     },
     dependencies: [code, client],
+    name: 'GameStateStream',
   );
 
   /// Provides the game error for the current game of the client with specified id
   static final error = StateNotifierProvider<GameErrorNotifier, GameError?>(
     (ref) => GameErrorNotifier(),
     dependencies: [playerID],
+    name: 'GameError',
   );
 
   /// Provides the game status for the current game of the client with specified id
@@ -87,7 +105,8 @@ class GameProviders {
       final _ = ref.watch(code); // Invalidate on change of gameCode
       return GameStatus.NotConnected;
     },
-    dependencies: [playerID],
+    dependencies: [playerID, code],
+    name: 'GameStatus',
   );
 
   /// Provides whether it is the players turn for the current game of the client with the specified id
@@ -100,18 +119,21 @@ class GameProviders {
       return currentPlayer == null || currentPlayer == pID;
     },
     dependencies: [playerID, state, code],
+    name: 'GameTurn',
   );
 
   /// Provides the way to configure the game for starting
   static final StateProvider<GameConfig> config = StateProvider<GameConfig>(
     (ref) => ref.watch(singleConfig),
     dependencies: [singleConfig],
+    name: 'GameConfig',
   );
 
   /// Provides the game type's name for the game specified by [config]
   static final Provider<String> gameType = Provider<String>(
     (ref) => ref.watch(state).asData?.value.type.name ?? '',
     dependencies: [state],
+    name: 'GameType',
   );
 
   /// Provides the [ServerClient] for each client id
@@ -124,30 +146,19 @@ class GameProviders {
         throw UnimplementedError(
             'Please set the address for the remote server before connecting a game server client');
       }
-      final client = ServerClient.fromParams(
-        location: location,
-        ref: ref,
-        address: address,
-        playerID: pID,
-      );
 
       ref.onDispose(client.dispose);
       return client;
     },
-    dependencies: [playerID, clientType, remoteUri],
-  );
-
-  /// Provides a [GameServerClient] that communicates with the game server and handles game events
-  static final Provider<GameServerClient> client = Provider(
-    (ref) {
-      final c = GameServerClient(
-        ref,
-        ref.watch(gameClient),
-        ref.watch(serverClient),
-      );
-      return c;
-    },
-    dependencies: [gameClient, serverClient],
+    dependencies: [
+      playerID,
+      clientType,
+      remoteUri,
+      config,
+      config.notifier,
+      code
+    ],
+    name: 'ServerClient',
   );
 
   /// Provides a [GameClient] for the client with the specified id
@@ -170,6 +181,7 @@ class GameProviders {
       return client;
     },
     dependencies: [playerID, clientType, remoteUri],
+    name: 'GameClient',
   );
 }
 

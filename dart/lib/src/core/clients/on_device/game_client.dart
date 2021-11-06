@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:riverpod/riverpod.dart';
+import 'package:rxdart/subjects.dart';
 
 import '../../backend.dart';
 import '../../client.dart';
@@ -11,117 +12,69 @@ import '../clients.dart';
 ///
 /// Warning implementation not complete or tested yet
 class NoServerGameClient extends GameClient {
-  NoServerGameClient(
-      {required ProviderRef<GameClient> ref, required PlayerID playerID})
-      : super(playerID, ref);
-  StreamSubscription<Game?>? _ss;
-  StreamSubscription<GameError?>? _se;
-  static final Map<String, List<void Function()>> _startListening = {};
+  NoServerGameClient();
   @override
-  Future<bool> exitGame() async {
+  Future<bool> exitGame(PlayerID playerID, GameCode code) async {
     gameStatus = GameStatus.NotJoined;
     return true;
   }
 
-  set gameStatus(GameStatus status) {
-    read(GameProviders.status.notifier).state = status;
-  }
-
-  Reader get backendReader =>
-      NoServerClient.games[read(GameProviders.code)]!.read;
-
-  GameStatus get gameStatus => read(GameProviders.status);
-  IList<Player> get _players => backendReader(BackendProviders.players);
   @override
-  Future<bool> register() async {
-    backendReader(BackendProviders.players.notifier).state =
-        _players.add(Player(playerID, name: read(GameProviders.playerName)));
-    gameStatus = GameStatus.NotJoined;
-    read(GameProviders.playerName.notifier).update(
-        (prev) => prev == '' ? playerID : prev); // TODO: Why is it this way
+  Future<String?> register(
+      PlayerID playerID, GameCode code, PlayerName name) async {
+    final backendReader = NoServerClient.games[code]!.container.read;
+    backendReader(BackendProviders.lobby.notifier)
+        .addPlayer(Player(playerID, name: name));
 
     gameStatus = GameStatus.NotStarted;
-    _startListening.putIfAbsent(gameCode, () => []);
-    _startListening[gameCode]!.add(_watchState);
-    final config = backendReader(BackendProviders.config);
-    if (_players.length == config.maxPlayers && config.autoStart) {
-      await sendEvent(const GenericEvent.start().asGameEvent);
+    final lobby = backendReader(BackendProviders.lobby);
+    final config = lobby.config;
+    final players = lobby.players;
+    if (players.length == config.maxPlayers &&
+        config.autoStart &&
+        playerID == config.adminID) {
+      await startGame(playerID, code);
     }
 
-    for (final pID in _players) {
-      lobbyStreamController.add(GameInfo(
-        gameId: gameCode,
-        players: _players.map((p) => p.name).toIList(),
-        player: pID.name,
-        creator: pID.id ==
-            backendReader(BackendProviders.players.state).state.first.id,
-        gameType: config.gameType,
-      ));
-    }
-    return true;
-  }
-
-  void _watchState() {
-    logger.info('Watching backend');
-
-    _ss = backendReader(BackendProviders.state.notifier).stream.listen(
-        (gameState) {
-      gameStreamController.add(gameState);
-      read(GameProviders.status.notifier).state = gameState.status;
-    }, onError: (e) {
-      logger.shout('Unexpected Error State $e');
-
-      read(GameProviders.error.notifier).error =
-          GameError(e as String, playerID);
-    });
-
-    _se = backendReader(BackendProviders.error.notifier)
-        .stream
-        .listen((gameError) {
-      logger.warning('Error State $gameError');
-      if (gameError == null || gameError.person == playerID) {
-        read(GameProviders.error.notifier).error = gameError;
-      }
-    });
-    final initialState =
-        backendReader(BackendProviders.state.notifier).gameState;
-    gameStreamController.add(initialState);
-    read(GameProviders.status.notifier).state = initialState.status;
-    final error = backendReader(BackendProviders.error.notifier).error;
-    read(GameProviders.error.notifier).error = error;
+    return name;
   }
 
   @override
-  Future<bool> sendEvent(Event event) async {
-    // print('${event.toJson()}');
+  Future<bool> startGame(PlayerID playerID, GameCode code) async {
+    final backendReader = NoServerClient.games[code]!.container.read;
+    backendReader(BackendProviders.state);
+    return true;
+  }
+
+  @override
+  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) {
+    final backend = NoServerClient.games[code]!.container;
+    backend.read(BackendProviders.lobby);
+    return backend.read(BackendProviders.playerLobby(playerID).stream);
+  }
+
+  @override
+  Stream<GameOrError> gameStream(PlayerID playerID, GameCode code) {
+    logger.info('Watching backend');
+    final backendReader = NoServerClient.games[code]!.container;
+    return backendReader.read(BackendProviders.state.notifier).stream;
+  }
+
+  @override
+  Future<bool> sendEvent(PlayerID playerID, GameCode code, Event event) async {
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
-    final result = backendReader(BackendProviders.state.notifier)
+    final backendReader = NoServerClient.games[code]!.container;
+    final result = backendReader
+        .read(BackendProviders.state.notifier)
         .handleEvent(event.asGameEvent);
-    if (event is GameEventGeneral &&
-        event.event is GenericEventStart &&
-        _startListening[gameCode] != null) {
-      logger.info('Starting');
-      for (final fcn in _startListening[gameCode]!) {
-        fcn();
-      }
-      _startListening[gameCode]?.clear();
-    }
     return result;
   }
 
   @override
   void dispose() {
-    _ss?.cancel();
-    _se?.cancel();
     logger.info('Disposing game client');
-    super.dispose();
-  }
-
-  static void registerImplementation() {
-    GameClient.registerImplementation(
-      OnDeviceClient,
-      (ref, address, id) => NoServerGameClient(ref: ref, playerID: id),
-    );
   }
 }
+
+final onDeviceGameClient = Provider((ref) => NoServerGameClient());

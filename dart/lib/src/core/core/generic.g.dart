@@ -90,12 +90,6 @@ _$GenericEventUndo _$$GenericEventUndoFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$GenericEventUndoToJson(_$GenericEventUndo instance) =>
     <String, dynamic>{};
 
-_$GenericEventStart _$$GenericEventStartFromJson(Map<String, dynamic> json) =>
-    _$GenericEventStart();
-
-Map<String, dynamic> _$$GenericEventStartToJson(_$GenericEventStart instance) =>
-    <String, dynamic>{};
-
 _$_GenericReadyNextRoundEvent _$$_GenericReadyNextRoundEventFromJson(
         Map<String, dynamic> json) =>
     _$_GenericReadyNextRoundEvent(

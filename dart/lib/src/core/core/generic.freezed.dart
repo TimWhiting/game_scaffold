@@ -396,8 +396,6 @@ GenericEvent _$GenericEventFromJson(Map<String, dynamic> json) {
   switch (json['runtimeType'] as String?) {
     case 'undo':
       return GenericEventUndo.fromJson(json);
-    case 'start':
-      return GenericEventStart.fromJson(json);
     case 'readyNextRound':
       return _GenericReadyNextRoundEvent.fromJson(json);
     case 'message':
@@ -415,10 +413,6 @@ class _$GenericEventTearOff {
 
   GenericEventUndo undo() {
     return const GenericEventUndo();
-  }
-
-  GenericEventStart start() {
-    return const GenericEventStart();
   }
 
   _GenericReadyNextRoundEvent readyNextRound(String player) {
@@ -449,7 +443,6 @@ mixin _$GenericEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() undo,
-    required TResult Function() start,
     required TResult Function(String player) readyNextRound,
     required TResult Function(String message, String from, String? to) message,
   }) =>
@@ -457,7 +450,6 @@ mixin _$GenericEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? undo,
-    TResult Function()? start,
     TResult Function(String player)? readyNextRound,
     TResult Function(String message, String from, String? to)? message,
   }) =>
@@ -465,7 +457,6 @@ mixin _$GenericEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? undo,
-    TResult Function()? start,
     TResult Function(String player)? readyNextRound,
     TResult Function(String message, String from, String? to)? message,
     required TResult orElse(),
@@ -474,7 +465,6 @@ mixin _$GenericEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GenericEventUndo value) undo,
-    required TResult Function(GenericEventStart value) start,
     required TResult Function(_GenericReadyNextRoundEvent value) readyNextRound,
     required TResult Function(GameMessage value) message,
   }) =>
@@ -482,7 +472,6 @@ mixin _$GenericEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(GenericEventUndo value)? undo,
-    TResult Function(GenericEventStart value)? start,
     TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
     TResult Function(GameMessage value)? message,
   }) =>
@@ -490,7 +479,6 @@ mixin _$GenericEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GenericEventUndo value)? undo,
-    TResult Function(GenericEventStart value)? start,
     TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
     TResult Function(GameMessage value)? message,
     required TResult orElse(),
@@ -559,7 +547,6 @@ class _$GenericEventUndo extends GenericEventUndo {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() undo,
-    required TResult Function() start,
     required TResult Function(String player) readyNextRound,
     required TResult Function(String message, String from, String? to) message,
   }) {
@@ -570,7 +557,6 @@ class _$GenericEventUndo extends GenericEventUndo {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? undo,
-    TResult Function()? start,
     TResult Function(String player)? readyNextRound,
     TResult Function(String message, String from, String? to)? message,
   }) {
@@ -581,7 +567,6 @@ class _$GenericEventUndo extends GenericEventUndo {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? undo,
-    TResult Function()? start,
     TResult Function(String player)? readyNextRound,
     TResult Function(String message, String from, String? to)? message,
     required TResult orElse(),
@@ -596,7 +581,6 @@ class _$GenericEventUndo extends GenericEventUndo {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GenericEventUndo value) undo,
-    required TResult Function(GenericEventStart value) start,
     required TResult Function(_GenericReadyNextRoundEvent value) readyNextRound,
     required TResult Function(GameMessage value) message,
   }) {
@@ -607,7 +591,6 @@ class _$GenericEventUndo extends GenericEventUndo {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(GenericEventUndo value)? undo,
-    TResult Function(GenericEventStart value)? start,
     TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
     TResult Function(GameMessage value)? message,
   }) {
@@ -618,7 +601,6 @@ class _$GenericEventUndo extends GenericEventUndo {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GenericEventUndo value)? undo,
-    TResult Function(GenericEventStart value)? start,
     TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
     TResult Function(GameMessage value)? message,
     required TResult orElse(),
@@ -641,134 +623,6 @@ abstract class GenericEventUndo extends GenericEvent {
 
   factory GenericEventUndo.fromJson(Map<String, dynamic> json) =
       _$GenericEventUndo.fromJson;
-}
-
-/// @nodoc
-abstract class $GenericEventStartCopyWith<$Res> {
-  factory $GenericEventStartCopyWith(
-          GenericEventStart value, $Res Function(GenericEventStart) then) =
-      _$GenericEventStartCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class _$GenericEventStartCopyWithImpl<$Res>
-    extends _$GenericEventCopyWithImpl<$Res>
-    implements $GenericEventStartCopyWith<$Res> {
-  _$GenericEventStartCopyWithImpl(
-      GenericEventStart _value, $Res Function(GenericEventStart) _then)
-      : super(_value, (v) => _then(v as GenericEventStart));
-
-  @override
-  GenericEventStart get _value => super._value as GenericEventStart;
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$GenericEventStart extends GenericEventStart {
-  const _$GenericEventStart() : super._();
-
-  factory _$GenericEventStart.fromJson(Map<String, dynamic> json) =>
-      _$$GenericEventStartFromJson(json);
-
-  @override
-  String toString() {
-    return 'GenericEvent.start()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) || (other is GenericEventStart);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() undo,
-    required TResult Function() start,
-    required TResult Function(String player) readyNextRound,
-    required TResult Function(String message, String from, String? to) message,
-  }) {
-    return start();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? undo,
-    TResult Function()? start,
-    TResult Function(String player)? readyNextRound,
-    TResult Function(String message, String from, String? to)? message,
-  }) {
-    return start?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? undo,
-    TResult Function()? start,
-    TResult Function(String player)? readyNextRound,
-    TResult Function(String message, String from, String? to)? message,
-    required TResult orElse(),
-  }) {
-    if (start != null) {
-      return start();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GenericEventUndo value) undo,
-    required TResult Function(GenericEventStart value) start,
-    required TResult Function(_GenericReadyNextRoundEvent value) readyNextRound,
-    required TResult Function(GameMessage value) message,
-  }) {
-    return start(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(GenericEventUndo value)? undo,
-    TResult Function(GenericEventStart value)? start,
-    TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
-    TResult Function(GameMessage value)? message,
-  }) {
-    return start?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GenericEventUndo value)? undo,
-    TResult Function(GenericEventStart value)? start,
-    TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
-    TResult Function(GameMessage value)? message,
-    required TResult orElse(),
-  }) {
-    if (start != null) {
-      return start(this);
-    }
-    return orElse();
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$GenericEventStartToJson(this)..['runtimeType'] = 'start';
-  }
-}
-
-abstract class GenericEventStart extends GenericEvent {
-  const factory GenericEventStart() = _$GenericEventStart;
-  const GenericEventStart._() : super._();
-
-  factory GenericEventStart.fromJson(Map<String, dynamic> json) =
-      _$GenericEventStart.fromJson;
 }
 
 /// @nodoc
@@ -843,7 +697,6 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() undo,
-    required TResult Function() start,
     required TResult Function(String player) readyNextRound,
     required TResult Function(String message, String from, String? to) message,
   }) {
@@ -854,7 +707,6 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? undo,
-    TResult Function()? start,
     TResult Function(String player)? readyNextRound,
     TResult Function(String message, String from, String? to)? message,
   }) {
@@ -865,7 +717,6 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? undo,
-    TResult Function()? start,
     TResult Function(String player)? readyNextRound,
     TResult Function(String message, String from, String? to)? message,
     required TResult orElse(),
@@ -880,7 +731,6 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GenericEventUndo value) undo,
-    required TResult Function(GenericEventStart value) start,
     required TResult Function(_GenericReadyNextRoundEvent value) readyNextRound,
     required TResult Function(GameMessage value) message,
   }) {
@@ -891,7 +741,6 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(GenericEventUndo value)? undo,
-    TResult Function(GenericEventStart value)? start,
     TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
     TResult Function(GameMessage value)? message,
   }) {
@@ -902,7 +751,6 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GenericEventUndo value)? undo,
-    TResult Function(GenericEventStart value)? start,
     TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
     TResult Function(GameMessage value)? message,
     required TResult orElse(),
@@ -1025,7 +873,6 @@ class _$GameMessage extends GameMessage {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() undo,
-    required TResult Function() start,
     required TResult Function(String player) readyNextRound,
     required TResult Function(String message, String from, String? to) message,
   }) {
@@ -1036,7 +883,6 @@ class _$GameMessage extends GameMessage {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? undo,
-    TResult Function()? start,
     TResult Function(String player)? readyNextRound,
     TResult Function(String message, String from, String? to)? message,
   }) {
@@ -1047,7 +893,6 @@ class _$GameMessage extends GameMessage {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? undo,
-    TResult Function()? start,
     TResult Function(String player)? readyNextRound,
     TResult Function(String message, String from, String? to)? message,
     required TResult orElse(),
@@ -1062,7 +907,6 @@ class _$GameMessage extends GameMessage {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(GenericEventUndo value) undo,
-    required TResult Function(GenericEventStart value) start,
     required TResult Function(_GenericReadyNextRoundEvent value) readyNextRound,
     required TResult Function(GameMessage value) message,
   }) {
@@ -1073,7 +917,6 @@ class _$GameMessage extends GameMessage {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(GenericEventUndo value)? undo,
-    TResult Function(GenericEventStart value)? start,
     TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
     TResult Function(GameMessage value)? message,
   }) {
@@ -1084,7 +927,6 @@ class _$GameMessage extends GameMessage {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(GenericEventUndo value)? undo,
-    TResult Function(GenericEventStart value)? start,
     TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
     TResult Function(GameMessage value)? message,
     required TResult orElse(),

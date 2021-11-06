@@ -9,7 +9,7 @@ part of 'game.dart';
 _$_GameConfig _$$_GameConfigFromJson(Map<String, dynamic> json) =>
     _$_GameConfig(
       gameType: json['gameType'] as String,
-      adminId: json['adminId'] as String?,
+      adminID: json['adminID'] as String?,
       nameSet: _$enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ??
           NameSet.Basic,
       customNames: json['customNames'] as bool? ?? false,
@@ -23,7 +23,7 @@ _$_GameConfig _$$_GameConfigFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_GameConfigToJson(_$_GameConfig instance) =>
     <String, dynamic>{
       'gameType': instance.gameType,
-      'adminId': instance.adminId,
+      'adminID': instance.adminID,
       'nameSet': _$NameSetEnumMap[instance.nameSet],
       'customNames': instance.customNames,
       'rounds': instance.rounds,
@@ -92,4 +92,19 @@ Map<String, dynamic> _$$_GameInfoToJson(_$_GameInfo instance) =>
       'player': instance.player,
       'creator': instance.creator,
       'gameType': instance.gameType,
+    };
+
+_$_Lobby _$$_LobbyFromJson(Map<String, dynamic> json) => _$_Lobby(
+      code: json['code'] as String,
+      players: ISet<Player>.fromJson(json['players'],
+          (value) => Player.fromJson(value as Map<String, dynamic>)),
+      config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$_LobbyToJson(_$_Lobby instance) => <String, dynamic>{
+      'code': instance.code,
+      'players': instance.players.toJson(
+        (value) => value,
+      ),
+      'config': instance.config,
     };

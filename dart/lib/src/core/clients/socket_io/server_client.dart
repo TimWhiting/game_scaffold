@@ -14,10 +14,8 @@ import 'channels.dart';
 /// The socket IO implementation of [ServerClient]
 class IOServerClient extends ServerClient {
   IOServerClient({
-    required ProviderRef<ServerClient> ref,
     required this.address,
-    required PlayerID playerID,
-  }) : super(ref, playerID) {
+  }) {
     Future.delayed(const Duration(milliseconds: 10), connect);
   }
 
@@ -25,11 +23,9 @@ class IOServerClient extends ServerClient {
   IO.Socket? socket;
 
   @override
-  Future<String> createGame() async {
-    final gameConfig = read(GameProviders.config);
-    logger.fine('Creating game $gameConfig');
-    final gameCode = await _createGame(gameConfig);
-    read(GameProviders.code.notifier).state = gameCode;
+  Future<GameCode> createGame(PlayerID playerID, GameConfig config) async {
+    logger.fine('Creating game $config');
+    final gameCode = await _createGame(config);
     return gameCode;
   }
 
@@ -40,15 +36,15 @@ class IOServerClient extends ServerClient {
   }
 
   @override
-  Future<bool> deleteGame() async {
+  Future<bool> deleteGame(PlayerID playerID, GameCode gameCode) async {
     await _ensureConnected();
-    final result =
-        await socket!.call(IOChannel.deletegame, read(GameProviders.code));
+    final result = await socket!
+        .call(IOChannel.deletegame, {'code': gameCode, 'playerID': playerID});
     return result as bool;
   }
 
   @override
-  Future<IList<GameInfo>> getGames() async {
+  Future<IList<GameInfo>> getGames(PlayerID playerID) async {
     await _ensureConnected();
     final result = await socket!.call(IOChannel.getgames, playerID);
     return (json.decode(result as String) as List<dynamic>)
@@ -66,12 +62,6 @@ class IOServerClient extends ServerClient {
     await connect();
   }
 
-  set gameStatus(GameStatus status) {
-    read(GameProviders.status.notifier).state = status;
-  }
-
-  GameStatus get gameStatus => read(GameProviders.status);
-
   /// Connects to the backend
   @override
   Future<void> connect() async {
@@ -82,17 +72,23 @@ class IOServerClient extends ServerClient {
           Uri.parse(socket?.io.uri ?? '') != address) {
         socket?.dispose();
         socket = IO.io(address.toString(), socketIOOpts);
-        socket!.on(IOChannel.connection.string,
-            (_) => gameStatus = GameStatus.NotJoined);
-        socket!.on(IOChannel.disconnect.string,
-            (_) => gameStatus = GameStatus.NotConnected);
+        socket!.on(
+          IOChannel.connection.string,
+          (_) => gameStatus = GameStatus.NotJoined,
+        );
+        socket!.on(
+          IOChannel.disconnect.string,
+          (_) => gameStatus = GameStatus.NotConnected,
+        );
         await Future.delayed(const Duration(milliseconds: 20));
         final currentStatus = gameStatus;
         if (currentStatus == GameStatus.NotConnected ||
             currentStatus == GameStatus.NotJoined) {
-          scheduleMicrotask(() => gameStatus = socket!.connected
-              ? GameStatus.NotJoined
-              : GameStatus.NotConnected);
+          scheduleMicrotask(
+            () => gameStatus = socket!.connected
+                ? GameStatus.NotJoined
+                : GameStatus.NotConnected,
+          );
         }
       }
       completer.complete();
@@ -110,12 +106,12 @@ class IOServerClient extends ServerClient {
     socket?.dispose();
     gameStatus = GameStatus.NotConnected;
   }
-
-  static void registerImplementation() {
-    ServerClient.registerImplementation(
-      IOClient,
-      (ref, address, id) =>
-          IOServerClient(ref: ref, address: address, playerID: id),
-    );
-  }
 }
+
+final socketIOGameServerClient = Provider((ref) {
+  final client = IOServerClient(
+    address: ref.watch(GameProviders.remoteUri),
+  );
+  ref.onDispose(client.dispose);
+  return client;
+});

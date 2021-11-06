@@ -170,16 +170,16 @@ class GenericEvent with _$GenericEvent implements Event {
   /// Undo's the effects of the last event
   const factory GenericEvent.undo() = GenericEventUndo;
 
-  /// Starts the game
-  const factory GenericEvent.start() = GenericEventStart;
-
   /// Signals that [player] is ready for the next round
   const factory GenericEvent.readyNextRound(String player) =
       _GenericReadyNextRoundEvent;
 
   /// Sends a [message] from the player with id [from] to the player with id [to]
-  const factory GenericEvent.message(String message,
-      {required PlayerID from, required PlayerID? to}) = GameMessage;
+  const factory GenericEvent.message(
+    String message, {
+    required PlayerID from,
+    required PlayerID? to,
+  }) = GameMessage;
 
   factory GenericEvent.fromJson(Map<String, dynamic> map) =>
       _$GenericEventFromJson(map);

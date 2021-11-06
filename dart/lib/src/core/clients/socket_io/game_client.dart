@@ -12,85 +12,88 @@ import 'channels.dart';
 
 /// The socket IO implementation of [GameClient]
 class IOGameClient extends GameClient {
-  IOGameClient(
-      {required ProviderRef<GameClient> ref,
-      required this.address,
-      required PlayerID playerID})
-      : super(playerID, ref) {
-    Future.delayed(const Duration(milliseconds: 100), _ensureConnected);
+  IOGameClient({
+    required this.address,
+    required GameCode code,
+  }) {
+    Future.delayed(
+      const Duration(milliseconds: 100),
+      () => _ensureConnected(code),
+    );
   }
   final GameAddress address;
 
   IO.Socket? _socket;
   GameCode? _lastGameCode;
 
-  void _ensureConnected() {
-    if (gameCode != _lastGameCode || (_socket?.disconnected ?? true)) {
+  void _ensureConnected(GameCode code) {
+    if (code != _lastGameCode || (_socket?.disconnected ?? true)) {
       _socket?.dispose();
-      _socket = IO.io('$address/$gameCode', socketIOOpts);
-      logger.info('Created Game Client Socket $gameCode');
-      _lastGameCode = gameCode;
-      scheduleMicrotask(() => gameStatus = GameStatus.NotJoined);
+      _socket = IO.io('$address/$code', socketIOOpts);
+      logger.info('Created Game Client Socket $code');
+      _lastGameCode = code;
+      // scheduleMicrotask(() => gameStatus = GameStatus.NotJoined);
     }
   }
 
   @override
-  Future<bool> exitGame() async {
+  Future<bool> exitGame(PlayerID playerID, GameCode code) async {
     _socket!.off(IOChannel.error_channel.string);
     _socket!.off(IOChannel.gamestate.string);
     _socket!.off(IOChannel.lobby.string);
     logger.info('Exiting game');
-    gameStatus = GameStatus.NotJoined;
+    // gameStatus = GameStatus.NotJoined;
     return true;
   }
 
-  set gameStatus(GameStatus status) {
-    read(GameProviders.status.notifier).state = status;
-  }
-
-  GameStatus get gameStatus => read(GameProviders.status);
   @override
-  Future<bool> register() async {
-    _ensureConnected();
+  Future<PlayerName> register(
+      PlayerID playerID, GameCode code, PlayerName name) async {
+    _ensureConnected(code);
     logger.info('Registering');
-    gameStatus = GameStatus.NotJoined;
-    _watchState();
-    final assignedName = await _socket!.call(IOChannel.register,
-        {'name': read(GameProviders.playerName), 'id': playerID}) as String?;
+    // gameStatus = GameStatus.NotJoined;
+    final assignedName = await _socket!
+        .call(IOChannel.register, {'name': name, 'id': playerID}) as String?;
     if (assignedName != null) {
-      read(GameProviders.playerName.notifier).state = assignedName;
-      return true;
+      return assignedName;
     }
-    return false;
+    return name;
   }
 
-  void _onLobby(Map<String, dynamic> lobby) {
-    final gameInfo = GameInfo.fromJson(lobby);
-    gameStatus = GameStatus.NotStarted;
-    logger.info('Got Lobby $gameInfo');
-    lobbyStreamController.add(gameInfo);
+  @override
+  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) async* {
+    final sc = StreamController<GameInfo>();
+    _socket!.on(IOChannel.lobby.string, (d) {
+      final gameInfo = GameInfo.fromJson(d as Map<String, dynamic>);
+      sc.add(gameInfo);
+      logger.info('Got Lobby $gameInfo');
+    });
+    // gameStatus = GameStatus.NotStarted;
+
+    yield* sc.stream;
+    await sc.close();
   }
 
-  void _watchState() {
+  @override
+  Stream<GameOrError> gameStream(PlayerID playerID, GameCode code) async* {
+    final sc = StreamController<GameOrError>();
     _socket!.on(IOChannel.gamestate.string, (data) {
       _socket!.off(IOChannel.lobby.string);
       final gameState = Game.fromJson(data as Map<String, dynamic>);
       logger.info('Got gamestate $data');
-      gameStreamController.add(gameState);
-      gameStatus = gameState.status;
+      sc.add(gameState.gameValue());
     });
     _socket!.on(IOChannel.error_channel.string, (data) {
       final error = GameError.fromJson(data as Map<String, dynamic>);
       logger.warning('Error: $error');
-      read(GameProviders.error.notifier).error = error;
+      sc.add(error);
     });
-    // ignore: unnecessary_lambdas
-    _socket!
-        .on(IOChannel.lobby.string, (d) => _onLobby(d as Map<String, dynamic>));
+    yield* sc.stream;
+    await sc.close();
   }
 
   @override
-  Future<bool> sendEvent(Event event) async {
+  Future<bool> sendEvent(PlayerID playerID, GameCode code, Event event) async {
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
     final result = await _socket!.call(IOChannel.event, js);
@@ -99,17 +102,31 @@ class IOGameClient extends GameClient {
 
   @override
   void dispose() {
-    exitGame();
     logger.info('Dispose');
     _socket!.dispose();
-    super.dispose();
   }
 
-  static void registerImplementation() {
-    GameClient.registerImplementation(
-      IOClient,
-      (ref, address, id) =>
-          IOGameClient(address: address, ref: ref, playerID: id),
-    );
+  @override
+  Future<bool> startGame(PlayerID playerID, GameCode code) async {
+    final result = await _socket!
+        .call(IOChannel.startgame, {'playerID': playerID, 'code': code});
+    return result as bool;
   }
 }
+
+final socketIOGameClient = Provider(
+  (ref) {
+    final client = IOGameClient(
+      code: ref.read(GameProviders.code),
+      address: ref.watch(GameProviders.remoteUri),
+    );
+    // TODO: Handle status changes
+    ref.onDispose(() {
+      client.exitGame(
+        ref.read(GameProviders.playerID),
+        ref.read(GameProviders.code),
+      );
+      client.dispose();
+    });
+  },
+);
