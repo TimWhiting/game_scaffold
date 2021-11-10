@@ -34,19 +34,31 @@ class BackendProviders {
     name: 'BackendLobby',
   );
 
-  static final playerLobby =
-      StreamProvider.family<GameInfo, PlayerID>((ref, player) async* {
-    await for (final l in ref.watch(lobby.notifier).stream) {
+  static final playerLobby = StreamProvider.family<GameInfo, PlayerID>(
+    (ref, player) async* {
+      final l = ref.read(lobby);
       final pls = l.players;
       yield GameInfo(
         gameId: l.code,
         player: pls.firstWhere((p) => p.id == player).name,
-        creator: player == l.config.adminId,
+        creator: player == l.config.adminID,
         players: pls.map((p) => p.name).toIList(),
         gameType: l.config.gameType,
       );
-    }
-  });
+      await for (final l in ref.watch(lobby.notifier).stream) {
+        final pls = l.players;
+        yield GameInfo(
+          gameId: l.code,
+          player: pls.firstWhere((p) => p.id == player).name,
+          creator: player == l.config.adminID,
+          players: pls.map((p) => p.name).toIList(),
+          gameType: l.config.gameType,
+        );
+      }
+    },
+    name: 'BackendPlayerLobby',
+    dependencies: [lobby.notifier, lobby],
+  );
 
   /// Provides the [GameStateNotifier] based on the [GameConfig] from [config]
   static final StateNotifierProvider<GameStateNotifier, GameOrError> state =
@@ -55,24 +67,19 @@ class BackendProviders {
       final l = ref.watch(lobby);
       return GameStateNotifier(
         l.config,
-        ref.read,
         l.code,
         Game.getInitialState(l.config, l.players),
       );
     },
     name: 'BackendGameNotifier',
+    dependencies: [lobby],
   );
 
   /// Provides the [GameErrorNotifier] to keep track of errors of a game
-  static final error = StreamProvider<GameError>(
-    (ref) async* {
-      await for (final state in ref.watch(state.notifier).stream) {
-        if (state.isError) {
-          yield state.error!;
-        }
-      }
-    },
+  static final error = Provider<GameError?>(
+    (ref) => ref.watch(state.select((s) => s.error)),
     name: 'BackendGameError',
+    dependencies: [state],
   );
 }
 
@@ -93,15 +100,14 @@ class LobbyNotifier extends StateNotifier<Lobby> {
 }
 
 /// A [StateNotifier] that handles events for a particular game, delegating to the game's implementation for non generic events
-class GameStateNotifier<E extends Event, T extends Game<E>>
-    extends StateNotifier<GameOrError<T>> {
-  GameStateNotifier(this.gameConfig, this.read, this.code, T initialState)
+class GameStateNotifier<E extends Event, G extends Game<E>>
+    extends StateNotifier<GameOrError<G>> {
+  GameStateNotifier(this.gameConfig, this.code, G initialState)
       : _gameStateLogger = Logger('GameStateNotifier $code'),
-        lastState = initialState,
+        _previousStates = [initialState],
         super(initialState.gameValue());
 
   final Logger _gameStateLogger;
-  final Reader read;
 
   /// The [code] of this game
   final GameCode code;
@@ -110,15 +116,14 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   final GameConfig gameConfig;
 
   /// A list of previous states
-  final _previousStates = <T>[];
-  T lastState;
+  final List<G> _previousStates;
 
   /// Returns the [state] of the game
   ///
   /// Remember to watch / listen to the state of the [GameStateNotifier]
   /// rather than just watching changes in the notifier itself, otherwise changes
   /// in the [gameState] will not trigger updates of the ui
-  T get gameState => lastState;
+  G get gameState => _previousStates.last;
 
   /// Handles a [GameEvent] and updates the state accordingly
   ///
@@ -128,14 +133,15 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
   bool handleEvent(GameEvent event) {
     // print('${event.toJson()}');
     try {
-      final game = state.isGame ? state.value! : lastState;
-      _previousStates.add(game);
+      final game = gameState;
 
       state = event.when(
         general: (e) => e.maybeWhen(
           undo: () {
+            // Remove the current state
             _previousStates.removeLast();
-            return _previousStates.removeLast().gameValue();
+            final lastState = _previousStates.removeLast();
+            return lastState as GameOrError<G>;
           },
           readyNextRound: (e) {
             if (game.readyPlayers.length > 1) {
@@ -157,11 +163,13 @@ class GameStateNotifier<E extends Event, T extends Game<E>>
           orElse: () =>
               GameError('General Event not implemented yet $e', 'programmer'),
         ),
-        game: (e) => game.next(e as E),
+        game: (e) => game.next(e as E) as GameOrError<G>,
       );
+
       if (state.isError) {
-        _previousStates.removeLast();
+        return false;
       } else {
+        _previousStates.add(state.value!);
         return true;
       }
       // ignore: avoid_catches_without_on_clauses

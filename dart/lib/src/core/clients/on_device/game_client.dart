@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:riverpod/riverpod.dart';
-import 'package:rxdart/subjects.dart';
 
 import '../../backend.dart';
 import '../../client.dart';
@@ -14,26 +13,24 @@ import '../clients.dart';
 class NoServerGameClient extends GameClient {
   NoServerGameClient();
   @override
-  Future<bool> exitGame(PlayerID playerID, GameCode code) async {
-    gameStatus = GameStatus.NotJoined;
-    return true;
-  }
+  Future<bool> exitGame(PlayerID playerID, GameCode code) async => true;
 
   @override
-  Future<String?> register(
+  Future<String?> joinGame(
       PlayerID playerID, GameCode code, PlayerName name) async {
     final backendReader = NoServerClient.games[code]!.container.read;
-    backendReader(BackendProviders.lobby.notifier)
-        .addPlayer(Player(playerID, name: name));
 
-    gameStatus = GameStatus.NotStarted;
+    final notifier = backendReader(BackendProviders.lobby.notifier);
+    await Future.delayed(const Duration(microseconds: 1));
+    notifier.addPlayer(Player(playerID, name: name));
+
     final lobby = backendReader(BackendProviders.lobby);
     final config = lobby.config;
     final players = lobby.players;
-    if (players.length == config.maxPlayers &&
-        config.autoStart &&
-        playerID == config.adminID) {
-      await startGame(playerID, code);
+    if (players.length == config.maxPlayers && config.autoStart) {
+      scheduleMicrotask(() {
+        startGame(playerID, code).ignore();
+      });
     }
 
     return name;
@@ -65,6 +62,9 @@ class NoServerGameClient extends GameClient {
     final js = event.asGameEvent.toJson();
     logger.info('Sending event $js');
     final backendReader = NoServerClient.games[code]!.container;
+    // If the gameClient is initializing
+    // we cannot edit the backend provider synchronously
+    await Future.delayed(const Duration(microseconds: 1));
     final result = backendReader
         .read(BackendProviders.state.notifier)
         .handleEvent(event.asGameEvent);
@@ -77,4 +77,8 @@ class NoServerGameClient extends GameClient {
   }
 }
 
-final onDeviceGameClient = Provider((ref) => NoServerGameClient());
+final onDeviceGameClient = Provider<GameClient>((ref) {
+  final client = NoServerGameClient();
+  ref.onDispose(client.dispose);
+  return client;
+});

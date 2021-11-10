@@ -16,7 +16,6 @@ void main() {
   final _ = IOServer();
   Game.registerGeneralEvents();
   TicTacToeGame.register();
-  registerIOClients();
   runApp(ProviderScope(
     overrides: [
       GameProviders.clientType.overrideWithValue(StateController(IOClient)),

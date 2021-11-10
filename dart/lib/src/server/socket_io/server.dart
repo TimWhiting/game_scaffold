@@ -113,11 +113,10 @@ class IOServer {
     logger.fine('Creating game');
     final gameConfig = GameConfig.fromJson(config);
     final gameid = generateGameID(servers.keys.toList());
-    final scopedContainer = ProviderContainer(
-      parent: container,
-      overrides: [BackendProviders.code.overrideWithValue(gameid)],
-    );
-    scopedContainer.read(BackendProviders.config.notifier).state = gameConfig;
+    final scopedContainer = ProviderContainer();
+    final lobby = scopedContainer.read(BackendProviders.lobby.notifier);
+    lobby.setCode(gameid);
+    lobby.setConfig(gameConfig);
     final server = GameServer(
         io, this, scopedContainer.read, gameid, servers.remove,
         debug: debug);

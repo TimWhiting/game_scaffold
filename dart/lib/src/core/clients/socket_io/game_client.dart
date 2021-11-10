@@ -15,6 +15,7 @@ class IOGameClient extends GameClient {
   IOGameClient({
     required this.address,
     required GameCode code,
+    required this.ref,
   }) {
     Future.delayed(
       const Duration(milliseconds: 100),
@@ -22,23 +23,28 @@ class IOGameClient extends GameClient {
     );
   }
   final GameAddress address;
+  final ProviderRef<GameClient> ref;
 
   IO.Socket? _socket;
   GameCode? _lastGameCode;
+  // ignore: avoid_setters_without_getters
+  set gameStatus(GameStatus status) {
+    ref.read(GameProviders.status.notifier).state = status;
+  }
 
-  void _ensureConnected(GameCode code) {
+  Future<void> _ensureConnected(GameCode code) async {
     if (code != _lastGameCode || (_socket?.disconnected ?? true)) {
       _socket?.dispose();
       _socket = IO.io('$address/$code', socketIOOpts);
       logger.info('Created Game Client Socket $code');
       _lastGameCode = code;
-      // scheduleMicrotask(() => gameStatus = GameStatus.NotJoined);
+      await Future.delayed(const Duration(microseconds: 1));
+      gameStatus = GameStatus.NotJoined;
     }
   }
 
   @override
   Future<bool> exitGame(PlayerID playerID, GameCode code) async {
-    _socket!.off(IOChannel.error_channel.string);
     _socket!.off(IOChannel.gamestate.string);
     _socket!.off(IOChannel.lobby.string);
     logger.info('Exiting game');
@@ -47,11 +53,11 @@ class IOGameClient extends GameClient {
   }
 
   @override
-  Future<PlayerName> register(
+  Future<PlayerName> joinGame(
       PlayerID playerID, GameCode code, PlayerName name) async {
-    _ensureConnected(code);
+    await _ensureConnected(code);
     logger.info('Registering');
-    // gameStatus = GameStatus.NotJoined;
+    gameStatus = GameStatus.NotJoined;
     final assignedName = await _socket!
         .call(IOChannel.register, {'name': name, 'id': playerID}) as String?;
     if (assignedName != null) {
@@ -68,7 +74,7 @@ class IOGameClient extends GameClient {
       sc.add(gameInfo);
       logger.info('Got Lobby $gameInfo');
     });
-    // gameStatus = GameStatus.NotStarted;
+    gameStatus = GameStatus.NotStarted;
 
     yield* sc.stream;
     await sc.close();
@@ -79,15 +85,11 @@ class IOGameClient extends GameClient {
     final sc = StreamController<GameOrError>();
     _socket!.on(IOChannel.gamestate.string, (data) {
       _socket!.off(IOChannel.lobby.string);
-      final gameState = Game.fromJson(data as Map<String, dynamic>);
+      final gameState = GameOrError.fromJson(data as Map<String, dynamic>);
       logger.info('Got gamestate $data');
-      sc.add(gameState.gameValue());
+      sc.add(gameState);
     });
-    _socket!.on(IOChannel.error_channel.string, (data) {
-      final error = GameError.fromJson(data as Map<String, dynamic>);
-      logger.warning('Error: $error');
-      sc.add(error);
-    });
+
     yield* sc.stream;
     await sc.close();
   }
@@ -114,19 +116,28 @@ class IOGameClient extends GameClient {
   }
 }
 
-final socketIOGameClient = Provider(
+final socketIOGameClient = Provider<GameClient>(
   (ref) {
     final client = IOGameClient(
       code: ref.read(GameProviders.code),
       address: ref.watch(GameProviders.remoteUri),
+      ref: ref,
     );
-    // TODO: Handle status changes
     ref.onDispose(() {
       client.exitGame(
         ref.read(GameProviders.playerID),
         ref.read(GameProviders.code),
       );
+      ref.read(GameProviders.status.notifier).state = GameStatus.NotConnected;
       client.dispose();
     });
+    return client;
   },
+  name: 'socketIOGameClient',
+  dependencies: [
+    GameProviders.remoteUri,
+    GameProviders.code,
+    GameProviders.playerID,
+    GameProviders.status.notifier,
+  ],
 );

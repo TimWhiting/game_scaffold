@@ -8,15 +8,14 @@ part 'errors.g.dart';
 
 /// Represents the union type of a game or an error, along with some helper getters to work with them
 @freezed
-class GameOrError<T extends Game> with _$GameOrError {
+class GameOrError<G extends Game> with _$GameOrError {
   const GameOrError._();
 
   /// Represents a game
-  const factory GameOrError.game(@GameConverter() T game) = GameValue<T>;
+  const factory GameOrError.game(@GameConverter() G game) = GameValue<G>;
 
   /// Represets an error
-  const factory GameOrError.error(String message, PlayerID person) =
-      GameError<T>;
+  const factory GameOrError.error(String message, PlayerID person) = GameError;
   factory GameOrError.fromJson(Map<String, dynamic> json) =>
       _$GameOrErrorFromJson(json);
 
@@ -30,7 +29,7 @@ class GameOrError<T extends Game> with _$GameOrError {
   String get errorString => isError ? error!.message : 'No Error';
 
   /// Returns the game value or null
-  T? get value => when(error: (m, p) => null, game: (g) => g as T);
+  G? get value => when(error: (m, p) => null, game: (g) => g as G);
 
   /// Returns whether this instance is a game
   bool get isGame => this is GameValue;

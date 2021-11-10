@@ -15,9 +15,12 @@ class NoServerClient extends ServerClient {
     final gameCode = generateGameID([]);
     final backendRead = ProviderContainer(overrides: []);
     final lobby = backendRead.read(BackendProviders.lobby.notifier);
+    await Future.delayed(const Duration(microseconds: 1));
+    print('Creating game');
     lobby.setCode(gameCode);
     lobby.setConfig(config);
     games[gameCode] = LocalGame(gameCode, playerID, backendRead);
+
     return gameCode;
   }
 
@@ -59,7 +62,15 @@ class NoServerClient extends ServerClient {
   }
 }
 
-final onDeviceGameServerClient = Provider((ref) => NoServerClient());
+final onDeviceGameServerClient = Provider<ServerClient>(
+  (ref) {
+    final client = NoServerClient();
+    ref.onDispose(client.dispose);
+    return client;
+  },
+  name: 'onDeviceGameServerClient',
+  dependencies: const [],
+);
 
 /// Keeps track of some metadata about a game for an [OnDeviceClient] game
 class LocalGame {

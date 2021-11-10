@@ -4,7 +4,7 @@ version: 0.3.2
 homepage: https://www.github.com/TimWhiting/game_scaffold
 
 environment:
-  sdk: ">=2.13.0-0 <3.0.0"
+  sdk: ">=2.15.0-0 <3.0.0"
 
 dependencies:
   game_scaffold_dart: ^0.3.1

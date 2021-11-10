@@ -22,7 +22,6 @@ class GameServer {
     this.timeout = const Duration(hours: 2),
     this.debug = true,
   })  : _socket = _io.of('/$_gameId'),
-        _gameError = _read(BackendProviders.error.notifier),
         _serverLogger = Logger('GameServer $_gameId') {
     _initServer();
   }
@@ -43,7 +42,8 @@ class GameServer {
   GameCode get gameID => _gameId;
 
   /// Gets [GameConfig] of this game
-  GameConfig get gameConfig => _read(BackendProviders.config);
+  GameConfig get gameConfig =>
+      _read(BackendProviders.state.notifier).gameConfig;
 
   /// Gets the game's type from the config
   GameType get gameType => gameConfig.gameType;
@@ -52,14 +52,14 @@ class GameServer {
   IList<PlayerID> get playerNames => _players.map((p) => p.name).toIList();
 
   /// Returns whether the client by [id] is the admin
-  bool isClientAdmin(PlayerID? id) => id == gameConfig.adminId;
+  bool isClientAdmin(PlayerID? id) => id == gameConfig.adminID;
 
   /// Gets the client's name corresponding to [id]
   String? getClientName(PlayerID id) => _clientNames[id];
 
   final Reader _read;
   final GameCode _gameId;
-  IList<Player> get _players => _read(BackendProviders.players);
+  IList<Player> get _players => _read(BackendProviders.lobby).players.toIList();
   final _clients = <PlayerID, IO.Socket?>{};
   final _clientNames = <PlayerID, String>{};
   // ignore: prefer_typing_uninitialized_variables
@@ -73,7 +73,7 @@ class GameServer {
       _read(BackendProviders.state.notifier);
 
   /// The notifier for errors of the game
-  final GameErrorNotifier _gameError;
+  // final GameErrorNotifier _gameError;
 
   /// Keeps track of how long there has not been an event
   late Timer _gameNotActiveTimer;
@@ -82,7 +82,6 @@ class GameServer {
   bool _active = false;
 
   late void Function() _gameStateListenerDisposer;
-  late void Function() _gameErrorListenerDisposer;
 
   void _initServer() {
     _gameNotActiveTimer = Timer.periodic(timeout, (timer) {
@@ -90,7 +89,6 @@ class GameServer {
         killGame();
       }
     });
-    _gameErrorListenerDisposer = _gameError.addListener(_sendError);
     _serverLogger.info('Creating Game Server');
     _serverLogger.info('Listening on namespace /$_gameId');
     // ignore: avoid_dynamic_calls
@@ -120,7 +118,7 @@ class GameServer {
     );
     _serverLogger.info('Sending first update');
     if (_started) {
-      _sendUpdates(_gameState.gameState);
+      _sendUpdates(_gameState.gameState.gameValue());
     }
   }
 
@@ -155,8 +153,7 @@ class GameServer {
       return;
     }
     if (_clients.length > gameConfig.maxPlayers) {
-      client.emit(IOChannel.error_channel.string,
-          GameError('Too many players already, sorry', id));
+      _sendUpdates(GameError('Too many players already, sorry', id));
       _clients[id]?.emit(IOChannel.name.string);
     } else {
       if (gameConfig.customNames) {
@@ -179,7 +176,6 @@ class GameServer {
 
       if (_players.length == gameConfig.maxPlayers && gameConfig.autoStart) {
         _start();
-        _gameState.handleEvent(const GenericEvent.start().asGameEvent);
       }
     }
   }
@@ -195,14 +191,14 @@ class GameServer {
   }
 
   void _addPlayer(Player player) {
-    _read(BackendProviders.players.notifier).state = _players.add(player);
+    _read(BackendProviders.lobby.notifier).addPlayer(player);
     _serverLogger.info('Notifying ${_clients.length} clients of added player');
     for (final client in _clients.entries) {
       client.value?.emit(IOChannel.lobby.string, gameInfo(client.key).toJson());
     }
   }
 
-  void _sendUpdates(Game? state) {
+  void _sendUpdates(GameOrError? state) {
     if (state == null) {
       return;
     }
@@ -213,7 +209,7 @@ class GameServer {
 
       client.value?.emit(IOChannel.gamestate.string, json);
     }
-    if (state.status == GameStatus.Finished) {
+    if (state.value?.status == GameStatus.Finished) {
       killGame();
     }
   }
@@ -222,7 +218,6 @@ class GameServer {
   void _dispose() {
     _gameNotActiveTimer.cancel();
     _gameStateListenerDisposer();
-    _gameErrorListenerDisposer();
     _gameState.dispose();
     for (final client in [..._clients.values]) {
       client?.disconnect();
@@ -233,19 +228,10 @@ class GameServer {
     }
   }
 
-  void _sendError(GameError? message) {
-    if (message == null) {
-      return;
-    }
-    _serverLogger.info('Error: $message');
-    _clients[message.person]
-        ?.emit(IOChannel.error_channel.string, message.toJson());
-  }
-
   dynamic _handleRequest(gameEvent) {
     final event = Game.gameEventFromJson(gameEvent as Map<String, dynamic>);
     _serverLogger.info(event);
-    if (event is GameEventGeneral && event.event is GenericEventStart) {
+    if (event is GameEventGame) {
       _start();
     }
     _gameState.handleEvent(event);

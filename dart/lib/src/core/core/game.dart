@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:riverpod/riverpod.dart';
 
 import 'core.dart';
 import 'errors.dart';
@@ -19,8 +18,6 @@ typedef GameType = String;
 
 /// Abstract class that all games must inherit from
 abstract class Game<E extends Event> {
-  Game();
-
   /// [generic] game holding some commonly used state
   GenericGame get generic;
 
@@ -30,7 +27,7 @@ abstract class Game<E extends Event> {
   /// So make the error as informative as possible. This method should return a copy of the state if
   /// undo functionality needs to work. (i.e. the class should be immutable), for high performance you can
   /// make the changes and just return the changed instance itself, but undo functionality won't work.
-  GameOrError<T> next<T extends Game>(E event);
+  GameOrError next(E event);
 
   /// Copies the state of the game with generic replaced by the function applying updates to the most recent copy of generic
   ///

@@ -15,9 +15,11 @@ import 'channels.dart';
 class IOServerClient extends ServerClient {
   IOServerClient({
     required this.address,
+    required this.ref,
   }) {
     Future.delayed(const Duration(milliseconds: 10), connect);
   }
+  final ProviderRef<ServerClient> ref;
 
   final GameAddress address;
   IO.Socket? socket;
@@ -104,14 +106,26 @@ class IOServerClient extends ServerClient {
   @override
   Future<void> disconnect() async {
     socket?.dispose();
+
     gameStatus = GameStatus.NotConnected;
   }
+
+  set gameStatus(GameStatus status) {
+    ref.read(GameProviders.status.notifier).state = status;
+  }
+
+  GameStatus get gameStatus => ref.read(GameProviders.status.notifier).state;
 }
 
-final socketIOGameServerClient = Provider((ref) {
-  final client = IOServerClient(
-    address: ref.watch(GameProviders.remoteUri),
-  );
-  ref.onDispose(client.dispose);
-  return client;
-});
+final socketIOGameServerClient = Provider<ServerClient>(
+  (ref) {
+    final client = IOServerClient(
+      address: ref.watch(GameProviders.remoteUri),
+      ref: ref,
+    );
+    ref.onDispose(client.dispose);
+    return client;
+  },
+  name: 'socketIOGameServerClient',
+  dependencies: [GameProviders.remoteUri, GameProviders.status.notifier],
+);

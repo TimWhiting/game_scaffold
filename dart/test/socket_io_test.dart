@@ -11,7 +11,6 @@ void main() {
     p1Game = ProviderContainer(
         parent: rootProvider,
         overrides: [GameProviders.playerID.overrideWithValue(P1)]).read;
-    registerIOClients();
   });
   test('io', () async {
     read(GameProviders.clientType.notifier).state = IOClient;
@@ -19,11 +18,12 @@ void main() {
         Uri.parse('http://localhost:$defaultGamePort');
 
     expect(p1Game(GameProviders.status), GameStatus.NotConnected);
-    final client = p1Game(GameProviders.client);
-    final code =
-        await client.createGame(config: const GameConfig(gameType: 'None'));
+    p1Game(GameProviders.config.notifier).state =
+        const GameConfig(gameType: 'None');
+    final code = await p1Game(GameProviders.createGame.future);
     expect(p1Game(GameProviders.status), GameStatus.NotJoined);
-    await client.register(code: code);
+    p1Game(GameProviders.code.notifier).state = code;
+    await p1Game(GameProviders.joinGame.future);
     expect(p1Game, GameStatus.NotStarted);
   });
 }

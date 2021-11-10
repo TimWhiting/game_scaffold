@@ -6,27 +6,27 @@ part of 'errors.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$GameValue<T> _$$GameValueFromJson<T extends Game<Event>>(
+_$GameValue<G> _$$GameValueFromJson<G extends Game<Event>>(
         Map<String, dynamic> json) =>
-    _$GameValue<T>(
-      GameConverter<T>().fromJson(json['game'] as Map<String, dynamic>),
+    _$GameValue<G>(
+      GameConverter<G>().fromJson(json['game'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$GameValueToJson<T extends Game<Event>>(
-        _$GameValue<T> instance) =>
+Map<String, dynamic> _$$GameValueToJson<G extends Game<Event>>(
+        _$GameValue<G> instance) =>
     <String, dynamic>{
-      'game': GameConverter<T>().toJson(instance.game),
+      'game': GameConverter<G>().toJson(instance.game),
     };
 
-_$GameError<T> _$$GameErrorFromJson<T extends Game<Event>>(
+_$GameError<G> _$$GameErrorFromJson<G extends Game<Event>>(
         Map<String, dynamic> json) =>
-    _$GameError<T>(
+    _$GameError<G>(
       json['message'] as String,
       json['person'] as String,
     );
 
-Map<String, dynamic> _$$GameErrorToJson<T extends Game<Event>>(
-        _$GameError<T> instance) =>
+Map<String, dynamic> _$$GameErrorToJson<G extends Game<Event>>(
+        _$GameError<G> instance) =>
     <String, dynamic>{
       'message': instance.message,
       'person': instance.person,

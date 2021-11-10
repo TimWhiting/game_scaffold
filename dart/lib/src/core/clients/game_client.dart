@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
-import 'package:rxdart/rxdart.dart';
 import '../../../game_scaffold_dart.dart';
 import '../core.dart';
 
@@ -16,7 +14,7 @@ abstract class GameClient {
   Future<bool> exitGame(PlayerID playerID, GameCode code);
 
   /// Registers the client with the game server
-  Future<PlayerName?> register(
+  Future<PlayerName?> joinGame(
       PlayerID playerID, GameCode code, PlayerName name);
 
   /// Sends [event] to the game server

@@ -10,42 +10,39 @@ import 'package:test/test.dart' as darttest;
 /// * [test] gives you access to a [GameTester] which allows you to test the game
 ///
 /// Uses the OnDevice clients
-@isTestGroup
+/// TODO: Maybe try to use only Backend Providers as long as nothing need to be async (which it shouldn't since the game method are all non-async)?
+@isTest
 void testGame<T extends Game>(
   String testName, {
   required GameConfig config,
   required List<Player> players,
   required Future<void> Function(GameTester<T>) test,
 }) {
-  darttest.group(testName, () {
+  darttest.test(testName, () async {
     final root = ProviderContainer();
-    final readers = <PlayerID, dynamic>{};
+    final readers = <PlayerID, Reader>{};
 
-    late GameCode code;
-    darttest.setUp(() async {
-      root.read(GameProviders.clientType.notifier).state = OnDeviceClient;
+    root.read(GameProviders.clientType.notifier).state = OnDeviceClient;
 
-      for (final p in players) {
-        readers[p.id] = ProviderContainer(
-            parent: root,
-            overrides: [GameProviders.playerID.overrideWithValue(p.id)]).read;
-      }
-      code = await (readers[players.first.id] as Reader)(GameProviders.client)
-          .createGame(config: config);
-      for (final p in players) {
-        await (readers[p.id] as Reader)(GameProviders.client)
-            .register(code: code);
-      }
+    for (final p in players) {
+      readers[p.id] = ProviderContainer(
+          parent: root,
+          overrides: [GameProviders.playerID.overrideWithValue(p.id)]).read;
+    }
+    readers[players.first.id]!(GameProviders.config.notifier).state = config;
+    final code =
+        await readers[players.first.id]!(GameProviders.createGame.future);
+    for (final p in players) {
+      readers[p.id]!(GameProviders.code.notifier).state = code;
+      await readers[p.id]!(GameProviders.joinGame.future);
+    }
 
-      if ((readers[players.first.id] as Reader)(GameProviders.status) !=
-          GameStatus.Started) {
-        await (readers[players.first.id] as Reader)(GameProviders.client)
-            .startGame();
-      }
-    });
-    darttest.test(testName, () async {
-      await test(GameTester<T>(root.read, readers, players, code));
-    });
+    if (readers[players.first.id]!(GameProviders.status) !=
+        GameStatus.Started) {
+      await readers[players.first.id]!(GameProviders.startGame.future);
+    }
+
+    await test(GameTester<T>(root.read, readers, players, code));
   });
 }
 
@@ -59,8 +56,9 @@ class GameTester<T extends Game> {
   final List<Player> _players;
   final GameCode code;
   final Reader read;
-  final Map<PlayerID, dynamic> readers;
+  final Map<PlayerID, Reader> readers;
   late final backendReader = NoServerClient.games[code]!.read;
+  GameError? _lastError;
 
   /// Event lets you test the [outcome] of an [event]
   ///
@@ -71,34 +69,38 @@ class GameTester<T extends Game> {
   ///   expect(game.players.size, 2);
   /// });
   /// ```
-  void event(Event event, Function(T, GameError<T>?) outcome) {
+  void event(Event event, Function(T, GameError?) outcome) {
     backendReader(BackendProviders.state.notifier)
         .handleEvent(event.asGameEvent);
 
-    final game = backendReader(BackendProviders.state) as T;
-    final error = backendReader(BackendProviders.error) as GameError<T>?;
-    if (error != null) {
-      backendReader(BackendProviders.error.notifier).clearError();
+    final g = game;
+    final e = error;
+    if (e == _lastError) {
+      outcome(g, null);
+    } else {
+      _lastError = e;
+      outcome(g, e);
     }
-    outcome(game, error);
   }
 
   /// Returns the current game state
   ///
   /// If testing the outcome of an event prefer using [event]
-  T get game => backendReader(BackendProviders.state) as T;
+  T get game => backendReader(BackendProviders.state.notifier).gameState as T;
 
   /// Returns the current error state
   ///
   /// If testing the outcome of an event prefer using [event]
-  GameError? get error => backendReader(GameProviders.error);
+  GameError? get error => backendReader(BackendProviders.error);
 
   /// Advances to the next round, and checks the [expectation] of the game after
   /// the round has advanced
   void nextRound(Function(T) expectation) {
     for (final p in _players) {
-      (readers[p.id] as Reader)(GameProviders.client).newRound();
+      backendReader(BackendProviders.state.notifier)
+          .handleEvent(GenericEvent.readyNextRound(p.id).asGameEvent);
     }
+
     expectation(game);
   }
 }

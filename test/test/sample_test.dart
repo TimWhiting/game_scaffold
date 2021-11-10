@@ -5,7 +5,6 @@ import 'package:game_scaffold_test/game_scaffold_test.dart';
 import 'package:test/test.dart';
 
 void main() {
-  registerOnDeviceClients();
   Game.registerGeneralEvents();
   TicTacToeGame.register();
 

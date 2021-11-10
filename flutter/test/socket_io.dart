@@ -5,7 +5,6 @@ import 'package:game_scaffold_games/game_scaffold_games.dart';
 Future<void> main() async {
   Game.registerGeneralEvents();
   TicTacToeGame.register();
-  registerIOClients();
   final ioServer = IOServer();
 
   await test('Created', (read) async {
@@ -20,14 +19,13 @@ Future<void> main() async {
 
   await test('Registered Start Game', (read) async {
     final gameCode = read.gameFor(P1)(GameProviders.code);
-    final gameClient = read.gameFor(P1)(GameProviders.client);
-    await gameClient.register();
-    await gameClient.startGame();
+    await read.gameFor(P1)(GameProviders.joinGame.future);
+    await read.gameFor(P1)(GameProviders.startGame.future);
     await Future.delayed(const Duration(milliseconds: 100));
     assert(ioServer.servers[gameCode]!.playerNames.length == 1,
         'One Player Joined');
     assert(
-        read.gameFor(P1)(GameProviders.state).asData?.value.status ==
+        read.gameFor(P1)(GameProviders.game).asData?.value.status ==
             GameStatus.Started,
         'Game is Started');
   });
@@ -49,14 +47,12 @@ Future<void> test(
   });
   root.read(GameProviders.remoteUri.notifier).state =
       Uri.parse('http://127.0.0.1:$defaultGamePort');
-  var serverClient = readers.gameFor(P1)(GameProviders.client);
   const config = GameConfig(adminID: P1, gameType: 'tictactoe');
   readers.gameFor(P1)(GameProviders.config.notifier).state = config;
-  final code = await serverClient.createGame();
+  final code = await readers.gameFor(P1)(GameProviders.createGame.future);
   await Future.delayed(const Duration(milliseconds: 100));
   await testFn(readers);
-  serverClient = readers.gameFor(P1)(GameProviders.client);
-  final deleted = await serverClient.deleteGame();
+  final deleted = await readers.gameFor(P1)(GameProviders.deleteGame.future);
   print(
       '########## Finished Test $testName GameCode: $code, deleted: $deleted ##########');
 }

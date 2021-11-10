@@ -46,12 +46,12 @@ class GenericGame with _$GenericGame {
 
   /// Creates a default initialized game with [players]
   factory GenericGame.start(
-    IList<Player> players, {
+    ISet<Player> players, {
     required bool multiPly,
     required bool simultaneousAction,
   }) =>
       GenericGame(
-        players,
+        players.toIList(),
         <PlayerID>[].lock,
         <IList<double>>[].lock,
         DateTime.now(),

@@ -27,7 +27,10 @@ class GameNavigator extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameStatus = ref.watch(GameProviders.status);
+    final generalStatus = ref.watch(GameProviders.status);
+    final gameStatus = ref.watch(GameProviders.gameOrError
+            .select((g) => g.asData?.value.value?.status)) ??
+        generalStatus;
     final pages = {GameStatus.NotConnected: disconnected};
     navigationLogger.info(
         'PlayerID: ${ref.read(GameProviders.playerID)} gameStatus: $gameStatus');
@@ -61,16 +64,30 @@ class GameNavigator extends HookConsumerWidget {
             status == GameStatus.BetweenRounds ||
             status == GameStatus.Started ||
             status == GameStatus.NotStarted) {
-          ref.read(GameProviders.client).exitGame();
-          ref.read(GameProviders.games.notifier).refresh();
+          ref.read(GameProviders.exitGame.future);
+          ref.refresh(GameProviders.allGames);
           route.didPop(null);
           return true;
         } else if (status == GameStatus.NotJoined) {
-          ref.read(GameProviders.client).disconnect();
+          ref.read(GameProviders.serverClient).disconnect();
           return true;
         }
         return false;
       },
     );
+  }
+}
+
+extension RefreshFuture<State> on AlwaysAliveProviderBase<AsyncValue<State>> {
+  Future<State> refresh(WidgetRef ref) {
+    ref.refresh(this);
+    return ref.read(future);
+  }
+}
+
+extension RefreshADFuture<State> on AutoDisposeProviderBase<AsyncValue<State>> {
+  Future<State> refresh(WidgetRef ref) {
+    ref.refresh(this);
+    return ref.read(future);
   }
 }

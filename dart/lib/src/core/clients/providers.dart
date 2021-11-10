@@ -46,142 +46,251 @@ class GameProviders {
   /// Provides the player's name
   static final playerName = StateProvider<String>(
     (ref) => '',
-    dependencies: [playerID],
     name: 'PlayerName',
+    dependencies: [playerID],
   );
 
   /// Provides the game code for each client id
   static final StateProvider<GameCode> code = StateProvider(
     (ref) => '',
-    dependencies: [playerID],
     name: 'GameCode',
-  );
-
-  /// Provides game lobby info in the form of [GameInfo] for the lobby
-  static final StreamProvider<GameInfo> lobby = StreamProvider(
-    (ref) {
-      final _ = ref.watch(code); // Invalidate gameLobby on change of gameCode
-      final c = ref.watch(client);
-      return c.gameLobby();
-    },
-    dependencies: [client, code],
-    name: 'Lobby',
-  );
-
-  /// Provides the game info of all games that the client with the specified id
-  /// is a part of
-  static final games = StateNotifierProvider<
-      LastOrLoadingStateNotifier<IList<GameInfo>>,
-      LoadingFuture<IList<GameInfo>>>(
-    (ref) {
-      final c = ref.watch(client);
-      return LastOrLoadingStateNotifier(c.getGames);
-    },
-    dependencies: [client],
-    name: 'ActiveGames',
-  );
-
-  /// Provides the game state for the current game of the client with specified id
-  static final StreamProvider<Game> state = StreamProvider<Game>(
-    (ref) {
-      final _ = ref.watch(code); // Invalidate on change of gameCode
-      final c = ref.watch(client);
-      return c.gameStream();
-    },
-    dependencies: [code, client],
-    name: 'GameStateStream',
-  );
-
-  /// Provides the game error for the current game of the client with specified id
-  static final error = StateNotifierProvider<GameErrorNotifier, GameError?>(
-    (ref) => GameErrorNotifier(),
     dependencies: [playerID],
-    name: 'GameError',
   );
 
   /// Provides the game status for the current game of the client with specified id
   static final StateProvider<GameStatus> status = StateProvider<GameStatus>(
-    (ref) {
-      final _ = ref.watch(code); // Invalidate on change of gameCode
-      return GameStatus.NotConnected;
-    },
-    dependencies: [playerID, code],
+    (ref) => GameStatus.NotConnected,
     name: 'GameStatus',
+    dependencies: [playerID],
   );
 
   /// Provides whether it is the players turn for the current game of the client with the specified id
-  static final Provider<bool> turn = Provider<bool>(
-    (ref) {
-      final pID = ref.watch(playerID);
-      final _ = ref.watch(code); // Invalidate on change of gameCode
-      final currentPlayer = ref.watch(state).asData?.value.currentPlayer?.id;
-      // Null indicates that all players can go simulataneously
-      return currentPlayer == null || currentPlayer == pID;
-    },
-    dependencies: [playerID, state, code],
-    name: 'GameTurn',
-  );
+  static final Provider<bool> turn = Provider<bool>((ref) {
+    final pID = ref.watch(playerID);
+    final _ = ref.watch(code); // Invalidate on change of gameCode
+    final currentPlayer = ref.watch(game).asData?.value.currentPlayer?.id;
+    // Null indicates that all players can go simulataneously
+    return currentPlayer == null || currentPlayer == pID;
+  }, name: 'GameTurn', dependencies: [playerID, code, game]);
 
   /// Provides the way to configure the game for starting
   static final StateProvider<GameConfig> config = StateProvider<GameConfig>(
     (ref) => ref.watch(singleConfig),
-    dependencies: [singleConfig],
     name: 'GameConfig',
+    dependencies: [singleConfig, playerID],
   );
 
   /// Provides the game type's name for the game specified by [config]
-  static final Provider<String> gameType = Provider<String>(
-    (ref) => ref.watch(state).asData?.value.type.name ?? '',
-    dependencies: [state],
+  static final gameType = Provider<String>(
+    (ref) => ref.watch(game).asData?.value.type.name ?? '',
     name: 'GameType',
+    dependencies: [game],
   );
 
   /// Provides the [ServerClient] for each client id
-  static final Provider<ServerClient> serverClient = Provider(
-    (ref) {
-      final pID = ref.watch(playerID);
-      final location = ref.watch(clientType);
-      final address = ref.watch(remoteUri);
-      if (location == IOClient && address == defaultAddress) {
-        throw UnimplementedError(
-            'Please set the address for the remote server before connecting a game server client');
+  static final serverClientFamily = Provider.family<ServerClient, ClientType>(
+    (ref, clientType) {
+      switch (clientType) {
+        case IOClient:
+          return ref.watch(socketIOGameServerClient);
+        case OnDeviceClient:
+          return ref.watch(onDeviceGameServerClient);
+        default:
+          throw UnsupportedError('Unsupported client type');
       }
-
-      ref.onDispose(client.dispose);
-      return client;
     },
-    dependencies: [
-      playerID,
-      clientType,
-      remoteUri,
-      config,
-      config.notifier,
-      code
-    ],
+    name: 'ServerClientFamily',
+    dependencies: [socketIOGameServerClient, onDeviceGameServerClient],
+  );
+
+  static final serverClient = Provider<ServerClient>(
+    (ref) => ref.watch(serverClientFamily(ref.watch(clientType))),
     name: 'ServerClient',
+    dependencies: [clientType, serverClientFamily],
+  );
+
+  static final serverConnect = FutureProvider<void>(
+    (ref) => ref.watch(serverClient).connect(),
+    name: 'ServerConnect',
+    dependencies: [serverClient],
+  );
+
+  static final serverDisconnect = FutureProvider<void>(
+    (ref) => ref.watch(serverClient).disconnect(),
+    name: 'ServerDisconnect',
+    dependencies: [serverClient],
+  );
+
+  static final createGame = FutureProvider<String>(
+    (ref) async {
+      final c = await ref.watch(serverClient).createGame(
+            ref.watch(playerID),
+            ref.watch(config),
+          );
+      ref.read(code.notifier).state = c;
+      ref.read(status.notifier).state = GameStatus.NotJoined;
+      return c;
+    },
+    name: 'CreateGame',
+    dependencies: [
+      serverClient,
+      playerID,
+      config,
+      code.notifier,
+      status.notifier
+    ],
+  );
+
+  static final allGames = FutureProvider<IList<GameInfo>>(
+    (ref) => ref.watch(serverClient).getGames(ref.watch(playerID)),
+    name: 'AllGames',
+    dependencies: [serverClient, playerID],
+  );
+
+  static final deleteGame = FutureProvider<bool>(
+    (ref) => ref
+        .watch(serverClient)
+        .deleteGame(ref.watch(playerID), ref.watch(code)),
+    name: 'DeleteGame',
+    dependencies: [serverClient, playerID, code],
   );
 
   /// Provides a [GameClient] for the client with the specified id
-  static final Provider<GameClient> gameClient = Provider(
-    (ref) {
-      final pID = ref.watch(playerID);
-      final location = ref.watch(clientType);
-      final address = ref.watch(remoteUri);
-      if (location == IOClient && address == defaultAddress) {
-        throw UnimplementedError(
-            'Please set the address for the remote server before connecting a game server client');
+  static final gameClientFamily = Provider.family<GameClient, ClientType>(
+    (ref, clientType) {
+      switch (clientType) {
+        case IOClient:
+          return ref.watch(socketIOGameClient);
+        case OnDeviceClient:
+          return ref.watch(onDeviceGameClient);
+        default:
+          throw UnsupportedError('Unsupported client type');
       }
-      final client = GameClient.fromParams(
-        location: location,
-        ref: ref,
-        address: address,
-        playerID: pID,
-      );
-      ref.onDispose(client.dispose);
-      return client;
     },
-    dependencies: [playerID, clientType, remoteUri],
+    name: 'GameClientFamily',
+    dependencies: [socketIOGameClient, onDeviceGameClient],
+  );
+
+  static final gameClient = Provider<GameClient>(
+    (ref) => ref.watch(gameClientFamily(ref.watch(clientType))),
     name: 'GameClient',
+    dependencies: [clientType, gameClientFamily],
+  );
+
+  static final joinGame = FutureProvider<String?>(
+    (ref) async {
+      print('joining');
+      final name = await ref.watch(gameClient).joinGame(
+          ref.watch(playerID), ref.watch(code), ref.watch(playerName));
+      if (name != null) {
+        ref.read(playerName.notifier).state = name;
+      }
+      ref.read(status.notifier).state = GameStatus.NotStarted;
+      return name;
+    },
+    name: 'JoinGame',
+    dependencies: [
+      gameClient,
+      playerID,
+      code,
+      playerName,
+      playerName.notifier,
+      status.notifier
+    ],
+  );
+
+  static final startGame = FutureProvider<bool>(
+    (ref) =>
+        ref.watch(gameClient).startGame(ref.watch(playerID), ref.watch(code)),
+    name: 'StartGame',
+    dependencies: [gameClient, playerID, code],
+  );
+
+  static final exitGame = FutureProvider<bool>(
+    (ref) =>
+        ref.watch(gameClient).exitGame(ref.watch(playerID), ref.watch(code)),
+    name: 'ExitGame',
+    dependencies: [gameClient, playerID, code],
+  );
+
+  static final undo = FutureProvider<bool>(
+    (ref) => ref.watch(gameClient).undo(ref.watch(playerID), ref.watch(code)),
+    name: 'Undo',
+    dependencies: [gameClient, playerID, code],
+  );
+
+  static final newRound = FutureProvider<bool>(
+    (ref) =>
+        ref.watch(gameClient).newRound(ref.watch(playerID), ref.watch(code)),
+    name: 'NewRound',
+    dependencies: [gameClient, playerID, code],
+  );
+
+  static final chatMessage = StateProvider<String>(
+    (ref) => '',
+    name: 'Message',
+  );
+
+  static final sendMessage = FutureProvider<bool>(
+    (ref) => ref.watch(gameClient).sendMessage(
+        ref.watch(playerID), ref.watch(code), ref.watch(chatMessage)),
+    name: 'NewRound',
+    dependencies: [gameClient, playerID, code, chatMessage],
+  );
+
+  static final sendEvent = FutureProvider.autoDispose.family<bool, GameEvent>(
+    (ref, event) => ref
+        .watch(gameClient)
+        .sendEvent(ref.watch(playerID), ref.watch(code), event),
+    name: 'SendEvent',
+    dependencies: [gameClient, playerID, code],
+  );
+
+  /// Provides game lobby info in the form of [GameInfo] for the lobby
+  static final lobby = StreamProvider<GameInfo>(
+    (ref) {
+      final c = ref.watch(gameClient);
+      return c.gameLobby(ref.watch(playerID), ref.watch(code));
+    },
+    name: 'Lobby',
+    dependencies: [gameClient, playerID, code],
+  );
+
+  /// Provides the game or error state for the current game of the client with specified id
+  static final gameOrError = StreamProvider<GameOrError>(
+    (ref) {
+      final c = ref.watch(gameClient);
+      return c.gameStream(ref.watch(playerID), ref.watch(code));
+    },
+    name: 'GameOrErrorStream',
+    dependencies: [gameClient, playerID, code],
+  );
+
+  /// Provides the game state for the current game of the client with specified id
+  static final game = StreamProvider<Game>(
+    (ref) async* {
+      await for (final g in ref.watch(gameOrError.stream)) {
+        if (g.isGame) {
+          ref.read(status.notifier).state = g.value!.generic.status;
+          yield g.value!;
+        }
+      }
+    },
+    name: 'GameStateStream',
+    dependencies: [gameOrError.stream, status.notifier],
+  );
+
+  /// Provides the game error for the current game of the client with specified id
+  static final error = StreamProvider<GameError>(
+    (ref) async* {
+      await for (final g in ref.watch(gameOrError.stream)) {
+        if (g.isError) {
+          yield g.error!;
+        }
+      }
+    },
+    name: 'GameError',
+    dependencies: [gameOrError.stream],
   );
 }
 

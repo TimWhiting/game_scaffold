@@ -18,8 +18,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
       _$TicTacToeGameFromJson(map);
 
   @override
-  GameOrError<TicTacToeGame> next(
-          TicTacToeGameEvent event, Reader backendReader) =>
+  GameOrError<TicTacToeGame> next(TicTacToeGameEvent event) =>
       _handleMove(event.player, event.location);
 
   GameOrError<TicTacToeGame> _handleMove(PlayerID player, int location) {
@@ -56,8 +55,7 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
       location >= 0 && location < 9 && board[location] == null;
 
   @override
-  TicTacToeGame moveNextRound(GameConfig config, Reader backendReader) =>
-      TicTacToeGame(
+  TicTacToeGame moveNextRound(GameConfig config) => TicTacToeGame(
         generic: generic.finishRound(
           {
             players[0].id: points[players[0].id]!,
@@ -112,9 +110,12 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
       'tictactoe',
       name: 'Tic Tac Toe',
       fromJson: (json) => TicTacToeGame.fromJson(json),
-      initialState: (config, players, _) => TicTacToeGame(
-        generic: GenericGame.start(players,
-            multiPly: true, simultaneousAction: false),
+      initialState: (config, players) => TicTacToeGame(
+        generic: GenericGame.start(
+          players,
+          multiPly: true,
+          simultaneousAction: false,
+        ),
         board: List.filled(9, null).lock,
       ),
       gameEventFromJson: (j) => TicTacToeGameEvent.fromJson(j).asGameEvent,

@@ -7,7 +7,6 @@ import 'package:logging/logging.dart';
 void main() {
   Game.registerGeneralEvents();
   TicTacToeGame.register();
-  registerOnDeviceClients();
 
   Logger.root.clearListeners();
   Logger.root.level = Level.FINE;
@@ -75,10 +74,8 @@ class CreateOrJoinWidget extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerID = ref.watch(GameProviders.playerID);
-    final code = ref.watch(GameProviders.code);
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
-    final gameClient = ref.read(GameProviders.client);
-    final allGames = ref.watch(GameProviders.games);
+    final allGames = ref.watch(GameProviders.allGames);
 
     return Scaffold(
       body: Center(
@@ -91,16 +88,16 @@ class CreateOrJoinWidget extends HookConsumerWidget {
               ElevatedButton(
                 key: Key('Create Game Button $playerID'),
                 onPressed: () async {
-                  final id = await gameClient.createGame(
-                    config: const GameConfig(
-                      adminID: P1,
-                      customNames: false,
-                      gameType: 'tictactoe',
-                      rounds: 2,
-                      maxPlayers: 2,
-                    ),
+                  ref.read(GameProviders.config.notifier).state =
+                      const GameConfig(
+                    adminID: P1,
+                    customNames: false,
+                    gameType: 'tictactoe',
+                    rounds: 2,
+                    maxPlayers: 2,
                   );
-                  await ref.read(GameProviders.client).register(code: id);
+                  await GameProviders.createGame.refresh(ref);
+                  await GameProviders.joinGame.refresh(ref);
                 },
                 child: const Text('Create Game'),
               ),
@@ -118,15 +115,18 @@ class CreateOrJoinWidget extends HookConsumerWidget {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () => gameClient.register(code: code),
+                onPressed: () {
+                  GameProviders.joinGame.refresh(ref);
+                },
                 child: const Text('Join Game'),
               )
             ],
-            if (allGames.hasData)
-              for (final info in allGames.value)
+            if (allGames.value != null)
+              for (final info in allGames.value!)
                 ElevatedButton(
-                  onPressed: () {
-                    gameClient.register(code: info.gameId);
+                  onPressed: () async {
+                    ref.read(GameProviders.code.notifier).state = info.gameId;
+                    await GameProviders.joinGame.refresh(ref);
                   },
                   child: Text(
                       'Started Game: ${info.gameId}, Players: ${info.players}'),
@@ -149,7 +149,7 @@ class LobbyWidget extends HookConsumerWidget {
         child: Column(children: [
           const SizedBox(height: 40),
           const Text('Lobby'),
-          Text('$lobby'),
+          Text('${lobby.value}'),
         ]),
       ),
     );
@@ -160,11 +160,11 @@ class GameWidget extends HookConsumerWidget {
   const GameWidget({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameState = ref.watch(GameProviders.state);
+    final gameState = ref.watch(GameProviders.game);
     final gameStatus = ref.watch(GameProviders.status);
     final playerID = ref.watch(GameProviders.playerID);
-    ref.listen<GameError?>(GameProviders.error, (prevError, error) {
-      if (error != null) {
+    ref.listen<AsyncValue<GameError>>(GameProviders.error, (prevError, error) {
+      if (error != prevError) {
         showDialog(
           context: context,
           builder: (c) => Dialog(
@@ -191,9 +191,11 @@ class GameWidget extends HookConsumerWidget {
                     for (final c in [0, 1, 2])
                       GestureDetector(
                         key: Key('$playerID square $r $c'),
-                        onTap: () => ref.read(GameProviders.client).sendEvent(
-                              TicTacToeGameEvent(playerID, r * 3 + c),
-                            ),
+                        onTap: () async {
+                          await GameProviders.sendEvent(
+                            TicTacToeGameEvent(playerID, r * 3 + c).asGameEvent,
+                          ).refresh(ref);
+                        },
                         child: ColoredBox(
                           color: Colors.black,
                           child: Container(
@@ -217,7 +219,9 @@ class GameWidget extends HookConsumerWidget {
                   !g.readyPlayers.contains(playerID)) ...[
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () => ref.read(GameProviders.client).newRound(),
+                  onPressed: () async {
+                    await GameProviders.newRound.refresh(ref);
+                  },
                   child: const Text('Next Round'),
                 ),
               ],
