@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:riverpod/riverpod.dart';
 
+import '../../../../server.dart';
 import '../../backend.dart';
 import '../../client.dart';
 import '../../core.dart';
@@ -28,20 +29,14 @@ class NoServerGameClient extends GameClient {
     final config = lobby.config;
     final players = lobby.players;
     if (players.length == config.maxPlayers && config.autoStart) {
-      scheduleMicrotask(() {
-        startGame(playerID, code).ignore();
-      });
+      // TODO: Starting a game?
     }
 
     return name;
   }
 
   @override
-  Future<bool> startGame(PlayerID playerID, GameCode code) async {
-    final backendReader = NoServerClient.games[code]!.container.read;
-    backendReader(BackendProviders.state);
-    return true;
-  }
+  Future<bool> startGame(PlayerID playerID, GameCode code) async => true;
 
   @override
   Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) {
@@ -51,10 +46,23 @@ class NoServerGameClient extends GameClient {
   }
 
   @override
-  Stream<GameOrError> gameStream(PlayerID playerID, GameCode code) {
+  Stream<GameOrError> gameStream(PlayerID playerID, GameCode code) async* {
     logger.info('Watching backend');
-    final backendReader = NoServerClient.games[code]!.container;
-    return backendReader.read(BackendProviders.state.notifier).stream;
+    final ss = StreamController<GameOrError>();
+    final backendReader = NoServerClient.games[code]?.container;
+    backendReader?.listen<GameStateNotifier>(BackendProviders.state.notifier,
+        (prev, curr) async {
+      print('New notifier');
+      // ignore: prefer_foreach
+      ss.add(curr.state);
+      await for (final e in curr.stream) {
+        print(e);
+        ss.add(e);
+      }
+    });
+
+    yield* ss.stream;
+    await ss.close();
   }
 
   @override
