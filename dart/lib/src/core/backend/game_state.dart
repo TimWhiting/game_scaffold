@@ -26,6 +26,7 @@ class BackendProviders {
   static final lobby = StateNotifierProvider<LobbyNotifier, Lobby>(
     (ref) => LobbyNotifier(
       Lobby(
+        gameStatus: GameStatus.Lobby,
         code: '',
         players: <Player>{}.lock,
         config: const GameConfig(gameType: ''),
@@ -40,6 +41,7 @@ class BackendProviders {
       final pls = l.players;
       yield GameInfo(
         gameId: l.code,
+        status: l.gameStatus,
         player: pls.firstWhere((p) => p.id == player).name,
         creator: player == l.config.adminID,
         players: pls.map((p) => p.name).toIList(),
@@ -49,6 +51,7 @@ class BackendProviders {
         final pls = l.players;
         yield GameInfo(
           gameId: l.code,
+          status: l.gameStatus,
           player: pls.firstWhere((p) => p.id == player).name,
           creator: player == l.config.adminID,
           players: pls.map((p) => p.name).toIList(),

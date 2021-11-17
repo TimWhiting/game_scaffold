@@ -9,7 +9,6 @@ import 'package:logging/logging.dart';
 // import 'main.dart';
 
 void main() {
-  Game.registerGeneralEvents();
   TicTacToeGame.register();
   final url = Platform.environment['SUPAURL'] ?? '';
   final key = Platform.environment['SUPAKEY'] ?? '';

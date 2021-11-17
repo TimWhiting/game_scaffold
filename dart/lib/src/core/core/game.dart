@@ -50,6 +50,7 @@ abstract class Game<E extends Event> {
 
   /// Returns the name game type that is registered for serialization
   GameType get type;
+  static bool _generalIsRegistered = false;
 
   /// Registers a game type with the server
   static void registerGameType<T extends Game, Q extends Game>(
@@ -60,6 +61,10 @@ abstract class Game<E extends Event> {
     required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
     Q Function(T)? toClientView,
   }) {
+    if (!_generalIsRegistered) {
+      _generalIsRegistered = true;
+      _registerGeneralEvents();
+    }
     gameNames[type] = name;
     _fromJsonFactory[type] = fromJson;
     _eventFromJsonFactory[type] = gameEventFromJson;
@@ -100,7 +105,7 @@ abstract class Game<E extends Event> {
   }
 
   /// Registers the set of general events
-  static void registerGeneralEvents() {
+  static void _registerGeneralEvents() {
     _eventFromJsonFactory['GenericEvent'] =
         (j) => GenericEvent.fromJson(j).asGameEvent;
   }
@@ -128,24 +133,18 @@ abstract class Game<E extends Event> {
 
 /// Represents the current status of the game as seen by the client
 enum GameStatus {
-  /// The client is not connected to the backend
-  NotConnected,
-
-  /// The client has not joined a game on the backend yet
-  NotJoined,
-
   /// The client is waiting for the game to start
-  NotStarted,
+  Lobby,
 
   /// The game has started
   Started,
 
-  /// The game is finished
-  Finished,
-
   /// The game is waiting for the clients to signal that they are ready for the
   /// next round before moving on
   BetweenRounds,
+
+  /// The game is finished
+  Finished,
 }
 
 /// Some general config parameters for a game of [gameType]
@@ -187,6 +186,7 @@ class GameInfo with _$GameInfo {
     required PlayerName player,
     required bool creator,
     required GameType gameType,
+    required GameStatus status,
   }) = _GameInfo;
   factory GameInfo.fromJson(Map<String, dynamic> map) =>
       _$GameInfoFromJson(map);
@@ -198,6 +198,7 @@ class Lobby with _$Lobby {
     required GameCode code,
     required ISet<Player> players,
     required GameConfig config,
+    required GameStatus gameStatus,
   }) = _Lobby;
   factory Lobby.fromJson(Map<String, dynamic> map) => _$LobbyFromJson(map);
 }

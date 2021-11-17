@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:game_scaffold_dart/server.dart';
+import 'package:game_scaffold_games/games.dart';
 import 'package:test/test.dart';
 
-void main() {
+Future<void> main() async {
+  TicTacToeGame.register();
+
   final _ = IOServer();
   late Reader read;
   late Reader p1Game;
@@ -17,13 +22,16 @@ void main() {
     read(GameProviders.remoteUri.notifier).state =
         Uri.parse('http://localhost:$defaultGamePort');
 
-    expect(p1Game(GameProviders.status), GameStatus.NotConnected);
+    expect(p1Game(GameProviders.status), null);
     p1Game(GameProviders.config.notifier).state =
-        const GameConfig(gameType: 'None');
+        const GameConfig(gameType: 'tictactoe');
     final code = await p1Game(GameProviders.createGame.future);
-    expect(p1Game(GameProviders.status), GameStatus.NotJoined);
+    expect(p1Game(GameProviders.status), null);
     p1Game(GameProviders.code.notifier).state = code;
     await p1Game(GameProviders.joinGame.future);
-    expect(p1Game, GameStatus.NotStarted);
+    await Future.delayed(const Duration(milliseconds: 1));
+    expect(p1Game(GameProviders.status), GameStatus.Lobby);
   });
+  await Future.delayed(const Duration(seconds: 2));
+  exit(0);
 }

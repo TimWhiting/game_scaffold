@@ -51,21 +51,30 @@ class GameProviders {
   );
 
   /// Provides the game code for each client id
-  static final StateProvider<GameCode> code = StateProvider(
+  static final code = StateProvider<GameCode>(
     (ref) => '',
     name: 'GameCode',
     dependencies: [playerID],
   );
 
   /// Provides the game status for the current game of the client with specified id
-  static final StateProvider<GameStatus> status = StateProvider<GameStatus>(
-    (ref) => GameStatus.NotConnected,
+  static final status = StateProvider<GameStatus?>(
+    (ref) {
+      final status = ref.watch(lobby).asData?.value.status;
+      if (status == null) {
+        return null;
+      } else if (status == GameStatus.Started) {
+        return ref.watch(game).asData?.value.status ?? GameStatus.Lobby;
+      } else {
+        return status;
+      }
+    },
     name: 'GameStatus',
     dependencies: [playerID],
   );
 
   /// Provides whether it is the players turn for the current game of the client with the specified id
-  static final Provider<bool> turn = Provider<bool>((ref) {
+  static final turn = Provider<bool>((ref) {
     final pID = ref.watch(playerID);
     final _ = ref.watch(code); // Invalidate on change of gameCode
     final currentPlayer = ref.watch(game).asData?.value.currentPlayer?.id;
@@ -128,7 +137,6 @@ class GameProviders {
             ref.watch(config),
           );
       ref.read(code.notifier).state = c;
-      ref.read(status.notifier).state = GameStatus.NotJoined;
       return c;
     },
     name: 'CreateGame',
@@ -137,9 +145,9 @@ class GameProviders {
       playerID,
       config,
       code.notifier,
-      status.notifier
     ],
   );
+  static final connected = StateProvider<bool>((ref) => false);
 
   static final allGames = FutureProvider<IList<GameInfo>>(
     (ref) => ref.watch(serverClient).getGames(ref.watch(playerID)),
@@ -180,12 +188,12 @@ class GameProviders {
   static final joinGame = FutureProvider<String?>(
     (ref) async {
       print('joining');
-      final name = await ref.watch(gameClient).joinGame(
-          ref.watch(playerID), ref.watch(code), ref.watch(playerName));
+      final name = await ref
+          .watch(gameClient)
+          .joinGame(ref.watch(playerID), ref.watch(code), ref.read(playerName));
       if (name != null) {
         ref.read(playerName.notifier).state = name;
       }
-      ref.read(status.notifier).state = GameStatus.NotStarted;
       return name;
     },
     name: 'JoinGame',
@@ -195,7 +203,6 @@ class GameProviders {
       code,
       playerName,
       playerName.notifier,
-      status.notifier
     ],
   );
 
@@ -271,13 +278,12 @@ class GameProviders {
     (ref) async* {
       await for (final g in ref.watch(gameOrError.stream)) {
         if (g.isGame) {
-          ref.read(status.notifier).state = g.value!.generic.status;
           yield g.value!;
         }
       }
     },
     name: 'GameStateStream',
-    dependencies: [gameOrError.stream, status.notifier],
+    dependencies: [gameOrError.stream],
   );
 
   /// Provides the game error for the current game of the client with specified id

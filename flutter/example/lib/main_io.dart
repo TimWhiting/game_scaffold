@@ -14,7 +14,6 @@ void main() {
       // ignore: avoid_print
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
   final _ = IOServer();
-  Game.registerGeneralEvents();
   TicTacToeGame.register();
   runApp(ProviderScope(
     overrides: [

@@ -76,12 +76,10 @@ K _$enumDecode<K, V>(
 }
 
 const _$GameStatusEnumMap = {
-  GameStatus.NotConnected: 'NotConnected',
-  GameStatus.NotJoined: 'NotJoined',
-  GameStatus.NotStarted: 'NotStarted',
+  GameStatus.Lobby: 'Lobby',
   GameStatus.Started: 'Started',
-  GameStatus.Finished: 'Finished',
   GameStatus.BetweenRounds: 'BetweenRounds',
+  GameStatus.Finished: 'Finished',
 };
 
 _$GenericEventUndo _$$GenericEventUndoFromJson(Map<String, dynamic> json) =>

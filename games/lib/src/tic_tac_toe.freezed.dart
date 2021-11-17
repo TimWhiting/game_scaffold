@@ -1,5 +1,6 @@
+// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'tic_tac_toe.dart';
 
@@ -31,7 +32,7 @@ class _$TicTacToeGameTearOff {
     );
   }
 
-  TicTacToeGame fromJson(Map<String, Object> json) {
+  TicTacToeGame fromJson(Map<String, Object?> json) {
     return TicTacToeGame.fromJson(json);
   }
 }
@@ -155,7 +156,7 @@ class _$_TicTacToeGame extends _TicTacToeGame {
       : super._();
 
   factory _$_TicTacToeGame.fromJson(Map<String, dynamic> json) =>
-      _$_$_TicTacToeGameFromJson(json);
+      _$$_TicTacToeGameFromJson(json);
 
   @override
   final GenericGame generic;
@@ -173,22 +174,15 @@ class _$_TicTacToeGame extends _TicTacToeGame {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _TicTacToeGame &&
-            (identical(other.generic, generic) ||
-                const DeepCollectionEquality()
-                    .equals(other.generic, generic)) &&
-            (identical(other.board, board) ||
-                const DeepCollectionEquality().equals(other.board, board)) &&
-            (identical(other.type, type) ||
-                const DeepCollectionEquality().equals(other.type, type)));
+        (other.runtimeType == runtimeType &&
+            other is _TicTacToeGame &&
+            (identical(other.generic, generic) || other.generic == generic) &&
+            (identical(other.board, board) || other.board == board) &&
+            (identical(other.type, type) || other.type == type));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(generic) ^
-      const DeepCollectionEquality().hash(board) ^
-      const DeepCollectionEquality().hash(type);
+  int get hashCode => Object.hash(runtimeType, generic, board, type);
 
   @JsonKey(ignore: true)
   @override
@@ -197,7 +191,7 @@ class _$_TicTacToeGame extends _TicTacToeGame {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_TicTacToeGameToJson(this);
+    return _$$_TicTacToeGameToJson(this);
   }
 }
 
@@ -212,11 +206,11 @@ abstract class _TicTacToeGame extends TicTacToeGame {
       _$_TicTacToeGame.fromJson;
 
   @override
-  GenericGame get generic => throw _privateConstructorUsedError;
+  GenericGame get generic;
   @override
-  IList<String?> get board => throw _privateConstructorUsedError;
+  IList<String?> get board;
   @override
-  String get type => throw _privateConstructorUsedError;
+  String get type;
   @override
   @JsonKey(ignore: true)
   _$TicTacToeGameCopyWith<_TicTacToeGame> get copyWith =>
@@ -238,7 +232,7 @@ class _$TicTacToeGameEventTearOff {
     );
   }
 
-  TicTacToeGameEvent fromJson(Map<String, Object> json) {
+  TicTacToeGameEvent fromJson(Map<String, Object?> json) {
     return TicTacToeGameEvent.fromJson(json);
   }
 }
@@ -337,7 +331,7 @@ class _$_TicTacToeGameEvent extends _TicTacToeGameEvent {
   const _$_TicTacToeGameEvent(this.player, this.location) : super._();
 
   factory _$_TicTacToeGameEvent.fromJson(Map<String, dynamic> json) =>
-      _$_$_TicTacToeGameEventFromJson(json);
+      _$$_TicTacToeGameEventFromJson(json);
 
   @override
   final String player;
@@ -352,19 +346,15 @@ class _$_TicTacToeGameEvent extends _TicTacToeGameEvent {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _TicTacToeGameEvent &&
-            (identical(other.player, player) ||
-                const DeepCollectionEquality().equals(other.player, player)) &&
+        (other.runtimeType == runtimeType &&
+            other is _TicTacToeGameEvent &&
+            (identical(other.player, player) || other.player == player) &&
             (identical(other.location, location) ||
-                const DeepCollectionEquality()
-                    .equals(other.location, location)));
+                other.location == location));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(player) ^
-      const DeepCollectionEquality().hash(location);
+  int get hashCode => Object.hash(runtimeType, player, location);
 
   @JsonKey(ignore: true)
   @override
@@ -373,7 +363,7 @@ class _$_TicTacToeGameEvent extends _TicTacToeGameEvent {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$_$_TicTacToeGameEventToJson(this);
+    return _$$_TicTacToeGameEventToJson(this);
   }
 }
 
@@ -386,9 +376,9 @@ abstract class _TicTacToeGameEvent extends TicTacToeGameEvent {
       _$_TicTacToeGameEvent.fromJson;
 
   @override
-  String get player => throw _privateConstructorUsedError;
+  String get player;
   @override
-  int get location => throw _privateConstructorUsedError;
+  int get location;
   @override
   @JsonKey(ignore: true)
   _$TicTacToeGameEventCopyWith<_TicTacToeGameEvent> get copyWith =>

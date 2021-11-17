@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
 void main() {
-  Game.registerGeneralEvents();
   TicTacToeGame.register();
 
   Logger.root.clearListeners();

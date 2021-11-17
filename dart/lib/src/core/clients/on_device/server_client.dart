@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:riverpod/riverpod.dart';
 
 import '../../backend.dart';
@@ -44,6 +46,7 @@ class NoServerClient extends ServerClient {
     return [
       for (final g in gms)
         GameInfo(
+          status: g.read(BackendProviders.lobby).gameStatus,
           gameId: g.gameCode,
           player: g
               .read(BackendProviders.lobby)
@@ -66,10 +69,13 @@ final onDeviceGameServerClient = Provider<ServerClient>(
   (ref) {
     final client = NoServerClient();
     ref.onDispose(client.dispose);
+    scheduleMicrotask(() {
+      ref.read(GameProviders.connected.notifier).state = true;
+    });
     return client;
   },
   name: 'onDeviceGameServerClient',
-  dependencies: const [],
+  dependencies: [GameProviders.connected.notifier],
 );
 
 /// Keeps track of some metadata about a game for an [OnDeviceClient] game

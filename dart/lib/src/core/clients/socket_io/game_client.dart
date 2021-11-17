@@ -38,8 +38,6 @@ class IOGameClient extends GameClient {
       _socket = IO.io('$address/$code', socketIOOpts);
       logger.info('Created Game Client Socket $code');
       _lastGameCode = code;
-      await Future.delayed(const Duration(microseconds: 1));
-      gameStatus = GameStatus.NotJoined;
     }
   }
 
@@ -57,7 +55,6 @@ class IOGameClient extends GameClient {
       PlayerID playerID, GameCode code, PlayerName name) async {
     await _ensureConnected(code);
     logger.info('Registering');
-    gameStatus = GameStatus.NotJoined;
     final assignedName = await _socket!
         .call(IOChannel.register, {'name': name, 'id': playerID}) as String?;
     if (assignedName != null) {
@@ -74,7 +71,6 @@ class IOGameClient extends GameClient {
       sc.add(gameInfo);
       logger.info('Got Lobby $gameInfo');
     });
-    gameStatus = GameStatus.NotStarted;
 
     yield* sc.stream;
     await sc.close();
@@ -85,6 +81,7 @@ class IOGameClient extends GameClient {
     final sc = StreamController<GameOrError>();
     _socket!.on(IOChannel.gamestate.string, (data) {
       _socket!.off(IOChannel.lobby.string);
+      print('game or error $data');
       final gameState = GameOrError.fromJson(data as Map<String, dynamic>);
       logger.info('Got gamestate $data');
       sc.add(gameState);
@@ -128,7 +125,6 @@ final socketIOGameClient = Provider<GameClient>(
         ref.read(GameProviders.playerID),
         ref.read(GameProviders.code),
       );
-      ref.read(GameProviders.status.notifier).state = GameStatus.NotConnected;
       client.dispose();
     });
     return client;
@@ -138,6 +134,5 @@ final socketIOGameClient = Provider<GameClient>(
     GameProviders.remoteUri,
     GameProviders.code,
     GameProviders.playerID,
-    GameProviders.status.notifier,
   ],
 );

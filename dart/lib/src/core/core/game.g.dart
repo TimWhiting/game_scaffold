@@ -81,6 +81,7 @@ _$_GameInfo _$$_GameInfoFromJson(Map<String, dynamic> json) => _$_GameInfo(
       player: json['player'] as String,
       creator: json['creator'] as bool,
       gameType: json['gameType'] as String,
+      status: _$enumDecode(_$GameStatusEnumMap, json['status']),
     );
 
 Map<String, dynamic> _$$_GameInfoToJson(_$_GameInfo instance) =>
@@ -92,13 +93,22 @@ Map<String, dynamic> _$$_GameInfoToJson(_$_GameInfo instance) =>
       'player': instance.player,
       'creator': instance.creator,
       'gameType': instance.gameType,
+      'status': _$GameStatusEnumMap[instance.status],
     };
+
+const _$GameStatusEnumMap = {
+  GameStatus.Lobby: 'Lobby',
+  GameStatus.Started: 'Started',
+  GameStatus.BetweenRounds: 'BetweenRounds',
+  GameStatus.Finished: 'Finished',
+};
 
 _$_Lobby _$$_LobbyFromJson(Map<String, dynamic> json) => _$_Lobby(
       code: json['code'] as String,
       players: ISet<Player>.fromJson(json['players'],
           (value) => Player.fromJson(value as Map<String, dynamic>)),
       config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
+      gameStatus: _$enumDecode(_$GameStatusEnumMap, json['gameStatus']),
     );
 
 Map<String, dynamic> _$$_LobbyToJson(_$_Lobby instance) => <String, dynamic>{
@@ -107,4 +117,5 @@ Map<String, dynamic> _$$_LobbyToJson(_$_Lobby instance) => <String, dynamic>{
         (value) => value,
       ),
       'config': instance.config,
+      'gameStatus': _$GameStatusEnumMap[instance.gameStatus],
     };

@@ -27,24 +27,24 @@ class GameNavigator extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final generalStatus = ref.watch(GameProviders.status);
-    final gameStatus = ref.watch(GameProviders.gameOrError
-            .select((g) => g.asData?.value.value?.status)) ??
-        generalStatus;
-    final pages = {GameStatus.NotConnected: disconnected};
+    final conn = ref.watch(GameProviders.connected);
+    final gameStatus = ref.watch(GameProviders.status);
+
+    final pages = {'disconnected': disconnected};
     navigationLogger.info(
         'PlayerID: ${ref.read(GameProviders.playerID)} gameStatus: $gameStatus');
 
-    if (gameStatus != GameStatus.NotConnected) {
-      pages[GameStatus.NotJoined] = connected;
-      if (gameStatus != GameStatus.NotJoined) {
-        pages[GameStatus.NotStarted] = lobby;
-        if (gameStatus != GameStatus.NotStarted) {
-          pages[GameStatus.Started] = game;
+    if (conn) {
+      pages['connected'] = connected;
+      if (gameStatus != null) {
+        pages['lobby'] = lobby;
+        if (gameStatus != GameStatus.Lobby) {
           if (gameStatus == GameStatus.BetweenRounds && betweenRounds != game) {
-            pages[GameStatus.Started] = betweenRounds;
+            pages['started'] = betweenRounds;
           } else if (gameStatus == GameStatus.Finished && gameOver != game) {
-            pages[GameStatus.Started] = gameOver;
+            pages['started'] = gameOver;
+          } else {
+            pages['started'] = game;
           }
         }
       }
@@ -52,23 +52,24 @@ class GameNavigator extends HookConsumerWidget {
 
     return Navigator(
       pages: pages.entries
-          .map((entry) => MaterialPage(
+          .map(
+            (entry) => MaterialPage(
               key: ValueKey(entry.key),
               child: entry.value,
-              arguments: entry.key))
+              arguments: entry.key,
+            ),
+          )
           .toList(),
       onPopPage: (route, p) {
         navigationLogger.info('Popping route ${route.settings.arguments}');
-        final status = route.settings.arguments as GameStatus?;
-        if (status == GameStatus.Finished ||
-            status == GameStatus.BetweenRounds ||
-            status == GameStatus.Started ||
-            status == GameStatus.NotStarted) {
+        final status = route.settings.arguments as String?;
+        if (status == 'lobby' || status == 'started') {
+          ref.refresh(GameProviders.exitGame);
           ref.read(GameProviders.exitGame.future);
           ref.refresh(GameProviders.allGames);
           route.didPop(null);
           return true;
-        } else if (status == GameStatus.NotJoined) {
+        } else if (status == 'connected') {
           ref.read(GameProviders.serverClient).disconnect();
           return true;
         }

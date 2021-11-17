@@ -80,6 +80,7 @@ class GameServer {
 
   /// Keeps track of how long there has not been an event (i.e. game is active)
   bool _active = false;
+  final _started = true;
 
   late void Function() _gameStateListenerDisposer;
 
@@ -99,6 +100,7 @@ class GameServer {
   }
 
   GameInfo gameInfo(PlayerID? id) => GameInfo(
+        status: _started ? GameStatus.Started : GameStatus.Lobby,
         gameId: _gameId,
         players: _players.map((p) => p.name).toIList(),
         player: _clientNames[id] ?? '',
@@ -122,8 +124,6 @@ class GameServer {
     }
   }
 
-  bool _started = false;
-
   void _handleRegister(IO.Socket client, Map<String, dynamic> data) {
     _serverLogger
         .info('Game server namespace $_gameId registering client $data');
@@ -143,8 +143,8 @@ class GameServer {
       _serverLogger.info('Client $id rejoining');
       _clients[id] = client;
       if (_started) {
-        _clients[id]
-            ?.emit(IOChannel.gamestate.string, _gameState.gameState.toJson());
+        _clients[id]?.emit(IOChannel.gamestate.string,
+            _gameState.gameState.gameValue().toJson());
       } else {
         _clients[id]?.emit(IOChannel.lobby.string, gameInfo(id).toJson());
       }
@@ -181,7 +181,6 @@ class GameServer {
   }
 
   void _start() {
-    _started = true;
     _gameStateListenerDisposer = _gameState.addListener(_sendUpdates);
   }
 

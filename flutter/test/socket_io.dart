@@ -3,7 +3,6 @@ import 'package:game_scaffold_games/game_scaffold_games.dart';
 
 // ignore_for_file: avoid_print
 Future<void> main() async {
-  Game.registerGeneralEvents();
   TicTacToeGame.register();
   final ioServer = IOServer();
 
@@ -12,7 +11,7 @@ Future<void> main() async {
     assert(ioServer.servers[gameCode] != null, 'Game Server Created');
     final gameStatus = read.gameFor(P1)(GameProviders.status);
     print(gameStatus);
-    assert(gameStatus == GameStatus.NotJoined, 'Game Starts out Not Joined');
+    assert(gameStatus == null, 'Game Starts out Not Joined');
   });
 
   await Future.delayed(const Duration(milliseconds: 100));

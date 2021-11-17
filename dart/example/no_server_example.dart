@@ -5,7 +5,6 @@ import 'package:game_scaffold_games/games.dart';
 
 // ignore_for_file: avoid_print
 Future<void> main(List<String> arguments) async {
-  Game.registerGeneralEvents();
   TicTacToeGame.register();
   final rootProvider = ProviderContainer();
   final read = rootProvider.read;

@@ -8,14 +8,14 @@ environment:
 
 dependencies:
   fast_immutable_collections: ^7.0.5-dev0
-  freezed_annotation: ^0.14.0
+  freezed_annotation: ^1.0.0
   game_scaffold_dart: ^0.3.1
-  json_annotation: ^4.0.0
+  json_annotation: ^4.3.0
 
 dev_dependencies:
   build_runner: any
-  freezed: ^0.14.0
-  json_serializable: ^5.0.2
+  freezed: ^1.0.0
+  json_serializable: ^6.0.1
 
 dependency_overrides:
   game_scaffold_dart:
