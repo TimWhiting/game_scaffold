@@ -4,7 +4,7 @@ import 'package:logging/logging.dart';
 import '../../../game_scaffold_dart.dart';
 import '../core.dart';
 
-/// A client for a particular game identified by [gameCode]
+/// A client for a particular game
 abstract class GameClient {
   GameClient() : logger = Logger('GameClient');
 

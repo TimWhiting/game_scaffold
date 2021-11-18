@@ -1,3 +1,7 @@
+## 0.4.0
+
+- Major refactor for riverpod 1.0.0
+
 ## 0.3.1
 
 - Update dependencies

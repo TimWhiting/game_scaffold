@@ -1,5 +1,9 @@
 ## 0.3.4
 
+- Major refactor for riverpod 1.0.0
+
+## 0.3.4
+
 - Update no server client
 
 ## 0.3.1

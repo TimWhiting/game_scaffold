@@ -53,7 +53,7 @@ class BackendProviders {
     dependencies: [lobby],
   );
 
-  /// Provides the [GameStateNotifier] based on the [GameConfig] from [config]
+  /// Provides the [GameStateNotifier] based on the [GameConfig] from [lobby]'s config
   static final StateNotifierProvider<GameStateNotifier, GameOrError> state =
       StateNotifierProvider<GameStateNotifier, GameOrError>(
     (ref) {
