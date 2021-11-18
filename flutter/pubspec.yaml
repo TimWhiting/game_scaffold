@@ -4,7 +4,7 @@ version: 0.4.0
 homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:
-  sdk: ">=2.13.0-0 <3.0.0"
+  sdk: ">=2.13.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -27,9 +27,9 @@ dev_dependencies:
     sdk: flutter
   game_scaffold_games: any
 
-dependency_overrides:
-  game_scaffold_dart:
-    path: ../dart
-  game_scaffold_games:
-    path: ../games
+# dependency_overrides:
+#   game_scaffold_dart:
+#     path: ../dart
+#   game_scaffold_games:
+#     path: ../games
 flutter: null
