@@ -190,7 +190,7 @@ class GameProviders {
       print('joining');
       final name = await ref
           .watch(gameClient)
-          .joinGame(ref.watch(playerID), ref.watch(code), ref.read(playerName));
+          .joinGame(ref.read(playerID), ref.read(code), ref.read(playerName));
       if (name != null) {
         ref.read(playerName.notifier).state = name;
       }
@@ -208,27 +208,25 @@ class GameProviders {
 
   static final startGame = FutureProvider<bool>(
     (ref) =>
-        ref.watch(gameClient).startGame(ref.watch(playerID), ref.watch(code)),
+        ref.watch(gameClient).startGame(ref.read(playerID), ref.read(code)),
     name: 'StartGame',
     dependencies: [gameClient, playerID, code],
   );
 
   static final exitGame = FutureProvider<bool>(
-    (ref) =>
-        ref.watch(gameClient).exitGame(ref.watch(playerID), ref.watch(code)),
+    (ref) => ref.watch(gameClient).exitGame(ref.read(playerID), ref.read(code)),
     name: 'ExitGame',
     dependencies: [gameClient, playerID, code],
   );
 
   static final undo = FutureProvider<bool>(
-    (ref) => ref.watch(gameClient).undo(ref.watch(playerID), ref.watch(code)),
+    (ref) => ref.watch(gameClient).undo(ref.read(playerID), ref.read(code)),
     name: 'Undo',
     dependencies: [gameClient, playerID, code],
   );
 
   static final newRound = FutureProvider<bool>(
-    (ref) =>
-        ref.watch(gameClient).newRound(ref.watch(playerID), ref.watch(code)),
+    (ref) => ref.watch(gameClient).newRound(ref.read(playerID), ref.read(code)),
     name: 'NewRound',
     dependencies: [gameClient, playerID, code],
   );
@@ -239,16 +237,17 @@ class GameProviders {
   );
 
   static final sendMessage = FutureProvider<bool>(
-    (ref) => ref.watch(gameClient).sendMessage(
-        ref.watch(playerID), ref.watch(code), ref.watch(chatMessage)),
+    (ref) => ref
+        .watch(gameClient)
+        .sendMessage(ref.read(playerID), ref.read(code), ref.read(chatMessage)),
     name: 'NewRound',
     dependencies: [gameClient, playerID, code, chatMessage],
   );
 
-  static final sendEvent = FutureProvider.autoDispose.family<bool, GameEvent>(
+  static final sendEvent = FutureProvider.family<bool, GameEvent>(
     (ref, event) => ref
         .watch(gameClient)
-        .sendEvent(ref.watch(playerID), ref.watch(code), event),
+        .sendEvent(ref.read(playerID), ref.read(code), event),
     name: 'SendEvent',
     dependencies: [gameClient, playerID, code],
   );
@@ -257,7 +256,7 @@ class GameProviders {
   static final lobby = StreamProvider<GameInfo>(
     (ref) {
       final c = ref.watch(gameClient);
-      return c.gameLobby(ref.watch(playerID), ref.watch(code));
+      return c.gameLobby(ref.read(playerID), ref.read(code));
     },
     name: 'Lobby',
     dependencies: [gameClient, playerID, code],
@@ -267,7 +266,7 @@ class GameProviders {
   static final gameOrError = StreamProvider<GameOrError>(
     (ref) {
       final c = ref.watch(gameClient);
-      return c.gameStream(ref.watch(playerID), ref.watch(code));
+      return c.gameStream(ref.read(playerID), ref.read(code));
     },
     name: 'GameOrErrorStream',
     dependencies: [gameClient, playerID, code],

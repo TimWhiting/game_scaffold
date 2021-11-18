@@ -36,7 +36,11 @@ class NoServerGameClient extends GameClient {
   }
 
   @override
-  Future<bool> startGame(PlayerID playerID, GameCode code) async => true;
+  Future<bool> startGame(PlayerID playerID, GameCode code) async {
+    final backendReader = NoServerClient.games[code]!.container.read;
+    backendReader(BackendProviders.state);
+    return true;
+  }
 
   @override
   Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) {
@@ -50,16 +54,17 @@ class NoServerGameClient extends GameClient {
     logger.info('Watching backend');
     final ss = StreamController<GameOrError>();
     final backendReader = NoServerClient.games[code]?.container;
-    backendReader?.listen<GameStateNotifier>(BackendProviders.state.notifier,
-        (prev, curr) async {
-      print('New notifier');
-      // ignore: prefer_foreach
-      ss.add(curr.state);
-      await for (final e in curr.stream) {
-        print(e);
-        ss.add(e);
-      }
-    });
+    backendReader?.listen<GameStateNotifier>(
+      BackendProviders.state.notifier,
+      (prev, curr) async {
+        ss.add(curr.gameState.gameValue());
+        // ignore: prefer_foreach
+        await for (final e in curr.stream) {
+          ss.add(e);
+        }
+      },
+      fireImmediately: true,
+    );
 
     yield* ss.stream;
     await ss.close();
