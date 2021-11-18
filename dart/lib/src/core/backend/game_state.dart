@@ -37,8 +37,9 @@ class BackendProviders {
 
   static final playerLobby = StreamProvider.family<GameInfo, PlayerID>(
     (ref, player) async* {
-      final l = ref.read(lobby);
+      final l = ref.watch(lobby);
       final pls = l.players;
+
       yield GameInfo(
         gameId: l.code,
         status: l.gameStatus,
@@ -47,20 +48,9 @@ class BackendProviders {
         players: pls.map((p) => p.name).toIList(),
         gameType: l.config.gameType,
       );
-      await for (final l in ref.watch(lobby.notifier).stream) {
-        final pls = l.players;
-        yield GameInfo(
-          gameId: l.code,
-          status: l.gameStatus,
-          player: pls.firstWhere((p) => p.id == player).name,
-          creator: player == l.config.adminID,
-          players: pls.map((p) => p.name).toIList(),
-          gameType: l.config.gameType,
-        );
-      }
     },
     name: 'BackendPlayerLobby',
-    dependencies: [lobby.notifier, lobby],
+    dependencies: [lobby],
   );
 
   /// Provides the [GameStateNotifier] based on the [GameConfig] from [config]
@@ -99,6 +89,10 @@ class LobbyNotifier extends StateNotifier<Lobby> {
 
   void setCode(GameCode code) {
     state = state.copyWith(code: code);
+  }
+
+  void start() {
+    state = state.copyWith(gameStatus: GameStatus.Started);
   }
 }
 

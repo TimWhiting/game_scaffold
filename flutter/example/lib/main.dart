@@ -179,7 +179,7 @@ class GameWidget extends HookConsumerWidget {
       data: (g) => Scaffold(
         appBar: AppBar(),
         body: Center(
-          child: Column(
+          child: ListView(
             children: [
               Text('$gameState'),
               const SizedBox(height: 20),

@@ -24,12 +24,13 @@ class NoServerGameClient extends GameClient {
     final notifier = backendReader(BackendProviders.lobby.notifier);
     await Future.delayed(const Duration(microseconds: 1));
     notifier.addPlayer(Player(playerID, name: name));
+    await Future.delayed(const Duration(microseconds: 1));
 
     final lobby = backendReader(BackendProviders.lobby);
     final config = lobby.config;
     final players = lobby.players;
     if (players.length == config.maxPlayers && config.autoStart) {
-      // TODO: Starting a game?
+      notifier.start();
     }
 
     return name;
@@ -43,10 +44,22 @@ class NoServerGameClient extends GameClient {
   }
 
   @override
-  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) {
-    final backend = NoServerClient.games[code]!.container;
-    backend.read(BackendProviders.lobby);
-    return backend.read(BackendProviders.playerLobby(playerID).stream);
+  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) async* {
+    final backend = NoServerClient.games[code]?.container;
+    final ss = StreamController<GameInfo>();
+    if (backend == null) {
+      return;
+    }
+
+    backend.listen<Stream<GameInfo>>(
+        BackendProviders.playerLobby(playerID).stream, (prev, curr) async {
+      // ignore: prefer_foreach
+      await for (final e in curr) {
+        ss.add(e);
+      }
+    });
+    yield* ss.stream;
+    await ss.close();
   }
 
   @override
@@ -94,4 +107,4 @@ final onDeviceGameClient = Provider<GameClient>((ref) {
   final client = NoServerGameClient();
   ref.onDispose(client.dispose);
   return client;
-});
+}, dependencies: [GameProviders.playerID]);

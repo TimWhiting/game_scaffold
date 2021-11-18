@@ -70,7 +70,7 @@ class GameProviders {
       }
     },
     name: 'GameStatus',
-    dependencies: [playerID],
+    dependencies: [playerID, lobby, game],
   );
 
   /// Provides whether it is the players turn for the current game of the client with the specified id
@@ -93,7 +93,7 @@ class GameProviders {
   static final gameType = Provider<String>(
     (ref) => ref.watch(game).asData?.value.type.name ?? '',
     name: 'GameType',
-    dependencies: [game],
+    dependencies: [game, playerID],
   );
 
   /// Provides the [ServerClient] for each client id
@@ -109,7 +109,11 @@ class GameProviders {
       }
     },
     name: 'ServerClientFamily',
-    dependencies: [socketIOGameServerClient, onDeviceGameServerClient],
+    dependencies: [
+      socketIOGameServerClient,
+      onDeviceGameServerClient,
+      playerID
+    ],
   );
 
   static final serverClient = Provider<ServerClient>(
@@ -176,7 +180,7 @@ class GameProviders {
       }
     },
     name: 'GameClientFamily',
-    dependencies: [socketIOGameClient, onDeviceGameClient],
+    dependencies: [socketIOGameClient, onDeviceGameClient, playerID],
   );
 
   static final gameClient = Provider<GameClient>(
@@ -187,7 +191,6 @@ class GameProviders {
 
   static final joinGame = FutureProvider<String?>(
     (ref) async {
-      print('joining');
       final name = await ref
           .watch(gameClient)
           .joinGame(ref.read(playerID), ref.read(code), ref.read(playerName));
@@ -254,9 +257,9 @@ class GameProviders {
 
   /// Provides game lobby info in the form of [GameInfo] for the lobby
   static final lobby = StreamProvider<GameInfo>(
-    (ref) {
+    (ref) async* {
       final c = ref.watch(gameClient);
-      return c.gameLobby(ref.read(playerID), ref.read(code));
+      yield* c.gameLobby(ref.watch(playerID), ref.watch(code));
     },
     name: 'Lobby',
     dependencies: [gameClient, playerID, code],
@@ -266,7 +269,7 @@ class GameProviders {
   static final gameOrError = StreamProvider<GameOrError>(
     (ref) {
       final c = ref.watch(gameClient);
-      return c.gameStream(ref.read(playerID), ref.read(code));
+      return c.gameStream(ref.watch(playerID), ref.watch(code));
     },
     name: 'GameOrErrorStream',
     dependencies: [gameClient, playerID, code],
@@ -282,7 +285,7 @@ class GameProviders {
       }
     },
     name: 'GameStateStream',
-    dependencies: [gameOrError.stream],
+    dependencies: [gameOrError.stream, playerID],
   );
 
   /// Provides the game error for the current game of the client with specified id
@@ -295,7 +298,7 @@ class GameProviders {
       }
     },
     name: 'GameError',
-    dependencies: [gameOrError.stream],
+    dependencies: [gameOrError.stream, playerID],
   );
 }
 

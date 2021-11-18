@@ -21,33 +21,6 @@ void main() {
     return text.data!.substring(codestart, codestart + 4);
   }
 
-  testWidgets('Create Game Works', (tester) async {
-    app.main();
-    await tester.pumpAndSettle();
-    // Create a game
-    expect(find.byKey(p1Create), findsOneWidget);
-    await tester.tap(find.byKey(p1Create));
-    await tester.pumpAndSettle();
-    // Get the game ID
-    final gameId = getGameId(tester);
-    expect(gameId, isNotEmpty);
-  });
-
-  testWidgets('Join Game Works', (tester) async {
-    app.main();
-    // Create a Game
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(p1Create));
-    await tester.pumpAndSettle();
-    // Get the Game ID
-    final gameId = getGameId(tester);
-    await tester.enterText(find.byType(TextField), gameId);
-    await tester.pumpAndSettle();
-    // 2nd Player Join Game
-    await tester.tap(find.text('Join Game'));
-    await tester.pumpAndSettle();
-  });
-
   testWidgets('Playing Tic Tac Toe Works', (tester) async {
     app.main();
     // Create a Game
