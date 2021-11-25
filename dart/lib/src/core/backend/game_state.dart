@@ -61,7 +61,7 @@ class BackendProviders {
       return GameStateNotifier(
         l.config,
         l.code,
-        Game.getInitialState(l.config, l.players),
+        Game.getInitialState(l.config, l.players.toIList()),
       );
     },
     name: 'BackendGameNotifier',

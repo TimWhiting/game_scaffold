@@ -1,3 +1,7 @@
+## 0.4.1
+
+- The initial list for games is now a list rather than a set 
+
 ## 0.4.0
 
 - Major refactor for riverpod 1.0.0

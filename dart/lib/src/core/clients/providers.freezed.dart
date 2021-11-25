@@ -133,7 +133,8 @@ class _$FutureLoading<T> extends FutureLoading<T> {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is FutureLoading<T>);
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is FutureLoading<T>);
   }
 
   @override
@@ -261,15 +262,14 @@ class _$FutureRefreshing<T> extends FutureRefreshing<T> {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is FutureRefreshing<T> &&
-            (identical(other.lastValue, lastValue) ||
-                const DeepCollectionEquality()
-                    .equals(other.lastValue, lastValue)));
+        (other.runtimeType == runtimeType &&
+            other is FutureRefreshing<T> &&
+            const DeepCollectionEquality().equals(other.lastValue, lastValue));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(lastValue);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(lastValue));
 
   @JsonKey(ignore: true)
   @override
@@ -349,7 +349,7 @@ abstract class FutureRefreshing<T> extends LoadingFuture<T> {
   const factory FutureRefreshing(T lastValue) = _$FutureRefreshing<T>;
   const FutureRefreshing._() : super._();
 
-  T get lastValue => throw _privateConstructorUsedError;
+  T get lastValue;
   @JsonKey(ignore: true)
   $FutureRefreshingCopyWith<T, FutureRefreshing<T>> get copyWith =>
       throw _privateConstructorUsedError;
@@ -403,14 +403,14 @@ class _$FutureValue<T> extends FutureValue<T> {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is FutureValue<T> &&
-            (identical(other.value, value) ||
-                const DeepCollectionEquality().equals(other.value, value)));
+        (other.runtimeType == runtimeType &&
+            other is FutureValue<T> &&
+            const DeepCollectionEquality().equals(other.value, value));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(value);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(value));
 
   @JsonKey(ignore: true)
   @override
@@ -490,7 +490,7 @@ abstract class FutureValue<T> extends LoadingFuture<T> {
   const factory FutureValue(T value) = _$FutureValue<T>;
   const FutureValue._() : super._();
 
-  T get value => throw _privateConstructorUsedError;
+  T get value;
   @JsonKey(ignore: true)
   $FutureValueCopyWith<T, FutureValue<T>> get copyWith =>
       throw _privateConstructorUsedError;

@@ -1,4 +1,12 @@
-## 0.3.4
+## 0.4.1+1
+
+- Regenerated freezed classes
+
+## 0.4.1
+
+- Switch back to list of players
+
+## 0.4.0
 
 - Major refactor for riverpod 1.0.0
 

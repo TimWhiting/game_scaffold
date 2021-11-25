@@ -1,6 +1,6 @@
 name: game_scaffold_games
 description: Games for the game_scaffold_dart package
-version: 0.4.0
+version: 0.4.1
 homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:
@@ -9,7 +9,7 @@ environment:
 dependencies:
   fast_immutable_collections: ^7.0.5-dev0
   freezed_annotation: ^1.0.0
-  game_scaffold_dart: ^0.4.0
+  game_scaffold_dart: ^0.4.1+1
   json_annotation: ^4.3.0
 
 dev_dependencies:

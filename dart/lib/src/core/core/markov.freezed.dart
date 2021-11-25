@@ -27,7 +27,7 @@ class _$MatrixTearOff {
     );
   }
 
-  Matrix fromJson(Map<String, Object> json) {
+  Matrix fromJson(Map<String, Object?> json) {
     return Matrix.fromJson(json);
   }
 }
@@ -121,14 +121,14 @@ class _$_Matrix implements _Matrix {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Matrix &&
-            (identical(other.rewards, rewards) ||
-                const DeepCollectionEquality().equals(other.rewards, rewards)));
+        (other.runtimeType == runtimeType &&
+            other is _Matrix &&
+            const DeepCollectionEquality().equals(other.rewards, rewards));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(rewards);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(rewards));
 
   @JsonKey(ignore: true)
   @override
@@ -147,7 +147,7 @@ abstract class _Matrix implements Matrix {
   factory _Matrix.fromJson(Map<String, dynamic> json) = _$_Matrix.fromJson;
 
   @override
-  List<List<Reward>> get rewards => throw _privateConstructorUsedError;
+  List<List<Reward>> get rewards;
   @override
   @JsonKey(ignore: true)
   _$MatrixCopyWith<_Matrix> get copyWith => throw _privateConstructorUsedError;
@@ -168,7 +168,7 @@ class _$JointActionTearOff {
     );
   }
 
-  JointAction fromJson(Map<String, Object> json) {
+  JointAction fromJson(Map<String, Object?> json) {
     return JointAction.fromJson(json);
   }
 }
@@ -312,18 +312,14 @@ class _$_JointAction implements _JointAction {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _JointAction &&
-            (identical(other.p1, p1) ||
-                const DeepCollectionEquality().equals(other.p1, p1)) &&
-            (identical(other.p2, p2) ||
-                const DeepCollectionEquality().equals(other.p2, p2)));
+        (other.runtimeType == runtimeType &&
+            other is _JointAction &&
+            (identical(other.p1, p1) || other.p1 == p1) &&
+            (identical(other.p2, p2) || other.p2 == p2));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(p1) ^
-      const DeepCollectionEquality().hash(p2);
+  int get hashCode => Object.hash(runtimeType, p1, p2);
 
   @JsonKey(ignore: true)
   @override
@@ -400,9 +396,9 @@ abstract class _JointAction implements JointAction {
       _$_JointAction.fromJson;
 
   @override
-  int get p1 => throw _privateConstructorUsedError;
+  int get p1;
   @override
-  int get p2 => throw _privateConstructorUsedError;
+  int get p2;
   @override
   @JsonKey(ignore: true)
   _$JointActionCopyWith<_JointAction> get copyWith =>
@@ -424,7 +420,7 @@ class _$RewardTearOff {
     );
   }
 
-  Reward fromJson(Map<String, Object> json) {
+  Reward fromJson(Map<String, Object?> json) {
     return Reward.fromJson(json);
   }
 }
@@ -531,18 +527,14 @@ class _$_Reward implements _Reward {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Reward &&
-            (identical(other.p1, p1) ||
-                const DeepCollectionEquality().equals(other.p1, p1)) &&
-            (identical(other.p2, p2) ||
-                const DeepCollectionEquality().equals(other.p2, p2)));
+        (other.runtimeType == runtimeType &&
+            other is _Reward &&
+            (identical(other.p1, p1) || other.p1 == p1) &&
+            (identical(other.p2, p2) || other.p2 == p2));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(p1) ^
-      const DeepCollectionEquality().hash(p2);
+  int get hashCode => Object.hash(runtimeType, p1, p2);
 
   @JsonKey(ignore: true)
   @override
@@ -561,9 +553,9 @@ abstract class _Reward implements Reward {
   factory _Reward.fromJson(Map<String, dynamic> json) = _$_Reward.fromJson;
 
   @override
-  double get p1 => throw _privateConstructorUsedError;
+  double get p1;
   @override
-  double get p2 => throw _privateConstructorUsedError;
+  double get p2;
   @override
   @JsonKey(ignore: true)
   _$RewardCopyWith<_Reward> get copyWith => throw _privateConstructorUsedError;

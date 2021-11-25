@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 GameOrError<G> _$GameOrErrorFromJson<G extends Game<Event>>(
     Map<String, dynamic> json) {
-  switch (json['runtimeType'] as String?) {
+  switch (json['runtimeType']) {
     case 'game':
       return GameValue<G>.fromJson(json);
     case 'error':
@@ -44,7 +44,7 @@ class _$GameOrErrorTearOff {
     );
   }
 
-  GameOrError<G> fromJson<G extends Game<Event>>(Map<String, Object> json) {
+  GameOrError<G> fromJson<G extends Game<Event>>(Map<String, Object?> json) {
     return GameOrError<G>.fromJson(json);
   }
 }
@@ -147,7 +147,9 @@ class _$GameValueCopyWithImpl<G extends Game<Event>, $Res>
 /// @nodoc
 @JsonSerializable()
 class _$GameValue<G extends Game<Event>> extends GameValue<G> {
-  const _$GameValue(@GameConverter() this.game) : super._();
+  const _$GameValue(@GameConverter() this.game, {String? $type})
+      : $type = $type ?? 'game',
+        super._();
 
   factory _$GameValue.fromJson(Map<String, dynamic> json) =>
       _$$GameValueFromJson(json);
@@ -155,6 +157,9 @@ class _$GameValue<G extends Game<Event>> extends GameValue<G> {
   @override
   @GameConverter()
   final G game;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
 
   @override
   String toString() {
@@ -164,14 +169,14 @@ class _$GameValue<G extends Game<Event>> extends GameValue<G> {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is GameValue<G> &&
-            (identical(other.game, game) ||
-                const DeepCollectionEquality().equals(other.game, game)));
+        (other.runtimeType == runtimeType &&
+            other is GameValue<G> &&
+            const DeepCollectionEquality().equals(other.game, game));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(game);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(game));
 
   @JsonKey(ignore: true)
   @override
@@ -242,7 +247,7 @@ class _$GameValue<G extends Game<Event>> extends GameValue<G> {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GameValueToJson(this)..['runtimeType'] = 'game';
+    return _$$GameValueToJson(this);
   }
 }
 
@@ -254,7 +259,7 @@ abstract class GameValue<G extends Game<Event>> extends GameOrError<G> {
       _$GameValue<G>.fromJson;
 
   @GameConverter()
-  G get game => throw _privateConstructorUsedError;
+  G get game;
   @JsonKey(ignore: true)
   $GameValueCopyWith<G, GameValue<G>> get copyWith =>
       throw _privateConstructorUsedError;
@@ -300,7 +305,9 @@ class _$GameErrorCopyWithImpl<G extends Game<Event>, $Res>
 /// @nodoc
 @JsonSerializable()
 class _$GameError<G extends Game<Event>> extends GameError<G> {
-  const _$GameError(this.message, this.person) : super._();
+  const _$GameError(this.message, this.person, {String? $type})
+      : $type = $type ?? 'error',
+        super._();
 
   factory _$GameError.fromJson(Map<String, dynamic> json) =>
       _$$GameErrorFromJson(json);
@@ -310,6 +317,9 @@ class _$GameError<G extends Game<Event>> extends GameError<G> {
   @override
   final String person;
 
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
   @override
   String toString() {
     return 'GameOrError<$G>.error(message: $message, person: $person)';
@@ -318,19 +328,14 @@ class _$GameError<G extends Game<Event>> extends GameError<G> {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is GameError<G> &&
-            (identical(other.message, message) ||
-                const DeepCollectionEquality()
-                    .equals(other.message, message)) &&
-            (identical(other.person, person) ||
-                const DeepCollectionEquality().equals(other.person, person)));
+        (other.runtimeType == runtimeType &&
+            other is GameError<G> &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.person, person) || other.person == person));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(message) ^
-      const DeepCollectionEquality().hash(person);
+  int get hashCode => Object.hash(runtimeType, message, person);
 
   @JsonKey(ignore: true)
   @override
@@ -401,7 +406,7 @@ class _$GameError<G extends Game<Event>> extends GameError<G> {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GameErrorToJson(this)..['runtimeType'] = 'error';
+    return _$$GameErrorToJson(this);
   }
 }
 
@@ -412,8 +417,8 @@ abstract class GameError<G extends Game<Event>> extends GameOrError<G> {
   factory GameError.fromJson(Map<String, dynamic> json) =
       _$GameError<G>.fromJson;
 
-  String get message => throw _privateConstructorUsedError;
-  String get person => throw _privateConstructorUsedError;
+  String get message;
+  String get person;
   @JsonKey(ignore: true)
   $GameErrorCopyWith<G, GameError<G>> get copyWith =>
       throw _privateConstructorUsedError;

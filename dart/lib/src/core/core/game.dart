@@ -57,7 +57,7 @@ abstract class Game<E extends Event> {
     GameType type, {
     required String name,
     required Q Function(Map<String, dynamic>) fromJson,
-    required T Function(GameConfig, ISet<Player>) initialState,
+    required T Function(GameConfig, IList<Player>) initialState,
     required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
     Q Function(T)? toClientView,
   }) {
@@ -85,7 +85,7 @@ abstract class Game<E extends Event> {
   static Game toClientView(Game g) => _toClientViews[g.type]!(g);
 
   /// Will get the initial state for a particular configuration
-  static Game getInitialState(GameConfig gameConfig, ISet<Player> players) {
+  static Game getInitialState(GameConfig gameConfig, IList<Player> players) {
     final initState = _initialStates[gameConfig.gameType];
     if (initState == null) {
       throw UnimplementedError(
@@ -127,7 +127,7 @@ abstract class Game<E extends Event> {
   static final Map<GameType, String> gameNames = {};
 
   /// Stores the function to create the initial state of the game
-  static final Map<GameType, Game Function(GameConfig, ISet<Player>)>
+  static final Map<GameType, Game Function(GameConfig, IList<Player>)>
       _initialStates = {};
 }
 

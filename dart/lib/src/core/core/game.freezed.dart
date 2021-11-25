@@ -44,7 +44,7 @@ class _$GameConfigTearOff {
     );
   }
 
-  GameConfig fromJson(Map<String, Object> json) {
+  GameConfig fromJson(Map<String, Object?> json) {
     return GameConfig.fromJson(json);
   }
 }
@@ -283,46 +283,36 @@ class _$_GameConfig implements _GameConfig {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _GameConfig &&
+        (other.runtimeType == runtimeType &&
+            other is _GameConfig &&
             (identical(other.gameType, gameType) ||
-                const DeepCollectionEquality()
-                    .equals(other.gameType, gameType)) &&
-            (identical(other.adminID, adminID) ||
-                const DeepCollectionEquality()
-                    .equals(other.adminID, adminID)) &&
-            (identical(other.nameSet, nameSet) ||
-                const DeepCollectionEquality()
-                    .equals(other.nameSet, nameSet)) &&
+                other.gameType == gameType) &&
+            (identical(other.adminID, adminID) || other.adminID == adminID) &&
+            (identical(other.nameSet, nameSet) || other.nameSet == nameSet) &&
             (identical(other.customNames, customNames) ||
-                const DeepCollectionEquality()
-                    .equals(other.customNames, customNames)) &&
-            (identical(other.rounds, rounds) ||
-                const DeepCollectionEquality().equals(other.rounds, rounds)) &&
+                other.customNames == customNames) &&
+            (identical(other.rounds, rounds) || other.rounds == rounds) &&
             (identical(other.minPlayers, minPlayers) ||
-                const DeepCollectionEquality()
-                    .equals(other.minPlayers, minPlayers)) &&
+                other.minPlayers == minPlayers) &&
             (identical(other.maxPlayers, maxPlayers) ||
-                const DeepCollectionEquality()
-                    .equals(other.maxPlayers, maxPlayers)) &&
+                other.maxPlayers == maxPlayers) &&
             (identical(other.autoStart, autoStart) ||
-                const DeepCollectionEquality()
-                    .equals(other.autoStart, autoStart)) &&
-            (identical(other.options, options) ||
-                const DeepCollectionEquality().equals(other.options, options)));
+                other.autoStart == autoStart) &&
+            const DeepCollectionEquality().equals(other.options, options));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(gameType) ^
-      const DeepCollectionEquality().hash(adminID) ^
-      const DeepCollectionEquality().hash(nameSet) ^
-      const DeepCollectionEquality().hash(customNames) ^
-      const DeepCollectionEquality().hash(rounds) ^
-      const DeepCollectionEquality().hash(minPlayers) ^
-      const DeepCollectionEquality().hash(maxPlayers) ^
-      const DeepCollectionEquality().hash(autoStart) ^
-      const DeepCollectionEquality().hash(options);
+  int get hashCode => Object.hash(
+      runtimeType,
+      gameType,
+      adminID,
+      nameSet,
+      customNames,
+      rounds,
+      minPlayers,
+      maxPlayers,
+      autoStart,
+      const DeepCollectionEquality().hash(options));
 
   @JsonKey(ignore: true)
   @override
@@ -351,25 +341,25 @@ abstract class _GameConfig implements GameConfig {
       _$_GameConfig.fromJson;
 
   @override
-  String get gameType => throw _privateConstructorUsedError;
+  String get gameType;
   @override
-  String? get adminID => throw _privateConstructorUsedError;
+  String? get adminID;
   @override
-  NameSet get nameSet => throw _privateConstructorUsedError;
+  NameSet get nameSet;
   @override
-  bool get customNames => throw _privateConstructorUsedError;
+  bool get customNames;
   @override
-  int get rounds => throw _privateConstructorUsedError;
+  int get rounds;
   @override
-  int get minPlayers => throw _privateConstructorUsedError;
+  int get minPlayers;
   @override
-  int get maxPlayers => throw _privateConstructorUsedError;
+  int get maxPlayers;
   @override
-  bool get autoStart => throw _privateConstructorUsedError;
+  bool get autoStart;
   @override
 
   /// [options] must be json serializable
-  Map<String, dynamic>? get options => throw _privateConstructorUsedError;
+  Map<String, dynamic>? get options;
   @override
   @JsonKey(ignore: true)
   _$GameConfigCopyWith<_GameConfig> get copyWith =>
@@ -401,7 +391,7 @@ class _$GameInfoTearOff {
     );
   }
 
-  GameInfo fromJson(Map<String, Object> json) {
+  GameInfo fromJson(Map<String, Object?> json) {
     return GameInfo.fromJson(json);
   }
 }
@@ -579,33 +569,20 @@ class _$_GameInfo implements _GameInfo {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _GameInfo &&
-            (identical(other.gameId, gameId) ||
-                const DeepCollectionEquality().equals(other.gameId, gameId)) &&
-            (identical(other.players, players) ||
-                const DeepCollectionEquality()
-                    .equals(other.players, players)) &&
-            (identical(other.player, player) ||
-                const DeepCollectionEquality().equals(other.player, player)) &&
-            (identical(other.creator, creator) ||
-                const DeepCollectionEquality()
-                    .equals(other.creator, creator)) &&
+        (other.runtimeType == runtimeType &&
+            other is _GameInfo &&
+            (identical(other.gameId, gameId) || other.gameId == gameId) &&
+            (identical(other.players, players) || other.players == players) &&
+            (identical(other.player, player) || other.player == player) &&
+            (identical(other.creator, creator) || other.creator == creator) &&
             (identical(other.gameType, gameType) ||
-                const DeepCollectionEquality()
-                    .equals(other.gameType, gameType)) &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)));
+                other.gameType == gameType) &&
+            (identical(other.status, status) || other.status == status));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(gameId) ^
-      const DeepCollectionEquality().hash(players) ^
-      const DeepCollectionEquality().hash(player) ^
-      const DeepCollectionEquality().hash(creator) ^
-      const DeepCollectionEquality().hash(gameType) ^
-      const DeepCollectionEquality().hash(status);
+  int get hashCode => Object.hash(
+      runtimeType, gameId, players, player, creator, gameType, status);
 
   @JsonKey(ignore: true)
   @override
@@ -630,17 +607,17 @@ abstract class _GameInfo implements GameInfo {
   factory _GameInfo.fromJson(Map<String, dynamic> json) = _$_GameInfo.fromJson;
 
   @override
-  String get gameId => throw _privateConstructorUsedError;
+  String get gameId;
   @override
-  IList<String> get players => throw _privateConstructorUsedError;
+  IList<String> get players;
   @override
-  String get player => throw _privateConstructorUsedError;
+  String get player;
   @override
-  bool get creator => throw _privateConstructorUsedError;
+  bool get creator;
   @override
-  String get gameType => throw _privateConstructorUsedError;
+  String get gameType;
   @override
-  GameStatus get status => throw _privateConstructorUsedError;
+  GameStatus get status;
   @override
   @JsonKey(ignore: true)
   _$GameInfoCopyWith<_GameInfo> get copyWith =>
@@ -668,7 +645,7 @@ class _$LobbyTearOff {
     );
   }
 
-  Lobby fromJson(Map<String, Object> json) {
+  Lobby fromJson(Map<String, Object?> json) {
     return Lobby.fromJson(json);
   }
 }
@@ -825,26 +802,18 @@ class _$_Lobby implements _Lobby {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Lobby &&
-            (identical(other.code, code) ||
-                const DeepCollectionEquality().equals(other.code, code)) &&
-            (identical(other.players, players) ||
-                const DeepCollectionEquality()
-                    .equals(other.players, players)) &&
-            (identical(other.config, config) ||
-                const DeepCollectionEquality().equals(other.config, config)) &&
+        (other.runtimeType == runtimeType &&
+            other is _Lobby &&
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.players, players) || other.players == players) &&
+            (identical(other.config, config) || other.config == config) &&
             (identical(other.gameStatus, gameStatus) ||
-                const DeepCollectionEquality()
-                    .equals(other.gameStatus, gameStatus)));
+                other.gameStatus == gameStatus));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(code) ^
-      const DeepCollectionEquality().hash(players) ^
-      const DeepCollectionEquality().hash(config) ^
-      const DeepCollectionEquality().hash(gameStatus);
+      Object.hash(runtimeType, code, players, config, gameStatus);
 
   @JsonKey(ignore: true)
   @override
@@ -867,13 +836,13 @@ abstract class _Lobby implements Lobby {
   factory _Lobby.fromJson(Map<String, dynamic> json) = _$_Lobby.fromJson;
 
   @override
-  String get code => throw _privateConstructorUsedError;
+  String get code;
   @override
-  ISet<Player> get players => throw _privateConstructorUsedError;
+  ISet<Player> get players;
   @override
-  GameConfig get config => throw _privateConstructorUsedError;
+  GameConfig get config;
   @override
-  GameStatus get gameStatus => throw _privateConstructorUsedError;
+  GameStatus get gameStatus;
   @override
   @JsonKey(ignore: true)
   _$LobbyCopyWith<_Lobby> get copyWith => throw _privateConstructorUsedError;

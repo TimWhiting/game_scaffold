@@ -46,7 +46,7 @@ class _$GenericGameTearOff {
     );
   }
 
-  GenericGame fromJson(Map<String, Object> json) {
+  GenericGame fromJson(Map<String, Object?> json) {
     return GenericGame.fromJson(json);
   }
 }
@@ -294,49 +294,39 @@ class _$_GenericGame extends _GenericGame {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _GenericGame &&
-            (identical(other.players, players) ||
-                const DeepCollectionEquality()
-                    .equals(other.players, players)) &&
+        (other.runtimeType == runtimeType &&
+            other is _GenericGame &&
+            (identical(other.players, players) || other.players == players) &&
             (identical(other.readyPlayers, readyPlayers) ||
-                const DeepCollectionEquality()
-                    .equals(other.readyPlayers, readyPlayers)) &&
+                other.readyPlayers == readyPlayers) &&
             (identical(other.allRoundScores, allRoundScores) ||
-                const DeepCollectionEquality()
-                    .equals(other.allRoundScores, allRoundScores)) &&
-            (identical(other.time, time) ||
-                const DeepCollectionEquality().equals(other.time, time)) &&
+                other.allRoundScores == allRoundScores) &&
+            (identical(other.time, time) || other.time == time) &&
             (identical(other.messages, messages) ||
-                const DeepCollectionEquality()
-                    .equals(other.messages, messages)) &&
-            (identical(other.status, status) ||
-                const DeepCollectionEquality().equals(other.status, status)) &&
+                other.messages == messages) &&
+            (identical(other.status, status) || other.status == status) &&
             (identical(other.currentPlayerIndex, currentPlayerIndex) ||
-                const DeepCollectionEquality()
-                    .equals(other.currentPlayerIndex, currentPlayerIndex)) &&
-            (identical(other.round, round) ||
-                const DeepCollectionEquality().equals(other.round, round)) &&
+                other.currentPlayerIndex == currentPlayerIndex) &&
+            (identical(other.round, round) || other.round == round) &&
             (identical(other.isMultiPly, isMultiPly) ||
-                const DeepCollectionEquality()
-                    .equals(other.isMultiPly, isMultiPly)) &&
+                other.isMultiPly == isMultiPly) &&
             (identical(other.isSimultaneousAction, isSimultaneousAction) ||
-                const DeepCollectionEquality()
-                    .equals(other.isSimultaneousAction, isSimultaneousAction)));
+                other.isSimultaneousAction == isSimultaneousAction));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(players) ^
-      const DeepCollectionEquality().hash(readyPlayers) ^
-      const DeepCollectionEquality().hash(allRoundScores) ^
-      const DeepCollectionEquality().hash(time) ^
-      const DeepCollectionEquality().hash(messages) ^
-      const DeepCollectionEquality().hash(status) ^
-      const DeepCollectionEquality().hash(currentPlayerIndex) ^
-      const DeepCollectionEquality().hash(round) ^
-      const DeepCollectionEquality().hash(isMultiPly) ^
-      const DeepCollectionEquality().hash(isSimultaneousAction);
+  int get hashCode => Object.hash(
+      runtimeType,
+      players,
+      readyPlayers,
+      allRoundScores,
+      time,
+      messages,
+      status,
+      currentPlayerIndex,
+      round,
+      isMultiPly,
+      isSimultaneousAction);
 
   @JsonKey(ignore: true)
   @override
@@ -367,25 +357,25 @@ abstract class _GenericGame extends GenericGame {
       _$_GenericGame.fromJson;
 
   @override
-  IList<Player> get players => throw _privateConstructorUsedError;
+  IList<Player> get players;
   @override
-  IList<String> get readyPlayers => throw _privateConstructorUsedError;
+  IList<String> get readyPlayers;
   @override
-  IList<IList<double>> get allRoundScores => throw _privateConstructorUsedError;
+  IList<IList<double>> get allRoundScores;
   @override
-  DateTime get time => throw _privateConstructorUsedError;
+  DateTime get time;
   @override
-  IList<GameMessage> get messages => throw _privateConstructorUsedError;
+  IList<GameMessage> get messages;
   @override
-  GameStatus get status => throw _privateConstructorUsedError;
+  GameStatus get status;
   @override
-  int? get currentPlayerIndex => throw _privateConstructorUsedError;
+  int? get currentPlayerIndex;
   @override
-  int get round => throw _privateConstructorUsedError;
+  int get round;
   @override // ignore: avoid_positional_boolean_parameters
-  bool get isMultiPly => throw _privateConstructorUsedError;
+  bool get isMultiPly;
   @override
-  bool get isSimultaneousAction => throw _privateConstructorUsedError;
+  bool get isSimultaneousAction;
   @override
   @JsonKey(ignore: true)
   _$GenericGameCopyWith<_GenericGame> get copyWith =>
@@ -393,7 +383,7 @@ abstract class _GenericGame extends GenericGame {
 }
 
 GenericEvent _$GenericEventFromJson(Map<String, dynamic> json) {
-  switch (json['runtimeType'] as String?) {
+  switch (json['runtimeType']) {
     case 'undo':
       return GenericEventUndo.fromJson(json);
     case 'readyNextRound':
@@ -430,7 +420,7 @@ class _$GenericEventTearOff {
     );
   }
 
-  GenericEvent fromJson(Map<String, Object> json) {
+  GenericEvent fromJson(Map<String, Object?> json) {
     return GenericEvent.fromJson(json);
   }
 }
@@ -525,10 +515,15 @@ class _$GenericEventUndoCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$GenericEventUndo extends GenericEventUndo {
-  const _$GenericEventUndo() : super._();
+  const _$GenericEventUndo({String? $type})
+      : $type = $type ?? 'undo',
+        super._();
 
   factory _$GenericEventUndo.fromJson(Map<String, dynamic> json) =>
       _$$GenericEventUndoFromJson(json);
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
 
   @override
   String toString() {
@@ -537,7 +532,8 @@ class _$GenericEventUndo extends GenericEventUndo {
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is GenericEventUndo);
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is GenericEventUndo);
   }
 
   @override
@@ -613,7 +609,7 @@ class _$GenericEventUndo extends GenericEventUndo {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GenericEventUndoToJson(this)..['runtimeType'] = 'undo';
+    return _$$GenericEventUndoToJson(this);
   }
 }
 
@@ -662,13 +658,18 @@ class __$GenericReadyNextRoundEventCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
-  const _$_GenericReadyNextRoundEvent(this.player) : super._();
+  const _$_GenericReadyNextRoundEvent(this.player, {String? $type})
+      : $type = $type ?? 'readyNextRound',
+        super._();
 
   factory _$_GenericReadyNextRoundEvent.fromJson(Map<String, dynamic> json) =>
       _$$_GenericReadyNextRoundEventFromJson(json);
 
   @override
   final String player;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
 
   @override
   String toString() {
@@ -678,14 +679,13 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _GenericReadyNextRoundEvent &&
-            (identical(other.player, player) ||
-                const DeepCollectionEquality().equals(other.player, player)));
+        (other.runtimeType == runtimeType &&
+            other is _GenericReadyNextRoundEvent &&
+            (identical(other.player, player) || other.player == player));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(player);
+  int get hashCode => Object.hash(runtimeType, player);
 
   @JsonKey(ignore: true)
   @override
@@ -763,8 +763,7 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_GenericReadyNextRoundEventToJson(this)
-      ..['runtimeType'] = 'readyNextRound';
+    return _$$_GenericReadyNextRoundEventToJson(this);
   }
 }
 
@@ -776,7 +775,7 @@ abstract class _GenericReadyNextRoundEvent extends GenericEvent {
   factory _GenericReadyNextRoundEvent.fromJson(Map<String, dynamic> json) =
       _$_GenericReadyNextRoundEvent.fromJson;
 
-  String get player => throw _privateConstructorUsedError;
+  String get player;
   @JsonKey(ignore: true)
   _$GenericReadyNextRoundEventCopyWith<_GenericReadyNextRoundEvent>
       get copyWith => throw _privateConstructorUsedError;
@@ -826,8 +825,10 @@ class _$GameMessageCopyWithImpl<$Res> extends _$GenericEventCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$GameMessage extends GameMessage {
-  const _$GameMessage(this.message, {required this.from, required this.to})
-      : super._();
+  const _$GameMessage(this.message,
+      {required this.from, required this.to, String? $type})
+      : $type = $type ?? 'message',
+        super._();
 
   factory _$GameMessage.fromJson(Map<String, dynamic> json) =>
       _$$GameMessageFromJson(json);
@@ -839,6 +840,9 @@ class _$GameMessage extends GameMessage {
   @override
   final String? to;
 
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
   @override
   String toString() {
     return 'GenericEvent.message(message: $message, from: $from, to: $to)';
@@ -847,22 +851,15 @@ class _$GameMessage extends GameMessage {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is GameMessage &&
-            (identical(other.message, message) ||
-                const DeepCollectionEquality()
-                    .equals(other.message, message)) &&
-            (identical(other.from, from) ||
-                const DeepCollectionEquality().equals(other.from, from)) &&
-            (identical(other.to, to) ||
-                const DeepCollectionEquality().equals(other.to, to)));
+        (other.runtimeType == runtimeType &&
+            other is GameMessage &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.from, from) || other.from == from) &&
+            (identical(other.to, to) || other.to == to));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(message) ^
-      const DeepCollectionEquality().hash(from) ^
-      const DeepCollectionEquality().hash(to);
+  int get hashCode => Object.hash(runtimeType, message, from, to);
 
   @JsonKey(ignore: true)
   @override
@@ -939,7 +936,7 @@ class _$GameMessage extends GameMessage {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GameMessageToJson(this)..['runtimeType'] = 'message';
+    return _$$GameMessageToJson(this);
   }
 }
 
@@ -951,9 +948,9 @@ abstract class GameMessage extends GenericEvent {
   factory GameMessage.fromJson(Map<String, dynamic> json) =
       _$GameMessage.fromJson;
 
-  String get message => throw _privateConstructorUsedError;
-  String get from => throw _privateConstructorUsedError;
-  String? get to => throw _privateConstructorUsedError;
+  String get message;
+  String get from;
+  String? get to;
   @JsonKey(ignore: true)
   $GameMessageCopyWith<GameMessage> get copyWith =>
       throw _privateConstructorUsedError;

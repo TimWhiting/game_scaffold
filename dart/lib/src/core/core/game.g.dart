@@ -10,7 +10,7 @@ _$_GameConfig _$$_GameConfigFromJson(Map<String, dynamic> json) =>
     _$_GameConfig(
       gameType: json['gameType'] as String,
       adminID: json['adminID'] as String?,
-      nameSet: _$enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ??
+      nameSet: $enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ??
           NameSet.Basic,
       customNames: json['customNames'] as bool? ?? false,
       rounds: json['rounds'] as int? ?? 15,
@@ -33,43 +33,6 @@ Map<String, dynamic> _$$_GameConfigToJson(_$_GameConfig instance) =>
       'options': instance.options,
     };
 
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
-
-K? _$enumDecodeNullable<K, V>(
-  Map<K, V> enumValues,
-  dynamic source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
-}
-
 const _$NameSetEnumMap = {
   NameSet.Basic: 'Basic',
 };
@@ -81,7 +44,7 @@ _$_GameInfo _$$_GameInfoFromJson(Map<String, dynamic> json) => _$_GameInfo(
       player: json['player'] as String,
       creator: json['creator'] as bool,
       gameType: json['gameType'] as String,
-      status: _$enumDecode(_$GameStatusEnumMap, json['status']),
+      status: $enumDecode(_$GameStatusEnumMap, json['status']),
     );
 
 Map<String, dynamic> _$$_GameInfoToJson(_$_GameInfo instance) =>
@@ -108,7 +71,7 @@ _$_Lobby _$$_LobbyFromJson(Map<String, dynamic> json) => _$_Lobby(
       players: ISet<Player>.fromJson(json['players'],
           (value) => Player.fromJson(value as Map<String, dynamic>)),
       config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
-      gameStatus: _$enumDecode(_$GameStatusEnumMap, json['gameStatus']),
+      gameStatus: $enumDecode(_$GameStatusEnumMap, json['gameStatus']),
     );
 
 Map<String, dynamic> _$$_LobbyToJson(_$_Lobby instance) => <String, dynamic>{

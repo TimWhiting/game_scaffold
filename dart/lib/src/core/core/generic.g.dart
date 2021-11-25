@@ -18,7 +18,7 @@ _$_GenericGame _$$_GenericGameFromJson(Map<String, dynamic> json) =>
       DateTime.parse(json['time'] as String),
       IList<GameMessage>.fromJson(json['messages'],
           (value) => GameMessage.fromJson(value as Map<String, dynamic>)),
-      _$enumDecode(_$GameStatusEnumMap, json['status']),
+      $enumDecode(_$GameStatusEnumMap, json['status']),
       json['currentPlayerIndex'] as int?,
       json['round'] as int,
       json['isMultiPly'] as bool,
@@ -49,32 +49,6 @@ Map<String, dynamic> _$$_GenericGameToJson(_$_GenericGame instance) =>
       'isSimultaneousAction': instance.isSimultaneousAction,
     };
 
-K _$enumDecode<K, V>(
-  Map<K, V> enumValues,
-  Object? source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError(
-      'A value must be provided. Supported values: '
-      '${enumValues.values.join(', ')}',
-    );
-  }
-
-  return enumValues.entries.singleWhere(
-    (e) => e.value == source,
-    orElse: () {
-      if (unknownValue == null) {
-        throw ArgumentError(
-          '`$source` is not one of the supported values: '
-          '${enumValues.values.join(', ')}',
-        );
-      }
-      return MapEntry(unknownValue, enumValues.values.first);
-    },
-  ).key;
-}
-
 const _$GameStatusEnumMap = {
   GameStatus.Lobby: 'Lobby',
   GameStatus.Started: 'Started',
@@ -83,21 +57,27 @@ const _$GameStatusEnumMap = {
 };
 
 _$GenericEventUndo _$$GenericEventUndoFromJson(Map<String, dynamic> json) =>
-    _$GenericEventUndo();
+    _$GenericEventUndo(
+      $type: json['runtimeType'] as String?,
+    );
 
 Map<String, dynamic> _$$GenericEventUndoToJson(_$GenericEventUndo instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{
+      'runtimeType': instance.$type,
+    };
 
 _$_GenericReadyNextRoundEvent _$$_GenericReadyNextRoundEventFromJson(
         Map<String, dynamic> json) =>
     _$_GenericReadyNextRoundEvent(
       json['player'] as String,
+      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$_GenericReadyNextRoundEventToJson(
         _$_GenericReadyNextRoundEvent instance) =>
     <String, dynamic>{
       'player': instance.player,
+      'runtimeType': instance.$type,
     };
 
 _$GameMessage _$$GameMessageFromJson(Map<String, dynamic> json) =>
@@ -105,6 +85,7 @@ _$GameMessage _$$GameMessageFromJson(Map<String, dynamic> json) =>
       json['message'] as String,
       from: json['from'] as String,
       to: json['to'] as String?,
+      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$GameMessageToJson(_$GameMessage instance) =>
@@ -112,4 +93,5 @@ Map<String, dynamic> _$$GameMessageToJson(_$GameMessage instance) =>
       'message': instance.message,
       'from': instance.from,
       'to': instance.to,
+      'runtimeType': instance.$type,
     };

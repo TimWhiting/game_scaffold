@@ -46,7 +46,7 @@ class GenericGame with _$GenericGame {
 
   /// Creates a default initialized game with [players]
   factory GenericGame.start(
-    ISet<Player> players, {
+    IList<Player> players, {
     required bool multiPly,
     required bool simultaneousAction,
   }) =>

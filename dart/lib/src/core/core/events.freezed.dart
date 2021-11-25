@@ -137,14 +137,13 @@ class _$GameEventGame extends GameEventGame {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is GameEventGame &&
-            (identical(other.event, event) ||
-                const DeepCollectionEquality().equals(other.event, event)));
+        (other.runtimeType == runtimeType &&
+            other is GameEventGame &&
+            (identical(other.event, event) || other.event == event));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(event);
+  int get hashCode => Object.hash(runtimeType, event);
 
   @JsonKey(ignore: true)
   @override
@@ -218,7 +217,7 @@ abstract class GameEventGame extends GameEvent {
   const factory GameEventGame(Event event) = _$GameEventGame;
   const GameEventGame._() : super._();
 
-  Event get event => throw _privateConstructorUsedError;
+  Event get event;
   @JsonKey(ignore: true)
   $GameEventGameCopyWith<GameEventGame> get copyWith =>
       throw _privateConstructorUsedError;
@@ -280,14 +279,13 @@ class _$GameEventGeneral extends GameEventGeneral {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is GameEventGeneral &&
-            (identical(other.event, event) ||
-                const DeepCollectionEquality().equals(other.event, event)));
+        (other.runtimeType == runtimeType &&
+            other is GameEventGeneral &&
+            (identical(other.event, event) || other.event == event));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(event);
+  int get hashCode => Object.hash(runtimeType, event);
 
   @JsonKey(ignore: true)
   @override
@@ -361,7 +359,7 @@ abstract class GameEventGeneral extends GameEvent {
   const factory GameEventGeneral(GenericEvent event) = _$GameEventGeneral;
   const GameEventGeneral._() : super._();
 
-  GenericEvent get event => throw _privateConstructorUsedError;
+  GenericEvent get event;
   @JsonKey(ignore: true)
   $GameEventGeneralCopyWith<GameEventGeneral> get copyWith =>
       throw _privateConstructorUsedError;
