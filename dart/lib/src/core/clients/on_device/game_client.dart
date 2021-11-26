@@ -39,7 +39,9 @@ class NoServerGameClient extends GameClient {
   @override
   Future<bool> startGame(PlayerID playerID, GameCode code) async {
     final backendReader = NoServerClient.games[code]!.container.read;
-    backendReader(BackendProviders.state);
+    final notifier = backendReader(BackendProviders.lobby.notifier);
+    await Future.delayed(const Duration(microseconds: 1));
+    notifier.start();
     return true;
   }
 
@@ -57,7 +59,7 @@ class NoServerGameClient extends GameClient {
       await for (final e in curr) {
         ss.add(e);
       }
-    });
+    }, fireImmediately: true);
     yield* ss.stream;
     await ss.close();
   }

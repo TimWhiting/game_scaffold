@@ -1,3 +1,7 @@
+## 0.4.1+2
+
+- Fix local server issues
+
 ## 0.4.1+1
 
 - Regenerated freezed classes

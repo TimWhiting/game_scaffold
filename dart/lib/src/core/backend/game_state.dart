@@ -39,15 +39,16 @@ class BackendProviders {
     (ref, player) async* {
       final l = ref.watch(lobby);
       final pls = l.players;
-
-      yield GameInfo(
-        gameId: l.code,
-        status: l.gameStatus,
-        player: pls.firstWhere((p) => p.id == player).name,
-        creator: player == l.config.adminID,
-        players: pls.map((p) => p.name).toIList(),
-        gameType: l.config.gameType,
-      );
+      if (pls.any((p) => p.id == player)) {
+        yield GameInfo(
+          gameId: l.code,
+          status: l.gameStatus,
+          player: pls.firstWhere((p) => p.id == player).name,
+          creator: player == l.config.adminID,
+          players: pls.map((p) => p.name).toIList(),
+          gameType: l.config.gameType,
+        );
+      }
     },
     name: 'BackendPlayerLobby',
     dependencies: [lobby],

@@ -18,7 +18,6 @@ class NoServerClient extends ServerClient {
     final backendRead = ProviderContainer(overrides: []);
     final lobby = backendRead.read(BackendProviders.lobby.notifier);
     await Future.delayed(const Duration(microseconds: 1));
-    print('Creating game');
     lobby.setCode(gameCode);
     lobby.setConfig(config);
     games[gameCode] = LocalGame(gameCode, playerID, backendRead);
