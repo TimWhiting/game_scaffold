@@ -23,7 +23,7 @@ String get homeDir {
 class BackendProviders {
   BackendProviders._();
 
-  static final lobby = StateNotifierProvider<LobbyNotifier, Lobby>(
+  static final lobby = StateNotifierProvider.autoDispose<LobbyNotifier, Lobby>(
     (ref) => LobbyNotifier(
       Lobby(
         gameStatus: GameStatus.Lobby,
@@ -35,7 +35,8 @@ class BackendProviders {
     name: 'BackendLobby',
   );
 
-  static final playerLobby = StreamProvider.family<GameInfo, PlayerID>(
+  static final playerLobby =
+      StreamProvider.autoDispose.family<GameInfo, PlayerID>(
     (ref, player) async* {
       final l = ref.watch(lobby);
       final pls = l.players;
@@ -55,8 +56,8 @@ class BackendProviders {
   );
 
   /// Provides the [GameStateNotifier] based on the [GameConfig] from [lobby]'s config
-  static final StateNotifierProvider<GameStateNotifier, GameOrError> state =
-      StateNotifierProvider<GameStateNotifier, GameOrError>(
+  static final state =
+      StateNotifierProvider.autoDispose<GameStateNotifier, GameOrError>(
     (ref) {
       final l = ref.watch(lobby);
       return GameStateNotifier(
@@ -70,7 +71,7 @@ class BackendProviders {
   );
 
   /// Provides the [GameErrorNotifier] to keep track of errors of a game
-  static final error = Provider<GameError?>(
+  static final error = Provider.autoDispose<GameError?>(
     (ref) => ref.watch(state.select((s) => s.error)),
     name: 'BackendGameError',
     dependencies: [state],

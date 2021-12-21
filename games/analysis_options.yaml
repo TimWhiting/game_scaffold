@@ -17,8 +17,6 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
-  enable-experiment:
-    - nonfunction-type-aliases
 #   exclude:
 #     - path/to/excluded/files/**
 

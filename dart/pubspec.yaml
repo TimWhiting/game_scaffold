@@ -11,7 +11,7 @@ dependencies:
   characters: ^1.1.0
   collection: ^1.15.0
   enum_to_string: ^2.0.1
-  fast_immutable_collections: ^7.0.7-dev0
+  fast_immutable_collections: ^7.1.0-dev0
   freezed_annotation: ^1.0.0
   json_annotation: ^4.3.0
   logging: ^1.0.1
@@ -22,9 +22,9 @@ dependencies:
   stream: ^3.0.2+4
 
 dev_dependencies:
-  build_runner: ^2.1.4
+  build_runner: any
   freezed: ^1.0.0
-  json_serializable: ^6.0.1
+  json_serializable: any
   test: any
 
 scripts:

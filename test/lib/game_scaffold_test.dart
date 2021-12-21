@@ -57,7 +57,7 @@ class GameTester<T extends Game> {
   final GameCode code;
   final Reader read;
   final Map<PlayerID, Reader> readers;
-  late final backendReader = NoServerClient.games[code]!.read;
+  late final backendReader = NoGameClient.games[code]!.read;
   GameError? _lastError;
 
   /// Event lets you test the [outcome] of an [event]

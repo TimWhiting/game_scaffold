@@ -8,8 +8,6 @@ import 'package:socket_io/socket_io.dart' as IO;
 import 'package:socket_io/src/namespace.dart' as IO;
 
 import '../../core.dart';
-import '../../core/backend.dart';
-import '../../core/clients/socket_io/channels.dart';
 import 'server.dart';
 
 class GameServer {

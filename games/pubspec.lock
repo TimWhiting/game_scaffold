@@ -161,7 +161,7 @@ packages:
       name: fast_immutable_collections
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.0.7-dev0"
+    version: "7.1.0-dev0"
   file:
     dependency: transitive
     description:
@@ -200,10 +200,10 @@ packages:
   game_scaffold_dart:
     dependency: "direct main"
     description:
-      name: game_scaffold_dart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1+1"
+      path: "../dart"
+      relative: true
+    source: path
+    version: "0.4.1+2"
   glob:
     dependency: transitive
     description:
