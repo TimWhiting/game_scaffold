@@ -29,12 +29,7 @@ class FirebaseRoundClient extends RoundClient {
   void dispose() {}
 
   @override
-  Future<bool> exitGame(PlayerID playerID, GameCode code) async {
-    final result = await functions
-        .httpsCallable('exitGame')
-        .call({'playerID': playerID, 'code': code});
-    return result.data as bool;
-  }
+  Future<bool> exitGame(PlayerID playerID, GameCode code) async => true;
 
   @override
   Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) => firebaseDb
@@ -85,7 +80,7 @@ class FirebaseGameClient extends GameClient {
   Future<GameCode> createGame(PlayerID playerID, GameConfig config) async {
     final result = await functions
         .httpsCallable('createGame')
-        .call({'playerID': playerID, 'code': config.toJson()});
+        .call({'playerID': playerID, 'config': config.toJson()});
     return result.data as GameCode;
   }
 
