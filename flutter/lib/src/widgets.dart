@@ -70,7 +70,7 @@ class GameNavigator extends HookConsumerWidget {
           route.didPop(null);
           return true;
         } else if (status == 'connected') {
-          ref.read(GameProviders.serverClient).disconnect();
+          ref.read(GameProviders.gameClient).disconnect();
           return true;
         }
         return false;
