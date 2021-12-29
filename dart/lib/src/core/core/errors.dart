@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../core.dart';
@@ -16,8 +15,7 @@ class GameOrError<G extends Game> with _$GameOrError {
 
   /// Represets an error
   const factory GameOrError.error(String message, PlayerID person) = GameError;
-  factory GameOrError.fromJson(Map<String, dynamic> json) =>
-      _$GameOrErrorFromJson(json);
+  factory GameOrError.fromJson(Map<String, dynamic> json) => _$GameOrErrorFromJson(json);
 
   /// Returns whether this instance is an error
   bool get isError => this is GameError;
@@ -39,8 +37,7 @@ extension GameOrErrorGameX<E extends Event> on Game<E> {
   GameOrError<G> gameValue<G extends Game<E>>() => GameValue(this as G);
 }
 
-class GameConverter<T extends Game>
-    implements JsonConverter<T, Map<String, dynamic>> {
+class GameConverter<T extends Game> implements JsonConverter<T, Map<String, dynamic>> {
   const GameConverter();
   @override
   T fromJson(Map<String, dynamic> json) => Game.fromJson(json) as T;

@@ -25,20 +25,16 @@ void testGame<T extends Game>(
     root.read(GameProviders.clientType.notifier).state = OnDeviceClient;
 
     for (final p in players) {
-      readers[p.id] = ProviderContainer(
-          parent: root,
-          overrides: [GameProviders.playerID.overrideWithValue(p.id)]).read;
+      readers[p.id] = ProviderContainer(parent: root, overrides: [GameProviders.playerID.overrideWithValue(p.id)]).read;
     }
     readers[players.first.id]!(GameProviders.config.notifier).state = config;
-    final code =
-        await readers[players.first.id]!(GameProviders.createGame.future);
+    final code = await readers[players.first.id]!(GameProviders.createGame.future);
     for (final p in players) {
       readers[p.id]!(GameProviders.code.notifier).state = code;
       await readers[p.id]!(GameProviders.joinGame.future);
     }
 
-    if (readers[players.first.id]!(GameProviders.status) !=
-        GameStatus.Started) {
+    if (readers[players.first.id]!(GameProviders.status) != GameStatus.Started) {
       await readers[players.first.id]!(GameProviders.startGame.future);
     }
 
@@ -70,8 +66,7 @@ class GameTester<T extends Game> {
   /// });
   /// ```
   void event(Event event, Function(T, GameError?) outcome) {
-    backendReader(BackendProviders.state.notifier)
-        .handleEvent(event.asGameEvent);
+    backendReader(BackendProviders.state.notifier).handleEvent(event.asGameEvent);
 
     final g = game;
     final e = error;
@@ -97,8 +92,7 @@ class GameTester<T extends Game> {
   /// the round has advanced
   void nextRound(Function(T) expectation) {
     for (final p in _players) {
-      backendReader(BackendProviders.state.notifier)
-          .handleEvent(GenericEvent.readyNextRound(p.id).asGameEvent);
+      backendReader(BackendProviders.state.notifier).handleEvent(GenericEvent.readyNextRound(p.id).asGameEvent);
     }
 
     expectation(game);

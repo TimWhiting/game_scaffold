@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:game_scaffold/game_scaffold.dart';
 import 'package:game_scaffold_dart/server.dart';
 import 'package:game_scaffold_games/games.dart';
 import 'package:logging/logging.dart';
@@ -18,8 +17,7 @@ void main() {
   runApp(ProviderScope(
     overrides: [
       GameProviders.clientType.overrideWithValue(StateController(IOClient)),
-      GameProviders.remoteUri.overrideWithValue(
-          StateController(Uri.parse('http://localhost:$defaultGamePort'))),
+      GameProviders.remoteUri.overrideWithValue(StateController(Uri.parse('http://localhost:$defaultGamePort'))),
     ],
     child: const TicTacToeApp(),
   ));

@@ -2,7 +2,6 @@ import 'dart:io';
 
 // import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:game_scaffold/game_scaffold.dart';
 import 'package:game_scaffold_games/games.dart';
 import 'package:logging/logging.dart';
 // import 'package:supabase/supabase.dart' hide Provider;
@@ -13,8 +12,7 @@ void main() {
   final url = Platform.environment['SUPAURL'] ?? '';
   final key = Platform.environment['SUPAKEY'] ?? '';
   if (url == '' || key == '') {
-    stderr.writeln(
-        'Please make sure the SUPAURL and SUPAKEY environment variables are set to your SUPA database');
+    stderr.writeln('Please make sure the SUPAURL and SUPAKEY environment variables are set to your SUPA database');
 
     // ignore: avoid_print
     print('url "$url", key "$key"');
