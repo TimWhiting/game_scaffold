@@ -42,6 +42,11 @@ class GameProviders {
     name: 'ClientType',
   );
 
+  static final allClientTypes = StateProvider<List<ClientType>>(
+    (ref) => [IOClient, OnDeviceClient],
+    name: 'AllClientTypes',
+  );
+
   /// Provides the player's name
   static final playerName = StateProvider<String>(
     (ref) => '',
@@ -96,8 +101,7 @@ class GameProviders {
   );
 
   /// Provides the [GameClient] for each client id
-  static final gameClientFamily =
-      Provider.autoDispose.family<GameClient, ClientType>(
+  static final gameClientFamily = Provider.autoDispose.family<GameClient, ClientType>(
     (ref, clientType) {
       switch (clientType) {
         case IOClient:
@@ -109,11 +113,7 @@ class GameProviders {
       }
     },
     name: 'GameClientFamily',
-    dependencies: [
-      socketIOGameServerClient,
-      onDeviceGameServerClient,
-      playerID
-    ],
+    dependencies: [socketIOGameServerClient, onDeviceGameServerClient, playerID],
   );
 
   static final gameClient = Provider.autoDispose<GameClient>(
@@ -160,15 +160,13 @@ class GameProviders {
   );
 
   static final deleteGame = FutureProvider.autoDispose<bool>(
-    (ref) =>
-        ref.watch(gameClient).deleteGame(ref.read(playerID), ref.read(code)),
+    (ref) => ref.watch(gameClient).deleteGame(ref.read(playerID), ref.read(code)),
     name: 'DeleteGame',
     dependencies: [gameClient, playerID, code],
   );
 
   /// Provides a [RoundClient] for the client with the specified id
-  static final roundClientFamily =
-      Provider.family.autoDispose<RoundClient, ClientType>(
+  static final roundClientFamily = Provider.family.autoDispose<RoundClient, ClientType>(
     (ref, clientType) {
       switch (clientType) {
         case IOClient:
@@ -191,9 +189,7 @@ class GameProviders {
 
   static final joinGame = FutureProvider.autoDispose<String?>(
     (ref) async {
-      final name = await ref
-          .watch(roundClient)
-          .joinGame(ref.read(playerID), ref.read(code), ref.read(playerName));
+      final name = await ref.watch(roundClient).joinGame(ref.read(playerID), ref.read(code), ref.read(playerName));
       if (name != null) {
         ref.read(playerName.notifier).state = name;
       }
@@ -210,15 +206,13 @@ class GameProviders {
   );
 
   static final startGame = FutureProvider.autoDispose<bool>(
-    (ref) =>
-        ref.watch(roundClient).startGame(ref.read(playerID), ref.read(code)),
+    (ref) => ref.watch(roundClient).startGame(ref.read(playerID), ref.read(code)),
     name: 'StartGame',
     dependencies: [roundClient, playerID, code],
   );
 
   static final exitGame = FutureProvider.autoDispose<bool>(
-    (ref) =>
-        ref.watch(roundClient).exitGame(ref.read(playerID), ref.read(code)),
+    (ref) => ref.watch(roundClient).exitGame(ref.read(playerID), ref.read(code)),
     name: 'ExitGame',
     dependencies: [roundClient, playerID, code],
   );
@@ -230,8 +224,7 @@ class GameProviders {
   );
 
   static final newRound = FutureProvider.autoDispose<bool>(
-    (ref) =>
-        ref.watch(roundClient).newRound(ref.read(playerID), ref.read(code)),
+    (ref) => ref.watch(roundClient).newRound(ref.read(playerID), ref.read(code)),
     name: 'NewRound',
     dependencies: [roundClient, playerID, code],
   );
@@ -242,17 +235,13 @@ class GameProviders {
   );
 
   static final sendMessage = FutureProvider.autoDispose<bool>(
-    (ref) => ref
-        .watch(roundClient)
-        .sendMessage(ref.read(playerID), ref.read(code), ref.read(chatMessage)),
+    (ref) => ref.watch(roundClient).sendMessage(ref.read(playerID), ref.read(code), ref.read(chatMessage)),
     name: 'NewRound',
     dependencies: [roundClient, playerID, code, chatMessage],
   );
 
   static final sendEvent = FutureProvider.autoDispose.family<bool, GameEvent>(
-    (ref, event) => ref
-        .watch(roundClient)
-        .sendEvent(ref.read(playerID), ref.read(code), event),
+    (ref, event) => ref.watch(roundClient).sendEvent(ref.read(playerID), ref.read(code), event),
     name: 'SendEvent',
     dependencies: [roundClient, playerID, code],
   );
@@ -305,8 +294,7 @@ class GameProviders {
 }
 
 class LastOrLoadingStateNotifier<T> extends StateNotifier<LoadingFuture<T>> {
-  LastOrLoadingStateNotifier(this._creator)
-      : super(const LoadingFuture.loading()) {
+  LastOrLoadingStateNotifier(this._creator) : super(const LoadingFuture.loading()) {
     scheduleMicrotask(refresh);
   }
   final Future<T> Function() _creator;
@@ -332,7 +320,5 @@ class LoadingFuture<T> with _$LoadingFuture {
   const factory LoadingFuture.value(T value) = FutureValue<T>;
   bool get hasData => maybeMap(loading: (_) => false, orElse: () => true);
   T get value => when(
-      loading: () => throw Exception('Got value in loading state'),
-      refreshing: (v) => v as T,
-      value: (v) => v as T);
+      loading: () => throw Exception('Got value in loading state'), refreshing: (v) => v as T, value: (v) => v as T);
 }
