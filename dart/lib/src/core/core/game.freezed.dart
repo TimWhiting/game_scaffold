@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'game.dart';
@@ -252,22 +253,22 @@ class _$_GameConfig implements _GameConfig {
   final String gameType;
   @override
   final String? adminID;
-  @JsonKey(defaultValue: NameSet.Basic)
+  @JsonKey()
   @override
   final NameSet nameSet;
-  @JsonKey(defaultValue: false)
+  @JsonKey()
   @override
   final bool customNames;
-  @JsonKey(defaultValue: 15)
+  @JsonKey()
   @override
   final int rounds;
-  @JsonKey(defaultValue: 1)
+  @JsonKey()
   @override
   final int minPlayers;
-  @JsonKey(defaultValue: 10)
+  @JsonKey()
   @override
   final int maxPlayers;
-  @JsonKey(defaultValue: true)
+  @JsonKey()
   @override
   final bool autoStart;
   @override
@@ -285,33 +286,31 @@ class _$_GameConfig implements _GameConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _GameConfig &&
-            (identical(other.gameType, gameType) ||
-                other.gameType == gameType) &&
-            (identical(other.adminID, adminID) || other.adminID == adminID) &&
-            (identical(other.nameSet, nameSet) || other.nameSet == nameSet) &&
-            (identical(other.customNames, customNames) ||
-                other.customNames == customNames) &&
-            (identical(other.rounds, rounds) || other.rounds == rounds) &&
-            (identical(other.minPlayers, minPlayers) ||
-                other.minPlayers == minPlayers) &&
-            (identical(other.maxPlayers, maxPlayers) ||
-                other.maxPlayers == maxPlayers) &&
-            (identical(other.autoStart, autoStart) ||
-                other.autoStart == autoStart) &&
+            const DeepCollectionEquality().equals(other.gameType, gameType) &&
+            const DeepCollectionEquality().equals(other.adminID, adminID) &&
+            const DeepCollectionEquality().equals(other.nameSet, nameSet) &&
+            const DeepCollectionEquality()
+                .equals(other.customNames, customNames) &&
+            const DeepCollectionEquality().equals(other.rounds, rounds) &&
+            const DeepCollectionEquality()
+                .equals(other.minPlayers, minPlayers) &&
+            const DeepCollectionEquality()
+                .equals(other.maxPlayers, maxPlayers) &&
+            const DeepCollectionEquality().equals(other.autoStart, autoStart) &&
             const DeepCollectionEquality().equals(other.options, options));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      gameType,
-      adminID,
-      nameSet,
-      customNames,
-      rounds,
-      minPlayers,
-      maxPlayers,
-      autoStart,
+      const DeepCollectionEquality().hash(gameType),
+      const DeepCollectionEquality().hash(adminID),
+      const DeepCollectionEquality().hash(nameSet),
+      const DeepCollectionEquality().hash(customNames),
+      const DeepCollectionEquality().hash(rounds),
+      const DeepCollectionEquality().hash(minPlayers),
+      const DeepCollectionEquality().hash(maxPlayers),
+      const DeepCollectionEquality().hash(autoStart),
       const DeepCollectionEquality().hash(options));
 
   @JsonKey(ignore: true)
@@ -571,18 +570,23 @@ class _$_GameInfo implements _GameInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _GameInfo &&
-            (identical(other.gameId, gameId) || other.gameId == gameId) &&
-            (identical(other.players, players) || other.players == players) &&
-            (identical(other.player, player) || other.player == player) &&
-            (identical(other.creator, creator) || other.creator == creator) &&
-            (identical(other.gameType, gameType) ||
-                other.gameType == gameType) &&
-            (identical(other.status, status) || other.status == status));
+            const DeepCollectionEquality().equals(other.gameId, gameId) &&
+            const DeepCollectionEquality().equals(other.players, players) &&
+            const DeepCollectionEquality().equals(other.player, player) &&
+            const DeepCollectionEquality().equals(other.creator, creator) &&
+            const DeepCollectionEquality().equals(other.gameType, gameType) &&
+            const DeepCollectionEquality().equals(other.status, status));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, gameId, players, player, creator, gameType, status);
+      runtimeType,
+      const DeepCollectionEquality().hash(gameId),
+      const DeepCollectionEquality().hash(players),
+      const DeepCollectionEquality().hash(player),
+      const DeepCollectionEquality().hash(creator),
+      const DeepCollectionEquality().hash(gameType),
+      const DeepCollectionEquality().hash(status));
 
   @JsonKey(ignore: true)
   @override
@@ -804,16 +808,20 @@ class _$_Lobby implements _Lobby {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Lobby &&
-            (identical(other.code, code) || other.code == code) &&
-            (identical(other.players, players) || other.players == players) &&
-            (identical(other.config, config) || other.config == config) &&
-            (identical(other.gameStatus, gameStatus) ||
-                other.gameStatus == gameStatus));
+            const DeepCollectionEquality().equals(other.code, code) &&
+            const DeepCollectionEquality().equals(other.players, players) &&
+            const DeepCollectionEquality().equals(other.config, config) &&
+            const DeepCollectionEquality()
+                .equals(other.gameStatus, gameStatus));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, code, players, config, gameStatus);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(code),
+      const DeepCollectionEquality().hash(players),
+      const DeepCollectionEquality().hash(config),
+      const DeepCollectionEquality().hash(gameStatus));
 
   @JsonKey(ignore: true)
   @override

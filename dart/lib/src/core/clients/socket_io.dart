@@ -50,12 +50,10 @@ class IORoundClient extends RoundClient {
   }
 
   @override
-  Future<PlayerName> joinGame(
-      PlayerID playerID, GameCode code, PlayerName name) async {
+  Future<PlayerGameName> joinGame(PlayerID playerID, GameCode code, PlayerGameName name) async {
     await _ensureConnected(code);
     logger.info('Registering');
-    final assignedName = await _socket!
-        .call(IOChannel.register, {'name': name, 'id': playerID}) as String?;
+    final assignedName = await _socket!.call(IOChannel.register, {'name': name, 'id': playerID}) as String?;
     if (assignedName != null) {
       return assignedName;
     }
@@ -106,8 +104,7 @@ class IORoundClient extends RoundClient {
 
   @override
   Future<bool> startGame(PlayerID playerID, GameCode code) async {
-    final result = await _socket!
-        .call(IOChannel.startgame, {'playerID': playerID, 'code': code});
+    final result = await _socket!.call(IOChannel.startgame, {'playerID': playerID, 'code': code});
     return result as bool;
   }
 }
@@ -163,8 +160,7 @@ class IOGameClient extends GameClient {
 
   @override
   Future<bool> deleteGame(PlayerID playerID, GameCode code) async {
-    final result = await socket
-        .call(IOChannel.deletegame, {'code': code, 'playerID': playerID});
+    final result = await socket.call(IOChannel.deletegame, {'code': code, 'playerID': playerID});
     return result as bool;
   }
 

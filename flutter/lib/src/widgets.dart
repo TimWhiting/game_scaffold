@@ -31,8 +31,7 @@ class GameNavigator extends HookConsumerWidget {
     final gameStatus = ref.watch(GameProviders.status);
 
     final pages = {'disconnected': disconnected};
-    navigationLogger.info(
-        'PlayerID: ${ref.read(GameProviders.playerID)} gameStatus: $gameStatus');
+    navigationLogger.info('PlayerID: ${ref.read(GameProviders.playerID)} gameStatus: $gameStatus');
 
     if (conn) {
       pages['connected'] = connected;
@@ -65,12 +64,11 @@ class GameNavigator extends HookConsumerWidget {
         final status = route.settings.arguments as String?;
         if (status == 'lobby' || status == 'started') {
           ref.refresh(GameProviders.exitGame);
-          ref.read(GameProviders.exitGame.future);
           ref.refresh(GameProviders.allGames);
           route.didPop(null);
           return true;
         } else if (status == 'connected') {
-          ref.read(GameProviders.gameClient).disconnect();
+          ref.read(GameProviders.serverClient).disconnect();
           return true;
         }
         return false;

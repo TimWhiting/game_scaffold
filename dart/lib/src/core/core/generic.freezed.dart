@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'generic.dart';
@@ -296,37 +297,36 @@ class _$_GenericGame extends _GenericGame {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _GenericGame &&
-            (identical(other.players, players) || other.players == players) &&
-            (identical(other.readyPlayers, readyPlayers) ||
-                other.readyPlayers == readyPlayers) &&
-            (identical(other.allRoundScores, allRoundScores) ||
-                other.allRoundScores == allRoundScores) &&
-            (identical(other.time, time) || other.time == time) &&
-            (identical(other.messages, messages) ||
-                other.messages == messages) &&
-            (identical(other.status, status) || other.status == status) &&
-            (identical(other.currentPlayerIndex, currentPlayerIndex) ||
-                other.currentPlayerIndex == currentPlayerIndex) &&
-            (identical(other.round, round) || other.round == round) &&
-            (identical(other.isMultiPly, isMultiPly) ||
-                other.isMultiPly == isMultiPly) &&
-            (identical(other.isSimultaneousAction, isSimultaneousAction) ||
-                other.isSimultaneousAction == isSimultaneousAction));
+            const DeepCollectionEquality().equals(other.players, players) &&
+            const DeepCollectionEquality()
+                .equals(other.readyPlayers, readyPlayers) &&
+            const DeepCollectionEquality()
+                .equals(other.allRoundScores, allRoundScores) &&
+            const DeepCollectionEquality().equals(other.time, time) &&
+            const DeepCollectionEquality().equals(other.messages, messages) &&
+            const DeepCollectionEquality().equals(other.status, status) &&
+            const DeepCollectionEquality()
+                .equals(other.currentPlayerIndex, currentPlayerIndex) &&
+            const DeepCollectionEquality().equals(other.round, round) &&
+            const DeepCollectionEquality()
+                .equals(other.isMultiPly, isMultiPly) &&
+            const DeepCollectionEquality()
+                .equals(other.isSimultaneousAction, isSimultaneousAction));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      players,
-      readyPlayers,
-      allRoundScores,
-      time,
-      messages,
-      status,
-      currentPlayerIndex,
-      round,
-      isMultiPly,
-      isSimultaneousAction);
+      const DeepCollectionEquality().hash(players),
+      const DeepCollectionEquality().hash(readyPlayers),
+      const DeepCollectionEquality().hash(allRoundScores),
+      const DeepCollectionEquality().hash(time),
+      const DeepCollectionEquality().hash(messages),
+      const DeepCollectionEquality().hash(status),
+      const DeepCollectionEquality().hash(currentPlayerIndex),
+      const DeepCollectionEquality().hash(round),
+      const DeepCollectionEquality().hash(isMultiPly),
+      const DeepCollectionEquality().hash(isSimultaneousAction));
 
   @JsonKey(ignore: true)
   @override
@@ -681,11 +681,12 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _GenericReadyNextRoundEvent &&
-            (identical(other.player, player) || other.player == player));
+            const DeepCollectionEquality().equals(other.player, player));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, player);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(player));
 
   @JsonKey(ignore: true)
   @override
@@ -853,13 +854,17 @@ class _$GameMessage extends GameMessage {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is GameMessage &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.from, from) || other.from == from) &&
-            (identical(other.to, to) || other.to == to));
+            const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality().equals(other.from, from) &&
+            const DeepCollectionEquality().equals(other.to, to));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, message, from, to);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(message),
+      const DeepCollectionEquality().hash(from),
+      const DeepCollectionEquality().hash(to));
 
   @JsonKey(ignore: true)
   @override

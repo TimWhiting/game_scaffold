@@ -27,5 +27,11 @@ dev_dependencies:
   json_serializable: any
   test: any
 
+dependency_overrides:
+  freezed_annotation: 
+    path: ../../../../dev/freezed/packages/freezed_annotation
+  freezed: 
+    path: ../../../../dev/freezed/packages/freezed
+
 scripts:
   - gen: dart run build_runner build

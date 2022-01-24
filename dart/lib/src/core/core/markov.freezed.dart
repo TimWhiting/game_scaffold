@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'markov.dart';
@@ -314,12 +315,15 @@ class _$_JointAction implements _JointAction {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _JointAction &&
-            (identical(other.p1, p1) || other.p1 == p1) &&
-            (identical(other.p2, p2) || other.p2 == p2));
+            const DeepCollectionEquality().equals(other.p1, p1) &&
+            const DeepCollectionEquality().equals(other.p2, p2));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, p1, p2);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(p1),
+      const DeepCollectionEquality().hash(p2));
 
   @JsonKey(ignore: true)
   @override
@@ -529,12 +533,15 @@ class _$_Reward implements _Reward {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Reward &&
-            (identical(other.p1, p1) || other.p1 == p1) &&
-            (identical(other.p2, p2) || other.p2 == p2));
+            const DeepCollectionEquality().equals(other.p1, p1) &&
+            const DeepCollectionEquality().equals(other.p2, p2));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, p1, p2);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(p1),
+      const DeepCollectionEquality().hash(p2));
 
   @JsonKey(ignore: true)
   @override

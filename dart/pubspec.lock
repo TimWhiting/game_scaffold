@@ -7,14 +7,14 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "31.0.0"
+    version: "34.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.8.0"
+    version: "3.2.0"
   args:
     dependency: transitive
     description:
@@ -91,7 +91,7 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.1.3"
+    version: "8.1.4"
   characters:
     dependency: "direct main"
     description:
@@ -147,7 +147,7 @@ packages:
       name: coverage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.4"
+    version: "1.1.0"
   crypto:
     dependency: transitive
     description:
@@ -175,7 +175,7 @@ packages:
       name: fast_immutable_collections
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.1.0-dev0"
+    version: "7.1.2"
   file:
     dependency: transitive
     description:
@@ -193,16 +193,16 @@ packages:
   freezed:
     dependency: "direct dev"
     description:
-      name: freezed
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
+      path: "../../../../dev/freezed/packages/freezed"
+      relative: true
+    source: path
+    version: "1.1.1"
   freezed_annotation:
     dependency: "direct main"
     description:
-      name: freezed_annotation
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../../../../dev/freezed/packages/freezed_annotation"
+      relative: true
+    source: path
     version: "1.1.0"
   frontend_server_client:
     dependency: transitive
@@ -273,7 +273,7 @@ packages:
       name: json_serializable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.3"
+    version: "6.1.4"
   logging:
     dependency: "direct main"
     description:
@@ -448,7 +448,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.1"
+    version: "1.8.2"
   stack_trace:
     dependency: transitive
     description:
@@ -462,14 +462,14 @@ packages:
       name: state_notifier
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.1"
+    version: "0.7.2+1"
   stream:
     dependency: "direct main"
     description:
       name: stream
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.2+4"
+    version: "3.0.3"
   stream_channel:
     dependency: transitive
     description:

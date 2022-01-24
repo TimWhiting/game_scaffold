@@ -1,8 +1,9 @@
 import 'dart:async';
-
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import '../../../game_scaffold_dart.dart';
-import '../core.dart';
+part 'round_client.freezed.dart';
+part 'round_client.g.dart';
 
 /// A client for a particular game
 abstract class RoundClient {
@@ -10,36 +11,49 @@ abstract class RoundClient {
 
   final Logger logger;
 
-  /// Causes the client to exit the game
-  Future<bool> exitGame(PlayerID playerID, GameCode code);
-
-  /// Registers the client with the game server
-  Future<PlayerName?> joinGame(
-      PlayerID playerID, GameCode code, PlayerName name);
-
   /// Sends [event] to the game server
-  Future<bool> sendEvent(PlayerID playerID, GameCode code, Event event);
+  Future<ApiResponse<SendEventResponse>> sendEvent(SendEventRequest event);
 
-  /// Sends a start event to the game server
-  Future<bool> startGame(PlayerID playerID, GameCode code);
+  /// Watches the game state
+  Stream<ApiResponse<WatchGameResponse>> gameStream(WatchGameRequest request);
 
   /// Sends an undo event to the game server
-  Future<bool> undo(PlayerID playerID, GameCode code) =>
-      sendEvent(playerID, code, const GenericEvent.undo().asGameEvent);
+  Future<ApiResponse<SendEventResponse>> undo(PlayerID playerID, GameCode code) =>
+      sendEvent(SendEventRequest(playerID: playerID, code: code, event: const GenericEvent.undo().asGameEvent));
 
   /// Sends a new round event to the game server
-  Future<bool> newRound(PlayerID playerID, GameCode code) => sendEvent(
-      playerID, code, GenericEvent.readyNextRound(playerID).asGameEvent);
+  Future<ApiResponse<SendEventResponse>> newRound(PlayerID playerID, GameCode code) => sendEvent(
+      SendEventRequest(playerID: playerID, code: code, event: GenericEvent.readyNextRound(playerID).asGameEvent));
 
   /// Sends a message event to the game server
-  Future<bool> sendMessage(PlayerID playerID, GameCode code, String message) =>
-      sendEvent(playerID, code,
-          GenericEvent.message(message, from: playerID, to: null).asGameEvent);
+  Future<ApiResponse<SendEventResponse>> sendMessage(PlayerID playerID, GameCode code, String message) =>
+      sendEvent(SendEventRequest(
+          playerID: playerID, code: code, event: GenericEvent.message(message, from: playerID, to: null).asGameEvent));
 
   /// Disposes of the game client
   void dispose();
+}
 
-  Stream<GameOrError> gameStream(PlayerID playerID, GameCode code);
+@Freezed(genericArgumentFactories: true)
+class RoundServiceRequest<T extends Event> with _$RoundServiceRequest<T> {
+  const factory RoundServiceRequest.sendEvent({
+    required PlayerID playerID,
+    required GameCode code,
+    required T event,
+  }) = SendEventRequest<T>;
+  const factory RoundServiceRequest.watchGame({
+    required PlayerID playerID,
+    required GameCode code,
+  }) = WatchGameRequest;
+  factory RoundServiceRequest.fromJson(Map<String, dynamic> map, T Function(Object?) fromJsonT) =>
+      _$RoundServiceRequestFromJson(map, fromJsonT);
+}
 
-  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code);
+@Freezed(genericArgumentFactories: true)
+class RoundServiceResponse<T extends Game> with _$RoundServiceResponse {
+  const factory RoundServiceResponse.sendEvent() = SendEventResponse;
+  const factory RoundServiceResponse.watchGame({required T game}) = WatchGameResponse<T>;
+
+  factory RoundServiceResponse.fromJson(Map<String, dynamic> map, T Function(Object?) fromJsonT) =>
+      _$RoundServiceResponseFromJson(map, fromJsonT);
 }

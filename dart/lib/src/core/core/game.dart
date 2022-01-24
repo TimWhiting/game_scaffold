@@ -169,8 +169,8 @@ class GameConfig with _$GameConfig {
 class GameInfo with _$GameInfo {
   const factory GameInfo({
     required GameCode gameId,
-    required IList<PlayerName> players,
-    required PlayerName player,
+    required IList<PlayerGameName> players,
+    required PlayerGameName player,
     required bool creator,
     required GameType gameType,
     required GameStatus status,
