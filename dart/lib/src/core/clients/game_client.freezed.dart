@@ -428,6 +428,10 @@ GameServiceRequest _$GameServiceRequestFromJson(Map<String, dynamic> json) {
       return StartGameRequest.fromJson(json);
     case 'watchLobby':
       return WatchLobbyRequest.fromJson(json);
+    case 'sendEvent':
+      return SendEventRequest.fromJson(json);
+    case 'watchGame':
+      return WatchGameRequest.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'GameServiceRequest',
@@ -500,6 +504,22 @@ class _$GameServiceRequestTearOff {
     );
   }
 
+  SendEventRequest sendEvent(
+      {required String playerID, required String code, required Event event}) {
+    return SendEventRequest(
+      playerID: playerID,
+      code: code,
+      event: event,
+    );
+  }
+
+  WatchGameRequest watchGame({required String playerID, required String code}) {
+    return WatchGameRequest(
+      playerID: playerID,
+      code: code,
+    );
+  }
+
   GameServiceRequest fromJson(Map<String, Object?> json) {
     return GameServiceRequest.fromJson(json);
   }
@@ -522,6 +542,9 @@ mixin _$GameServiceRequest {
     required TResult Function(String playerID, String code) startGame,
     required TResult Function(String playerID, String authID, String code)
         watchLobby,
+    required TResult Function(String playerID, String code, Event event)
+        sendEvent,
+    required TResult Function(String playerID, String code) watchGame,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -533,6 +556,8 @@ mixin _$GameServiceRequest {
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
     TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code, Event event)? sendEvent,
+    TResult Function(String playerID, String code)? watchGame,
   }) =>
       throw _privateConstructorUsedError;
 
@@ -545,6 +570,8 @@ mixin _$GameServiceRequest {
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
+    required TResult Function(SendEventRequest value) sendEvent,
+    required TResult Function(WatchGameRequest value) watchGame,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -556,6 +583,8 @@ mixin _$GameServiceRequest {
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
+    TResult Function(SendEventRequest value)? sendEvent,
+    TResult Function(WatchGameRequest value)? watchGame,
   }) =>
       throw _privateConstructorUsedError;
 
@@ -681,6 +710,9 @@ class _$CreateGameRequest implements CreateGameRequest {
     required TResult Function(String playerID, String code) startGame,
     required TResult Function(String playerID, String authID, String code)
         watchLobby,
+    required TResult Function(String playerID, String code, Event event)
+        sendEvent,
+    required TResult Function(String playerID, String code) watchGame,
   }) {
     return createGame(authID, config);
   }
@@ -695,6 +727,8 @@ class _$CreateGameRequest implements CreateGameRequest {
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
     TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code, Event event)? sendEvent,
+    TResult Function(String playerID, String code)? watchGame,
   }) {
     return createGame?.call(authID, config);
   }
@@ -709,6 +743,8 @@ class _$CreateGameRequest implements CreateGameRequest {
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
+    required TResult Function(SendEventRequest value) sendEvent,
+    required TResult Function(WatchGameRequest value) watchGame,
   }) {
     return createGame(this);
   }
@@ -723,6 +759,8 @@ class _$CreateGameRequest implements CreateGameRequest {
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
+    TResult Function(SendEventRequest value)? sendEvent,
+    TResult Function(WatchGameRequest value)? watchGame,
   }) {
     return createGame?.call(this);
   }
@@ -853,6 +891,9 @@ class _$DeleteGameRequest implements DeleteGameRequest {
     required TResult Function(String playerID, String code) startGame,
     required TResult Function(String playerID, String authID, String code)
         watchLobby,
+    required TResult Function(String playerID, String code, Event event)
+        sendEvent,
+    required TResult Function(String playerID, String code) watchGame,
   }) {
     return deleteGame(playerID, authID, code);
   }
@@ -867,6 +908,8 @@ class _$DeleteGameRequest implements DeleteGameRequest {
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
     TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code, Event event)? sendEvent,
+    TResult Function(String playerID, String code)? watchGame,
   }) {
     return deleteGame?.call(playerID, authID, code);
   }
@@ -881,6 +924,8 @@ class _$DeleteGameRequest implements DeleteGameRequest {
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
+    required TResult Function(SendEventRequest value) sendEvent,
+    required TResult Function(WatchGameRequest value) watchGame,
   }) {
     return deleteGame(this);
   }
@@ -895,6 +940,8 @@ class _$DeleteGameRequest implements DeleteGameRequest {
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
+    TResult Function(SendEventRequest value)? sendEvent,
+    TResult Function(WatchGameRequest value)? watchGame,
   }) {
     return deleteGame?.call(this);
   }
@@ -1004,6 +1051,9 @@ class _$ListGamesRequest implements ListGamesRequest {
     required TResult Function(String playerID, String code) startGame,
     required TResult Function(String playerID, String authID, String code)
         watchLobby,
+    required TResult Function(String playerID, String code, Event event)
+        sendEvent,
+    required TResult Function(String playerID, String code) watchGame,
   }) {
     return listGames(authID);
   }
@@ -1018,6 +1068,8 @@ class _$ListGamesRequest implements ListGamesRequest {
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
     TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code, Event event)? sendEvent,
+    TResult Function(String playerID, String code)? watchGame,
   }) {
     return listGames?.call(authID);
   }
@@ -1032,6 +1084,8 @@ class _$ListGamesRequest implements ListGamesRequest {
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
+    required TResult Function(SendEventRequest value) sendEvent,
+    required TResult Function(WatchGameRequest value) watchGame,
   }) {
     return listGames(this);
   }
@@ -1046,6 +1100,8 @@ class _$ListGamesRequest implements ListGamesRequest {
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
+    TResult Function(SendEventRequest value)? sendEvent,
+    TResult Function(WatchGameRequest value)? watchGame,
   }) {
     return listGames?.call(this);
   }
@@ -1173,6 +1229,9 @@ class _$ExitGameRequest implements ExitGameRequest {
     required TResult Function(String playerID, String code) startGame,
     required TResult Function(String playerID, String authID, String code)
         watchLobby,
+    required TResult Function(String playerID, String code, Event event)
+        sendEvent,
+    required TResult Function(String playerID, String code) watchGame,
   }) {
     return exitGame(playerID, authID, code);
   }
@@ -1187,6 +1246,8 @@ class _$ExitGameRequest implements ExitGameRequest {
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
     TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code, Event event)? sendEvent,
+    TResult Function(String playerID, String code)? watchGame,
   }) {
     return exitGame?.call(playerID, authID, code);
   }
@@ -1201,6 +1262,8 @@ class _$ExitGameRequest implements ExitGameRequest {
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
+    required TResult Function(SendEventRequest value) sendEvent,
+    required TResult Function(WatchGameRequest value) watchGame,
   }) {
     return exitGame(this);
   }
@@ -1215,6 +1278,8 @@ class _$ExitGameRequest implements ExitGameRequest {
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
+    TResult Function(SendEventRequest value)? sendEvent,
+    TResult Function(WatchGameRequest value)? watchGame,
   }) {
     return exitGame?.call(this);
   }
@@ -1335,6 +1400,9 @@ class _$JoinGameRequest implements JoinGameRequest {
     required TResult Function(String playerID, String code) startGame,
     required TResult Function(String playerID, String authID, String code)
         watchLobby,
+    required TResult Function(String playerID, String code, Event event)
+        sendEvent,
+    required TResult Function(String playerID, String code) watchGame,
   }) {
     return joinGame(authID, code);
   }
@@ -1349,6 +1417,8 @@ class _$JoinGameRequest implements JoinGameRequest {
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
     TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code, Event event)? sendEvent,
+    TResult Function(String playerID, String code)? watchGame,
   }) {
     return joinGame?.call(authID, code);
   }
@@ -1363,6 +1433,8 @@ class _$JoinGameRequest implements JoinGameRequest {
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
+    required TResult Function(SendEventRequest value) sendEvent,
+    required TResult Function(WatchGameRequest value) watchGame,
   }) {
     return joinGame(this);
   }
@@ -1377,6 +1449,8 @@ class _$JoinGameRequest implements JoinGameRequest {
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
+    TResult Function(SendEventRequest value)? sendEvent,
+    TResult Function(WatchGameRequest value)? watchGame,
   }) {
     return joinGame?.call(this);
   }
@@ -1494,6 +1568,9 @@ class _$StartGameRequest implements StartGameRequest {
     required TResult Function(String playerID, String code) startGame,
     required TResult Function(String playerID, String authID, String code)
         watchLobby,
+    required TResult Function(String playerID, String code, Event event)
+        sendEvent,
+    required TResult Function(String playerID, String code) watchGame,
   }) {
     return startGame(playerID, code);
   }
@@ -1508,6 +1585,8 @@ class _$StartGameRequest implements StartGameRequest {
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
     TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code, Event event)? sendEvent,
+    TResult Function(String playerID, String code)? watchGame,
   }) {
     return startGame?.call(playerID, code);
   }
@@ -1522,6 +1601,8 @@ class _$StartGameRequest implements StartGameRequest {
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
+    required TResult Function(SendEventRequest value) sendEvent,
+    required TResult Function(WatchGameRequest value) watchGame,
   }) {
     return startGame(this);
   }
@@ -1536,6 +1617,8 @@ class _$StartGameRequest implements StartGameRequest {
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
+    TResult Function(SendEventRequest value)? sendEvent,
+    TResult Function(WatchGameRequest value)? watchGame,
   }) {
     return startGame?.call(this);
   }
@@ -1665,6 +1748,9 @@ class _$WatchLobbyRequest implements WatchLobbyRequest {
     required TResult Function(String playerID, String code) startGame,
     required TResult Function(String playerID, String authID, String code)
         watchLobby,
+    required TResult Function(String playerID, String code, Event event)
+        sendEvent,
+    required TResult Function(String playerID, String code) watchGame,
   }) {
     return watchLobby(playerID, authID, code);
   }
@@ -1679,6 +1765,8 @@ class _$WatchLobbyRequest implements WatchLobbyRequest {
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
     TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code, Event event)? sendEvent,
+    TResult Function(String playerID, String code)? watchGame,
   }) {
     return watchLobby?.call(playerID, authID, code);
   }
@@ -1693,6 +1781,8 @@ class _$WatchLobbyRequest implements WatchLobbyRequest {
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
+    required TResult Function(SendEventRequest value) sendEvent,
+    required TResult Function(WatchGameRequest value) watchGame,
   }) {
     return watchLobby(this);
   }
@@ -1707,6 +1797,8 @@ class _$WatchLobbyRequest implements WatchLobbyRequest {
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
+    TResult Function(SendEventRequest value)? sendEvent,
+    TResult Function(WatchGameRequest value)? watchGame,
   }) {
     return watchLobby?.call(this);
   }
@@ -1734,6 +1826,366 @@ abstract class WatchLobbyRequest implements GameServiceRequest {
       throw _privateConstructorUsedError;
 }
 
+/// @nodoc
+abstract class $SendEventRequestCopyWith<$Res> {
+  factory $SendEventRequestCopyWith(
+          SendEventRequest value, $Res Function(SendEventRequest) then) =
+      _$SendEventRequestCopyWithImpl<$Res>;
+  $Res call({String playerID, String code, Event event});
+
+  $EventCopyWith<$Res> get event;
+}
+
+/// @nodoc
+class _$SendEventRequestCopyWithImpl<$Res>
+    extends _$GameServiceRequestCopyWithImpl<$Res>
+    implements $SendEventRequestCopyWith<$Res> {
+  _$SendEventRequestCopyWithImpl(
+      SendEventRequest _value, $Res Function(SendEventRequest) _then)
+      : super(_value, (v) => _then(v as SendEventRequest));
+
+  @override
+  SendEventRequest get _value => super._value as SendEventRequest;
+
+  @override
+  $Res call({
+    Object? playerID = freezed,
+    Object? code = freezed,
+    Object? event = freezed,
+  }) {
+    return _then(SendEventRequest(
+      playerID: playerID == freezed
+          ? _value.playerID
+          : playerID // ignore: cast_nullable_to_non_nullable
+              as String,
+      code: code == freezed
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String,
+      event: event == freezed
+          ? _value.event
+          : event // ignore: cast_nullable_to_non_nullable
+              as Event,
+    ));
+  }
+
+  @override
+  $EventCopyWith<$Res> get event {
+    return $EventCopyWith<$Res>(_value.event, (value) {
+      return _then(_value.copyWith(event: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SendEventRequest implements SendEventRequest {
+  const _$SendEventRequest(
+      {required this.playerID,
+      required this.code,
+      required this.event,
+      String? $type})
+      : $type = $type ?? 'sendEvent';
+
+  factory _$SendEventRequest.fromJson(Map<String, dynamic> json) =>
+      _$$SendEventRequestFromJson(json);
+
+  @override
+  final String playerID;
+  @override
+  final String code;
+  @override
+  final Event event;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'GameServiceRequest.sendEvent(playerID: $playerID, code: $code, event: $event)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is SendEventRequest &&
+            const DeepCollectionEquality().equals(other.playerID, playerID) &&
+            const DeepCollectionEquality().equals(other.code, code) &&
+            const DeepCollectionEquality().equals(other.event, event));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(playerID),
+      const DeepCollectionEquality().hash(code),
+      const DeepCollectionEquality().hash(event));
+
+  @JsonKey(ignore: true)
+  @override
+  $SendEventRequestCopyWith<SendEventRequest> get copyWith =>
+      _$SendEventRequestCopyWithImpl<SendEventRequest>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String authID, GameConfig config) createGame,
+    required TResult Function(String playerID, String authID, String code)
+        deleteGame,
+    required TResult Function(String authID) listGames,
+    required TResult Function(String playerID, String authID, String code)
+        exitGame,
+    required TResult Function(String authID, String code) joinGame,
+    required TResult Function(String playerID, String code) startGame,
+    required TResult Function(String playerID, String authID, String code)
+        watchLobby,
+    required TResult Function(String playerID, String code, Event event)
+        sendEvent,
+    required TResult Function(String playerID, String code) watchGame,
+  }) {
+    return sendEvent(playerID, code, event);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String authID, GameConfig config)? createGame,
+    TResult Function(String playerID, String authID, String code)? deleteGame,
+    TResult Function(String authID)? listGames,
+    TResult Function(String playerID, String authID, String code)? exitGame,
+    TResult Function(String authID, String code)? joinGame,
+    TResult Function(String playerID, String code)? startGame,
+    TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code, Event event)? sendEvent,
+    TResult Function(String playerID, String code)? watchGame,
+  }) {
+    return sendEvent?.call(playerID, code, event);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(CreateGameRequest value) createGame,
+    required TResult Function(DeleteGameRequest value) deleteGame,
+    required TResult Function(ListGamesRequest value) listGames,
+    required TResult Function(ExitGameRequest value) exitGame,
+    required TResult Function(JoinGameRequest value) joinGame,
+    required TResult Function(StartGameRequest value) startGame,
+    required TResult Function(WatchLobbyRequest value) watchLobby,
+    required TResult Function(SendEventRequest value) sendEvent,
+    required TResult Function(WatchGameRequest value) watchGame,
+  }) {
+    return sendEvent(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(CreateGameRequest value)? createGame,
+    TResult Function(DeleteGameRequest value)? deleteGame,
+    TResult Function(ListGamesRequest value)? listGames,
+    TResult Function(ExitGameRequest value)? exitGame,
+    TResult Function(JoinGameRequest value)? joinGame,
+    TResult Function(StartGameRequest value)? startGame,
+    TResult Function(WatchLobbyRequest value)? watchLobby,
+    TResult Function(SendEventRequest value)? sendEvent,
+    TResult Function(WatchGameRequest value)? watchGame,
+  }) {
+    return sendEvent?.call(this);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SendEventRequestToJson(this);
+  }
+}
+
+abstract class SendEventRequest implements GameServiceRequest {
+  const factory SendEventRequest(
+      {required String playerID,
+      required String code,
+      required Event event}) = _$SendEventRequest;
+
+  factory SendEventRequest.fromJson(Map<String, dynamic> json) =
+      _$SendEventRequest.fromJson;
+
+  String get playerID;
+  String get code;
+  Event get event;
+  @JsonKey(ignore: true)
+  $SendEventRequestCopyWith<SendEventRequest> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $WatchGameRequestCopyWith<$Res> {
+  factory $WatchGameRequestCopyWith(
+          WatchGameRequest value, $Res Function(WatchGameRequest) then) =
+      _$WatchGameRequestCopyWithImpl<$Res>;
+  $Res call({String playerID, String code});
+}
+
+/// @nodoc
+class _$WatchGameRequestCopyWithImpl<$Res>
+    extends _$GameServiceRequestCopyWithImpl<$Res>
+    implements $WatchGameRequestCopyWith<$Res> {
+  _$WatchGameRequestCopyWithImpl(
+      WatchGameRequest _value, $Res Function(WatchGameRequest) _then)
+      : super(_value, (v) => _then(v as WatchGameRequest));
+
+  @override
+  WatchGameRequest get _value => super._value as WatchGameRequest;
+
+  @override
+  $Res call({
+    Object? playerID = freezed,
+    Object? code = freezed,
+  }) {
+    return _then(WatchGameRequest(
+      playerID: playerID == freezed
+          ? _value.playerID
+          : playerID // ignore: cast_nullable_to_non_nullable
+              as String,
+      code: code == freezed
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$WatchGameRequest implements WatchGameRequest {
+  const _$WatchGameRequest(
+      {required this.playerID, required this.code, String? $type})
+      : $type = $type ?? 'watchGame';
+
+  factory _$WatchGameRequest.fromJson(Map<String, dynamic> json) =>
+      _$$WatchGameRequestFromJson(json);
+
+  @override
+  final String playerID;
+  @override
+  final String code;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'GameServiceRequest.watchGame(playerID: $playerID, code: $code)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is WatchGameRequest &&
+            const DeepCollectionEquality().equals(other.playerID, playerID) &&
+            const DeepCollectionEquality().equals(other.code, code));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(playerID),
+      const DeepCollectionEquality().hash(code));
+
+  @JsonKey(ignore: true)
+  @override
+  $WatchGameRequestCopyWith<WatchGameRequest> get copyWith =>
+      _$WatchGameRequestCopyWithImpl<WatchGameRequest>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String authID, GameConfig config) createGame,
+    required TResult Function(String playerID, String authID, String code)
+        deleteGame,
+    required TResult Function(String authID) listGames,
+    required TResult Function(String playerID, String authID, String code)
+        exitGame,
+    required TResult Function(String authID, String code) joinGame,
+    required TResult Function(String playerID, String code) startGame,
+    required TResult Function(String playerID, String authID, String code)
+        watchLobby,
+    required TResult Function(String playerID, String code, Event event)
+        sendEvent,
+    required TResult Function(String playerID, String code) watchGame,
+  }) {
+    return watchGame(playerID, code);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String authID, GameConfig config)? createGame,
+    TResult Function(String playerID, String authID, String code)? deleteGame,
+    TResult Function(String authID)? listGames,
+    TResult Function(String playerID, String authID, String code)? exitGame,
+    TResult Function(String authID, String code)? joinGame,
+    TResult Function(String playerID, String code)? startGame,
+    TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code, Event event)? sendEvent,
+    TResult Function(String playerID, String code)? watchGame,
+  }) {
+    return watchGame?.call(playerID, code);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(CreateGameRequest value) createGame,
+    required TResult Function(DeleteGameRequest value) deleteGame,
+    required TResult Function(ListGamesRequest value) listGames,
+    required TResult Function(ExitGameRequest value) exitGame,
+    required TResult Function(JoinGameRequest value) joinGame,
+    required TResult Function(StartGameRequest value) startGame,
+    required TResult Function(WatchLobbyRequest value) watchLobby,
+    required TResult Function(SendEventRequest value) sendEvent,
+    required TResult Function(WatchGameRequest value) watchGame,
+  }) {
+    return watchGame(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(CreateGameRequest value)? createGame,
+    TResult Function(DeleteGameRequest value)? deleteGame,
+    TResult Function(ListGamesRequest value)? listGames,
+    TResult Function(ExitGameRequest value)? exitGame,
+    TResult Function(JoinGameRequest value)? joinGame,
+    TResult Function(StartGameRequest value)? startGame,
+    TResult Function(WatchLobbyRequest value)? watchLobby,
+    TResult Function(SendEventRequest value)? sendEvent,
+    TResult Function(WatchGameRequest value)? watchGame,
+  }) {
+    return watchGame?.call(this);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$WatchGameRequestToJson(this);
+  }
+}
+
+abstract class WatchGameRequest implements GameServiceRequest {
+  const factory WatchGameRequest(
+      {required String playerID, required String code}) = _$WatchGameRequest;
+
+  factory WatchGameRequest.fromJson(Map<String, dynamic> json) =
+      _$WatchGameRequest.fromJson;
+
+  String get playerID;
+  String get code;
+  @JsonKey(ignore: true)
+  $WatchGameRequestCopyWith<WatchGameRequest> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 GameServiceResponse _$GameServiceResponseFromJson(Map<String, dynamic> json) {
   switch (json['runtimeType']) {
     case 'createGame':
@@ -1750,6 +2202,10 @@ GameServiceResponse _$GameServiceResponseFromJson(Map<String, dynamic> json) {
       return StartGameResponse.fromJson(json);
     case 'watchLobby':
       return WatchLobbyResponse.fromJson(json);
+    case 'sendEvent':
+      return SendEventResponse.fromJson(json);
+    case 'watchGame':
+      return WatchGameResponse.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'runtimeType', 'GameServiceResponse',
@@ -1799,6 +2255,16 @@ class _$GameServiceResponseTearOff {
     );
   }
 
+  SendEventResponse sendEvent() {
+    return const SendEventResponse();
+  }
+
+  WatchGameResponse watchGame({required Game game}) {
+    return WatchGameResponse(
+      game: game,
+    );
+  }
+
   GameServiceResponse fromJson(Map<String, Object?> json) {
     return GameServiceResponse.fromJson(json);
   }
@@ -1818,6 +2284,8 @@ mixin _$GameServiceResponse {
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
+    required TResult Function() sendEvent,
+    required TResult Function(Game game) watchGame,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -1829,6 +2297,8 @@ mixin _$GameServiceResponse {
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
+    TResult Function()? sendEvent,
+    TResult Function(Game game)? watchGame,
   }) =>
       throw _privateConstructorUsedError;
 
@@ -1841,6 +2311,8 @@ mixin _$GameServiceResponse {
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
+    required TResult Function(SendEventResponse value) sendEvent,
+    required TResult Function(WatchGameResponse value) watchGame,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -1852,6 +2324,8 @@ mixin _$GameServiceResponse {
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
+    TResult Function(SendEventResponse value)? sendEvent,
+    TResult Function(WatchGameResponse value)? watchGame,
   }) =>
       throw _privateConstructorUsedError;
 
@@ -1965,6 +2439,8 @@ class _$CreateGameResponse implements CreateGameResponse {
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
+    required TResult Function() sendEvent,
+    required TResult Function(Game game) watchGame,
   }) {
     return createGame(playerID, code);
   }
@@ -1979,6 +2455,8 @@ class _$CreateGameResponse implements CreateGameResponse {
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
+    TResult Function()? sendEvent,
+    TResult Function(Game game)? watchGame,
   }) {
     return createGame?.call(playerID, code);
   }
@@ -1993,6 +2471,8 @@ class _$CreateGameResponse implements CreateGameResponse {
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
+    required TResult Function(SendEventResponse value) sendEvent,
+    required TResult Function(WatchGameResponse value) watchGame,
   }) {
     return createGame(this);
   }
@@ -2007,6 +2487,8 @@ class _$CreateGameResponse implements CreateGameResponse {
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
+    TResult Function(SendEventResponse value)? sendEvent,
+    TResult Function(WatchGameResponse value)? watchGame,
   }) {
     return createGame?.call(this);
   }
@@ -2085,6 +2567,8 @@ class _$DeleteGameResponse implements DeleteGameResponse {
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
+    required TResult Function() sendEvent,
+    required TResult Function(Game game) watchGame,
   }) {
     return deleteGame();
   }
@@ -2099,6 +2583,8 @@ class _$DeleteGameResponse implements DeleteGameResponse {
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
+    TResult Function()? sendEvent,
+    TResult Function(Game game)? watchGame,
   }) {
     return deleteGame?.call();
   }
@@ -2113,6 +2599,8 @@ class _$DeleteGameResponse implements DeleteGameResponse {
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
+    required TResult Function(SendEventResponse value) sendEvent,
+    required TResult Function(WatchGameResponse value) watchGame,
   }) {
     return deleteGame(this);
   }
@@ -2127,6 +2615,8 @@ class _$DeleteGameResponse implements DeleteGameResponse {
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
+    TResult Function(SendEventResponse value)? sendEvent,
+    TResult Function(WatchGameResponse value)? watchGame,
   }) {
     return deleteGame?.call(this);
   }
@@ -2223,6 +2713,8 @@ class _$ListGamesResponse implements ListGamesResponse {
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
+    required TResult Function() sendEvent,
+    required TResult Function(Game game) watchGame,
   }) {
     return listGames(games);
   }
@@ -2237,6 +2729,8 @@ class _$ListGamesResponse implements ListGamesResponse {
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
+    TResult Function()? sendEvent,
+    TResult Function(Game game)? watchGame,
   }) {
     return listGames?.call(games);
   }
@@ -2251,6 +2745,8 @@ class _$ListGamesResponse implements ListGamesResponse {
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
+    required TResult Function(SendEventResponse value) sendEvent,
+    required TResult Function(WatchGameResponse value) watchGame,
   }) {
     return listGames(this);
   }
@@ -2265,6 +2761,8 @@ class _$ListGamesResponse implements ListGamesResponse {
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
+    TResult Function(SendEventResponse value)? sendEvent,
+    TResult Function(WatchGameResponse value)? watchGame,
   }) {
     return listGames?.call(this);
   }
@@ -2342,6 +2840,8 @@ class _$ExitGameResponse implements ExitGameResponse {
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
+    required TResult Function() sendEvent,
+    required TResult Function(Game game) watchGame,
   }) {
     return exitGame();
   }
@@ -2356,6 +2856,8 @@ class _$ExitGameResponse implements ExitGameResponse {
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
+    TResult Function()? sendEvent,
+    TResult Function(Game game)? watchGame,
   }) {
     return exitGame?.call();
   }
@@ -2370,6 +2872,8 @@ class _$ExitGameResponse implements ExitGameResponse {
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
+    required TResult Function(SendEventResponse value) sendEvent,
+    required TResult Function(WatchGameResponse value) watchGame,
   }) {
     return exitGame(this);
   }
@@ -2384,6 +2888,8 @@ class _$ExitGameResponse implements ExitGameResponse {
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
+    TResult Function(SendEventResponse value)? sendEvent,
+    TResult Function(WatchGameResponse value)? watchGame,
   }) {
     return exitGame?.call(this);
   }
@@ -2480,6 +2986,8 @@ class _$JoinGameResponse implements JoinGameResponse {
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
+    required TResult Function() sendEvent,
+    required TResult Function(Game game) watchGame,
   }) {
     return joinGame(playerID);
   }
@@ -2494,6 +3002,8 @@ class _$JoinGameResponse implements JoinGameResponse {
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
+    TResult Function()? sendEvent,
+    TResult Function(Game game)? watchGame,
   }) {
     return joinGame?.call(playerID);
   }
@@ -2508,6 +3018,8 @@ class _$JoinGameResponse implements JoinGameResponse {
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
+    required TResult Function(SendEventResponse value) sendEvent,
+    required TResult Function(WatchGameResponse value) watchGame,
   }) {
     return joinGame(this);
   }
@@ -2522,6 +3034,8 @@ class _$JoinGameResponse implements JoinGameResponse {
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
+    TResult Function(SendEventResponse value)? sendEvent,
+    TResult Function(WatchGameResponse value)? watchGame,
   }) {
     return joinGame?.call(this);
   }
@@ -2599,6 +3113,8 @@ class _$StartGameResponse implements StartGameResponse {
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
+    required TResult Function() sendEvent,
+    required TResult Function(Game game) watchGame,
   }) {
     return startGame();
   }
@@ -2613,6 +3129,8 @@ class _$StartGameResponse implements StartGameResponse {
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
+    TResult Function()? sendEvent,
+    TResult Function(Game game)? watchGame,
   }) {
     return startGame?.call();
   }
@@ -2627,6 +3145,8 @@ class _$StartGameResponse implements StartGameResponse {
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
+    required TResult Function(SendEventResponse value) sendEvent,
+    required TResult Function(WatchGameResponse value) watchGame,
   }) {
     return startGame(this);
   }
@@ -2641,6 +3161,8 @@ class _$StartGameResponse implements StartGameResponse {
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
+    TResult Function(SendEventResponse value)? sendEvent,
+    TResult Function(WatchGameResponse value)? watchGame,
   }) {
     return startGame?.call(this);
   }
@@ -2746,6 +3268,8 @@ class _$WatchLobbyResponse implements WatchLobbyResponse {
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
+    required TResult Function() sendEvent,
+    required TResult Function(Game game) watchGame,
   }) {
     return watchLobby(gameInfo);
   }
@@ -2760,6 +3284,8 @@ class _$WatchLobbyResponse implements WatchLobbyResponse {
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
+    TResult Function()? sendEvent,
+    TResult Function(Game game)? watchGame,
   }) {
     return watchLobby?.call(gameInfo);
   }
@@ -2774,6 +3300,8 @@ class _$WatchLobbyResponse implements WatchLobbyResponse {
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
+    required TResult Function(SendEventResponse value) sendEvent,
+    required TResult Function(WatchGameResponse value) watchGame,
   }) {
     return watchLobby(this);
   }
@@ -2788,6 +3316,8 @@ class _$WatchLobbyResponse implements WatchLobbyResponse {
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
+    TResult Function(SendEventResponse value)? sendEvent,
+    TResult Function(WatchGameResponse value)? watchGame,
   }) {
     return watchLobby?.call(this);
   }
@@ -2808,5 +3338,286 @@ abstract class WatchLobbyResponse implements GameServiceResponse {
   GameInfo get gameInfo;
   @JsonKey(ignore: true)
   $WatchLobbyResponseCopyWith<WatchLobbyResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SendEventResponseCopyWith<$Res> {
+  factory $SendEventResponseCopyWith(
+          SendEventResponse value, $Res Function(SendEventResponse) then) =
+      _$SendEventResponseCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$SendEventResponseCopyWithImpl<$Res>
+    extends _$GameServiceResponseCopyWithImpl<$Res>
+    implements $SendEventResponseCopyWith<$Res> {
+  _$SendEventResponseCopyWithImpl(
+      SendEventResponse _value, $Res Function(SendEventResponse) _then)
+      : super(_value, (v) => _then(v as SendEventResponse));
+
+  @override
+  SendEventResponse get _value => super._value as SendEventResponse;
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SendEventResponse implements SendEventResponse {
+  const _$SendEventResponse({String? $type}) : $type = $type ?? 'sendEvent';
+
+  factory _$SendEventResponse.fromJson(Map<String, dynamic> json) =>
+      _$$SendEventResponseFromJson(json);
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'GameServiceResponse.sendEvent()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is SendEventResponse);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String playerID, String code) createGame,
+    required TResult Function() deleteGame,
+    required TResult Function(IList<GameInfo> games) listGames,
+    required TResult Function() exitGame,
+    required TResult Function(String playerID) joinGame,
+    required TResult Function() startGame,
+    required TResult Function(GameInfo gameInfo) watchLobby,
+    required TResult Function() sendEvent,
+    required TResult Function(Game game) watchGame,
+  }) {
+    return sendEvent();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String playerID, String code)? createGame,
+    TResult Function()? deleteGame,
+    TResult Function(IList<GameInfo> games)? listGames,
+    TResult Function()? exitGame,
+    TResult Function(String playerID)? joinGame,
+    TResult Function()? startGame,
+    TResult Function(GameInfo gameInfo)? watchLobby,
+    TResult Function()? sendEvent,
+    TResult Function(Game game)? watchGame,
+  }) {
+    return sendEvent?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(CreateGameResponse value) createGame,
+    required TResult Function(DeleteGameResponse value) deleteGame,
+    required TResult Function(ListGamesResponse value) listGames,
+    required TResult Function(ExitGameResponse value) exitGame,
+    required TResult Function(JoinGameResponse value) joinGame,
+    required TResult Function(StartGameResponse value) startGame,
+    required TResult Function(WatchLobbyResponse value) watchLobby,
+    required TResult Function(SendEventResponse value) sendEvent,
+    required TResult Function(WatchGameResponse value) watchGame,
+  }) {
+    return sendEvent(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(CreateGameResponse value)? createGame,
+    TResult Function(DeleteGameResponse value)? deleteGame,
+    TResult Function(ListGamesResponse value)? listGames,
+    TResult Function(ExitGameResponse value)? exitGame,
+    TResult Function(JoinGameResponse value)? joinGame,
+    TResult Function(StartGameResponse value)? startGame,
+    TResult Function(WatchLobbyResponse value)? watchLobby,
+    TResult Function(SendEventResponse value)? sendEvent,
+    TResult Function(WatchGameResponse value)? watchGame,
+  }) {
+    return sendEvent?.call(this);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SendEventResponseToJson(this);
+  }
+}
+
+abstract class SendEventResponse implements GameServiceResponse {
+  const factory SendEventResponse() = _$SendEventResponse;
+
+  factory SendEventResponse.fromJson(Map<String, dynamic> json) =
+      _$SendEventResponse.fromJson;
+}
+
+/// @nodoc
+abstract class $WatchGameResponseCopyWith<$Res> {
+  factory $WatchGameResponseCopyWith(
+          WatchGameResponse value, $Res Function(WatchGameResponse) then) =
+      _$WatchGameResponseCopyWithImpl<$Res>;
+  $Res call({Game game});
+
+  $GameCopyWith<$Res> get game;
+}
+
+/// @nodoc
+class _$WatchGameResponseCopyWithImpl<$Res>
+    extends _$GameServiceResponseCopyWithImpl<$Res>
+    implements $WatchGameResponseCopyWith<$Res> {
+  _$WatchGameResponseCopyWithImpl(
+      WatchGameResponse _value, $Res Function(WatchGameResponse) _then)
+      : super(_value, (v) => _then(v as WatchGameResponse));
+
+  @override
+  WatchGameResponse get _value => super._value as WatchGameResponse;
+
+  @override
+  $Res call({
+    Object? game = freezed,
+  }) {
+    return _then(WatchGameResponse(
+      game: game == freezed
+          ? _value.game
+          : game // ignore: cast_nullable_to_non_nullable
+              as Game,
+    ));
+  }
+
+  @override
+  $GameCopyWith<$Res> get game {
+    return $GameCopyWith<$Res>(_value.game, (value) {
+      return _then(_value.copyWith(game: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$WatchGameResponse implements WatchGameResponse {
+  const _$WatchGameResponse({required this.game, String? $type})
+      : $type = $type ?? 'watchGame';
+
+  factory _$WatchGameResponse.fromJson(Map<String, dynamic> json) =>
+      _$$WatchGameResponseFromJson(json);
+
+  @override
+  final Game game;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'GameServiceResponse.watchGame(game: $game)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is WatchGameResponse &&
+            const DeepCollectionEquality().equals(other.game, game));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(game));
+
+  @JsonKey(ignore: true)
+  @override
+  $WatchGameResponseCopyWith<WatchGameResponse> get copyWith =>
+      _$WatchGameResponseCopyWithImpl<WatchGameResponse>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String playerID, String code) createGame,
+    required TResult Function() deleteGame,
+    required TResult Function(IList<GameInfo> games) listGames,
+    required TResult Function() exitGame,
+    required TResult Function(String playerID) joinGame,
+    required TResult Function() startGame,
+    required TResult Function(GameInfo gameInfo) watchLobby,
+    required TResult Function() sendEvent,
+    required TResult Function(Game game) watchGame,
+  }) {
+    return watchGame(game);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String playerID, String code)? createGame,
+    TResult Function()? deleteGame,
+    TResult Function(IList<GameInfo> games)? listGames,
+    TResult Function()? exitGame,
+    TResult Function(String playerID)? joinGame,
+    TResult Function()? startGame,
+    TResult Function(GameInfo gameInfo)? watchLobby,
+    TResult Function()? sendEvent,
+    TResult Function(Game game)? watchGame,
+  }) {
+    return watchGame?.call(game);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(CreateGameResponse value) createGame,
+    required TResult Function(DeleteGameResponse value) deleteGame,
+    required TResult Function(ListGamesResponse value) listGames,
+    required TResult Function(ExitGameResponse value) exitGame,
+    required TResult Function(JoinGameResponse value) joinGame,
+    required TResult Function(StartGameResponse value) startGame,
+    required TResult Function(WatchLobbyResponse value) watchLobby,
+    required TResult Function(SendEventResponse value) sendEvent,
+    required TResult Function(WatchGameResponse value) watchGame,
+  }) {
+    return watchGame(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(CreateGameResponse value)? createGame,
+    TResult Function(DeleteGameResponse value)? deleteGame,
+    TResult Function(ListGamesResponse value)? listGames,
+    TResult Function(ExitGameResponse value)? exitGame,
+    TResult Function(JoinGameResponse value)? joinGame,
+    TResult Function(StartGameResponse value)? startGame,
+    TResult Function(WatchLobbyResponse value)? watchLobby,
+    TResult Function(SendEventResponse value)? sendEvent,
+    TResult Function(WatchGameResponse value)? watchGame,
+  }) {
+    return watchGame?.call(this);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$WatchGameResponseToJson(this);
+  }
+}
+
+abstract class WatchGameResponse implements GameServiceResponse {
+  const factory WatchGameResponse({required Game game}) = _$WatchGameResponse;
+
+  factory WatchGameResponse.fromJson(Map<String, dynamic> json) =
+      _$WatchGameResponse.fromJson;
+
+  Game get game;
+  @JsonKey(ignore: true)
+  $WatchGameResponseCopyWith<WatchGameResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }

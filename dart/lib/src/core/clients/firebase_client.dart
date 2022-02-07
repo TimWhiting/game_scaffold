@@ -1,86 +1,79 @@
-import 'package:cloud_functions/cloud_functions.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_dart/firebase_dart.dart';
+
 import '../../../game_scaffold_dart.dart';
 
-final firebaseAppProvider = FutureProvider((ref) => Firebase.initializeApp());
-final firebaseRoundClient = Provider.autoDispose((ref) => FirebaseRoundClient(ref));
+final firebaseCacheLocationProvider = Provider<String?>((ref) => null);
+final firebaseOptionsProvider = Provider<FirebaseOptions>((ref) => throw Exception('firebaseOptions not set'));
+final firebaseAppProvider = FutureProvider<FirebaseApp>(
+  (ref) {
+    FirebaseDart.setup(storagePath: ref.watch(firebaseCacheLocationProvider));
+    return Firebase.initializeApp(options: ref.watch(firebaseOptionsProvider));
+  },
+  dependencies: [firebaseOptionsProvider, firebaseCacheLocationProvider],
+);
 final firebaseGameClient = Provider.autoDispose((ref) => FirebaseGameClient(ref));
 
 const String firebaseServer = 'firebase';
 List<Override> firebaseOverrides() => [
-      GameProviders.roundClientFamily(firebaseServer).overrideWithProvider(firebaseRoundClient),
       GameProviders.gameClientFamily(firebaseServer).overrideWithProvider(firebaseGameClient),
     ];
-
-class FirebaseRoundClient extends RoundClient {
-  FirebaseRoundClient(this.ref);
-
-  final ProviderRef ref;
-  FirebaseFunctions get functions => FirebaseFunctions.instanceFor(app: ref.read(firebaseAppProvider).value);
-  FirebaseDatabase get firebaseDb => FirebaseDatabase.instanceFor(app: ref.read(firebaseAppProvider).value!);
-  @override
-  void dispose() {}
-
-  @override
-  Future<bool> exitGame(PlayerID playerID, GameCode code) async => true;
-
-  @override
-  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) => firebaseDb
-      .ref('games/$code/lobby')
-      .onValue
-      .map((v) => GameInfo.fromJson(v.snapshot.value! as Map<String, dynamic>));
-
-  @override
-  Stream<GameOrError<Game<Event>>> gameStream(PlayerID playerID, GameCode code) => firebaseDb
-      .ref('games/$code/game')
-      .onValue
-      .map((v) => GameOrError.fromJson(v.snapshot.value! as Map<String, dynamic>));
-
-  @override
-  Future<PlayerGameName?> joinGame(PlayerID playerID, GameCode code, PlayerGameName name) async {
-    final result = await functions.httpsCallable('joinGame').call({'playerID': playerID, 'code': code, 'name': name});
-    return result.data as PlayerGameName?;
-  }
-
-  @override
-  Future<bool> sendEvent(PlayerID playerID, GameCode code, Event event) async {
-    final result =
-        await functions.httpsCallable('sendEvent').call({'playerID': playerID, 'code': code, 'event': event.toJson()});
-    return result.data as bool;
-  }
-
-  @override
-  Future<StartGameResponse> startGame(StartGameRequest startGameRequest) async {
-    final result = await functions.httpsCallable('startGame').call(startGameRequest.toJson());
-    return StartGameResponse.fromJson(result.data).success;
-  }
-}
 
 class FirebaseGameClient extends GameClient {
   FirebaseGameClient(this.ref);
 
   final ProviderRef ref;
-  FirebaseFunctions get functions => FirebaseFunctions.instanceFor(app: ref.read(firebaseAppProvider).value);
 
   @override
-  Future<GameCode> createGame(PlayerID playerID, GameConfig config) async {
-    final result = await functions.httpsCallable('createGame').call({'playerID': playerID, 'config': config.toJson()});
-    return result.data as GameCode;
+  Future<ApiResponse<CreateGameResponse>> createGame(CreateGameRequest request) {
+    // TODO: implement createGame
+    throw UnimplementedError();
   }
 
   @override
-  Future<bool> deleteGame(PlayerID playerID, GameCode code) async {
-    final result = await functions.httpsCallable('deleteGame').call({'playerID': playerID, 'code': code});
-    return result.data as bool;
+  Future<ApiResponse<DeleteGameResponse>> deleteGame(DeleteGameRequest request) {
+    // TODO: implement deleteGame
+    throw UnimplementedError();
   }
 
   @override
-  void dispose() {}
+  Future<ApiResponse<ExitGameResponse>> exitGame(ExitGameRequest request) {
+    // TODO: implement exitGame
+    throw UnimplementedError();
+  }
 
   @override
-  Future<IList<GameInfo>> getGames(PlayerID playerID) async {
-    final result = await functions.httpsCallable('getGames').call({'playerID': playerID});
-    return (result.data as List).map((e) => GameInfo.fromJson(e as Map<String, dynamic>)).toIList();
+  Stream<ApiResponse<WatchLobbyResponse>> gameLobby(WatchLobbyRequest request) {
+    // TODO: implement gameLobby
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResponse<JoinGameResponse>> joinGame(JoinGameRequest request) {
+    // TODO: implement joinGame
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResponse<ListGamesResponse>> listGames(ListGamesRequest request) {
+    // TODO: implement listGames
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResponse<StartGameResponse>> startGame(StartGameRequest request) {
+    // TODO: implement startGame
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<ApiResponse<WatchGameResponse>> gameStream(WatchGameRequest request) {
+    // TODO: implement gameStream
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResponse<SendEventResponse>> sendEvent(SendEventRequest event) {
+    // TODO: implement sendEvent
+    throw UnimplementedError();
   }
 }

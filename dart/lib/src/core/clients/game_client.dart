@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logging/logging.dart';
 import '../../core.dart';
-import '../core.dart';
 part 'game_client.freezed.dart';
 part 'game_client.g.dart';
 
@@ -42,18 +41,23 @@ abstract class GameClient {
   /// Watches for changes to the overall game metadata which is valid also before the game starts
   Stream<ApiResponse<WatchLobbyResponse>> gameLobby(WatchLobbyRequest request);
 
-  /// Disposes of the [GameClient] (i.e. disconnects from the server)
-  void dispose();
+  /// Sends [event] to the game server
+  Future<ApiResponse<SendEventResponse>> sendEvent(SendEventRequest event);
 
-  /// Connects to the backend
-  ///
-  /// Default implementation does nothing
-  Future<void> connect() async {}
+  /// Watches the game state
+  Stream<ApiResponse<WatchGameResponse>> gameStream(WatchGameRequest request);
 
-  /// Disconnect from the backend
-  ///
-  /// Default implementation does nothing
-  Future<void> disconnect() async {}
+  /// Sends an undo event to the game server
+  Future<ApiResponse<SendEventResponse>> undo(PlayerID playerID, GameCode code) =>
+      sendEvent(SendEventRequest(playerID: playerID, code: code, event: const Event.undo()));
+
+  /// Sends a new round event to the game server
+  Future<ApiResponse<SendEventResponse>> newRound(PlayerID playerID, GameCode code) =>
+      sendEvent(SendEventRequest(playerID: playerID, code: code, event: Event.readyNextRound(playerID)));
+
+  /// Sends a message event to the game server
+  Future<ApiResponse<SendEventResponse>> sendMessage(PlayerID playerID, GameCode code, String message) => sendEvent(
+      SendEventRequest(playerID: playerID, code: code, event: Event.message(message, from: playerID, to: null)));
 }
 
 @Freezed(genericArgumentFactories: true)
@@ -79,6 +83,15 @@ class GameServiceRequest with _$GameServiceRequest {
   const factory GameServiceRequest.startGame({required PlayerID playerID, required GameCode code}) = StartGameRequest;
   const factory GameServiceRequest.watchLobby(
       {required PlayerID playerID, required AuthID authID, required GameCode code}) = WatchLobbyRequest;
+  const factory GameServiceRequest.sendEvent({
+    required PlayerID playerID,
+    required GameCode code,
+    required Event event,
+  }) = SendEventRequest;
+  const factory GameServiceRequest.watchGame({
+    required PlayerID playerID,
+    required GameCode code,
+  }) = WatchGameRequest;
 
   factory GameServiceRequest.fromJson(Map<String, dynamic> map) => _$GameServiceRequestFromJson(map);
 }
@@ -93,5 +106,8 @@ class GameServiceResponse with _$GameServiceResponse {
   const factory GameServiceResponse.joinGame({required PlayerID playerID}) = JoinGameResponse;
   const factory GameServiceResponse.startGame() = StartGameResponse;
   const factory GameServiceResponse.watchLobby({required GameInfo gameInfo}) = WatchLobbyResponse;
+  const factory GameServiceResponse.sendEvent() = SendEventResponse;
+  const factory GameServiceResponse.watchGame({required Game game}) = WatchGameResponse;
+
   factory GameServiceResponse.fromJson(Map<String, dynamic> map) => _$GameServiceResponseFromJson(map);
 }

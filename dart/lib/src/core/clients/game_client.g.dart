@@ -144,6 +144,36 @@ Map<String, dynamic> _$$WatchLobbyRequestToJson(_$WatchLobbyRequest instance) =>
       'runtimeType': instance.$type,
     };
 
+_$SendEventRequest _$$SendEventRequestFromJson(Map<String, dynamic> json) =>
+    _$SendEventRequest(
+      playerID: json['playerID'] as String,
+      code: json['code'] as String,
+      event: Event.fromJson(json['event'] as Map<String, dynamic>),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$SendEventRequestToJson(_$SendEventRequest instance) =>
+    <String, dynamic>{
+      'playerID': instance.playerID,
+      'code': instance.code,
+      'event': instance.event,
+      'runtimeType': instance.$type,
+    };
+
+_$WatchGameRequest _$$WatchGameRequestFromJson(Map<String, dynamic> json) =>
+    _$WatchGameRequest(
+      playerID: json['playerID'] as String,
+      code: json['code'] as String,
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$WatchGameRequestToJson(_$WatchGameRequest instance) =>
+    <String, dynamic>{
+      'playerID': instance.playerID,
+      'code': instance.code,
+      'runtimeType': instance.$type,
+    };
+
 _$CreateGameResponse _$$CreateGameResponseFromJson(Map<String, dynamic> json) =>
     _$CreateGameResponse(
       playerID: json['playerID'] as String,
@@ -227,5 +257,27 @@ Map<String, dynamic> _$$WatchLobbyResponseToJson(
         _$WatchLobbyResponse instance) =>
     <String, dynamic>{
       'gameInfo': instance.gameInfo,
+      'runtimeType': instance.$type,
+    };
+
+_$SendEventResponse _$$SendEventResponseFromJson(Map<String, dynamic> json) =>
+    _$SendEventResponse(
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$SendEventResponseToJson(_$SendEventResponse instance) =>
+    <String, dynamic>{
+      'runtimeType': instance.$type,
+    };
+
+_$WatchGameResponse _$$WatchGameResponseFromJson(Map<String, dynamic> json) =>
+    _$WatchGameResponse(
+      game: Game.fromJson(json['game'] as Map<String, dynamic>),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$WatchGameResponseToJson(_$WatchGameResponse instance) =>
+    <String, dynamic>{
+      'game': instance.game,
       'runtimeType': instance.$type,
     };

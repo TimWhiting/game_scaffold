@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'dart:async';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 
@@ -38,7 +36,7 @@ class GameProviders {
   /// The provider that controls the [RoundClient] and [GameClient]
   /// implementation to use
   static final clientType = StateProvider<ClientType>(
-    (ref) => IOClient,
+    (ref) => OnDeviceClient,
     name: 'ClientType',
   );
 
@@ -96,11 +94,10 @@ class GameProviders {
   );
 
   /// Provides the [GameClient] for each client id
-  static final gameClientFamily =
-      Provider.autoDispose.family<GameClient, ClientType>(
+  static final gameClientFamily = Provider.autoDispose.family<GameClient, ClientType>(
     (ref, clientType) {
       switch (clientType) {
-        case IOClient:
+        case NetworkClient:
           return ref.watch(socketIOGameServerClient);
         case OnDeviceClient:
           return ref.watch(onDeviceGameServerClient);
@@ -109,11 +106,7 @@ class GameProviders {
       }
     },
     name: 'GameClientFamily',
-    dependencies: [
-      socketIOGameServerClient,
-      onDeviceGameServerClient,
-      playerID
-    ],
+    dependencies: [socketIOGameServerClient, onDeviceGameServerClient, playerID],
   );
 
   static final gameClient = Provider.autoDispose<GameClient>(
@@ -122,26 +115,16 @@ class GameProviders {
     dependencies: [clientType, gameClientFamily],
   );
 
-  static final gameConnect = FutureProvider.autoDispose<void>(
-    (ref) => ref.watch(gameClient).connect(),
-    name: 'GameConnect',
-    dependencies: [gameClient],
-  );
-
-  static final gameDisconnect = FutureProvider.autoDispose<void>(
-    (ref) => ref.watch(gameClient).disconnect(),
-    name: 'GameDisconnect',
-    dependencies: [gameClient],
-  );
-
-  static final createGame = FutureProvider.autoDispose<String>(
+  static final createGame = FutureProvider.autoDispose<ApiResponse<CreateGameResponse>>(
     (ref) async {
-      final c = await ref.watch(gameClient).createGame(
-            ref.read(playerID),
-            ref.read(config),
-          );
-      ref.read(code.notifier).state = c;
-      return c;
+      final response =
+          await ref.watch(gameClient).createGame(CreateGameRequest(authID: ref.read(authID), config: ref.read(config)));
+      response.when(error: (e) {
+        ref.read(error.notifier).state = e;
+      }, success: (r) {
+        ref.read(code.notifier).state = r.code;
+      });
+      return response;
     },
     name: 'CreateGame',
     dependencies: [
@@ -151,7 +134,6 @@ class GameProviders {
       code.notifier,
     ],
   );
-  static final connected = StateProvider<bool>((ref) => false);
 
   static final allGames = FutureProvider.autoDispose<IList<GameInfo>>(
     (ref) => ref.watch(gameClient).getGames(ref.read(playerID)),
@@ -160,48 +142,20 @@ class GameProviders {
   );
 
   static final deleteGame = FutureProvider.autoDispose<bool>(
-    (ref) =>
-        ref.watch(gameClient).deleteGame(ref.read(playerID), ref.read(code)),
+    (ref) => ref.watch(gameClient).deleteGame(ref.read(playerID), ref.read(code)),
     name: 'DeleteGame',
     dependencies: [gameClient, playerID, code],
   );
 
-  /// Provides a [RoundClient] for the client with the specified id
-  static final roundClientFamily =
-      Provider.family.autoDispose<RoundClient, ClientType>(
-    (ref, clientType) {
-      switch (clientType) {
-        case IOClient:
-          return ref.watch(socketIOGameClient);
-        case OnDeviceClient:
-          return ref.watch(onDeviceGameClient);
-        default:
-          throw UnsupportedError('Unsupported client type');
-      }
-    },
-    name: 'GameClientFamily',
-    dependencies: [socketIOGameClient, onDeviceGameClient, playerID],
-  );
-
-  static final roundClient = Provider.autoDispose<RoundClient>(
-    (ref) => ref.watch(roundClientFamily(ref.watch(clientType))),
-    name: 'GameClient',
-    dependencies: [clientType, roundClientFamily],
-  );
-
   static final joinGame = FutureProvider.autoDispose<String?>(
     (ref) async {
-      final name = await ref
-          .watch(roundClient)
-          .joinGame(ref.read(playerID), ref.read(code), ref.read(playerName));
-      if (name != null) {
-        ref.read(playerName.notifier).state = name;
-      }
+      final name = await ref.watch(gameClient).joinGame(ref.read(playerID), ref.read(code), ref.read(playerName));
+      ref.read(playerName.notifier).state = name;
       return name;
     },
     name: 'JoinGame',
     dependencies: [
-      roundClient,
+      gameClient,
       playerID,
       code,
       playerName,
@@ -210,30 +164,27 @@ class GameProviders {
   );
 
   static final startGame = FutureProvider.autoDispose<bool>(
-    (ref) =>
-        ref.watch(roundClient).startGame(ref.read(playerID), ref.read(code)),
+    (ref) => ref.watch(gameClient).startGame(ref.read(playerID), ref.read(code)),
     name: 'StartGame',
-    dependencies: [roundClient, playerID, code],
+    dependencies: [gameClient, playerID, code],
   );
 
   static final exitGame = FutureProvider.autoDispose<bool>(
-    (ref) =>
-        ref.watch(roundClient).exitGame(ref.read(playerID), ref.read(code)),
+    (ref) => ref.watch(gameClient).exitGame(ref.read(playerID), ref.read(code)),
     name: 'ExitGame',
-    dependencies: [roundClient, playerID, code],
+    dependencies: [gameClient, playerID, code],
   );
 
   static final undo = FutureProvider.autoDispose<bool>(
-    (ref) => ref.watch(roundClient).undo(ref.read(playerID), ref.read(code)),
+    (ref) => ref.watch(gameClient).undo(ref.read(playerID), ref.read(code)),
     name: 'Undo',
-    dependencies: [roundClient, playerID, code],
+    dependencies: [gameClient, playerID, code],
   );
 
   static final newRound = FutureProvider.autoDispose<bool>(
-    (ref) =>
-        ref.watch(roundClient).newRound(ref.read(playerID), ref.read(code)),
+    (ref) => ref.watch(gameClient).newRound(ref.read(playerID), ref.read(code)),
     name: 'NewRound',
-    dependencies: [roundClient, playerID, code],
+    dependencies: [gameClient, playerID, code],
   );
 
   static final chatMessage = StateProvider<String>(
@@ -242,39 +193,35 @@ class GameProviders {
   );
 
   static final sendMessage = FutureProvider.autoDispose<bool>(
-    (ref) => ref
-        .watch(roundClient)
-        .sendMessage(ref.read(playerID), ref.read(code), ref.read(chatMessage)),
+    (ref) => ref.watch(gameClient).sendMessage(ref.read(playerID), ref.read(code), ref.read(chatMessage)),
     name: 'NewRound',
-    dependencies: [roundClient, playerID, code, chatMessage],
+    dependencies: [gameClient, playerID, code, chatMessage],
   );
 
   static final sendEvent = FutureProvider.autoDispose.family<bool, GameEvent>(
-    (ref, event) => ref
-        .watch(roundClient)
-        .sendEvent(ref.read(playerID), ref.read(code), event),
+    (ref, event) => ref.watch(gameClient).sendEvent(ref.read(playerID), ref.read(code), event),
     name: 'SendEvent',
-    dependencies: [roundClient, playerID, code],
+    dependencies: [gameClient, playerID, code],
   );
 
   /// Provides game lobby info in the form of [GameInfo] for the lobby
   static final lobby = StreamProvider.autoDispose<GameInfo>(
     (ref) async* {
-      final c = ref.watch(roundClient);
+      final c = ref.watch(gameClient);
       yield* c.gameLobby(ref.watch(playerID), ref.watch(code));
     },
     name: 'Lobby',
-    dependencies: [roundClient, playerID, code],
+    dependencies: [gameClient, playerID, code],
   );
 
   /// Provides the game or error state for the current game of the client with specified id
   static final gameOrError = StreamProvider.autoDispose<GameOrError>(
     (ref) {
-      final c = ref.watch(roundClient);
+      final c = ref.watch(gameClient);
       return c.gameStream(ref.watch(playerID), ref.watch(code));
     },
     name: 'GameOrErrorStream',
-    dependencies: [roundClient, playerID, code],
+    dependencies: [gameClient, playerID, code],
   );
 
   /// Provides the game state for the current game of the client with specified id
@@ -291,48 +238,9 @@ class GameProviders {
   );
 
   /// Provides the game error for the current game of the client with specified id
-  static final error = StreamProvider.autoDispose<GameError>(
-    (ref) async* {
-      await for (final g in ref.watch(gameOrError.stream)) {
-        if (g.isError) {
-          yield g.error!;
-        }
-      }
-    },
+  static final error = StateProvider.autoDispose<String>(
+    (ref) => '',
     name: 'GameError',
-    dependencies: [gameOrError.stream, playerID],
+    dependencies: [playerID],
   );
-}
-
-class LastOrLoadingStateNotifier<T> extends StateNotifier<LoadingFuture<T>> {
-  LastOrLoadingStateNotifier(this._creator)
-      : super(const LoadingFuture.loading()) {
-    scheduleMicrotask(refresh);
-  }
-  final Future<T> Function() _creator;
-  Future<T> refresh() async {
-    if (state is FutureLoading) {
-      final result = await _creator();
-      state = LoadingFuture.value(result);
-      return result;
-    } else {
-      state = LoadingFuture.refreshing(state.value);
-      final result = await _creator();
-      state = LoadingFuture.value(result);
-      return result;
-    }
-  }
-}
-
-@freezed
-class LoadingFuture<T> with _$LoadingFuture {
-  const LoadingFuture._();
-  const factory LoadingFuture.loading() = FutureLoading<T>;
-  const factory LoadingFuture.refreshing(T lastValue) = FutureRefreshing<T>;
-  const factory LoadingFuture.value(T value) = FutureValue<T>;
-  bool get hasData => maybeMap(loading: (_) => false, orElse: () => true);
-  T get value => when(
-      loading: () => throw Exception('Got value in loading state'),
-      refreshing: (v) => v as T,
-      value: (v) => v as T);
 }

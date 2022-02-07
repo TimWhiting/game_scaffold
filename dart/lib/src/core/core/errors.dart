@@ -7,11 +7,11 @@ part 'errors.g.dart';
 
 /// Represents the union type of a game or an error, along with some helper getters to work with them
 @freezed
-class GameOrError<G extends Game> with _$GameOrError {
+class GameOrError with _$GameOrError {
   const GameOrError._();
 
   /// Represents a game
-  const factory GameOrError.game(@GameConverter() G game) = GameValue<G>;
+  const factory GameOrError.game(Game game) = GameValue;
 
   /// Represets an error
   const factory GameOrError.error(String message, PlayerID person) = GameError;
@@ -27,26 +27,13 @@ class GameOrError<G extends Game> with _$GameOrError {
   String get errorString => isError ? error!.message : 'No Error';
 
   /// Returns the game value or null
-  G? get value => when(error: (m, p) => null, game: (g) => g as G);
+  Game? get value => when(error: (m, p) => null, game: (g) => g);
 
   /// Returns whether this instance is a game
   bool get isGame => this is GameValue;
 }
 
-extension GameOrErrorGameX<E extends Event> on Game<E> {
-  GameOrError<G> gameValue<G extends Game<E>>() => GameValue(this as G);
-}
-
-class GameConverter<T extends Game> implements JsonConverter<T, Map<String, dynamic>> {
-  const GameConverter();
-  @override
-  T fromJson(Map<String, dynamic> json) => Game.fromJson(json) as T;
-
-  @override
-  Map<String, dynamic> toJson(Game object) => object.toJson();
-}
-
-/// A companion [StateNotifier] to the [GameStateNotifier] that keeps track of the most recent error, and lets the client clear the error
+/// A [StateNotifier] that keeps track of the most recent error, and lets the client clear the error
 class GameErrorNotifier extends StateNotifier<GameError?> {
   GameErrorNotifier() : super(null);
 
