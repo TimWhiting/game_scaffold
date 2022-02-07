@@ -26,11 +26,11 @@ abstract class GameClient {
   /// Deletes the game on the server
   Future<ApiResponse<DeleteGameResponse>> deleteGame(DeleteGameRequest request);
 
+  /// Updates the game parameters
+  Future<ApiResponse<UpdateConfigResponse>> updateConfig(UpdateConfigRequest request);
+
   /// Gets a list of games on the server
   Future<ApiResponse<ListGamesResponse>> listGames(ListGamesRequest request);
-
-  /// Causes the client to exit the game
-  Future<ApiResponse<ExitGameResponse>> exitGame(ExitGameRequest request);
 
   /// Registers the client with the game server
   Future<ApiResponse<JoinGameResponse>> joinGame(JoinGameRequest request);
@@ -73,16 +73,13 @@ class ApiResponse<T> with _$ApiResponse<T> {
 @Freezed(maybeMap: false, maybeWhen: false)
 class GameServiceRequest with _$GameServiceRequest {
   const factory GameServiceRequest.createGame({required AuthID authID, required GameConfig config}) = CreateGameRequest;
-  const factory GameServiceRequest.deleteGame(
-      {required PlayerID playerID, required AuthID authID, required GameCode code}) = DeleteGameRequest;
+  const factory GameServiceRequest.updateConfig({required PlayerID playerID, required GameConfig config}) =
+      UpdateConfigRequest;
+  const factory GameServiceRequest.deleteGame({required PlayerID playerID, required GameCode code}) = DeleteGameRequest;
   const factory GameServiceRequest.listGames({required AuthID authID}) = ListGamesRequest;
-  const factory GameServiceRequest.exitGame(
-      {required PlayerID playerID, required AuthID authID, required GameCode code}) = ExitGameRequest;
   const factory GameServiceRequest.joinGame({required AuthID authID, required GameCode code}) = JoinGameRequest;
-
   const factory GameServiceRequest.startGame({required PlayerID playerID, required GameCode code}) = StartGameRequest;
-  const factory GameServiceRequest.watchLobby(
-      {required PlayerID playerID, required AuthID authID, required GameCode code}) = WatchLobbyRequest;
+  const factory GameServiceRequest.watchLobby({required PlayerID playerID, required GameCode code}) = WatchLobbyRequest;
   const factory GameServiceRequest.sendEvent({
     required PlayerID playerID,
     required GameCode code,
@@ -100,9 +97,9 @@ class GameServiceRequest with _$GameServiceRequest {
 class GameServiceResponse with _$GameServiceResponse {
   const factory GameServiceResponse.createGame({required PlayerID playerID, required GameCode code}) =
       CreateGameResponse;
+  const factory GameServiceResponse.updateConfig() = UpdateConfigResponse;
   const factory GameServiceResponse.deleteGame() = DeleteGameResponse;
   const factory GameServiceResponse.listGames({required IList<GameInfo> games}) = ListGamesResponse;
-  const factory GameServiceResponse.exitGame() = ExitGameResponse;
   const factory GameServiceResponse.joinGame({required PlayerID playerID}) = JoinGameResponse;
   const factory GameServiceResponse.startGame() = StartGameResponse;
   const factory GameServiceResponse.watchLobby({required GameInfo gameInfo}) = WatchLobbyResponse;

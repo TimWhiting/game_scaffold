@@ -416,12 +416,12 @@ GameServiceRequest _$GameServiceRequestFromJson(Map<String, dynamic> json) {
   switch (json['runtimeType']) {
     case 'createGame':
       return CreateGameRequest.fromJson(json);
+    case 'updateConfig':
+      return UpdateConfigRequest.fromJson(json);
     case 'deleteGame':
       return DeleteGameRequest.fromJson(json);
     case 'listGames':
       return ListGamesRequest.fromJson(json);
-    case 'exitGame':
-      return ExitGameRequest.fromJson(json);
     case 'joinGame':
       return JoinGameRequest.fromJson(json);
     case 'startGame':
@@ -451,13 +451,18 @@ class _$GameServiceRequestTearOff {
     );
   }
 
+  UpdateConfigRequest updateConfig(
+      {required String playerID, required GameConfig config}) {
+    return UpdateConfigRequest(
+      playerID: playerID,
+      config: config,
+    );
+  }
+
   DeleteGameRequest deleteGame(
-      {required String playerID,
-      required String authID,
-      required String code}) {
+      {required String playerID, required String code}) {
     return DeleteGameRequest(
       playerID: playerID,
-      authID: authID,
       code: code,
     );
   }
@@ -465,17 +470,6 @@ class _$GameServiceRequestTearOff {
   ListGamesRequest listGames({required String authID}) {
     return ListGamesRequest(
       authID: authID,
-    );
-  }
-
-  ExitGameRequest exitGame(
-      {required String playerID,
-      required String authID,
-      required String code}) {
-    return ExitGameRequest(
-      playerID: playerID,
-      authID: authID,
-      code: code,
     );
   }
 
@@ -494,12 +488,9 @@ class _$GameServiceRequestTearOff {
   }
 
   WatchLobbyRequest watchLobby(
-      {required String playerID,
-      required String authID,
-      required String code}) {
+      {required String playerID, required String code}) {
     return WatchLobbyRequest(
       playerID: playerID,
-      authID: authID,
       code: code,
     );
   }
@@ -533,15 +524,12 @@ mixin _$GameServiceRequest {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String authID, GameConfig config) createGame,
-    required TResult Function(String playerID, String authID, String code)
-        deleteGame,
+    required TResult Function(String playerID, GameConfig config) updateConfig,
+    required TResult Function(String playerID, String code) deleteGame,
     required TResult Function(String authID) listGames,
-    required TResult Function(String playerID, String authID, String code)
-        exitGame,
     required TResult Function(String authID, String code) joinGame,
     required TResult Function(String playerID, String code) startGame,
-    required TResult Function(String playerID, String authID, String code)
-        watchLobby,
+    required TResult Function(String playerID, String code) watchLobby,
     required TResult Function(String playerID, String code, Event event)
         sendEvent,
     required TResult Function(String playerID, String code) watchGame,
@@ -550,12 +538,12 @@ mixin _$GameServiceRequest {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String authID, GameConfig config)? createGame,
-    TResult Function(String playerID, String authID, String code)? deleteGame,
+    TResult Function(String playerID, GameConfig config)? updateConfig,
+    TResult Function(String playerID, String code)? deleteGame,
     TResult Function(String authID)? listGames,
-    TResult Function(String playerID, String authID, String code)? exitGame,
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
-    TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code)? watchLobby,
     TResult Function(String playerID, String code, Event event)? sendEvent,
     TResult Function(String playerID, String code)? watchGame,
   }) =>
@@ -564,9 +552,9 @@ mixin _$GameServiceRequest {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameRequest value) createGame,
+    required TResult Function(UpdateConfigRequest value) updateConfig,
     required TResult Function(DeleteGameRequest value) deleteGame,
     required TResult Function(ListGamesRequest value) listGames,
-    required TResult Function(ExitGameRequest value) exitGame,
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
@@ -577,9 +565,9 @@ mixin _$GameServiceRequest {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameRequest value)? createGame,
+    TResult Function(UpdateConfigRequest value)? updateConfig,
     TResult Function(DeleteGameRequest value)? deleteGame,
     TResult Function(ListGamesRequest value)? listGames,
-    TResult Function(ExitGameRequest value)? exitGame,
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
@@ -701,15 +689,12 @@ class _$CreateGameRequest implements CreateGameRequest {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String authID, GameConfig config) createGame,
-    required TResult Function(String playerID, String authID, String code)
-        deleteGame,
+    required TResult Function(String playerID, GameConfig config) updateConfig,
+    required TResult Function(String playerID, String code) deleteGame,
     required TResult Function(String authID) listGames,
-    required TResult Function(String playerID, String authID, String code)
-        exitGame,
     required TResult Function(String authID, String code) joinGame,
     required TResult Function(String playerID, String code) startGame,
-    required TResult Function(String playerID, String authID, String code)
-        watchLobby,
+    required TResult Function(String playerID, String code) watchLobby,
     required TResult Function(String playerID, String code, Event event)
         sendEvent,
     required TResult Function(String playerID, String code) watchGame,
@@ -721,12 +706,12 @@ class _$CreateGameRequest implements CreateGameRequest {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String authID, GameConfig config)? createGame,
-    TResult Function(String playerID, String authID, String code)? deleteGame,
+    TResult Function(String playerID, GameConfig config)? updateConfig,
+    TResult Function(String playerID, String code)? deleteGame,
     TResult Function(String authID)? listGames,
-    TResult Function(String playerID, String authID, String code)? exitGame,
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
-    TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code)? watchLobby,
     TResult Function(String playerID, String code, Event event)? sendEvent,
     TResult Function(String playerID, String code)? watchGame,
   }) {
@@ -737,9 +722,9 @@ class _$CreateGameRequest implements CreateGameRequest {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameRequest value) createGame,
+    required TResult Function(UpdateConfigRequest value) updateConfig,
     required TResult Function(DeleteGameRequest value) deleteGame,
     required TResult Function(ListGamesRequest value) listGames,
-    required TResult Function(ExitGameRequest value) exitGame,
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
@@ -753,9 +738,9 @@ class _$CreateGameRequest implements CreateGameRequest {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameRequest value)? createGame,
+    TResult Function(UpdateConfigRequest value)? updateConfig,
     TResult Function(DeleteGameRequest value)? deleteGame,
     TResult Function(ListGamesRequest value)? listGames,
-    TResult Function(ExitGameRequest value)? exitGame,
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
@@ -787,11 +772,186 @@ abstract class CreateGameRequest implements GameServiceRequest {
 }
 
 /// @nodoc
+abstract class $UpdateConfigRequestCopyWith<$Res> {
+  factory $UpdateConfigRequestCopyWith(
+          UpdateConfigRequest value, $Res Function(UpdateConfigRequest) then) =
+      _$UpdateConfigRequestCopyWithImpl<$Res>;
+  $Res call({String playerID, GameConfig config});
+
+  $GameConfigCopyWith<$Res> get config;
+}
+
+/// @nodoc
+class _$UpdateConfigRequestCopyWithImpl<$Res>
+    extends _$GameServiceRequestCopyWithImpl<$Res>
+    implements $UpdateConfigRequestCopyWith<$Res> {
+  _$UpdateConfigRequestCopyWithImpl(
+      UpdateConfigRequest _value, $Res Function(UpdateConfigRequest) _then)
+      : super(_value, (v) => _then(v as UpdateConfigRequest));
+
+  @override
+  UpdateConfigRequest get _value => super._value as UpdateConfigRequest;
+
+  @override
+  $Res call({
+    Object? playerID = freezed,
+    Object? config = freezed,
+  }) {
+    return _then(UpdateConfigRequest(
+      playerID: playerID == freezed
+          ? _value.playerID
+          : playerID // ignore: cast_nullable_to_non_nullable
+              as String,
+      config: config == freezed
+          ? _value.config
+          : config // ignore: cast_nullable_to_non_nullable
+              as GameConfig,
+    ));
+  }
+
+  @override
+  $GameConfigCopyWith<$Res> get config {
+    return $GameConfigCopyWith<$Res>(_value.config, (value) {
+      return _then(_value.copyWith(config: value));
+    });
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$UpdateConfigRequest implements UpdateConfigRequest {
+  const _$UpdateConfigRequest(
+      {required this.playerID, required this.config, String? $type})
+      : $type = $type ?? 'updateConfig';
+
+  factory _$UpdateConfigRequest.fromJson(Map<String, dynamic> json) =>
+      _$$UpdateConfigRequestFromJson(json);
+
+  @override
+  final String playerID;
+  @override
+  final GameConfig config;
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'GameServiceRequest.updateConfig(playerID: $playerID, config: $config)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is UpdateConfigRequest &&
+            const DeepCollectionEquality().equals(other.playerID, playerID) &&
+            const DeepCollectionEquality().equals(other.config, config));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(playerID),
+      const DeepCollectionEquality().hash(config));
+
+  @JsonKey(ignore: true)
+  @override
+  $UpdateConfigRequestCopyWith<UpdateConfigRequest> get copyWith =>
+      _$UpdateConfigRequestCopyWithImpl<UpdateConfigRequest>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String authID, GameConfig config) createGame,
+    required TResult Function(String playerID, GameConfig config) updateConfig,
+    required TResult Function(String playerID, String code) deleteGame,
+    required TResult Function(String authID) listGames,
+    required TResult Function(String authID, String code) joinGame,
+    required TResult Function(String playerID, String code) startGame,
+    required TResult Function(String playerID, String code) watchLobby,
+    required TResult Function(String playerID, String code, Event event)
+        sendEvent,
+    required TResult Function(String playerID, String code) watchGame,
+  }) {
+    return updateConfig(playerID, config);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String authID, GameConfig config)? createGame,
+    TResult Function(String playerID, GameConfig config)? updateConfig,
+    TResult Function(String playerID, String code)? deleteGame,
+    TResult Function(String authID)? listGames,
+    TResult Function(String authID, String code)? joinGame,
+    TResult Function(String playerID, String code)? startGame,
+    TResult Function(String playerID, String code)? watchLobby,
+    TResult Function(String playerID, String code, Event event)? sendEvent,
+    TResult Function(String playerID, String code)? watchGame,
+  }) {
+    return updateConfig?.call(playerID, config);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(CreateGameRequest value) createGame,
+    required TResult Function(UpdateConfigRequest value) updateConfig,
+    required TResult Function(DeleteGameRequest value) deleteGame,
+    required TResult Function(ListGamesRequest value) listGames,
+    required TResult Function(JoinGameRequest value) joinGame,
+    required TResult Function(StartGameRequest value) startGame,
+    required TResult Function(WatchLobbyRequest value) watchLobby,
+    required TResult Function(SendEventRequest value) sendEvent,
+    required TResult Function(WatchGameRequest value) watchGame,
+  }) {
+    return updateConfig(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(CreateGameRequest value)? createGame,
+    TResult Function(UpdateConfigRequest value)? updateConfig,
+    TResult Function(DeleteGameRequest value)? deleteGame,
+    TResult Function(ListGamesRequest value)? listGames,
+    TResult Function(JoinGameRequest value)? joinGame,
+    TResult Function(StartGameRequest value)? startGame,
+    TResult Function(WatchLobbyRequest value)? watchLobby,
+    TResult Function(SendEventRequest value)? sendEvent,
+    TResult Function(WatchGameRequest value)? watchGame,
+  }) {
+    return updateConfig?.call(this);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$UpdateConfigRequestToJson(this);
+  }
+}
+
+abstract class UpdateConfigRequest implements GameServiceRequest {
+  const factory UpdateConfigRequest(
+      {required String playerID,
+      required GameConfig config}) = _$UpdateConfigRequest;
+
+  factory UpdateConfigRequest.fromJson(Map<String, dynamic> json) =
+      _$UpdateConfigRequest.fromJson;
+
+  String get playerID;
+  GameConfig get config;
+  @JsonKey(ignore: true)
+  $UpdateConfigRequestCopyWith<UpdateConfigRequest> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 abstract class $DeleteGameRequestCopyWith<$Res> {
   factory $DeleteGameRequestCopyWith(
           DeleteGameRequest value, $Res Function(DeleteGameRequest) then) =
       _$DeleteGameRequestCopyWithImpl<$Res>;
-  $Res call({String playerID, String authID, String code});
+  $Res call({String playerID, String code});
 }
 
 /// @nodoc
@@ -808,17 +968,12 @@ class _$DeleteGameRequestCopyWithImpl<$Res>
   @override
   $Res call({
     Object? playerID = freezed,
-    Object? authID = freezed,
     Object? code = freezed,
   }) {
     return _then(DeleteGameRequest(
       playerID: playerID == freezed
           ? _value.playerID
           : playerID // ignore: cast_nullable_to_non_nullable
-              as String,
-      authID: authID == freezed
-          ? _value.authID
-          : authID // ignore: cast_nullable_to_non_nullable
               as String,
       code: code == freezed
           ? _value.code
@@ -832,10 +987,7 @@ class _$DeleteGameRequestCopyWithImpl<$Res>
 @JsonSerializable()
 class _$DeleteGameRequest implements DeleteGameRequest {
   const _$DeleteGameRequest(
-      {required this.playerID,
-      required this.authID,
-      required this.code,
-      String? $type})
+      {required this.playerID, required this.code, String? $type})
       : $type = $type ?? 'deleteGame';
 
   factory _$DeleteGameRequest.fromJson(Map<String, dynamic> json) =>
@@ -844,8 +996,6 @@ class _$DeleteGameRequest implements DeleteGameRequest {
   @override
   final String playerID;
   @override
-  final String authID;
-  @override
   final String code;
 
   @JsonKey(name: 'runtimeType')
@@ -853,7 +1003,7 @@ class _$DeleteGameRequest implements DeleteGameRequest {
 
   @override
   String toString() {
-    return 'GameServiceRequest.deleteGame(playerID: $playerID, authID: $authID, code: $code)';
+    return 'GameServiceRequest.deleteGame(playerID: $playerID, code: $code)';
   }
 
   @override
@@ -862,7 +1012,6 @@ class _$DeleteGameRequest implements DeleteGameRequest {
         (other.runtimeType == runtimeType &&
             other is DeleteGameRequest &&
             const DeepCollectionEquality().equals(other.playerID, playerID) &&
-            const DeepCollectionEquality().equals(other.authID, authID) &&
             const DeepCollectionEquality().equals(other.code, code));
   }
 
@@ -870,7 +1019,6 @@ class _$DeleteGameRequest implements DeleteGameRequest {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(playerID),
-      const DeepCollectionEquality().hash(authID),
       const DeepCollectionEquality().hash(code));
 
   @JsonKey(ignore: true)
@@ -882,45 +1030,42 @@ class _$DeleteGameRequest implements DeleteGameRequest {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String authID, GameConfig config) createGame,
-    required TResult Function(String playerID, String authID, String code)
-        deleteGame,
+    required TResult Function(String playerID, GameConfig config) updateConfig,
+    required TResult Function(String playerID, String code) deleteGame,
     required TResult Function(String authID) listGames,
-    required TResult Function(String playerID, String authID, String code)
-        exitGame,
     required TResult Function(String authID, String code) joinGame,
     required TResult Function(String playerID, String code) startGame,
-    required TResult Function(String playerID, String authID, String code)
-        watchLobby,
+    required TResult Function(String playerID, String code) watchLobby,
     required TResult Function(String playerID, String code, Event event)
         sendEvent,
     required TResult Function(String playerID, String code) watchGame,
   }) {
-    return deleteGame(playerID, authID, code);
+    return deleteGame(playerID, code);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String authID, GameConfig config)? createGame,
-    TResult Function(String playerID, String authID, String code)? deleteGame,
+    TResult Function(String playerID, GameConfig config)? updateConfig,
+    TResult Function(String playerID, String code)? deleteGame,
     TResult Function(String authID)? listGames,
-    TResult Function(String playerID, String authID, String code)? exitGame,
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
-    TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code)? watchLobby,
     TResult Function(String playerID, String code, Event event)? sendEvent,
     TResult Function(String playerID, String code)? watchGame,
   }) {
-    return deleteGame?.call(playerID, authID, code);
+    return deleteGame?.call(playerID, code);
   }
 
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameRequest value) createGame,
+    required TResult Function(UpdateConfigRequest value) updateConfig,
     required TResult Function(DeleteGameRequest value) deleteGame,
     required TResult Function(ListGamesRequest value) listGames,
-    required TResult Function(ExitGameRequest value) exitGame,
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
@@ -934,9 +1079,9 @@ class _$DeleteGameRequest implements DeleteGameRequest {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameRequest value)? createGame,
+    TResult Function(UpdateConfigRequest value)? updateConfig,
     TResult Function(DeleteGameRequest value)? deleteGame,
     TResult Function(ListGamesRequest value)? listGames,
-    TResult Function(ExitGameRequest value)? exitGame,
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
@@ -954,15 +1099,12 @@ class _$DeleteGameRequest implements DeleteGameRequest {
 
 abstract class DeleteGameRequest implements GameServiceRequest {
   const factory DeleteGameRequest(
-      {required String playerID,
-      required String authID,
-      required String code}) = _$DeleteGameRequest;
+      {required String playerID, required String code}) = _$DeleteGameRequest;
 
   factory DeleteGameRequest.fromJson(Map<String, dynamic> json) =
       _$DeleteGameRequest.fromJson;
 
   String get playerID;
-  String get authID;
   String get code;
   @JsonKey(ignore: true)
   $DeleteGameRequestCopyWith<DeleteGameRequest> get copyWith =>
@@ -1042,15 +1184,12 @@ class _$ListGamesRequest implements ListGamesRequest {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String authID, GameConfig config) createGame,
-    required TResult Function(String playerID, String authID, String code)
-        deleteGame,
+    required TResult Function(String playerID, GameConfig config) updateConfig,
+    required TResult Function(String playerID, String code) deleteGame,
     required TResult Function(String authID) listGames,
-    required TResult Function(String playerID, String authID, String code)
-        exitGame,
     required TResult Function(String authID, String code) joinGame,
     required TResult Function(String playerID, String code) startGame,
-    required TResult Function(String playerID, String authID, String code)
-        watchLobby,
+    required TResult Function(String playerID, String code) watchLobby,
     required TResult Function(String playerID, String code, Event event)
         sendEvent,
     required TResult Function(String playerID, String code) watchGame,
@@ -1062,12 +1201,12 @@ class _$ListGamesRequest implements ListGamesRequest {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String authID, GameConfig config)? createGame,
-    TResult Function(String playerID, String authID, String code)? deleteGame,
+    TResult Function(String playerID, GameConfig config)? updateConfig,
+    TResult Function(String playerID, String code)? deleteGame,
     TResult Function(String authID)? listGames,
-    TResult Function(String playerID, String authID, String code)? exitGame,
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
-    TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code)? watchLobby,
     TResult Function(String playerID, String code, Event event)? sendEvent,
     TResult Function(String playerID, String code)? watchGame,
   }) {
@@ -1078,9 +1217,9 @@ class _$ListGamesRequest implements ListGamesRequest {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameRequest value) createGame,
+    required TResult Function(UpdateConfigRequest value) updateConfig,
     required TResult Function(DeleteGameRequest value) deleteGame,
     required TResult Function(ListGamesRequest value) listGames,
-    required TResult Function(ExitGameRequest value) exitGame,
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
@@ -1094,9 +1233,9 @@ class _$ListGamesRequest implements ListGamesRequest {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameRequest value)? createGame,
+    TResult Function(UpdateConfigRequest value)? updateConfig,
     TResult Function(DeleteGameRequest value)? deleteGame,
     TResult Function(ListGamesRequest value)? listGames,
-    TResult Function(ExitGameRequest value)? exitGame,
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
@@ -1121,189 +1260,6 @@ abstract class ListGamesRequest implements GameServiceRequest {
   String get authID;
   @JsonKey(ignore: true)
   $ListGamesRequestCopyWith<ListGamesRequest> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $ExitGameRequestCopyWith<$Res> {
-  factory $ExitGameRequestCopyWith(
-          ExitGameRequest value, $Res Function(ExitGameRequest) then) =
-      _$ExitGameRequestCopyWithImpl<$Res>;
-  $Res call({String playerID, String authID, String code});
-}
-
-/// @nodoc
-class _$ExitGameRequestCopyWithImpl<$Res>
-    extends _$GameServiceRequestCopyWithImpl<$Res>
-    implements $ExitGameRequestCopyWith<$Res> {
-  _$ExitGameRequestCopyWithImpl(
-      ExitGameRequest _value, $Res Function(ExitGameRequest) _then)
-      : super(_value, (v) => _then(v as ExitGameRequest));
-
-  @override
-  ExitGameRequest get _value => super._value as ExitGameRequest;
-
-  @override
-  $Res call({
-    Object? playerID = freezed,
-    Object? authID = freezed,
-    Object? code = freezed,
-  }) {
-    return _then(ExitGameRequest(
-      playerID: playerID == freezed
-          ? _value.playerID
-          : playerID // ignore: cast_nullable_to_non_nullable
-              as String,
-      authID: authID == freezed
-          ? _value.authID
-          : authID // ignore: cast_nullable_to_non_nullable
-              as String,
-      code: code == freezed
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$ExitGameRequest implements ExitGameRequest {
-  const _$ExitGameRequest(
-      {required this.playerID,
-      required this.authID,
-      required this.code,
-      String? $type})
-      : $type = $type ?? 'exitGame';
-
-  factory _$ExitGameRequest.fromJson(Map<String, dynamic> json) =>
-      _$$ExitGameRequestFromJson(json);
-
-  @override
-  final String playerID;
-  @override
-  final String authID;
-  @override
-  final String code;
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
-
-  @override
-  String toString() {
-    return 'GameServiceRequest.exitGame(playerID: $playerID, authID: $authID, code: $code)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is ExitGameRequest &&
-            const DeepCollectionEquality().equals(other.playerID, playerID) &&
-            const DeepCollectionEquality().equals(other.authID, authID) &&
-            const DeepCollectionEquality().equals(other.code, code));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(playerID),
-      const DeepCollectionEquality().hash(authID),
-      const DeepCollectionEquality().hash(code));
-
-  @JsonKey(ignore: true)
-  @override
-  $ExitGameRequestCopyWith<ExitGameRequest> get copyWith =>
-      _$ExitGameRequestCopyWithImpl<ExitGameRequest>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String authID, GameConfig config) createGame,
-    required TResult Function(String playerID, String authID, String code)
-        deleteGame,
-    required TResult Function(String authID) listGames,
-    required TResult Function(String playerID, String authID, String code)
-        exitGame,
-    required TResult Function(String authID, String code) joinGame,
-    required TResult Function(String playerID, String code) startGame,
-    required TResult Function(String playerID, String authID, String code)
-        watchLobby,
-    required TResult Function(String playerID, String code, Event event)
-        sendEvent,
-    required TResult Function(String playerID, String code) watchGame,
-  }) {
-    return exitGame(playerID, authID, code);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String authID, GameConfig config)? createGame,
-    TResult Function(String playerID, String authID, String code)? deleteGame,
-    TResult Function(String authID)? listGames,
-    TResult Function(String playerID, String authID, String code)? exitGame,
-    TResult Function(String authID, String code)? joinGame,
-    TResult Function(String playerID, String code)? startGame,
-    TResult Function(String playerID, String authID, String code)? watchLobby,
-    TResult Function(String playerID, String code, Event event)? sendEvent,
-    TResult Function(String playerID, String code)? watchGame,
-  }) {
-    return exitGame?.call(playerID, authID, code);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(CreateGameRequest value) createGame,
-    required TResult Function(DeleteGameRequest value) deleteGame,
-    required TResult Function(ListGamesRequest value) listGames,
-    required TResult Function(ExitGameRequest value) exitGame,
-    required TResult Function(JoinGameRequest value) joinGame,
-    required TResult Function(StartGameRequest value) startGame,
-    required TResult Function(WatchLobbyRequest value) watchLobby,
-    required TResult Function(SendEventRequest value) sendEvent,
-    required TResult Function(WatchGameRequest value) watchGame,
-  }) {
-    return exitGame(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(CreateGameRequest value)? createGame,
-    TResult Function(DeleteGameRequest value)? deleteGame,
-    TResult Function(ListGamesRequest value)? listGames,
-    TResult Function(ExitGameRequest value)? exitGame,
-    TResult Function(JoinGameRequest value)? joinGame,
-    TResult Function(StartGameRequest value)? startGame,
-    TResult Function(WatchLobbyRequest value)? watchLobby,
-    TResult Function(SendEventRequest value)? sendEvent,
-    TResult Function(WatchGameRequest value)? watchGame,
-  }) {
-    return exitGame?.call(this);
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ExitGameRequestToJson(this);
-  }
-}
-
-abstract class ExitGameRequest implements GameServiceRequest {
-  const factory ExitGameRequest(
-      {required String playerID,
-      required String authID,
-      required String code}) = _$ExitGameRequest;
-
-  factory ExitGameRequest.fromJson(Map<String, dynamic> json) =
-      _$ExitGameRequest.fromJson;
-
-  String get playerID;
-  String get authID;
-  String get code;
-  @JsonKey(ignore: true)
-  $ExitGameRequestCopyWith<ExitGameRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1391,15 +1347,12 @@ class _$JoinGameRequest implements JoinGameRequest {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String authID, GameConfig config) createGame,
-    required TResult Function(String playerID, String authID, String code)
-        deleteGame,
+    required TResult Function(String playerID, GameConfig config) updateConfig,
+    required TResult Function(String playerID, String code) deleteGame,
     required TResult Function(String authID) listGames,
-    required TResult Function(String playerID, String authID, String code)
-        exitGame,
     required TResult Function(String authID, String code) joinGame,
     required TResult Function(String playerID, String code) startGame,
-    required TResult Function(String playerID, String authID, String code)
-        watchLobby,
+    required TResult Function(String playerID, String code) watchLobby,
     required TResult Function(String playerID, String code, Event event)
         sendEvent,
     required TResult Function(String playerID, String code) watchGame,
@@ -1411,12 +1364,12 @@ class _$JoinGameRequest implements JoinGameRequest {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String authID, GameConfig config)? createGame,
-    TResult Function(String playerID, String authID, String code)? deleteGame,
+    TResult Function(String playerID, GameConfig config)? updateConfig,
+    TResult Function(String playerID, String code)? deleteGame,
     TResult Function(String authID)? listGames,
-    TResult Function(String playerID, String authID, String code)? exitGame,
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
-    TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code)? watchLobby,
     TResult Function(String playerID, String code, Event event)? sendEvent,
     TResult Function(String playerID, String code)? watchGame,
   }) {
@@ -1427,9 +1380,9 @@ class _$JoinGameRequest implements JoinGameRequest {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameRequest value) createGame,
+    required TResult Function(UpdateConfigRequest value) updateConfig,
     required TResult Function(DeleteGameRequest value) deleteGame,
     required TResult Function(ListGamesRequest value) listGames,
-    required TResult Function(ExitGameRequest value) exitGame,
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
@@ -1443,9 +1396,9 @@ class _$JoinGameRequest implements JoinGameRequest {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameRequest value)? createGame,
+    TResult Function(UpdateConfigRequest value)? updateConfig,
     TResult Function(DeleteGameRequest value)? deleteGame,
     TResult Function(ListGamesRequest value)? listGames,
-    TResult Function(ExitGameRequest value)? exitGame,
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
@@ -1559,15 +1512,12 @@ class _$StartGameRequest implements StartGameRequest {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String authID, GameConfig config) createGame,
-    required TResult Function(String playerID, String authID, String code)
-        deleteGame,
+    required TResult Function(String playerID, GameConfig config) updateConfig,
+    required TResult Function(String playerID, String code) deleteGame,
     required TResult Function(String authID) listGames,
-    required TResult Function(String playerID, String authID, String code)
-        exitGame,
     required TResult Function(String authID, String code) joinGame,
     required TResult Function(String playerID, String code) startGame,
-    required TResult Function(String playerID, String authID, String code)
-        watchLobby,
+    required TResult Function(String playerID, String code) watchLobby,
     required TResult Function(String playerID, String code, Event event)
         sendEvent,
     required TResult Function(String playerID, String code) watchGame,
@@ -1579,12 +1529,12 @@ class _$StartGameRequest implements StartGameRequest {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String authID, GameConfig config)? createGame,
-    TResult Function(String playerID, String authID, String code)? deleteGame,
+    TResult Function(String playerID, GameConfig config)? updateConfig,
+    TResult Function(String playerID, String code)? deleteGame,
     TResult Function(String authID)? listGames,
-    TResult Function(String playerID, String authID, String code)? exitGame,
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
-    TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code)? watchLobby,
     TResult Function(String playerID, String code, Event event)? sendEvent,
     TResult Function(String playerID, String code)? watchGame,
   }) {
@@ -1595,9 +1545,9 @@ class _$StartGameRequest implements StartGameRequest {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameRequest value) createGame,
+    required TResult Function(UpdateConfigRequest value) updateConfig,
     required TResult Function(DeleteGameRequest value) deleteGame,
     required TResult Function(ListGamesRequest value) listGames,
-    required TResult Function(ExitGameRequest value) exitGame,
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
@@ -1611,9 +1561,9 @@ class _$StartGameRequest implements StartGameRequest {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameRequest value)? createGame,
+    TResult Function(UpdateConfigRequest value)? updateConfig,
     TResult Function(DeleteGameRequest value)? deleteGame,
     TResult Function(ListGamesRequest value)? listGames,
-    TResult Function(ExitGameRequest value)? exitGame,
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
@@ -1648,7 +1598,7 @@ abstract class $WatchLobbyRequestCopyWith<$Res> {
   factory $WatchLobbyRequestCopyWith(
           WatchLobbyRequest value, $Res Function(WatchLobbyRequest) then) =
       _$WatchLobbyRequestCopyWithImpl<$Res>;
-  $Res call({String playerID, String authID, String code});
+  $Res call({String playerID, String code});
 }
 
 /// @nodoc
@@ -1665,17 +1615,12 @@ class _$WatchLobbyRequestCopyWithImpl<$Res>
   @override
   $Res call({
     Object? playerID = freezed,
-    Object? authID = freezed,
     Object? code = freezed,
   }) {
     return _then(WatchLobbyRequest(
       playerID: playerID == freezed
           ? _value.playerID
           : playerID // ignore: cast_nullable_to_non_nullable
-              as String,
-      authID: authID == freezed
-          ? _value.authID
-          : authID // ignore: cast_nullable_to_non_nullable
               as String,
       code: code == freezed
           ? _value.code
@@ -1689,10 +1634,7 @@ class _$WatchLobbyRequestCopyWithImpl<$Res>
 @JsonSerializable()
 class _$WatchLobbyRequest implements WatchLobbyRequest {
   const _$WatchLobbyRequest(
-      {required this.playerID,
-      required this.authID,
-      required this.code,
-      String? $type})
+      {required this.playerID, required this.code, String? $type})
       : $type = $type ?? 'watchLobby';
 
   factory _$WatchLobbyRequest.fromJson(Map<String, dynamic> json) =>
@@ -1701,8 +1643,6 @@ class _$WatchLobbyRequest implements WatchLobbyRequest {
   @override
   final String playerID;
   @override
-  final String authID;
-  @override
   final String code;
 
   @JsonKey(name: 'runtimeType')
@@ -1710,7 +1650,7 @@ class _$WatchLobbyRequest implements WatchLobbyRequest {
 
   @override
   String toString() {
-    return 'GameServiceRequest.watchLobby(playerID: $playerID, authID: $authID, code: $code)';
+    return 'GameServiceRequest.watchLobby(playerID: $playerID, code: $code)';
   }
 
   @override
@@ -1719,7 +1659,6 @@ class _$WatchLobbyRequest implements WatchLobbyRequest {
         (other.runtimeType == runtimeType &&
             other is WatchLobbyRequest &&
             const DeepCollectionEquality().equals(other.playerID, playerID) &&
-            const DeepCollectionEquality().equals(other.authID, authID) &&
             const DeepCollectionEquality().equals(other.code, code));
   }
 
@@ -1727,7 +1666,6 @@ class _$WatchLobbyRequest implements WatchLobbyRequest {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(playerID),
-      const DeepCollectionEquality().hash(authID),
       const DeepCollectionEquality().hash(code));
 
   @JsonKey(ignore: true)
@@ -1739,45 +1677,42 @@ class _$WatchLobbyRequest implements WatchLobbyRequest {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String authID, GameConfig config) createGame,
-    required TResult Function(String playerID, String authID, String code)
-        deleteGame,
+    required TResult Function(String playerID, GameConfig config) updateConfig,
+    required TResult Function(String playerID, String code) deleteGame,
     required TResult Function(String authID) listGames,
-    required TResult Function(String playerID, String authID, String code)
-        exitGame,
     required TResult Function(String authID, String code) joinGame,
     required TResult Function(String playerID, String code) startGame,
-    required TResult Function(String playerID, String authID, String code)
-        watchLobby,
+    required TResult Function(String playerID, String code) watchLobby,
     required TResult Function(String playerID, String code, Event event)
         sendEvent,
     required TResult Function(String playerID, String code) watchGame,
   }) {
-    return watchLobby(playerID, authID, code);
+    return watchLobby(playerID, code);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String authID, GameConfig config)? createGame,
-    TResult Function(String playerID, String authID, String code)? deleteGame,
+    TResult Function(String playerID, GameConfig config)? updateConfig,
+    TResult Function(String playerID, String code)? deleteGame,
     TResult Function(String authID)? listGames,
-    TResult Function(String playerID, String authID, String code)? exitGame,
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
-    TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code)? watchLobby,
     TResult Function(String playerID, String code, Event event)? sendEvent,
     TResult Function(String playerID, String code)? watchGame,
   }) {
-    return watchLobby?.call(playerID, authID, code);
+    return watchLobby?.call(playerID, code);
   }
 
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameRequest value) createGame,
+    required TResult Function(UpdateConfigRequest value) updateConfig,
     required TResult Function(DeleteGameRequest value) deleteGame,
     required TResult Function(ListGamesRequest value) listGames,
-    required TResult Function(ExitGameRequest value) exitGame,
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
@@ -1791,9 +1726,9 @@ class _$WatchLobbyRequest implements WatchLobbyRequest {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameRequest value)? createGame,
+    TResult Function(UpdateConfigRequest value)? updateConfig,
     TResult Function(DeleteGameRequest value)? deleteGame,
     TResult Function(ListGamesRequest value)? listGames,
-    TResult Function(ExitGameRequest value)? exitGame,
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
@@ -1811,15 +1746,12 @@ class _$WatchLobbyRequest implements WatchLobbyRequest {
 
 abstract class WatchLobbyRequest implements GameServiceRequest {
   const factory WatchLobbyRequest(
-      {required String playerID,
-      required String authID,
-      required String code}) = _$WatchLobbyRequest;
+      {required String playerID, required String code}) = _$WatchLobbyRequest;
 
   factory WatchLobbyRequest.fromJson(Map<String, dynamic> json) =
       _$WatchLobbyRequest.fromJson;
 
   String get playerID;
-  String get authID;
   String get code;
   @JsonKey(ignore: true)
   $WatchLobbyRequestCopyWith<WatchLobbyRequest> get copyWith =>
@@ -1931,15 +1863,12 @@ class _$SendEventRequest implements SendEventRequest {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String authID, GameConfig config) createGame,
-    required TResult Function(String playerID, String authID, String code)
-        deleteGame,
+    required TResult Function(String playerID, GameConfig config) updateConfig,
+    required TResult Function(String playerID, String code) deleteGame,
     required TResult Function(String authID) listGames,
-    required TResult Function(String playerID, String authID, String code)
-        exitGame,
     required TResult Function(String authID, String code) joinGame,
     required TResult Function(String playerID, String code) startGame,
-    required TResult Function(String playerID, String authID, String code)
-        watchLobby,
+    required TResult Function(String playerID, String code) watchLobby,
     required TResult Function(String playerID, String code, Event event)
         sendEvent,
     required TResult Function(String playerID, String code) watchGame,
@@ -1951,12 +1880,12 @@ class _$SendEventRequest implements SendEventRequest {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String authID, GameConfig config)? createGame,
-    TResult Function(String playerID, String authID, String code)? deleteGame,
+    TResult Function(String playerID, GameConfig config)? updateConfig,
+    TResult Function(String playerID, String code)? deleteGame,
     TResult Function(String authID)? listGames,
-    TResult Function(String playerID, String authID, String code)? exitGame,
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
-    TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code)? watchLobby,
     TResult Function(String playerID, String code, Event event)? sendEvent,
     TResult Function(String playerID, String code)? watchGame,
   }) {
@@ -1967,9 +1896,9 @@ class _$SendEventRequest implements SendEventRequest {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameRequest value) createGame,
+    required TResult Function(UpdateConfigRequest value) updateConfig,
     required TResult Function(DeleteGameRequest value) deleteGame,
     required TResult Function(ListGamesRequest value) listGames,
-    required TResult Function(ExitGameRequest value) exitGame,
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
@@ -1983,9 +1912,9 @@ class _$SendEventRequest implements SendEventRequest {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameRequest value)? createGame,
+    TResult Function(UpdateConfigRequest value)? updateConfig,
     TResult Function(DeleteGameRequest value)? deleteGame,
     TResult Function(ListGamesRequest value)? listGames,
-    TResult Function(ExitGameRequest value)? exitGame,
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
@@ -2102,15 +2031,12 @@ class _$WatchGameRequest implements WatchGameRequest {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String authID, GameConfig config) createGame,
-    required TResult Function(String playerID, String authID, String code)
-        deleteGame,
+    required TResult Function(String playerID, GameConfig config) updateConfig,
+    required TResult Function(String playerID, String code) deleteGame,
     required TResult Function(String authID) listGames,
-    required TResult Function(String playerID, String authID, String code)
-        exitGame,
     required TResult Function(String authID, String code) joinGame,
     required TResult Function(String playerID, String code) startGame,
-    required TResult Function(String playerID, String authID, String code)
-        watchLobby,
+    required TResult Function(String playerID, String code) watchLobby,
     required TResult Function(String playerID, String code, Event event)
         sendEvent,
     required TResult Function(String playerID, String code) watchGame,
@@ -2122,12 +2048,12 @@ class _$WatchGameRequest implements WatchGameRequest {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String authID, GameConfig config)? createGame,
-    TResult Function(String playerID, String authID, String code)? deleteGame,
+    TResult Function(String playerID, GameConfig config)? updateConfig,
+    TResult Function(String playerID, String code)? deleteGame,
     TResult Function(String authID)? listGames,
-    TResult Function(String playerID, String authID, String code)? exitGame,
     TResult Function(String authID, String code)? joinGame,
     TResult Function(String playerID, String code)? startGame,
-    TResult Function(String playerID, String authID, String code)? watchLobby,
+    TResult Function(String playerID, String code)? watchLobby,
     TResult Function(String playerID, String code, Event event)? sendEvent,
     TResult Function(String playerID, String code)? watchGame,
   }) {
@@ -2138,9 +2064,9 @@ class _$WatchGameRequest implements WatchGameRequest {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameRequest value) createGame,
+    required TResult Function(UpdateConfigRequest value) updateConfig,
     required TResult Function(DeleteGameRequest value) deleteGame,
     required TResult Function(ListGamesRequest value) listGames,
-    required TResult Function(ExitGameRequest value) exitGame,
     required TResult Function(JoinGameRequest value) joinGame,
     required TResult Function(StartGameRequest value) startGame,
     required TResult Function(WatchLobbyRequest value) watchLobby,
@@ -2154,9 +2080,9 @@ class _$WatchGameRequest implements WatchGameRequest {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameRequest value)? createGame,
+    TResult Function(UpdateConfigRequest value)? updateConfig,
     TResult Function(DeleteGameRequest value)? deleteGame,
     TResult Function(ListGamesRequest value)? listGames,
-    TResult Function(ExitGameRequest value)? exitGame,
     TResult Function(JoinGameRequest value)? joinGame,
     TResult Function(StartGameRequest value)? startGame,
     TResult Function(WatchLobbyRequest value)? watchLobby,
@@ -2190,12 +2116,12 @@ GameServiceResponse _$GameServiceResponseFromJson(Map<String, dynamic> json) {
   switch (json['runtimeType']) {
     case 'createGame':
       return CreateGameResponse.fromJson(json);
+    case 'updateConfig':
+      return UpdateConfigResponse.fromJson(json);
     case 'deleteGame':
       return DeleteGameResponse.fromJson(json);
     case 'listGames':
       return ListGamesResponse.fromJson(json);
-    case 'exitGame':
-      return ExitGameResponse.fromJson(json);
     case 'joinGame':
       return JoinGameResponse.fromJson(json);
     case 'startGame':
@@ -2225,6 +2151,10 @@ class _$GameServiceResponseTearOff {
     );
   }
 
+  UpdateConfigResponse updateConfig() {
+    return const UpdateConfigResponse();
+  }
+
   DeleteGameResponse deleteGame() {
     return const DeleteGameResponse();
   }
@@ -2233,10 +2163,6 @@ class _$GameServiceResponseTearOff {
     return ListGamesResponse(
       games: games,
     );
-  }
-
-  ExitGameResponse exitGame() {
-    return const ExitGameResponse();
   }
 
   JoinGameResponse joinGame({required String playerID}) {
@@ -2278,9 +2204,9 @@ mixin _$GameServiceResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String playerID, String code) createGame,
+    required TResult Function() updateConfig,
     required TResult Function() deleteGame,
     required TResult Function(IList<GameInfo> games) listGames,
-    required TResult Function() exitGame,
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
@@ -2291,9 +2217,9 @@ mixin _$GameServiceResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String playerID, String code)? createGame,
+    TResult Function()? updateConfig,
     TResult Function()? deleteGame,
     TResult Function(IList<GameInfo> games)? listGames,
-    TResult Function()? exitGame,
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
@@ -2305,9 +2231,9 @@ mixin _$GameServiceResponse {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameResponse value) createGame,
+    required TResult Function(UpdateConfigResponse value) updateConfig,
     required TResult Function(DeleteGameResponse value) deleteGame,
     required TResult Function(ListGamesResponse value) listGames,
-    required TResult Function(ExitGameResponse value) exitGame,
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
@@ -2318,9 +2244,9 @@ mixin _$GameServiceResponse {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameResponse value)? createGame,
+    TResult Function(UpdateConfigResponse value)? updateConfig,
     TResult Function(DeleteGameResponse value)? deleteGame,
     TResult Function(ListGamesResponse value)? listGames,
-    TResult Function(ExitGameResponse value)? exitGame,
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
@@ -2433,9 +2359,9 @@ class _$CreateGameResponse implements CreateGameResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String playerID, String code) createGame,
+    required TResult Function() updateConfig,
     required TResult Function() deleteGame,
     required TResult Function(IList<GameInfo> games) listGames,
-    required TResult Function() exitGame,
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
@@ -2449,9 +2375,9 @@ class _$CreateGameResponse implements CreateGameResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String playerID, String code)? createGame,
+    TResult Function()? updateConfig,
     TResult Function()? deleteGame,
     TResult Function(IList<GameInfo> games)? listGames,
-    TResult Function()? exitGame,
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
@@ -2465,9 +2391,9 @@ class _$CreateGameResponse implements CreateGameResponse {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameResponse value) createGame,
+    required TResult Function(UpdateConfigResponse value) updateConfig,
     required TResult Function(DeleteGameResponse value) deleteGame,
     required TResult Function(ListGamesResponse value) listGames,
-    required TResult Function(ExitGameResponse value) exitGame,
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
@@ -2481,9 +2407,9 @@ class _$CreateGameResponse implements CreateGameResponse {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameResponse value)? createGame,
+    TResult Function(UpdateConfigResponse value)? updateConfig,
     TResult Function(DeleteGameResponse value)? deleteGame,
     TResult Function(ListGamesResponse value)? listGames,
-    TResult Function(ExitGameResponse value)? exitGame,
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
@@ -2511,6 +2437,128 @@ abstract class CreateGameResponse implements GameServiceResponse {
   @JsonKey(ignore: true)
   $CreateGameResponseCopyWith<CreateGameResponse> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UpdateConfigResponseCopyWith<$Res> {
+  factory $UpdateConfigResponseCopyWith(UpdateConfigResponse value,
+          $Res Function(UpdateConfigResponse) then) =
+      _$UpdateConfigResponseCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$UpdateConfigResponseCopyWithImpl<$Res>
+    extends _$GameServiceResponseCopyWithImpl<$Res>
+    implements $UpdateConfigResponseCopyWith<$Res> {
+  _$UpdateConfigResponseCopyWithImpl(
+      UpdateConfigResponse _value, $Res Function(UpdateConfigResponse) _then)
+      : super(_value, (v) => _then(v as UpdateConfigResponse));
+
+  @override
+  UpdateConfigResponse get _value => super._value as UpdateConfigResponse;
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$UpdateConfigResponse implements UpdateConfigResponse {
+  const _$UpdateConfigResponse({String? $type})
+      : $type = $type ?? 'updateConfig';
+
+  factory _$UpdateConfigResponse.fromJson(Map<String, dynamic> json) =>
+      _$$UpdateConfigResponseFromJson(json);
+
+  @JsonKey(name: 'runtimeType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'GameServiceResponse.updateConfig()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is UpdateConfigResponse);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String playerID, String code) createGame,
+    required TResult Function() updateConfig,
+    required TResult Function() deleteGame,
+    required TResult Function(IList<GameInfo> games) listGames,
+    required TResult Function(String playerID) joinGame,
+    required TResult Function() startGame,
+    required TResult Function(GameInfo gameInfo) watchLobby,
+    required TResult Function() sendEvent,
+    required TResult Function(Game game) watchGame,
+  }) {
+    return updateConfig();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String playerID, String code)? createGame,
+    TResult Function()? updateConfig,
+    TResult Function()? deleteGame,
+    TResult Function(IList<GameInfo> games)? listGames,
+    TResult Function(String playerID)? joinGame,
+    TResult Function()? startGame,
+    TResult Function(GameInfo gameInfo)? watchLobby,
+    TResult Function()? sendEvent,
+    TResult Function(Game game)? watchGame,
+  }) {
+    return updateConfig?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(CreateGameResponse value) createGame,
+    required TResult Function(UpdateConfigResponse value) updateConfig,
+    required TResult Function(DeleteGameResponse value) deleteGame,
+    required TResult Function(ListGamesResponse value) listGames,
+    required TResult Function(JoinGameResponse value) joinGame,
+    required TResult Function(StartGameResponse value) startGame,
+    required TResult Function(WatchLobbyResponse value) watchLobby,
+    required TResult Function(SendEventResponse value) sendEvent,
+    required TResult Function(WatchGameResponse value) watchGame,
+  }) {
+    return updateConfig(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(CreateGameResponse value)? createGame,
+    TResult Function(UpdateConfigResponse value)? updateConfig,
+    TResult Function(DeleteGameResponse value)? deleteGame,
+    TResult Function(ListGamesResponse value)? listGames,
+    TResult Function(JoinGameResponse value)? joinGame,
+    TResult Function(StartGameResponse value)? startGame,
+    TResult Function(WatchLobbyResponse value)? watchLobby,
+    TResult Function(SendEventResponse value)? sendEvent,
+    TResult Function(WatchGameResponse value)? watchGame,
+  }) {
+    return updateConfig?.call(this);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$UpdateConfigResponseToJson(this);
+  }
+}
+
+abstract class UpdateConfigResponse implements GameServiceResponse {
+  const factory UpdateConfigResponse() = _$UpdateConfigResponse;
+
+  factory UpdateConfigResponse.fromJson(Map<String, dynamic> json) =
+      _$UpdateConfigResponse.fromJson;
 }
 
 /// @nodoc
@@ -2561,9 +2609,9 @@ class _$DeleteGameResponse implements DeleteGameResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String playerID, String code) createGame,
+    required TResult Function() updateConfig,
     required TResult Function() deleteGame,
     required TResult Function(IList<GameInfo> games) listGames,
-    required TResult Function() exitGame,
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
@@ -2577,9 +2625,9 @@ class _$DeleteGameResponse implements DeleteGameResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String playerID, String code)? createGame,
+    TResult Function()? updateConfig,
     TResult Function()? deleteGame,
     TResult Function(IList<GameInfo> games)? listGames,
-    TResult Function()? exitGame,
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
@@ -2593,9 +2641,9 @@ class _$DeleteGameResponse implements DeleteGameResponse {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameResponse value) createGame,
+    required TResult Function(UpdateConfigResponse value) updateConfig,
     required TResult Function(DeleteGameResponse value) deleteGame,
     required TResult Function(ListGamesResponse value) listGames,
-    required TResult Function(ExitGameResponse value) exitGame,
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
@@ -2609,9 +2657,9 @@ class _$DeleteGameResponse implements DeleteGameResponse {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameResponse value)? createGame,
+    TResult Function(UpdateConfigResponse value)? updateConfig,
     TResult Function(DeleteGameResponse value)? deleteGame,
     TResult Function(ListGamesResponse value)? listGames,
-    TResult Function(ExitGameResponse value)? exitGame,
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
@@ -2707,9 +2755,9 @@ class _$ListGamesResponse implements ListGamesResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String playerID, String code) createGame,
+    required TResult Function() updateConfig,
     required TResult Function() deleteGame,
     required TResult Function(IList<GameInfo> games) listGames,
-    required TResult Function() exitGame,
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
@@ -2723,9 +2771,9 @@ class _$ListGamesResponse implements ListGamesResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String playerID, String code)? createGame,
+    TResult Function()? updateConfig,
     TResult Function()? deleteGame,
     TResult Function(IList<GameInfo> games)? listGames,
-    TResult Function()? exitGame,
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
@@ -2739,9 +2787,9 @@ class _$ListGamesResponse implements ListGamesResponse {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameResponse value) createGame,
+    required TResult Function(UpdateConfigResponse value) updateConfig,
     required TResult Function(DeleteGameResponse value) deleteGame,
     required TResult Function(ListGamesResponse value) listGames,
-    required TResult Function(ExitGameResponse value) exitGame,
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
@@ -2755,9 +2803,9 @@ class _$ListGamesResponse implements ListGamesResponse {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameResponse value)? createGame,
+    TResult Function(UpdateConfigResponse value)? updateConfig,
     TResult Function(DeleteGameResponse value)? deleteGame,
     TResult Function(ListGamesResponse value)? listGames,
-    TResult Function(ExitGameResponse value)? exitGame,
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
@@ -2784,127 +2832,6 @@ abstract class ListGamesResponse implements GameServiceResponse {
   @JsonKey(ignore: true)
   $ListGamesResponseCopyWith<ListGamesResponse> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $ExitGameResponseCopyWith<$Res> {
-  factory $ExitGameResponseCopyWith(
-          ExitGameResponse value, $Res Function(ExitGameResponse) then) =
-      _$ExitGameResponseCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class _$ExitGameResponseCopyWithImpl<$Res>
-    extends _$GameServiceResponseCopyWithImpl<$Res>
-    implements $ExitGameResponseCopyWith<$Res> {
-  _$ExitGameResponseCopyWithImpl(
-      ExitGameResponse _value, $Res Function(ExitGameResponse) _then)
-      : super(_value, (v) => _then(v as ExitGameResponse));
-
-  @override
-  ExitGameResponse get _value => super._value as ExitGameResponse;
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$ExitGameResponse implements ExitGameResponse {
-  const _$ExitGameResponse({String? $type}) : $type = $type ?? 'exitGame';
-
-  factory _$ExitGameResponse.fromJson(Map<String, dynamic> json) =>
-      _$$ExitGameResponseFromJson(json);
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
-
-  @override
-  String toString() {
-    return 'GameServiceResponse.exitGame()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is ExitGameResponse);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String playerID, String code) createGame,
-    required TResult Function() deleteGame,
-    required TResult Function(IList<GameInfo> games) listGames,
-    required TResult Function() exitGame,
-    required TResult Function(String playerID) joinGame,
-    required TResult Function() startGame,
-    required TResult Function(GameInfo gameInfo) watchLobby,
-    required TResult Function() sendEvent,
-    required TResult Function(Game game) watchGame,
-  }) {
-    return exitGame();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String playerID, String code)? createGame,
-    TResult Function()? deleteGame,
-    TResult Function(IList<GameInfo> games)? listGames,
-    TResult Function()? exitGame,
-    TResult Function(String playerID)? joinGame,
-    TResult Function()? startGame,
-    TResult Function(GameInfo gameInfo)? watchLobby,
-    TResult Function()? sendEvent,
-    TResult Function(Game game)? watchGame,
-  }) {
-    return exitGame?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(CreateGameResponse value) createGame,
-    required TResult Function(DeleteGameResponse value) deleteGame,
-    required TResult Function(ListGamesResponse value) listGames,
-    required TResult Function(ExitGameResponse value) exitGame,
-    required TResult Function(JoinGameResponse value) joinGame,
-    required TResult Function(StartGameResponse value) startGame,
-    required TResult Function(WatchLobbyResponse value) watchLobby,
-    required TResult Function(SendEventResponse value) sendEvent,
-    required TResult Function(WatchGameResponse value) watchGame,
-  }) {
-    return exitGame(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(CreateGameResponse value)? createGame,
-    TResult Function(DeleteGameResponse value)? deleteGame,
-    TResult Function(ListGamesResponse value)? listGames,
-    TResult Function(ExitGameResponse value)? exitGame,
-    TResult Function(JoinGameResponse value)? joinGame,
-    TResult Function(StartGameResponse value)? startGame,
-    TResult Function(WatchLobbyResponse value)? watchLobby,
-    TResult Function(SendEventResponse value)? sendEvent,
-    TResult Function(WatchGameResponse value)? watchGame,
-  }) {
-    return exitGame?.call(this);
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ExitGameResponseToJson(this);
-  }
-}
-
-abstract class ExitGameResponse implements GameServiceResponse {
-  const factory ExitGameResponse() = _$ExitGameResponse;
-
-  factory ExitGameResponse.fromJson(Map<String, dynamic> json) =
-      _$ExitGameResponse.fromJson;
 }
 
 /// @nodoc
@@ -2980,9 +2907,9 @@ class _$JoinGameResponse implements JoinGameResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String playerID, String code) createGame,
+    required TResult Function() updateConfig,
     required TResult Function() deleteGame,
     required TResult Function(IList<GameInfo> games) listGames,
-    required TResult Function() exitGame,
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
@@ -2996,9 +2923,9 @@ class _$JoinGameResponse implements JoinGameResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String playerID, String code)? createGame,
+    TResult Function()? updateConfig,
     TResult Function()? deleteGame,
     TResult Function(IList<GameInfo> games)? listGames,
-    TResult Function()? exitGame,
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
@@ -3012,9 +2939,9 @@ class _$JoinGameResponse implements JoinGameResponse {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameResponse value) createGame,
+    required TResult Function(UpdateConfigResponse value) updateConfig,
     required TResult Function(DeleteGameResponse value) deleteGame,
     required TResult Function(ListGamesResponse value) listGames,
-    required TResult Function(ExitGameResponse value) exitGame,
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
@@ -3028,9 +2955,9 @@ class _$JoinGameResponse implements JoinGameResponse {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameResponse value)? createGame,
+    TResult Function(UpdateConfigResponse value)? updateConfig,
     TResult Function(DeleteGameResponse value)? deleteGame,
     TResult Function(ListGamesResponse value)? listGames,
-    TResult Function(ExitGameResponse value)? exitGame,
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
@@ -3107,9 +3034,9 @@ class _$StartGameResponse implements StartGameResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String playerID, String code) createGame,
+    required TResult Function() updateConfig,
     required TResult Function() deleteGame,
     required TResult Function(IList<GameInfo> games) listGames,
-    required TResult Function() exitGame,
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
@@ -3123,9 +3050,9 @@ class _$StartGameResponse implements StartGameResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String playerID, String code)? createGame,
+    TResult Function()? updateConfig,
     TResult Function()? deleteGame,
     TResult Function(IList<GameInfo> games)? listGames,
-    TResult Function()? exitGame,
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
@@ -3139,9 +3066,9 @@ class _$StartGameResponse implements StartGameResponse {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameResponse value) createGame,
+    required TResult Function(UpdateConfigResponse value) updateConfig,
     required TResult Function(DeleteGameResponse value) deleteGame,
     required TResult Function(ListGamesResponse value) listGames,
-    required TResult Function(ExitGameResponse value) exitGame,
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
@@ -3155,9 +3082,9 @@ class _$StartGameResponse implements StartGameResponse {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameResponse value)? createGame,
+    TResult Function(UpdateConfigResponse value)? updateConfig,
     TResult Function(DeleteGameResponse value)? deleteGame,
     TResult Function(ListGamesResponse value)? listGames,
-    TResult Function(ExitGameResponse value)? exitGame,
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
@@ -3262,9 +3189,9 @@ class _$WatchLobbyResponse implements WatchLobbyResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String playerID, String code) createGame,
+    required TResult Function() updateConfig,
     required TResult Function() deleteGame,
     required TResult Function(IList<GameInfo> games) listGames,
-    required TResult Function() exitGame,
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
@@ -3278,9 +3205,9 @@ class _$WatchLobbyResponse implements WatchLobbyResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String playerID, String code)? createGame,
+    TResult Function()? updateConfig,
     TResult Function()? deleteGame,
     TResult Function(IList<GameInfo> games)? listGames,
-    TResult Function()? exitGame,
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
@@ -3294,9 +3221,9 @@ class _$WatchLobbyResponse implements WatchLobbyResponse {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameResponse value) createGame,
+    required TResult Function(UpdateConfigResponse value) updateConfig,
     required TResult Function(DeleteGameResponse value) deleteGame,
     required TResult Function(ListGamesResponse value) listGames,
-    required TResult Function(ExitGameResponse value) exitGame,
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
@@ -3310,9 +3237,9 @@ class _$WatchLobbyResponse implements WatchLobbyResponse {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameResponse value)? createGame,
+    TResult Function(UpdateConfigResponse value)? updateConfig,
     TResult Function(DeleteGameResponse value)? deleteGame,
     TResult Function(ListGamesResponse value)? listGames,
-    TResult Function(ExitGameResponse value)? exitGame,
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
@@ -3389,9 +3316,9 @@ class _$SendEventResponse implements SendEventResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String playerID, String code) createGame,
+    required TResult Function() updateConfig,
     required TResult Function() deleteGame,
     required TResult Function(IList<GameInfo> games) listGames,
-    required TResult Function() exitGame,
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
@@ -3405,9 +3332,9 @@ class _$SendEventResponse implements SendEventResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String playerID, String code)? createGame,
+    TResult Function()? updateConfig,
     TResult Function()? deleteGame,
     TResult Function(IList<GameInfo> games)? listGames,
-    TResult Function()? exitGame,
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
@@ -3421,9 +3348,9 @@ class _$SendEventResponse implements SendEventResponse {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameResponse value) createGame,
+    required TResult Function(UpdateConfigResponse value) updateConfig,
     required TResult Function(DeleteGameResponse value) deleteGame,
     required TResult Function(ListGamesResponse value) listGames,
-    required TResult Function(ExitGameResponse value) exitGame,
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
@@ -3437,9 +3364,9 @@ class _$SendEventResponse implements SendEventResponse {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameResponse value)? createGame,
+    TResult Function(UpdateConfigResponse value)? updateConfig,
     TResult Function(DeleteGameResponse value)? deleteGame,
     TResult Function(ListGamesResponse value)? listGames,
-    TResult Function(ExitGameResponse value)? exitGame,
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,
@@ -3544,9 +3471,9 @@ class _$WatchGameResponse implements WatchGameResponse {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String playerID, String code) createGame,
+    required TResult Function() updateConfig,
     required TResult Function() deleteGame,
     required TResult Function(IList<GameInfo> games) listGames,
-    required TResult Function() exitGame,
     required TResult Function(String playerID) joinGame,
     required TResult Function() startGame,
     required TResult Function(GameInfo gameInfo) watchLobby,
@@ -3560,9 +3487,9 @@ class _$WatchGameResponse implements WatchGameResponse {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String playerID, String code)? createGame,
+    TResult Function()? updateConfig,
     TResult Function()? deleteGame,
     TResult Function(IList<GameInfo> games)? listGames,
-    TResult Function()? exitGame,
     TResult Function(String playerID)? joinGame,
     TResult Function()? startGame,
     TResult Function(GameInfo gameInfo)? watchLobby,
@@ -3576,9 +3503,9 @@ class _$WatchGameResponse implements WatchGameResponse {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameResponse value) createGame,
+    required TResult Function(UpdateConfigResponse value) updateConfig,
     required TResult Function(DeleteGameResponse value) deleteGame,
     required TResult Function(ListGamesResponse value) listGames,
-    required TResult Function(ExitGameResponse value) exitGame,
     required TResult Function(JoinGameResponse value) joinGame,
     required TResult Function(StartGameResponse value) startGame,
     required TResult Function(WatchLobbyResponse value) watchLobby,
@@ -3592,9 +3519,9 @@ class _$WatchGameResponse implements WatchGameResponse {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameResponse value)? createGame,
+    TResult Function(UpdateConfigResponse value)? updateConfig,
     TResult Function(DeleteGameResponse value)? deleteGame,
     TResult Function(ListGamesResponse value)? listGames,
-    TResult Function(ExitGameResponse value)? exitGame,
     TResult Function(JoinGameResponse value)? joinGame,
     TResult Function(StartGameResponse value)? startGame,
     TResult Function(WatchLobbyResponse value)? watchLobby,

@@ -24,12 +24,6 @@ class NoGameClient extends GameClient {
   }
 
   @override
-  Future<ApiResponse<ExitGameResponse>> exitGame(ExitGameRequest request) {
-    // TODO: implement exitGame
-    throw UnimplementedError();
-  }
-
-  @override
   Stream<ApiResponse<WatchLobbyResponse>> gameLobby(WatchLobbyRequest request) {
     // TODO: implement gameLobby
     throw UnimplementedError();
@@ -64,15 +58,21 @@ class NoGameClient extends GameClient {
     // TODO: implement startGame
     throw UnimplementedError();
   }
+
+  @override
+  Future<ApiResponse<UpdateConfigResponse>> updateConfig(UpdateConfigRequest request) {
+    // TODO: implement updateConfig
+    throw UnimplementedError();
+  }
 }
 
-final onDeviceGameServerClient = Provider<GameClient>(
+final onDeviceGameClient = Provider<GameClient>(
   (ref) {
     final client = NoGameClient();
 
     return client;
   },
-  name: 'onDeviceGameServerClient',
+  name: 'onDeviceGameClient',
   dependencies: const [],
 );
 

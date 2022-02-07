@@ -56,10 +56,25 @@ Map<String, dynamic> _$$CreateGameRequestToJson(_$CreateGameRequest instance) =>
       'runtimeType': instance.$type,
     };
 
+_$UpdateConfigRequest _$$UpdateConfigRequestFromJson(
+        Map<String, dynamic> json) =>
+    _$UpdateConfigRequest(
+      playerID: json['playerID'] as String,
+      config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$UpdateConfigRequestToJson(
+        _$UpdateConfigRequest instance) =>
+    <String, dynamic>{
+      'playerID': instance.playerID,
+      'config': instance.config,
+      'runtimeType': instance.$type,
+    };
+
 _$DeleteGameRequest _$$DeleteGameRequestFromJson(Map<String, dynamic> json) =>
     _$DeleteGameRequest(
       playerID: json['playerID'] as String,
-      authID: json['authID'] as String,
       code: json['code'] as String,
       $type: json['runtimeType'] as String?,
     );
@@ -67,7 +82,6 @@ _$DeleteGameRequest _$$DeleteGameRequestFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$DeleteGameRequestToJson(_$DeleteGameRequest instance) =>
     <String, dynamic>{
       'playerID': instance.playerID,
-      'authID': instance.authID,
       'code': instance.code,
       'runtimeType': instance.$type,
     };
@@ -81,22 +95,6 @@ _$ListGamesRequest _$$ListGamesRequestFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$ListGamesRequestToJson(_$ListGamesRequest instance) =>
     <String, dynamic>{
       'authID': instance.authID,
-      'runtimeType': instance.$type,
-    };
-
-_$ExitGameRequest _$$ExitGameRequestFromJson(Map<String, dynamic> json) =>
-    _$ExitGameRequest(
-      playerID: json['playerID'] as String,
-      authID: json['authID'] as String,
-      code: json['code'] as String,
-      $type: json['runtimeType'] as String?,
-    );
-
-Map<String, dynamic> _$$ExitGameRequestToJson(_$ExitGameRequest instance) =>
-    <String, dynamic>{
-      'playerID': instance.playerID,
-      'authID': instance.authID,
-      'code': instance.code,
       'runtimeType': instance.$type,
     };
 
@@ -131,7 +129,6 @@ Map<String, dynamic> _$$StartGameRequestToJson(_$StartGameRequest instance) =>
 _$WatchLobbyRequest _$$WatchLobbyRequestFromJson(Map<String, dynamic> json) =>
     _$WatchLobbyRequest(
       playerID: json['playerID'] as String,
-      authID: json['authID'] as String,
       code: json['code'] as String,
       $type: json['runtimeType'] as String?,
     );
@@ -139,7 +136,6 @@ _$WatchLobbyRequest _$$WatchLobbyRequestFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$WatchLobbyRequestToJson(_$WatchLobbyRequest instance) =>
     <String, dynamic>{
       'playerID': instance.playerID,
-      'authID': instance.authID,
       'code': instance.code,
       'runtimeType': instance.$type,
     };
@@ -189,6 +185,18 @@ Map<String, dynamic> _$$CreateGameResponseToJson(
       'runtimeType': instance.$type,
     };
 
+_$UpdateConfigResponse _$$UpdateConfigResponseFromJson(
+        Map<String, dynamic> json) =>
+    _$UpdateConfigResponse(
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$UpdateConfigResponseToJson(
+        _$UpdateConfigResponse instance) =>
+    <String, dynamic>{
+      'runtimeType': instance.$type,
+    };
+
 _$DeleteGameResponse _$$DeleteGameResponseFromJson(Map<String, dynamic> json) =>
     _$DeleteGameResponse(
       $type: json['runtimeType'] as String?,
@@ -212,16 +220,6 @@ Map<String, dynamic> _$$ListGamesResponseToJson(_$ListGamesResponse instance) =>
       'games': instance.games.toJson(
         (value) => value,
       ),
-      'runtimeType': instance.$type,
-    };
-
-_$ExitGameResponse _$$ExitGameResponseFromJson(Map<String, dynamic> json) =>
-    _$ExitGameResponse(
-      $type: json['runtimeType'] as String?,
-    );
-
-Map<String, dynamic> _$$ExitGameResponseToJson(_$ExitGameResponse instance) =>
-    <String, dynamic>{
       'runtimeType': instance.$type,
     };
 

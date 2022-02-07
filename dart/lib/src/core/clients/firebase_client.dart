@@ -2,26 +2,10 @@ import 'package:firebase_dart/firebase_dart.dart';
 
 import '../../../game_scaffold_dart.dart';
 
-final firebaseCacheLocationProvider = Provider<String?>((ref) => null);
-final firebaseOptionsProvider = Provider<FirebaseOptions>((ref) => throw Exception('firebaseOptions not set'));
-final firebaseAppProvider = FutureProvider<FirebaseApp>(
-  (ref) {
-    FirebaseDart.setup(storagePath: ref.watch(firebaseCacheLocationProvider));
-    return Firebase.initializeApp(options: ref.watch(firebaseOptionsProvider));
-  },
-  dependencies: [firebaseOptionsProvider, firebaseCacheLocationProvider],
-);
-final firebaseGameClient = Provider.autoDispose((ref) => FirebaseGameClient(ref));
+const String FirebaseClient = 'firebase';
 
-const String firebaseServer = 'firebase';
-List<Override> firebaseOverrides() => [
-      GameProviders.gameClientFamily(firebaseServer).overrideWithProvider(firebaseGameClient),
-    ];
-
-class FirebaseGameClient extends GameClient {
-  FirebaseGameClient(this.ref);
-
-  final ProviderRef ref;
+class FirebaseGameClient extends NetworkGameClient {
+  FirebaseGameClient({required GameAddress address}) : super(address: address);
 
   @override
   Future<ApiResponse<CreateGameResponse>> createGame(CreateGameRequest request) {
@@ -32,12 +16,6 @@ class FirebaseGameClient extends GameClient {
   @override
   Future<ApiResponse<DeleteGameResponse>> deleteGame(DeleteGameRequest request) {
     // TODO: implement deleteGame
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<ApiResponse<ExitGameResponse>> exitGame(ExitGameRequest request) {
-    // TODO: implement exitGame
     throw UnimplementedError();
   }
 
@@ -76,4 +54,25 @@ class FirebaseGameClient extends GameClient {
     // TODO: implement sendEvent
     throw UnimplementedError();
   }
+
+  @override
+  Future<ApiResponse<UpdateConfigResponse>> updateConfig(UpdateConfigRequest request) {
+    // TODO: implement updateConfig
+    throw UnimplementedError();
+  }
 }
+
+final firebaseCacheLocationProvider = Provider<String?>((ref) => null);
+final firebaseOptionsProvider = Provider<FirebaseOptions>((ref) => throw Exception('firebaseOptions not set'));
+final firebaseAppProvider = FutureProvider<FirebaseApp>(
+  (ref) {
+    FirebaseDart.setup(storagePath: ref.watch(firebaseCacheLocationProvider));
+    return Firebase.initializeApp(options: ref.watch(firebaseOptionsProvider));
+  },
+  dependencies: [firebaseOptionsProvider, firebaseCacheLocationProvider],
+);
+final firebaseGameClient = Provider.autoDispose(
+  (ref) => FirebaseGameClient(address: ref.watch(GameProviders.remoteUri)),
+  name: 'firebaseGameClient',
+  dependencies: [GameProviders.remoteUri],
+);

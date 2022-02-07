@@ -6,22 +6,12 @@ import '../../../game_scaffold_dart.dart';
 const NetworkClient = 'network';
 
 /// The socket IO implementation of [GameClient]
-class IOGameClient extends GameClient {
-  IOGameClient({
+class NetworkGameClient extends GameClient {
+  NetworkGameClient({
     required this.address,
-    required this.ref,
   });
-  final ProviderRef<GameClient> ref;
 
   final GameAddress address;
-
-  /// Disconnect from the backend
-  ///
-  /// Default implementation does nothing
-  @override
-  Future<void> disconnect() async {
-    ref.read(GameProviders.connected.notifier).state = false;
-  }
 
   @override
   Future<ApiResponse<CreateGameResponse>> createGame(CreateGameRequest request) {
@@ -32,12 +22,6 @@ class IOGameClient extends GameClient {
   @override
   Future<ApiResponse<DeleteGameResponse>> deleteGame(DeleteGameRequest request) {
     // TODO: implement deleteGame
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<ApiResponse<ExitGameResponse>> exitGame(ExitGameRequest request) {
-    // TODO: implement exitGame
     throw UnimplementedError();
   }
 
@@ -76,16 +60,16 @@ class IOGameClient extends GameClient {
     // TODO: implement sendEvent
     throw UnimplementedError();
   }
+
+  @override
+  Future<ApiResponse<UpdateConfigResponse>> updateConfig(UpdateConfigRequest request) {
+    // TODO: implement updateConfig
+    throw UnimplementedError();
+  }
 }
 
-final socketIOGameServerClient = Provider<GameClient>(
-  (ref) {
-    final client = IOGameClient(
-      address: ref.watch(GameProviders.remoteUri),
-      ref: ref,
-    );
-    return client;
-  },
-  name: 'socketIOGameServerClient',
+final networkGameClient = Provider<GameClient>(
+  (ref) => NetworkGameClient(address: ref.watch(GameProviders.remoteUri)),
+  name: 'networkGameClient',
   dependencies: [GameProviders.remoteUri],
 );
