@@ -104,30 +104,19 @@ class Game with _$Game {
   /// Creates a default initialized game with [players]
   factory Game.start(
     IList<Player> players,
-    GameConfig config, {
+    GameState gameState, {
     required bool multiPly,
     required bool simultaneousAction,
   }) =>
-      Game(
-        players.toIList(),
-        <PlayerID>[].lock,
-        <IList<double>>[].lock,
-        DateTime.now(),
-        <MessageEvent>[].lock,
-        GameStatus.Started,
-        0,
-        0,
-        multiPly,
-        simultaneousAction,
-        getInitialState(config, players),
-      );
+      Game(players.toIList(), <PlayerID>[].lock, <IList<double>>[].lock, DateTime.now(), <MessageEvent>[].lock,
+          GameStatus.Started, 0, 0, multiPly, simultaneousAction, gameState);
 
   /// Creates a default initialized game where the first player is chosen at random
   factory Game.startRandom(
-    IList<Player> players, {
+    IList<Player> players,
+    GameState gameState, {
     required bool multiPly,
     required bool simultaneousAction,
-    required GameConfig config,
   }) =>
       Game(
         players,
@@ -140,7 +129,7 @@ class Game with _$Game {
         Random().nextInt(players.length),
         multiPly,
         simultaneousAction,
-        getInitialState(config, players),
+        gameState,
       );
 
   /// Gets the player at the [currentPlayerIndex]
@@ -148,6 +137,8 @@ class Game with _$Game {
 
   /// Gets the total score for each player based off of [allRoundScores]
   IMap<PlayerID, double> get totalScores => playerRoundScores.mapValues((entry) => entry.value.sum);
+
+  List<PlayerID> get playerIDs => players.map((player) => player.id).toList();
 
   /// Gets the scores for each player for all rounds based off of [allRoundScores]
   IMap<PlayerID, IList<double>> get playerRoundScores => IMap({
@@ -213,30 +204,6 @@ class Game with _$Game {
   /// Adds a ready player to the list
   Game addReadyPlayer(PlayerID player) => copyWith(readyPlayers: readyPlayers.add(player));
 
-  /// This method takes an event and returns the changed game state or an error
-  ///
-  // /// Errors are typically for displaying on the UI why the particular player can't make that move.
-  // /// So make the error as informative as possible. This method should return a copy of the state if
-  // /// undo functionality needs to work. (i.e. the class should be immutable), for high performance you can
-  // /// make the changes and just return the changed instance itself, but undo functionality won't work.
-  // GameOrError next(E event);
-
-  // /// Copies the state of the game with generic replaced by the function applying updates to the most recent copy of generic
-  // ///
-  // /// This method should be implemented as follows for Games created with freezed and a field called generic:
-  // ///
-  // /// ```dart
-  // /// @override
-  // /// Game copyWithGeneric(GenericGame Function(GenericGame p1) updates) {
-  // ///  return copyWith(generic: updates(generic));
-  // ///}
-  // /// ```
-  // Game copyWithGeneric(GenericGame Function(GenericGame) updates);
-
-  // /// Logic to apply after all players have consented they want to play another round
-  // /// to initialize the next round
-  // Game moveNextRound(GameConfig config);
-
   /// Returns the name game type that is registered for serialization
   // GameType get type;
   static bool _generalIsRegistered = false;
@@ -246,7 +213,7 @@ class Game with _$Game {
     GameType type, {
     required String name,
     required GS Function(JsonMap) fromJson,
-    required GS Function(GameConfig, IList<Player>) initialState,
+    required Game Function(GameConfig, IList<Player>) initialState,
     required E Function(JsonMap) gameEventFromJson,
   }) {
     if (!_generalIsRegistered) {
@@ -269,7 +236,7 @@ class Game with _$Game {
   }
 
   /// Will get the initial state for a particular configuration
-  static GameState getInitialState(GameConfig gameConfig, IList<Player> players) {
+  static Game getInitialState(GameConfig gameConfig, IList<Player> players) {
     final initState = _initialStates[gameConfig.gameType];
     if (initState == null) {
       throw UnimplementedError('No game of that type exists in the registry ${gameConfig.gameType}');
@@ -299,7 +266,7 @@ class Game with _$Game {
   static final Map<GameType, String> gameNames = {};
 
   /// Stores the function to create the initial state of the game
-  static final Map<GameType, GameState Function(GameConfig, IList<Player>)> _initialStates = {};
+  static final Map<GameType, Game Function(GameConfig, IList<Player>)> _initialStates = {};
 }
 
 /// Represents the current status of the game as seen by the client

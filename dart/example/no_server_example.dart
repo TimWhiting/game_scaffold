@@ -7,12 +7,8 @@ import 'package:game_scaffold_games/games.dart';
 Future<void> main(List<String> arguments) async {
   TicTacToeGame.register();
   final rootProvider = ProviderContainer();
-  final p1Ref = ProviderContainer(
-      parent: rootProvider,
-      overrides: [GameProviders.playerID.overrideWithValue(P1)]);
-  final p2Ref = ProviderContainer(
-      parent: rootProvider,
-      overrides: [GameProviders.playerID.overrideWithValue(P2)]);
+  final p1Ref = ProviderContainer(parent: rootProvider, overrides: [GameProviders.multiplayerID.overrideWithValue(0)]);
+  final p2Ref = ProviderContainer(parent: rootProvider, overrides: [GameProviders.multiplayerID.overrideWithValue(1)]);
   rootProvider.read(GameProviders.clientType.notifier).state = OnDeviceClient;
   const config = GameConfig(
     adminID: P1,
@@ -25,7 +21,7 @@ Future<void> main(List<String> arguments) async {
   p1Ref.read(GameProviders.config.notifier).state = config;
   final code = await p1Ref.read(GameProviders.createGame.future);
   await p1Ref.read(GameProviders.joinGame.future);
-  p2Ref.read(GameProviders.code.notifier).state = code;
+  p2Ref.read(GameProviders.code.notifier).state = code!.code;
   await p2Ref.read(GameProviders.joinGame.future);
   await p1Ref.read(GameProviders.startGame.future);
 
@@ -35,13 +31,13 @@ Future<void> main(List<String> arguments) async {
       sub.close();
       return;
     }
-    final gameState = value.value! as TicTacToeGame;
+    final gameState = value.value!;
     print(gameState.status);
     if (gameState.gameOver || gameState.roundOver) {
       print('Round Over');
-      if (gameState.isWinner(P1)) {
+      if ((gameState.gameState as TicTacToeGame).isWinner(P1)) {
         print('Player 0 Wins!');
-      } else if (gameState.isWinner(P2)) {
+      } else if ((gameState.gameState as TicTacToeGame).isWinner(P2)) {
         print('Player 1 Wins!');
       } else {
         print('Draw');
@@ -59,7 +55,7 @@ Future<void> main(List<String> arguments) async {
         exit(0);
       }
     } else {
-      await loop(value.value!, {P1: p1Ref, P2: p2Ref}, code);
+      await loop(value.value!, {P1: p1Ref, P2: p2Ref}, code.code);
     }
   });
   await Future.delayed(const Duration(seconds: 10));
@@ -78,17 +74,16 @@ Future<void> loop(
     location = command!.split(',').map(int.tryParse).toList();
   } while (location.any((l) => l == null));
 
-  final event =
-      TicTacToeGameEvent(player, location[0]! * 3 + location[1]!).asGameEvent;
-  playerContainers[player]!.refresh(GameProviders.sendEvent(event));
-  await playerContainers[player]!.read(GameProviders.sendEvent(event).future);
+  final event = TicTacToeGameEvent(player, location[0]! * 3 + location[1]!);
+  playerContainers[player]!.refresh(GameProviders.sendEvent(event.asEvent));
+  await playerContainers[player]!.read(GameProviders.sendEvent(event.asEvent).future);
 
   await Future.delayed(const Duration(milliseconds: 100));
   final error = playerContainers[player]!.read(GameProviders.error);
-  if (error.value != null) {
+  if (error != '') {
     print('');
     print('!!!!!!!!!!!');
-    print(error.value);
+    print(error);
     print('!!!!!!!!!!!');
     print('');
   }
@@ -102,8 +97,7 @@ void printStateAndAction(Game state, GameCode code) {
       : gameState.board[index] == P2
           ? '0'
           : ' ';
-  String row(int startIndex) =>
-      '${strFor(startIndex)}|${strFor(startIndex + 1)}|${strFor(startIndex + 2)}';
+  String row(int startIndex) => '${strFor(startIndex)}|${strFor(startIndex + 1)}|${strFor(startIndex + 2)}';
   print('State: ');
   print(row(0));
   print('-----');

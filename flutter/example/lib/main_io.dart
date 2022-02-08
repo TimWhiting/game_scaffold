@@ -12,11 +12,11 @@ void main() {
   Logger.root.onRecord.listen((record) =>
       // ignore: avoid_print
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
-  final _ = IOServer();
+  final _ = NetworkServer();
   TicTacToeGame.register();
   runApp(ProviderScope(
     overrides: [
-      GameProviders.clientType.overrideWithValue(StateController(IOClient)),
+      GameProviders.clientType.overrideWithValue(StateController(NetworkClient)),
       GameProviders.remoteUri.overrideWithValue(StateController(Uri.parse('http://localhost:$defaultGamePort'))),
     ],
     child: const TicTacToeApp(),

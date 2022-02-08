@@ -25,13 +25,10 @@ typedef GameType = String;
 typedef JsonMap = Map<String, Object?>;
 
 abstract class GameState {
-  int get numFeatures;
-  IList<int> get features;
-  int get markovId => features.hashCode;
-  IList<Matrix> get actionRewards;
   String get type;
   JsonMap toJson();
-  GameState next(Event event);
+  GameOrError next(covariant GameEvent event, Game game);
+  Game moveNextRound(GameConfig config, Game game);
 }
 
 // The type of the event
@@ -39,4 +36,5 @@ typedef EventType = String;
 
 abstract class GameEvent {
   JsonMap toJson();
+  Event get asEvent => Event.game(this);
 }

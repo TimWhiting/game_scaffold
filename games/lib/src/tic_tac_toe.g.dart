@@ -8,7 +8,6 @@ part of 'tic_tac_toe.dart';
 
 _$_TicTacToeGame _$$_TicTacToeGameFromJson(Map<String, dynamic> json) =>
     _$_TicTacToeGame(
-      generic: GenericGame.fromJson(json['generic'] as Map<String, dynamic>),
       board:
           IList<String?>.fromJson(json['board'], (value) => value as String?),
       type: json['type'] as String? ?? 'tictactoe',
@@ -16,7 +15,6 @@ _$_TicTacToeGame _$$_TicTacToeGameFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_TicTacToeGameToJson(_$_TicTacToeGame instance) =>
     <String, dynamic>{
-      'generic': instance.generic,
       'board': instance.board.toJson(
         (value) => value,
       ),

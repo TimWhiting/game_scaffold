@@ -22,11 +22,8 @@ class _$TicTacToeGameTearOff {
   const _$TicTacToeGameTearOff();
 
   _TicTacToeGame call(
-      {required GenericGame generic,
-      required IList<String?> board,
-      String type = 'tictactoe'}) {
+      {required IList<String?> board, String type = 'tictactoe'}) {
     return _TicTacToeGame(
-      generic: generic,
       board: board,
       type: type,
     );
@@ -42,7 +39,6 @@ const $TicTacToeGame = _$TicTacToeGameTearOff();
 
 /// @nodoc
 mixin _$TicTacToeGame {
-  GenericGame get generic => throw _privateConstructorUsedError;
   IList<String?> get board => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
 
@@ -57,9 +53,7 @@ abstract class $TicTacToeGameCopyWith<$Res> {
   factory $TicTacToeGameCopyWith(
           TicTacToeGame value, $Res Function(TicTacToeGame) then) =
       _$TicTacToeGameCopyWithImpl<$Res>;
-  $Res call({GenericGame generic, IList<String?> board, String type});
-
-  $GenericGameCopyWith<$Res> get generic;
+  $Res call({IList<String?> board, String type});
 }
 
 /// @nodoc
@@ -73,15 +67,10 @@ class _$TicTacToeGameCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? generic = freezed,
     Object? board = freezed,
     Object? type = freezed,
   }) {
     return _then(_value.copyWith(
-      generic: generic == freezed
-          ? _value.generic
-          : generic // ignore: cast_nullable_to_non_nullable
-              as GenericGame,
       board: board == freezed
           ? _value.board
           : board // ignore: cast_nullable_to_non_nullable
@@ -92,13 +81,6 @@ class _$TicTacToeGameCopyWithImpl<$Res>
               as String,
     ));
   }
-
-  @override
-  $GenericGameCopyWith<$Res> get generic {
-    return $GenericGameCopyWith<$Res>(_value.generic, (value) {
-      return _then(_value.copyWith(generic: value));
-    });
-  }
 }
 
 /// @nodoc
@@ -108,10 +90,7 @@ abstract class _$TicTacToeGameCopyWith<$Res>
           _TicTacToeGame value, $Res Function(_TicTacToeGame) then) =
       __$TicTacToeGameCopyWithImpl<$Res>;
   @override
-  $Res call({GenericGame generic, IList<String?> board, String type});
-
-  @override
-  $GenericGameCopyWith<$Res> get generic;
+  $Res call({IList<String?> board, String type});
 }
 
 /// @nodoc
@@ -127,15 +106,10 @@ class __$TicTacToeGameCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? generic = freezed,
     Object? board = freezed,
     Object? type = freezed,
   }) {
     return _then(_TicTacToeGame(
-      generic: generic == freezed
-          ? _value.generic
-          : generic // ignore: cast_nullable_to_non_nullable
-              as GenericGame,
       board: board == freezed
           ? _value.board
           : board // ignore: cast_nullable_to_non_nullable
@@ -151,15 +125,12 @@ class __$TicTacToeGameCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_TicTacToeGame extends _TicTacToeGame {
-  const _$_TicTacToeGame(
-      {required this.generic, required this.board, this.type = 'tictactoe'})
+  const _$_TicTacToeGame({required this.board, this.type = 'tictactoe'})
       : super._();
 
   factory _$_TicTacToeGame.fromJson(Map<String, dynamic> json) =>
       _$$_TicTacToeGameFromJson(json);
 
-  @override
-  final GenericGame generic;
   @override
   final IList<String?> board;
   @JsonKey(defaultValue: 'tictactoe')
@@ -168,7 +139,7 @@ class _$_TicTacToeGame extends _TicTacToeGame {
 
   @override
   String toString() {
-    return 'TicTacToeGame(generic: $generic, board: $board, type: $type)';
+    return 'TicTacToeGame(board: $board, type: $type)';
   }
 
   @override
@@ -176,13 +147,12 @@ class _$_TicTacToeGame extends _TicTacToeGame {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _TicTacToeGame &&
-            (identical(other.generic, generic) || other.generic == generic) &&
             (identical(other.board, board) || other.board == board) &&
             (identical(other.type, type) || other.type == type));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, generic, board, type);
+  int get hashCode => Object.hash(runtimeType, board, type);
 
   @JsonKey(ignore: true)
   @override
@@ -196,17 +166,13 @@ class _$_TicTacToeGame extends _TicTacToeGame {
 }
 
 abstract class _TicTacToeGame extends TicTacToeGame {
-  const factory _TicTacToeGame(
-      {required GenericGame generic,
-      required IList<String?> board,
-      String type}) = _$_TicTacToeGame;
+  const factory _TicTacToeGame({required IList<String?> board, String type}) =
+      _$_TicTacToeGame;
   const _TicTacToeGame._() : super._();
 
   factory _TicTacToeGame.fromJson(Map<String, dynamic> json) =
       _$_TicTacToeGame.fromJson;
 
-  @override
-  GenericGame get generic;
   @override
   IList<String?> get board;
   @override
