@@ -38,7 +38,7 @@ const _$NameSetEnumMap = {
 };
 
 _$_GameInfo _$$_GameInfoFromJson(Map<String, dynamic> json) => _$_GameInfo(
-      gameId: json['gameId'] as String,
+      gameID: json['gameID'] as String,
       players:
           IList<String>.fromJson(json['players'], (value) => value as String),
       player: json['player'] as String,
@@ -49,7 +49,7 @@ _$_GameInfo _$$_GameInfoFromJson(Map<String, dynamic> json) => _$_GameInfo(
 
 Map<String, dynamic> _$$_GameInfoToJson(_$_GameInfo instance) =>
     <String, dynamic>{
-      'gameId': instance.gameId,
+      'gameID': instance.gameID,
       'players': instance.players.toJson(
         (value) => value,
       ),

@@ -375,14 +375,14 @@ class _$GameInfoTearOff {
   const _$GameInfoTearOff();
 
   _GameInfo call(
-      {required String gameId,
+      {required String gameID,
       required IList<String> players,
       required String player,
       required bool creator,
       required String gameType,
       required GameStatus status}) {
     return _GameInfo(
-      gameId: gameId,
+      gameID: gameID,
       players: players,
       player: player,
       creator: creator,
@@ -401,7 +401,7 @@ const $GameInfo = _$GameInfoTearOff();
 
 /// @nodoc
 mixin _$GameInfo {
-  String get gameId => throw _privateConstructorUsedError;
+  String get gameID => throw _privateConstructorUsedError;
   IList<String> get players => throw _privateConstructorUsedError;
   String get player => throw _privateConstructorUsedError;
   bool get creator => throw _privateConstructorUsedError;
@@ -419,7 +419,7 @@ abstract class $GameInfoCopyWith<$Res> {
   factory $GameInfoCopyWith(GameInfo value, $Res Function(GameInfo) then) =
       _$GameInfoCopyWithImpl<$Res>;
   $Res call(
-      {String gameId,
+      {String gameID,
       IList<String> players,
       String player,
       bool creator,
@@ -437,7 +437,7 @@ class _$GameInfoCopyWithImpl<$Res> implements $GameInfoCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? gameId = freezed,
+    Object? gameID = freezed,
     Object? players = freezed,
     Object? player = freezed,
     Object? creator = freezed,
@@ -445,9 +445,9 @@ class _$GameInfoCopyWithImpl<$Res> implements $GameInfoCopyWith<$Res> {
     Object? status = freezed,
   }) {
     return _then(_value.copyWith(
-      gameId: gameId == freezed
-          ? _value.gameId
-          : gameId // ignore: cast_nullable_to_non_nullable
+      gameID: gameID == freezed
+          ? _value.gameID
+          : gameID // ignore: cast_nullable_to_non_nullable
               as String,
       players: players == freezed
           ? _value.players
@@ -479,7 +479,7 @@ abstract class _$GameInfoCopyWith<$Res> implements $GameInfoCopyWith<$Res> {
       __$GameInfoCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String gameId,
+      {String gameID,
       IList<String> players,
       String player,
       bool creator,
@@ -498,7 +498,7 @@ class __$GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? gameId = freezed,
+    Object? gameID = freezed,
     Object? players = freezed,
     Object? player = freezed,
     Object? creator = freezed,
@@ -506,9 +506,9 @@ class __$GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
     Object? status = freezed,
   }) {
     return _then(_GameInfo(
-      gameId: gameId == freezed
-          ? _value.gameId
-          : gameId // ignore: cast_nullable_to_non_nullable
+      gameID: gameID == freezed
+          ? _value.gameID
+          : gameID // ignore: cast_nullable_to_non_nullable
               as String,
       players: players == freezed
           ? _value.players
@@ -538,7 +538,7 @@ class __$GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_GameInfo implements _GameInfo {
   const _$_GameInfo(
-      {required this.gameId,
+      {required this.gameID,
       required this.players,
       required this.player,
       required this.creator,
@@ -549,7 +549,7 @@ class _$_GameInfo implements _GameInfo {
       _$$_GameInfoFromJson(json);
 
   @override
-  final String gameId;
+  final String gameID;
   @override
   final IList<String> players;
   @override
@@ -563,7 +563,7 @@ class _$_GameInfo implements _GameInfo {
 
   @override
   String toString() {
-    return 'GameInfo(gameId: $gameId, players: $players, player: $player, creator: $creator, gameType: $gameType, status: $status)';
+    return 'GameInfo(gameID: $gameID, players: $players, player: $player, creator: $creator, gameType: $gameType, status: $status)';
   }
 
   @override
@@ -571,7 +571,7 @@ class _$_GameInfo implements _GameInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _GameInfo &&
-            (identical(other.gameId, gameId) || other.gameId == gameId) &&
+            (identical(other.gameID, gameID) || other.gameID == gameID) &&
             (identical(other.players, players) || other.players == players) &&
             (identical(other.player, player) || other.player == player) &&
             (identical(other.creator, creator) || other.creator == creator) &&
@@ -582,7 +582,7 @@ class _$_GameInfo implements _GameInfo {
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, gameId, players, player, creator, gameType, status);
+      runtimeType, gameID, players, player, creator, gameType, status);
 
   @JsonKey(ignore: true)
   @override
@@ -597,7 +597,7 @@ class _$_GameInfo implements _GameInfo {
 
 abstract class _GameInfo implements GameInfo {
   const factory _GameInfo(
-      {required String gameId,
+      {required String gameID,
       required IList<String> players,
       required String player,
       required bool creator,
@@ -607,7 +607,7 @@ abstract class _GameInfo implements GameInfo {
   factory _GameInfo.fromJson(Map<String, dynamic> json) = _$_GameInfo.fromJson;
 
   @override
-  String get gameId;
+  String get gameID;
   @override
   IList<String> get players;
   @override

@@ -13,9 +13,9 @@ typedef GameAddress = Uri;
 /// * Start
 /// * Delete
 /// * Get Game Info
-/// * Get List of Games that [playerID] is a part of
+/// * Get List of Games
 abstract class GameClient {
-  GameClient() : logger = Logger('ServerClient');
+  GameClient() : logger = Logger('GameClient');
 
   final Logger logger;
 

@@ -16,8 +16,8 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   String getGameId(WidgetTester tester) {
-    final text = tester.widget<Text>(find.textContaining('gameId:'));
-    final codestart = text.data!.indexOf('gameId:') + 'gameId:'.length + 1;
+    final text = tester.widget<Text>(find.textContaining('gameID:'));
+    final codestart = text.data!.indexOf('gameID:') + 'gameID:'.length + 1;
     return text.data!.substring(codestart, codestart + 4);
   }
 
@@ -28,8 +28,8 @@ void main() {
     await tester.tap(find.byKey(p1Create));
     await tester.pumpAndSettle();
     // Get the Game ID
-    final gameId = getGameId(tester);
-    await tester.enterText(find.byType(TextField), gameId);
+    final gameID = getGameId(tester);
+    await tester.enterText(find.byType(TextField), gameID);
     await tester.pumpAndSettle();
     // 2nd Player Join Game
     await tester.tap(find.text('Join Game'));

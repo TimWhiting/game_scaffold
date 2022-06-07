@@ -10,8 +10,8 @@ packages:
   - games/*
 
 scripts:
-  analyze: melos exec -- exec pub global run tuneup check
-  postbootstrap: tuneup --version || pub global activate tuneup
+  analyze: melos exec -- exec dart pub global run tuneup check
+  postbootstrap: tuneup --version || dart pub global activate tuneup
   postclean: melos exec -- exec rm -rf ./build ./android/.gradle ./ios/.symlinks ./ios/Pods ./android/.idea ./.idea
   test: melos exec --dir-exists=test -- exec flutter test || dart test
   upgrade: melos exec -- exec flutter pub upgrade || dart pub upgrade

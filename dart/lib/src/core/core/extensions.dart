@@ -21,7 +21,7 @@ extension EventX on Event {
           : GameEvent.game(this);
 }
 
-/// Some extensions on `Game` to more easiliy get some of the `GenericGame` fields
+/// Some extensions on `Game` to more easily get some of the `GenericGame` fields
 extension GameX on Game {
   /// Gets the current player's index
   int? get currentPlayerIndex => generic.currentPlayerIndex;

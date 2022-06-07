@@ -15,12 +15,12 @@ class GameServer {
     IO.Server _io,
     this.mainServer,
     this._read,
-    this._gameId,
+    this._gameID,
     this._onGameOver, {
     this.timeout = const Duration(hours: 2),
     this.debug = true,
-  })  : _socket = _io.of('/$_gameId'),
-        _serverLogger = Logger('GameServer $_gameId') {
+  })  : _socket = _io.of('/$_gameID'),
+        _serverLogger = Logger('GameServer $_gameID') {
     _initServer();
   }
 
@@ -37,7 +37,7 @@ class GameServer {
   final Duration timeout;
 
   /// The game's id
-  GameCode get gameID => _gameId;
+  GameCode get gameID => _gameID;
 
   /// Gets [GameConfig] of this game
   GameConfig get gameConfig =>
@@ -56,7 +56,7 @@ class GameServer {
   String? getClientName(PlayerID id) => _clientNames[id];
 
   final Reader _read;
-  final GameCode _gameId;
+  final GameCode _gameID;
   IList<Player> get _players => _read(BackendProviders.lobby).players.toIList();
   final _clients = <PlayerID, IO.Socket?>{};
   final _clientNames = <PlayerID, String>{};
@@ -89,7 +89,7 @@ class GameServer {
       }
     });
     _serverLogger.info('Creating Game Server');
-    _serverLogger.info('Listening on namespace /$_gameId');
+    _serverLogger.info('Listening on namespace /$_gameID');
     // ignore: avoid_dynamic_calls
     _socket.on(
       IOChannel.connection.string,
@@ -98,8 +98,8 @@ class GameServer {
   }
 
   GameInfo gameInfo(PlayerID? id) => GameInfo(
-        status: _started ? GameStatus.Started : GameStatus.Lobby,
-        gameId: _gameId,
+        status: _started ? GameStatus.started : GameStatus.lobby,
+        gameID: _gameID,
         players: _players.map((p) => p.name).toIList(),
         player: _clientNames[id] ?? '',
         creator: isClientAdmin(id),
@@ -107,7 +107,7 @@ class GameServer {
       );
 
   void _handleClientConnection(IO.Socket client) {
-    _serverLogger.info('Game server namespace $_gameId connected to client');
+    _serverLogger.info('Game server namespace $_gameID connected to client');
     client.on(
       IOChannel.register.string,
       (data) => _handleRegister(client, data as Map<String, dynamic>),
@@ -124,7 +124,7 @@ class GameServer {
 
   void _handleRegister(IO.Socket client, Map<String, dynamic> data) {
     _serverLogger
-        .info('Game server namespace $_gameId registering client $data');
+        .info('Game server namespace $_gameID registering client $data');
 
     final name = data['name'] as String?;
     final id = data['id'] as PlayerID;
@@ -141,7 +141,7 @@ class GameServer {
       _serverLogger.info('Client $id rejoining');
       _clients[id] = client;
       if (_started) {
-        _clients[id]?.emit(IOChannel.gamestate.string,
+        _clients[id]?.emit(IOChannel.gameState.string,
             _gameState.gameState.gameValue().toJson());
       } else {
         _clients[id]?.emit(IOChannel.lobby.string, gameInfo(id).toJson());
@@ -159,7 +159,7 @@ class GameServer {
         _clients[id] = client;
         _clientNames[id] = name ?? 'No name';
         _addPlayer(Player(id, name: name ?? 'No name'));
-        mainServer.addClientToGame(id, _gameId);
+        mainServer.addClientToGame(id, _gameID);
         _clients[id]?.emit(IOChannel.name.string, name);
       } else {
         _serverLogger.info('Creating player with random name');
@@ -168,7 +168,7 @@ class GameServer {
         _clients[id] = client;
         _clientNames[id] = name;
         _addPlayer(Player(id, name: name));
-        mainServer.addClientToGame(id, _gameId);
+        mainServer.addClientToGame(id, _gameID);
         _clients[id]?.emit(IOChannel.name.string, name);
       }
 
@@ -183,7 +183,7 @@ class GameServer {
   }
 
   void _handleDisconnect(IO.Socket socket, PlayerID id, reason) {
-    _serverLogger.info('Client disconnected from $_gameId namespace $reason');
+    _serverLogger.info('Client disconnected from $_gameID namespace $reason');
     _clients[id] = null;
   }
 
@@ -204,9 +204,9 @@ class GameServer {
     for (final client in _clients.entries) {
       _serverLogger.info('Game update for client ${client.key}');
 
-      client.value?.emit(IOChannel.gamestate.string, json);
+      client.value?.emit(IOChannel.gameState.string, json);
     }
-    if (state.value?.status == GameStatus.Finished) {
+    if (state.value?.status == GameStatus.finished) {
       killGame();
     }
   }
@@ -221,7 +221,7 @@ class GameServer {
     }
     _socket.clearListeners();
     for (final c in _clients.keys) {
-      mainServer.removeClientFromGame(c, _gameId);
+      mainServer.removeClientFromGame(c, _gameID);
     }
   }
 
@@ -246,17 +246,17 @@ class GameServer {
   void killGame() {
     _dispose();
     _serverLogger.info('Killing game');
-    _onGameOver(_gameId);
+    _onGameOver(_gameID);
   }
 
   /// Note: only notify users that the game was killed if the killing was manually
   /// done so that it doesn't kick clients out of the game at the end of the game
   void notifyKilled(IO.Socket client) {
     for (final client in _clients.values) {
-      client?.emit(IOChannel.gamedeleted.string, true);
+      client?.emit(IOChannel.gameDeleted.string, true);
     }
     if (!_clients.values.contains(client)) {
-      client.emit(IOChannel.gamedeleted.string, true);
+      client.emit(IOChannel.gameDeleted.string, true);
     }
   }
 

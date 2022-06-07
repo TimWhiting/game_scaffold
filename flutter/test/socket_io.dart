@@ -25,7 +25,7 @@ Future<void> main() async {
         'One Player Joined');
     assert(
         read.gameFor(P1)(GameProviders.game).asData?.value.status ==
-            GameStatus.Started,
+            GameStatus.started,
         'Game is Started');
   });
   assert(1 == 1, 'Success');

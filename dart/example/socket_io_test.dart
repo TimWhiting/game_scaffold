@@ -30,7 +30,7 @@ Future<void> main() async {
     p1Game(GameProviders.code.notifier).state = code;
     await p1Game(GameProviders.joinGame.future);
     await Future.delayed(const Duration(milliseconds: 1));
-    expect(p1Game(GameProviders.status), GameStatus.Lobby);
+    expect(p1Game(GameProviders.status), GameStatus.lobby);
   });
   await Future.delayed(const Duration(seconds: 2));
   exit(0);

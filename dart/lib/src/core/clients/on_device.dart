@@ -148,7 +148,7 @@ class NoGameClient extends GameClient {
       for (final g in gms)
         GameInfo(
           status: g.read(BackendProviders.lobby).gameStatus,
-          gameId: g.gameCode,
+          gameID: g.gameCode,
           player: g
               .read(BackendProviders.lobby)
               .players

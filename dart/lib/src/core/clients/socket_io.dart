@@ -42,7 +42,7 @@ class IORoundClient extends RoundClient {
 
   @override
   Future<bool> exitGame(PlayerID playerID, GameCode code) async {
-    _socket!.off(IOChannel.gamestate.string);
+    _socket!.off(IOChannel.gameState.string);
     _socket!.off(IOChannel.lobby.string);
     logger.info('Exiting game');
     // gameStatus = GameStatus.NotJoined;
@@ -78,11 +78,12 @@ class IORoundClient extends RoundClient {
   @override
   Stream<GameOrError> gameStream(PlayerID playerID, GameCode code) async* {
     final sc = StreamController<GameOrError>();
-    _socket!.on(IOChannel.gamestate.string, (data) {
+    _socket!.on(IOChannel.gameState.string, (data) {
       _socket!.off(IOChannel.lobby.string);
+      // ignore: avoid_print
       print('game or error $data');
       final gameState = GameOrError.fromJson(data as Map<String, dynamic>);
-      logger.info('Got gamestate $data');
+      logger.info('Got gameState $data');
       sc.add(gameState);
     });
 
@@ -107,7 +108,7 @@ class IORoundClient extends RoundClient {
   @override
   Future<bool> startGame(PlayerID playerID, GameCode code) async {
     final result = await _socket!
-        .call(IOChannel.startgame, {'playerID': playerID, 'code': code});
+        .call(IOChannel.startGame, {'playerID': playerID, 'code': code});
     return result as bool;
   }
 }
@@ -157,20 +158,20 @@ class IOGameClient extends GameClient {
   }
 
   Future<GameCode> _createGame(GameConfig config) async {
-    final result = await socket.call(IOChannel.creategame, config.toJson());
+    final result = await socket.call(IOChannel.createGame, config.toJson());
     return result as GameCode;
   }
 
   @override
   Future<bool> deleteGame(PlayerID playerID, GameCode code) async {
     final result = await socket
-        .call(IOChannel.deletegame, {'code': code, 'playerID': playerID});
+        .call(IOChannel.deleteGame, {'code': code, 'playerID': playerID});
     return result as bool;
   }
 
   @override
   Future<IList<GameInfo>> getGames(PlayerID playerID) async {
-    final result = await socket.call(IOChannel.getgames, playerID);
+    final result = await socket.call(IOChannel.getGames, playerID);
     return (json.decode(result as String) as List<dynamic>)
         .map((v) => GameInfo.fromJson(v as Map<String, dynamic>))
         .toIList();
@@ -228,26 +229,26 @@ final socketIOOpts = <String, dynamic>{
   'forceNew': true,
 };
 
-/// The IO Channels used by the socket io implemenations of [GameClient] and [ServerClient]
+/// The IO Channels used by the socket io implementations of [GameClient] and [RoundClient]
 enum IOChannel {
-  gamestate,
+  gameState,
   event,
   register,
   connect,
   connection,
-  creategame,
-  gamecreated,
-  deletegame,
-  gamedeleted,
-  startgame,
-  gamestarted,
-  eventack,
-  gameinfo,
-  getgameinfo,
+  createGame,
+  gameCreated,
+  deleteGame,
+  gameDeleted,
+  startGame,
+  gameStarted,
+  eventAck,
+  gameInfo,
+  getGameInfo,
   name,
   disconnect,
-  getgames,
-  allgames,
+  getGames,
+  allGames,
   lobby,
 }
 
@@ -264,39 +265,39 @@ extension IOChannelX on IOChannel {
 
     switch (this) {
       case IOChannel.lobby:
-      case IOChannel.gamestate:
+      case IOChannel.gameState:
       case IOChannel.connect:
       case IOChannel.connection:
-      case IOChannel.gamecreated:
-      case IOChannel.gameinfo:
+      case IOChannel.gameCreated:
+      case IOChannel.gameInfo:
       case IOChannel.name:
       case IOChannel.disconnect:
-      case IOChannel.allgames:
-      case IOChannel.eventack:
-      case IOChannel.gamestarted:
-      case IOChannel.gamedeleted:
+      case IOChannel.allGames:
+      case IOChannel.eventAck:
+      case IOChannel.gameStarted:
+      case IOChannel.gameDeleted:
         throw error;
-      case IOChannel.startgame:
-        return IOChannel.gamestarted;
+      case IOChannel.startGame:
+        return IOChannel.gameStarted;
       case IOChannel.event:
-        return IOChannel.eventack;
-      case IOChannel.deletegame:
-        return IOChannel.gamedeleted;
-      case IOChannel.creategame:
-        return IOChannel.gamecreated;
+        return IOChannel.eventAck;
+      case IOChannel.deleteGame:
+        return IOChannel.gameDeleted;
+      case IOChannel.createGame:
+        return IOChannel.gameCreated;
       case IOChannel.register:
         return IOChannel.name;
-      case IOChannel.getgameinfo:
-        return IOChannel.gameinfo;
-      case IOChannel.getgames:
-        return IOChannel.allgames;
+      case IOChannel.getGameInfo:
+        return IOChannel.gameInfo;
+      case IOChannel.getGames:
+        return IOChannel.allGames;
     }
   }
 }
 
 extension SocketIOX on IO.Socket {
-  /// Calls `requestChannel` with `request`, and receives the corresponding
-  /// response on the `requestChannel.reponseChannel`, returning it as a `Future`
+  /// Calls [requestChannel] with [request], and receives the corresponding
+  /// response on the `requestChannel.responseChannel`, returning it as a `Future`
   Future<Object> call(IOChannel requestChannel, Object? request) {
     final responseChannel = requestChannel.responseChannel;
     final completer = Completer<Object>();

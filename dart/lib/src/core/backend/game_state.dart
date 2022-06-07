@@ -26,7 +26,7 @@ class BackendProviders {
   static final lobby = StateNotifierProvider.autoDispose<LobbyNotifier, Lobby>(
     (ref) => LobbyNotifier(
       Lobby(
-        gameStatus: GameStatus.Lobby,
+        gameStatus: GameStatus.lobby,
         code: '',
         players: <Player>{}.lock,
         config: const GameConfig(gameType: ''),
@@ -42,7 +42,7 @@ class BackendProviders {
       final pls = l.players;
       if (pls.any((p) => p.id == player)) {
         yield GameInfo(
-          gameId: l.code,
+          gameID: l.code,
           status: l.gameStatus,
           player: pls.firstWhere((p) => p.id == player).name,
           creator: player == l.config.adminID,
@@ -94,7 +94,7 @@ class LobbyNotifier extends StateNotifier<Lobby> {
   }
 
   void start() {
-    state = state.copyWith(gameStatus: GameStatus.Started);
+    state = state.copyWith(gameStatus: GameStatus.started);
   }
 }
 
@@ -180,11 +180,11 @@ class GameStateNotifier<E extends Event, G extends Game<E>>
 }
 
 GameCode generateGameID(List<String> avoidList) {
-  var gameid = '';
-  while (gameid.length != 4 || avoidList.contains(gameid)) {
-    gameid = ('BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle())
+  var gameID = '';
+  while (gameID.length != 4 || avoidList.contains(gameID)) {
+    gameID = ('BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle())
         .join()
         .substring(0, 4);
   }
-  return gameid;
+  return gameID;
 }

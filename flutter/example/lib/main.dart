@@ -124,11 +124,11 @@ class CreateOrJoinWidget extends HookConsumerWidget {
               for (final info in allGames.value!)
                 ElevatedButton(
                   onPressed: () async {
-                    ref.read(GameProviders.code.notifier).state = info.gameId;
+                    ref.read(GameProviders.code.notifier).state = info.gameID;
                     await GameProviders.joinGame.refresh(ref);
                   },
                   child: Text(
-                      'Started Game: ${info.gameId}, Players: ${info.players}'),
+                      'Started Game: ${info.gameID}, Players: ${info.players}'),
                 ),
           ],
         ),
@@ -214,7 +214,7 @@ class GameWidget extends HookConsumerWidget {
                       ),
                   ],
                 ),
-              if (gameStatus == GameStatus.BetweenRounds &&
+              if (gameStatus == GameStatus.betweenRounds &&
                   !g.readyPlayers.contains(playerID)) ...[
                 const SizedBox(height: 20),
                 ElevatedButton(

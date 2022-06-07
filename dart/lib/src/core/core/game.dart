@@ -82,7 +82,8 @@ abstract class Game<E extends Event> {
   static Game getInitialState(GameConfig gameConfig, IList<Player> players) {
     final initState = _initialStates[gameConfig.gameType];
     if (initState == null) {
-      throw UnimplementedError('No game of that type exists in the registry ${gameConfig.gameType}');
+      throw UnimplementedError(
+          'No game of that type exists in the registry ${gameConfig.gameType}');
     }
     return initState(gameConfig, players);
   }
@@ -91,48 +92,53 @@ abstract class Game<E extends Event> {
   static GameEvent gameEventFromJson(Map<String, dynamic> json) {
     final fromJson = _eventFromJsonFactory[json['type']];
     if (fromJson == null) {
-      throw UnimplementedError('No GameEvent of that type exists ${json['type']}');
+      throw UnimplementedError(
+          'No GameEvent of that type exists ${json['type']}');
     }
     return fromJson(json);
   }
 
   /// Registers the set of general events
   static void _registerGeneralEvents() {
-    _eventFromJsonFactory['GenericEvent'] = (j) => GenericEvent.fromJson(j).asGameEvent;
+    _eventFromJsonFactory['GenericEvent'] =
+        (j) => GenericEvent.fromJson(j).asGameEvent;
   }
 
   /// Some private fields to keep track of information about registered games
 
   /// Converts the game from json based on the type
-  static final Map<GameType, Game Function(Map<String, dynamic>)> _fromJsonFactory = {};
+  static final Map<GameType, Game Function(Map<String, dynamic>)>
+      _fromJsonFactory = {};
 
   /// Converts the game to a potentially smaller form for sending over the wire
   static final Map<GameType, Game Function(Game)> _toClientViews = {};
 
   /// Converts the event from json to the event type
-  static final Map<GameType, GameEvent Function(Map<String, dynamic>)> _eventFromJsonFactory = {};
+  static final Map<GameType, GameEvent Function(Map<String, dynamic>)>
+      _eventFromJsonFactory = {};
 
   /// Stores the user friendly name of the game based on the type
   static final Map<GameType, String> gameNames = {};
 
   /// Stores the function to create the initial state of the game
-  static final Map<GameType, Game Function(GameConfig, IList<Player>)> _initialStates = {};
+  static final Map<GameType, Game Function(GameConfig, IList<Player>)>
+      _initialStates = {};
 }
 
 /// Represents the current status of the game as seen by the client
 enum GameStatus {
   /// The client is waiting for the game to start
-  Lobby,
+  lobby,
 
   /// The game has started
-  Started,
+  started,
 
   /// The game is waiting for the clients to signal that they are ready for the
   /// next round before moving on
-  BetweenRounds,
+  betweenRounds,
 
   /// The game is finished
-  Finished,
+  finished,
 }
 
 /// Some general config parameters for a game of [gameType]
@@ -154,13 +160,14 @@ class GameConfig with _$GameConfig {
     /// [options] must be json serializable
     Map<String, dynamic>? options,
   }) = _GameConfig;
-  factory GameConfig.fromJson(Map<String, dynamic> map) => _$GameConfigFromJson(map);
+  factory GameConfig.fromJson(Map<String, dynamic> map) =>
+      _$GameConfigFromJson(map);
 }
 
 /// An object to provide info about a particular game to the client
 ///
 /// Includes
-/// * The game's [gameId] on the server
+/// * The game's [gameID] on the server
 /// * The game's [gameType]
 /// * A list of [players] who are part of the game
 /// * The [player]'s id in the game
@@ -168,14 +175,15 @@ class GameConfig with _$GameConfig {
 @freezed
 class GameInfo with _$GameInfo {
   const factory GameInfo({
-    required GameCode gameId,
+    required GameCode gameID,
     required IList<PlayerName> players,
     required PlayerName player,
     required bool creator,
     required GameType gameType,
     required GameStatus status,
   }) = _GameInfo;
-  factory GameInfo.fromJson(Map<String, dynamic> map) => _$GameInfoFromJson(map);
+  factory GameInfo.fromJson(Map<String, dynamic> map) =>
+      _$GameInfoFromJson(map);
 }
 
 @freezed

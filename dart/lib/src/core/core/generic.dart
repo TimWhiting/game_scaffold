@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'core.dart';
@@ -35,7 +36,8 @@ class GenericGame with _$GenericGame {
   ) = _GenericGame;
   const GenericGame._();
 
-  factory GenericGame.fromJson(Map<String, dynamic> map) => _$GenericGameFromJson(map);
+  factory GenericGame.fromJson(Map<String, dynamic> map) =>
+      _$GenericGameFromJson(map);
 
   /// Creates a default initialized game with [players]
   factory GenericGame.start(
@@ -49,7 +51,7 @@ class GenericGame with _$GenericGame {
         <IList<double>>[].lock,
         DateTime.now(),
         <GameMessage>[].lock,
-        GameStatus.Started,
+        GameStatus.started,
         0,
         0,
         multiPly,
@@ -68,7 +70,7 @@ class GenericGame with _$GenericGame {
         <IList<double>>[].lock,
         DateTime.now(),
         <GameMessage>[].lock,
-        GameStatus.Started,
+        GameStatus.started,
         0,
         Random().nextInt(players.length),
         multiPly,
@@ -76,36 +78,42 @@ class GenericGame with _$GenericGame {
       );
 
   /// Gets the player at the [currentPlayerIndex]
-  Player? get currentPlayer => currentPlayerIndex == null ? null : players[currentPlayerIndex!];
+  Player? get currentPlayer =>
+      currentPlayerIndex == null ? null : players[currentPlayerIndex!];
 
   /// Gets the total score for each player based off of [allRoundScores]
-  IMap<PlayerID, double> get totalScores => playerRoundScores.mapValues((entry) => entry.value.sum);
+  IMap<PlayerID, double> get totalScores =>
+      playerRoundScores.mapValues((entry) => entry.value.sum);
 
   /// Gets the scores for each player for all rounds based off of [allRoundScores]
   IMap<PlayerID, IList<double>> get playerRoundScores => IMap({
-        for (var p = 0; p < players.length; p++) players[p].id: IList(allRoundScores.map((rs) => rs[p])),
+        for (var p = 0; p < players.length; p++)
+          players[p].id: IList(allRoundScores.map((rs) => rs[p])),
       });
 
   /// Gets the scores for each round for each player based off of [allRoundScores]
-  IList<IMap<PlayerID, double>> get roundPlayerScores => IList(allRoundScores.map((rs) => IMap(
-        {
-          for (var i = 0; i < players.length; i++) players[i].id: rs[i],
-        },
-      )));
+  IList<IMap<PlayerID, double>> get roundPlayerScores =>
+      IList(allRoundScores.map((rs) => IMap(
+            {
+              for (var i = 0; i < players.length; i++) players[i].id: rs[i],
+            },
+          )));
 
   /// Gets whether the game is over
-  bool get gameOver => status == GameStatus.Finished;
+  bool get gameOver => status == GameStatus.finished;
 
   /// Gets whether the round is over
-  bool get roundOver => status == GameStatus.BetweenRounds;
+  bool get roundOver => status == GameStatus.betweenRounds;
 
   /// Returns a copy of the [GenericGame] with the next player in the player
   /// array as the current player
-  GenericGame nextPlayer() => copyWith(currentPlayerIndex: (currentPlayerIndex! + 1) % players.length);
+  GenericGame nextPlayer() =>
+      copyWith(currentPlayerIndex: (currentPlayerIndex! + 1) % players.length);
 
   /// Returns a copy of the [GenericGame] with the current player being the one
   /// with id [player]
-  GenericGame setNextPlayer(PlayerID player) => copyWith(currentPlayerIndex: players.indexWhere((p) => p.id == player));
+  GenericGame setNextPlayer(PlayerID player) =>
+      copyWith(currentPlayerIndex: players.indexWhere((p) => p.id == player));
 
   /// Returns a copy of the [GenericGame] with the time updated to the current time
   GenericGame updateTime() => copyWith(time: DateTime.now());
@@ -116,19 +124,20 @@ class GenericGame with _$GenericGame {
       );
 
   /// Returns a copy of the [GenericGame] with the [round] incremented,
-  /// [status] set to [GameStatus.Started] and optionally the
+  /// [status] set to [GameStatus.started] and optionally the
   /// players' [scores] added to [allRoundScores]
   GenericGame finishRound([Map<PlayerID, double>? scores]) => scores != null
       ? updateScores(scores).copyWith(
           round: round + 1,
-          status: GameStatus.Started,
+          status: GameStatus.started,
         )
-      : copyWith(round: round + 1, status: GameStatus.Started);
+      : copyWith(round: round + 1, status: GameStatus.started);
 
   /// Returns a copy of the [GenericGame] with the [scores] added to
   /// [allRoundScores]
-  GenericGame updateScores(Map<PlayerID, double> scores) =>
-      copyWith(allRoundScores: allRoundScores.add(players.map((p) => scores[p.id]!).toIList()));
+  GenericGame updateScores(Map<PlayerID, double> scores) => copyWith(
+      allRoundScores:
+          allRoundScores.add(players.map((p) => scores[p.id]!).toIList()));
 
   /// Returns a copy of the [GenericGame] with the [status] updated to [status]
   GenericGame updateStatus(GameStatus status) => copyWith(status: status);
@@ -143,7 +152,8 @@ class GenericGame with _$GenericGame {
   GenericGame clearReadyPlayers() => copyWith(readyPlayers: <PlayerID>[].lock);
 
   /// Adds a ready player to the list
-  GenericGame addReadyPlayer(PlayerID player) => copyWith(readyPlayers: readyPlayers.add(player));
+  GenericGame addReadyPlayer(PlayerID player) =>
+      copyWith(readyPlayers: readyPlayers.add(player));
 }
 
 /// A [GenericEvent] that is handled by the Generic server implementation
@@ -156,7 +166,8 @@ class GenericEvent with _$GenericEvent implements Event {
   const factory GenericEvent.undo() = GenericEventUndo;
 
   /// Signals that [player] is ready for the next round
-  const factory GenericEvent.readyNextRound(String player) = _GenericReadyNextRoundEvent;
+  const factory GenericEvent.readyNextRound(String player) =
+      _GenericReadyNextRoundEvent;
 
   /// Sends a [message] from the player with id [from] to the player with id [to]
   const factory GenericEvent.message(
@@ -165,7 +176,8 @@ class GenericEvent with _$GenericEvent implements Event {
     required PlayerID? to,
   }) = GameMessage;
 
-  factory GenericEvent.fromJson(Map<String, dynamic> map) => _$GenericEventFromJson(map);
+  factory GenericEvent.fromJson(Map<String, dynamic> map) =>
+      _$GenericEventFromJson(map);
   @override
   String get type => 'GenericEvent';
 }

@@ -15,11 +15,11 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_hooks: ^0.18.0
-  flutter_riverpod: ^1.0.0
+  flutter_riverpod: ^2.0.0-dev.9
   game_scaffold_dart: ^0.4.1+1
-  hooks_riverpod: ^1.0.0
+  hooks_riverpod: ^2.0.0-dev.9
   logging: ^1.0.0
-  riverpod: ^1.0.0
+  riverpod: ^2.0.0-dev.9
 
 dev_dependencies:
   dartdoc: any

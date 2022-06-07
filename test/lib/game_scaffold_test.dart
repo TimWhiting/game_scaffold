@@ -25,16 +25,20 @@ void testGame<T extends Game>(
     root.read(GameProviders.clientType.notifier).state = OnDeviceClient;
 
     for (final p in players) {
-      readers[p.id] = ProviderContainer(parent: root, overrides: [GameProviders.playerID.overrideWithValue(p.id)]).read;
+      readers[p.id] = ProviderContainer(
+          parent: root,
+          overrides: [GameProviders.playerID.overrideWithValue(p.id)]).read;
     }
     readers[players.first.id]!(GameProviders.config.notifier).state = config;
-    final code = await readers[players.first.id]!(GameProviders.createGame.future);
+    final code =
+        await readers[players.first.id]!(GameProviders.createGame.future);
     for (final p in players) {
       readers[p.id]!(GameProviders.code.notifier).state = code;
       await readers[p.id]!(GameProviders.joinGame.future);
     }
 
-    if (readers[players.first.id]!(GameProviders.status) != GameStatus.Started) {
+    if (readers[players.first.id]!(GameProviders.status) !=
+        GameStatus.started) {
       await readers[players.first.id]!(GameProviders.startGame.future);
     }
 
@@ -44,7 +48,7 @@ void testGame<T extends Game>(
 
 /// `GameTester` lets you test an event and check it's outcome
 ///
-/// Just call [event] with your event, and a function that recieves a game and error
+/// Just call [event] with your event, and a function that receives a game and error
 /// and check the properties you want
 class GameTester<T extends Game> {
   GameTester(this.read, this.readers, this._players, this.code);
@@ -66,7 +70,8 @@ class GameTester<T extends Game> {
   /// });
   /// ```
   void event(Event event, Function(T, GameError?) outcome) {
-    backendReader(BackendProviders.state.notifier).handleEvent(event.asGameEvent);
+    backendReader(BackendProviders.state.notifier)
+        .handleEvent(event.asGameEvent);
 
     final g = game;
     final e = error;
@@ -92,7 +97,8 @@ class GameTester<T extends Game> {
   /// the round has advanced
   void nextRound(Function(T) expectation) {
     for (final p in _players) {
-      backendReader(BackendProviders.state.notifier).handleEvent(GenericEvent.readyNextRound(p.id).asGameEvent);
+      backendReader(BackendProviders.state.notifier)
+          .handleEvent(GenericEvent.readyNextRound(p.id).asGameEvent);
     }
 
     expectation(game);

@@ -1,0 +1,3 @@
+dependency_overrides:
+  game_scaffold_dart:
+    path: ../dart

@@ -73,30 +73,30 @@ class IOServer {
       (reason) => _clientDisconnect(client, reason),
     );
     client.on(
-      IOChannel.creategame.string,
+      IOChannel.createGame.string,
       (config) => _createGame(client, config as Map<String, dynamic>),
     );
     client.on(
-      IOChannel.getgames.string,
+      IOChannel.getGames.string,
       (clientId) => _getGames(client, clientId as String),
     );
     client.on(
-      IOChannel.getgameinfo.string,
+      IOChannel.getGameInfo.string,
       (id) => _getGameInfo(client, id as String),
     );
 
     client.on(
-      IOChannel.deletegame.string,
+      IOChannel.deleteGame.string,
       (id) => _deleteGame(client, id as String),
     );
   }
 
   void _getGameInfo(IO.Socket client, PlayerID id) {
     if (servers.containsKey(id)) {
-      client.emit(IOChannel.gameinfo.string,
+      client.emit(IOChannel.gameInfo.string,
           servers[id]!.gameInfo(servers[id]!.clientID(client)).toJson());
     } else {
-      client.emit(IOChannel.gameinfo.string, '404');
+      client.emit(IOChannel.gameInfo.string, '404');
     }
   }
 
@@ -111,16 +111,16 @@ class IOServer {
   ) {
     logger.fine('Creating game');
     final gameConfig = GameConfig.fromJson(config);
-    final gameid = generateGameID(servers.keys.toList());
+    final gameID = generateGameID(servers.keys.toList());
     final scopedContainer = ProviderContainer();
     final lobby = scopedContainer.read(BackendProviders.lobby.notifier);
-    lobby.setCode(gameid);
+    lobby.setCode(gameID);
     lobby.setConfig(gameConfig);
     final server = GameServer(
-        io, this, scopedContainer.read, gameid, servers.remove,
+        io, this, scopedContainer.read, gameID, servers.remove,
         debug: debug);
     servers[server.gameID] = server;
-    client.emit(IOChannel.gamecreated.string, server.gameID);
+    client.emit(IOChannel.gameCreated.string, server.gameID);
   }
 
   Future<void> _deleteGame(IO.Socket client, GameCode id) async {
@@ -132,7 +132,7 @@ class IOServer {
 
   void _getGames(IO.Socket client, PlayerID id) {
     if (_clientGames[id] == null) {
-      client.emit(IOChannel.allgames.string, json.encode([]));
+      client.emit(IOChannel.allGames.string, json.encode([]));
     } else {
       _updateGames(id, client);
     }
@@ -143,17 +143,17 @@ class IOServer {
     final games = _clientGames[id]!;
     final gameInfo =
         games.map((g) => servers[g]!.gameInfo(id).toJson()).toList();
-    client.emit(IOChannel.allgames.string, json.encode(gameInfo));
+    client.emit(IOChannel.allGames.string, json.encode(gameInfo));
   }
 
-  void addClientToGame(PlayerID id, GameCode gameId) {
+  void addClientToGame(PlayerID id, GameCode gameID) {
     if (_clientGames[id] == null) {
       _clientGames[id] = {};
     }
-    _clientGames[id]!.add(gameId);
+    _clientGames[id]!.add(gameID);
   }
 
-  void removeClientFromGame(PlayerID id, GameCode gameId) {
-    _clientGames[id]?.remove(gameId);
+  void removeClientFromGame(PlayerID id, GameCode gameID) {
+    _clientGames[id]?.remove(gameID);
   }
 }

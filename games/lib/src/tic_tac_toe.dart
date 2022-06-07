@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 
@@ -13,10 +14,12 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
   }) = _TicTacToeGame;
   const TicTacToeGame._();
 
-  factory TicTacToeGame.fromJson(Map<String, dynamic> map) => _$TicTacToeGameFromJson(map);
+  factory TicTacToeGame.fromJson(Map<String, dynamic> map) =>
+      _$TicTacToeGameFromJson(map);
 
   @override
-  GameOrError<TicTacToeGame> next(TicTacToeGameEvent event) => _handleMove(event.player, event.location);
+  GameOrError<TicTacToeGame> next(TicTacToeGameEvent event) =>
+      _handleMove(event.player, event.location);
 
   GameOrError<TicTacToeGame> _handleMove(PlayerID player, int location) {
     if (player != currentPlayer?.id) {
@@ -36,27 +39,35 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
     if (playerIDs.any(isWinner) || board.every((l) => l != null)) {
       if (round == 2) {
         gGame = gGame.finishRound(
-          {players[0].id: points[players[0].id]!, players[1].id: points[players[1].id]!},
-        ).updateStatus(GameStatus.Finished);
+          {
+            players[0].id: points[players[0].id]!,
+            players[1].id: points[players[1].id]!
+          },
+        ).updateStatus(GameStatus.finished);
       } else {
-        gGame = gGame.updateStatus(GameStatus.BetweenRounds);
+        gGame = gGame.updateStatus(GameStatus.betweenRounds);
       }
     }
     return copyWith(generic: gGame);
   }
 
-  bool canMove(PlayerID player, int location) => location >= 0 && location < 9 && board[location] == null;
+  bool canMove(PlayerID player, int location) =>
+      location >= 0 && location < 9 && board[location] == null;
 
   @override
   TicTacToeGame moveNextRound(GameConfig config) => TicTacToeGame(
         generic: generic.finishRound(
-          {players[0].id: points[players[0].id]!, players[1].id: points[players[1].id]!},
+          {
+            players[0].id: points[players[0].id]!,
+            players[1].id: points[players[1].id]!
+          },
         ),
         board: List.filled(9, null).lock,
       );
 
   @override
-  TicTacToeGame copyWithGeneric(GenericGame Function(GenericGame p1) updates) => copyWith(generic: updates(generic));
+  TicTacToeGame copyWithGeneric(GenericGame Function(GenericGame p1) updates) =>
+      copyWith(generic: updates(generic));
 
   IMap<String, double> get points => IMap({
         for (final p in playerIDs)
@@ -79,7 +90,8 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
   ].map((l) => l.lock).toIList();
 
   bool isWinner(PlayerID playerID) {
-    if (winningLocationCombinations.any((comb) => comb.every((loc) => board[loc] == playerID))) {
+    if (winningLocationCombinations
+        .any((comb) => comb.every((loc) => board[loc] == playerID))) {
       return true;
     }
     return false;
@@ -113,10 +125,12 @@ class TicTacToeGame with _$TicTacToeGame implements Game<TicTacToeGameEvent> {
 
 @freezed
 class TicTacToeGameEvent with _$TicTacToeGameEvent implements Event {
-  const factory TicTacToeGameEvent(PlayerID player, int location) = _TicTacToeGameEvent;
+  const factory TicTacToeGameEvent(PlayerID player, int location) =
+      _TicTacToeGameEvent;
   const TicTacToeGameEvent._();
 
-  factory TicTacToeGameEvent.fromJson(Map<String, dynamic> map) => _$TicTacToeGameEventFromJson(map);
+  factory TicTacToeGameEvent.fromJson(Map<String, dynamic> map) =>
+      _$TicTacToeGameEventFromJson(map);
   @override
   String get type => 'tictactoe';
 }

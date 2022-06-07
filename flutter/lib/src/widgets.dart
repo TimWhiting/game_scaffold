@@ -1,3 +1,5 @@
+// ignore_for_file: do_not_use_environment
+
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -9,8 +11,8 @@ import 'package:logging/logging.dart';
 
 @visibleForTesting
 bool multiplayerOverride = false;
-// ignore: do_not_use_environment
-bool get multiplayerTest => const bool.fromEnvironment('MULTIPLAYER_TEST') || multiplayerOverride;
+bool get multiplayerTest =>
+    const bool.fromEnvironment('MULTIPLAYER_TEST') || multiplayerOverride;
 
 final navigationLogger = Logger('GameNavigator');
 final isDesktop = !(kIsWeb || isMobile);
@@ -29,7 +31,8 @@ class MultiPlayerWidget extends HookConsumerWidget {
   final Widget? additionalOptions;
 
   static const addPlayerKey = ValueKey('addPlayer');
-  static ValueKey<String> getPlayerNumberKey(int index) => ValueKey('playerNumber$index');
+  static ValueKey<String> getPlayerNumberKey(int index) =>
+      ValueKey('playerNumber$index');
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,7 +40,8 @@ class MultiPlayerWidget extends HookConsumerWidget {
     final lock = useState(false);
     final currentApp = useState(0);
     final sideBySide = useState(isDesktop);
-    final ipAddress = useTextEditingController(text: '${ref.watch(GameProviders.remoteUri)}');
+    final ipAddress =
+        useTextEditingController(text: '${ref.watch(GameProviders.remoteUri)}');
     if (multiplayerTest) {
       return Scaffold(
         body: Column(
@@ -46,12 +50,16 @@ class MultiPlayerWidget extends HookConsumerWidget {
               child: sideBySide.value
                   ? Row(
                       children: [
-                        for (var i = 0; i < apps.length; i++) Expanded(child: app(i, code, apps[i])),
+                        for (var i = 0; i < apps.length; i++)
+                          Expanded(child: app(i, code, apps[i])),
                       ],
                     )
                   : IndexedStack(
                       index: currentApp.value,
-                      children: [for (var i = 0; i < apps.length; i++) app(i, code, apps[i])],
+                      children: [
+                        for (var i = 0; i < apps.length; i++)
+                          app(i, code, apps[i])
+                      ],
                     ),
             ),
             Row(
@@ -94,13 +102,17 @@ class MultiPlayerWidget extends HookConsumerWidget {
                             ),
                           ],
                           IconButton(
-                            icon: lock.value ? const Icon(Icons.lock_open) : const Icon(Icons.lock),
+                            icon: lock.value
+                                ? const Icon(Icons.lock_open)
+                                : const Icon(Icons.lock),
                             onPressed: () {
                               lock.value = !lock.value;
                             },
                           ),
                           IconButton(
-                            icon: sideBySide.value ? const Icon(Icons.tab) : const Icon(Icons.calendar_view_week),
+                            icon: sideBySide.value
+                                ? const Icon(Icons.tab)
+                                : const Icon(Icons.calendar_view_week),
                             onPressed: () {
                               sideBySide.value = !sideBySide.value;
                             },
@@ -114,16 +126,20 @@ class MultiPlayerWidget extends HookConsumerWidget {
                           DropdownButton<ClientType>(
                             value: ref.watch(GameProviders.clientType),
                             items: [
-                              for (final backendType in ref.watch(GameProviders.allClientTypes))
+                              for (final backendType
+                                  in ref.watch(GameProviders.allClientTypes))
                                 DropdownMenuItem<ClientType>(
                                   value: backendType,
                                   child: Text(backendType.name),
                                 ),
                             ],
-                            onChanged: (v) => ref.read(GameProviders.clientType.notifier).state = v!,
+                            onChanged: (v) => ref
+                                .read(GameProviders.clientType.notifier)
+                                .state = v!,
                           ),
                           const SizedBox(width: 20),
-                          if (ref.watch(GameProviders.clientType) == IOClient) ...[
+                          if (ref.watch(GameProviders.clientType) ==
+                              IOClient) ...[
                             const SizedBox(width: 20),
                             SizedBox(
                               width: 200,
@@ -137,7 +153,9 @@ class MultiPlayerWidget extends HookConsumerWidget {
                                   // TODO: Use a formatter to limit what someone can type in the field
                                   final uri = Uri.tryParse(value);
                                   if (uri != null) {
-                                    ref.read(GameProviders.remoteUri.notifier).state = uri;
+                                    ref
+                                        .read(GameProviders.remoteUri.notifier)
+                                        .state = uri;
                                   }
                                 },
                               ),
@@ -171,7 +189,9 @@ class MultiPlayerWidget extends HookConsumerWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(StringProperty('code', code));
-    properties.add(ObjectFlagProperty<Widget Function(int p1, String? p2, Key p3)>.has('app', app));
+    properties.add(
+        ObjectFlagProperty<Widget Function(int p1, String? p2, Key p3)>.has(
+            'app', app));
   }
 }
 
@@ -201,16 +221,17 @@ class GameNavigator extends HookConsumerWidget {
     final gameStatus = ref.watch(GameProviders.status);
 
     final pages = {'disconnected': disconnected};
-    navigationLogger.info('PlayerID: ${ref.read(GameProviders.playerID)} gameStatus: $gameStatus');
+    navigationLogger.info(
+        'PlayerID: ${ref.read(GameProviders.playerID)} gameStatus: $gameStatus');
 
     if (conn) {
       pages['connected'] = connected;
       if (gameStatus != null) {
         pages['lobby'] = lobby;
-        if (gameStatus != GameStatus.Lobby) {
-          if (gameStatus == GameStatus.BetweenRounds && betweenRounds != game) {
+        if (gameStatus != GameStatus.lobby) {
+          if (gameStatus == GameStatus.betweenRounds && betweenRounds != game) {
             pages['started'] = betweenRounds;
-          } else if (gameStatus == GameStatus.Finished && gameOver != game) {
+          } else if (gameStatus == GameStatus.finished && gameOver != game) {
             pages['started'] = gameOver;
           } else {
             pages['started'] = game;
