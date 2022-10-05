@@ -1,12 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 import 'core.dart';
-import 'errors.dart';
-import 'events.dart';
-import 'extensions.dart';
-import 'generic.dart';
-import 'player.dart';
 
 export 'errors.dart';
 

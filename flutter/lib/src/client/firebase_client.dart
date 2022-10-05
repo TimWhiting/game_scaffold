@@ -17,14 +17,47 @@ List<Override> firebaseOverrides() => [
           .overrideWithProvider(firebaseGameClient),
     ];
 
-class FirebaseRoundClient extends RoundClient {
-  FirebaseRoundClient(this.ref);
+mixin FirebaseDatabaseHelpers {
+  ProviderRef get ref;
 
-  final ProviderRef ref;
   FirebaseFunctions get functions =>
       FirebaseFunctions.instanceFor(app: ref.read(firebaseAppProvider).value);
+
   FirebaseDatabase get firebaseDb =>
       FirebaseDatabase.instanceFor(app: ref.read(firebaseAppProvider).value!);
+
+  DatabaseReference get gamesReference => firebaseDb.ref('games');
+
+  DatabaseReference get allGames => firebaseDb.ref('allGames');
+
+  DatabaseReference game(GameCode code) => gamesReference.child(code);
+
+  DatabaseReference gameState(GameCode code) => game(code).child('state');
+
+  DatabaseReference gameConfig(GameCode code) => game(code).child('config');
+
+  DatabaseReference lobbyRef(GameCode code) => game(code).child('lobby');
+
+  DatabaseReference gamePlayersRef(GameCode code) =>
+      lobbyRef(code).child('players');
+
+  DatabaseReference playerGames(PlayerID player) =>
+      firebaseDb.ref('playerGames').child(player).child('games');
+
+  Future<GameInfo> lobbyFromFirebase(PlayerID playerID, GameCode game) async {
+    final info = await lobbyRef(game).get();
+    final json = info.value as Map<String, dynamic>;
+    json['creator'] = json['creator'] as PlayerID == playerID;
+    json['player'] ??= '';
+    return GameInfo.fromJson(json);
+  }
+}
+
+class FirebaseRoundClient extends RoundClient with FirebaseDatabaseHelpers {
+  FirebaseRoundClient(this.ref);
+
+  @override
+  final ProviderRef ref;
   @override
   void dispose() {}
 
@@ -32,8 +65,7 @@ class FirebaseRoundClient extends RoundClient {
   Future<bool> exitGame(PlayerID playerID, GameCode code) async => true;
 
   @override
-  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) => firebaseDb
-      .ref('games/$code/lobby')
+  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) => game(code)
       .onValue
       .map((v) => GameInfo.fromJson(v.snapshot.value! as Map<String, dynamic>));
 
@@ -62,34 +94,53 @@ class FirebaseRoundClient extends RoundClient {
 
   @override
   Future<bool> startGame(PlayerID playerID, GameCode code) async {
-    final result = await functions
-        .httpsCallable('startGame')
-        .call({'playerID': playerID, 'code': code});
-    return result.data as bool;
+    await lobbyRef(code).update({'status': GameStatus.Started.name});
+    final config = await gameConfig(code).get();
+    final players = await lobbyRef(code).child('players').get();
+    await gameState(code).set(
+      Game.getInitialState(
+        GameConfig.fromJson(config.value as Map<String, dynamic>),
+        players as List<PlayerName>? ?? <PlayerName>[],
+      ),
+    );
+    return true;
   }
 }
 
-class FirebaseGameClient extends GameClient {
+class FirebaseGameClient extends GameClient with FirebaseDatabaseHelpers {
   FirebaseGameClient(this.ref);
 
+  @override
   final ProviderRef ref;
-  FirebaseFunctions get functions =>
-      FirebaseFunctions.instanceFor(app: ref.read(firebaseAppProvider).value);
 
   @override
   Future<GameCode> createGame(PlayerID playerID, GameConfig config) async {
-    final result = await functions
-        .httpsCallable('createGame')
-        .call({'playerID': playerID, 'config': config.toJson()});
-    return result.data as GameCode;
+    final codes = (await allGames.get()).value as List? ?? [];
+    final newCode = generateGameID(codes.cast());
+    await allGames.set([...codes, newCode]);
+    await gameConfig(newCode).set(config.toJson());
+    await lobbyRef(newCode).set({
+      'players': [],
+      'gameType': config.gameType,
+      'status': GameStatus.Lobby,
+      'gameId': newCode,
+      'creator': playerID,
+    });
+    final games = await playerGames(playerID).get();
+
+    await playerGames(playerID).set([...games.value as List? ?? [], newCode]);
+
+    return newCode;
   }
 
   @override
   Future<bool> deleteGame(PlayerID playerID, GameCode code) async {
-    final result = await functions
-        .httpsCallable('deleteGame')
-        .call({'playerID': playerID, 'code': code});
-    return result.data as bool;
+    final games = await playerGames(playerID).get();
+    await playerGames(playerID).set((games.value as List? ?? [])..remove(code));
+    await game(code).remove();
+    final all = await allGames.get();
+    await allGames.set((all as List? ?? [])..remove(code));
+    return true;
   }
 
   @override
@@ -97,10 +148,11 @@ class FirebaseGameClient extends GameClient {
 
   @override
   Future<IList<GameInfo>> getGames(PlayerID playerID) async {
-    final result =
-        await functions.httpsCallable('getGames').call({'playerID': playerID});
-    return (result.data as List)
-        .map((e) => GameInfo.fromJson(e as Map<String, dynamic>))
-        .toIList();
+    final gameCodes = await playerGames(playerID).get();
+    final infos = <GameInfo>[];
+    for (final game in gameCodes.value as List<GameCode>? ?? <GameCode>[]) {
+      infos.add(await lobbyFromFirebase(playerID, game));
+    }
+    return infos.lock;
   }
 }
