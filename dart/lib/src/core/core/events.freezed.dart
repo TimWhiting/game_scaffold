@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'events.dart';
@@ -11,27 +12,7 @@ part of 'events.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$GameEventTearOff {
-  const _$GameEventTearOff();
-
-  GameEventGame game(Event event) {
-    return GameEventGame(
-      event,
-    );
-  }
-
-  GameEventGeneral general(GenericEvent event) {
-    return GameEventGeneral(
-      event,
-    );
-  }
-}
-
-/// @nodoc
-const $GameEvent = _$GameEventTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$GameEvent {
@@ -91,28 +72,28 @@ class _$GameEventCopyWithImpl<$Res> implements $GameEventCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class $GameEventGameCopyWith<$Res> {
-  factory $GameEventGameCopyWith(
-          GameEventGame value, $Res Function(GameEventGame) then) =
-      _$GameEventGameCopyWithImpl<$Res>;
+abstract class _$$GameEventGameCopyWith<$Res> {
+  factory _$$GameEventGameCopyWith(
+          _$GameEventGame value, $Res Function(_$GameEventGame) then) =
+      __$$GameEventGameCopyWithImpl<$Res>;
   $Res call({Event event});
 }
 
 /// @nodoc
-class _$GameEventGameCopyWithImpl<$Res> extends _$GameEventCopyWithImpl<$Res>
-    implements $GameEventGameCopyWith<$Res> {
-  _$GameEventGameCopyWithImpl(
-      GameEventGame _value, $Res Function(GameEventGame) _then)
-      : super(_value, (v) => _then(v as GameEventGame));
+class __$$GameEventGameCopyWithImpl<$Res> extends _$GameEventCopyWithImpl<$Res>
+    implements _$$GameEventGameCopyWith<$Res> {
+  __$$GameEventGameCopyWithImpl(
+      _$GameEventGame _value, $Res Function(_$GameEventGame) _then)
+      : super(_value, (v) => _then(v as _$GameEventGame));
 
   @override
-  GameEventGame get _value => super._value as GameEventGame;
+  _$GameEventGame get _value => super._value as _$GameEventGame;
 
   @override
   $Res call({
     Object? event = freezed,
   }) {
-    return _then(GameEventGame(
+    return _then(_$GameEventGame(
       event == freezed
           ? _value.event
           : event // ignore: cast_nullable_to_non_nullable
@@ -138,17 +119,18 @@ class _$GameEventGame extends GameEventGame {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is GameEventGame &&
-            (identical(other.event, event) || other.event == event));
+            other is _$GameEventGame &&
+            const DeepCollectionEquality().equals(other.event, event));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, event);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(event));
 
   @JsonKey(ignore: true)
   @override
-  $GameEventGameCopyWith<GameEventGame> get copyWith =>
-      _$GameEventGameCopyWithImpl<GameEventGame>(this, _$identity);
+  _$$GameEventGameCopyWith<_$GameEventGame> get copyWith =>
+      __$$GameEventGameCopyWithImpl<_$GameEventGame>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -214,40 +196,41 @@ class _$GameEventGame extends GameEventGame {
 }
 
 abstract class GameEventGame extends GameEvent {
-  const factory GameEventGame(Event event) = _$GameEventGame;
+  const factory GameEventGame(final Event event) = _$GameEventGame;
   const GameEventGame._() : super._();
 
   Event get event;
   @JsonKey(ignore: true)
-  $GameEventGameCopyWith<GameEventGame> get copyWith =>
+  _$$GameEventGameCopyWith<_$GameEventGame> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $GameEventGeneralCopyWith<$Res> {
-  factory $GameEventGeneralCopyWith(
-          GameEventGeneral value, $Res Function(GameEventGeneral) then) =
-      _$GameEventGeneralCopyWithImpl<$Res>;
+abstract class _$$GameEventGeneralCopyWith<$Res> {
+  factory _$$GameEventGeneralCopyWith(
+          _$GameEventGeneral value, $Res Function(_$GameEventGeneral) then) =
+      __$$GameEventGeneralCopyWithImpl<$Res>;
   $Res call({GenericEvent event});
 
   $GenericEventCopyWith<$Res> get event;
 }
 
 /// @nodoc
-class _$GameEventGeneralCopyWithImpl<$Res> extends _$GameEventCopyWithImpl<$Res>
-    implements $GameEventGeneralCopyWith<$Res> {
-  _$GameEventGeneralCopyWithImpl(
-      GameEventGeneral _value, $Res Function(GameEventGeneral) _then)
-      : super(_value, (v) => _then(v as GameEventGeneral));
+class __$$GameEventGeneralCopyWithImpl<$Res>
+    extends _$GameEventCopyWithImpl<$Res>
+    implements _$$GameEventGeneralCopyWith<$Res> {
+  __$$GameEventGeneralCopyWithImpl(
+      _$GameEventGeneral _value, $Res Function(_$GameEventGeneral) _then)
+      : super(_value, (v) => _then(v as _$GameEventGeneral));
 
   @override
-  GameEventGeneral get _value => super._value as GameEventGeneral;
+  _$GameEventGeneral get _value => super._value as _$GameEventGeneral;
 
   @override
   $Res call({
     Object? event = freezed,
   }) {
-    return _then(GameEventGeneral(
+    return _then(_$GameEventGeneral(
       event == freezed
           ? _value.event
           : event // ignore: cast_nullable_to_non_nullable
@@ -280,17 +263,18 @@ class _$GameEventGeneral extends GameEventGeneral {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is GameEventGeneral &&
-            (identical(other.event, event) || other.event == event));
+            other is _$GameEventGeneral &&
+            const DeepCollectionEquality().equals(other.event, event));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, event);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(event));
 
   @JsonKey(ignore: true)
   @override
-  $GameEventGeneralCopyWith<GameEventGeneral> get copyWith =>
-      _$GameEventGeneralCopyWithImpl<GameEventGeneral>(this, _$identity);
+  _$$GameEventGeneralCopyWith<_$GameEventGeneral> get copyWith =>
+      __$$GameEventGeneralCopyWithImpl<_$GameEventGeneral>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -356,11 +340,11 @@ class _$GameEventGeneral extends GameEventGeneral {
 }
 
 abstract class GameEventGeneral extends GameEvent {
-  const factory GameEventGeneral(GenericEvent event) = _$GameEventGeneral;
+  const factory GameEventGeneral(final GenericEvent event) = _$GameEventGeneral;
   const GameEventGeneral._() : super._();
 
   GenericEvent get event;
   @JsonKey(ignore: true)
-  $GameEventGeneralCopyWith<GameEventGeneral> get copyWith =>
+  _$$GameEventGeneralCopyWith<_$GameEventGeneral> get copyWith =>
       throw _privateConstructorUsedError;
 }

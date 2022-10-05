@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'game.dart';
@@ -11,46 +12,11 @@ part of 'game.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 GameConfig _$GameConfigFromJson(Map<String, dynamic> json) {
   return _GameConfig.fromJson(json);
 }
-
-/// @nodoc
-class _$GameConfigTearOff {
-  const _$GameConfigTearOff();
-
-  _GameConfig call(
-      {required String gameType,
-      String? adminID,
-      NameSet nameSet = NameSet.Basic,
-      bool customNames = false,
-      int rounds = 15,
-      int minPlayers = 1,
-      int maxPlayers = 10,
-      bool autoStart = true,
-      Map<String, dynamic>? options}) {
-    return _GameConfig(
-      gameType: gameType,
-      adminID: adminID,
-      nameSet: nameSet,
-      customNames: customNames,
-      rounds: rounds,
-      minPlayers: minPlayers,
-      maxPlayers: maxPlayers,
-      autoStart: autoStart,
-      options: options,
-    );
-  }
-
-  GameConfig fromJson(Map<String, Object?> json) {
-    return GameConfig.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $GameConfig = _$GameConfigTearOff();
 
 /// @nodoc
 mixin _$GameConfig {
@@ -151,10 +117,11 @@ class _$GameConfigCopyWithImpl<$Res> implements $GameConfigCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$GameConfigCopyWith<$Res> implements $GameConfigCopyWith<$Res> {
-  factory _$GameConfigCopyWith(
-          _GameConfig value, $Res Function(_GameConfig) then) =
-      __$GameConfigCopyWithImpl<$Res>;
+abstract class _$$_GameConfigCopyWith<$Res>
+    implements $GameConfigCopyWith<$Res> {
+  factory _$$_GameConfigCopyWith(
+          _$_GameConfig value, $Res Function(_$_GameConfig) then) =
+      __$$_GameConfigCopyWithImpl<$Res>;
   @override
   $Res call(
       {String gameType,
@@ -169,14 +136,14 @@ abstract class _$GameConfigCopyWith<$Res> implements $GameConfigCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$GameConfigCopyWithImpl<$Res> extends _$GameConfigCopyWithImpl<$Res>
-    implements _$GameConfigCopyWith<$Res> {
-  __$GameConfigCopyWithImpl(
-      _GameConfig _value, $Res Function(_GameConfig) _then)
-      : super(_value, (v) => _then(v as _GameConfig));
+class __$$_GameConfigCopyWithImpl<$Res> extends _$GameConfigCopyWithImpl<$Res>
+    implements _$$_GameConfigCopyWith<$Res> {
+  __$$_GameConfigCopyWithImpl(
+      _$_GameConfig _value, $Res Function(_$_GameConfig) _then)
+      : super(_value, (v) => _then(v as _$_GameConfig));
 
   @override
-  _GameConfig get _value => super._value as _GameConfig;
+  _$_GameConfig get _value => super._value as _$_GameConfig;
 
   @override
   $Res call({
@@ -190,7 +157,7 @@ class __$GameConfigCopyWithImpl<$Res> extends _$GameConfigCopyWithImpl<$Res>
     Object? autoStart = freezed,
     Object? options = freezed,
   }) {
-    return _then(_GameConfig(
+    return _then(_$_GameConfig(
       gameType: gameType == freezed
           ? _value.gameType
           : gameType // ignore: cast_nullable_to_non_nullable
@@ -224,7 +191,7 @@ class __$GameConfigCopyWithImpl<$Res> extends _$GameConfigCopyWithImpl<$Res>
           : autoStart // ignore: cast_nullable_to_non_nullable
               as bool,
       options: options == freezed
-          ? _value.options
+          ? _value._options
           : options // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>?,
     ));
@@ -243,7 +210,8 @@ class _$_GameConfig implements _GameConfig {
       this.minPlayers = 1,
       this.maxPlayers = 10,
       this.autoStart = true,
-      this.options});
+      final Map<String, dynamic>? options})
+      : _options = options;
 
   factory _$_GameConfig.fromJson(Map<String, dynamic> json) =>
       _$$_GameConfigFromJson(json);
@@ -252,28 +220,36 @@ class _$_GameConfig implements _GameConfig {
   final String gameType;
   @override
   final String? adminID;
-  @JsonKey(defaultValue: NameSet.Basic)
   @override
+  @JsonKey()
   final NameSet nameSet;
-  @JsonKey(defaultValue: false)
   @override
+  @JsonKey()
   final bool customNames;
-  @JsonKey(defaultValue: 15)
   @override
+  @JsonKey()
   final int rounds;
-  @JsonKey(defaultValue: 1)
   @override
+  @JsonKey()
   final int minPlayers;
-  @JsonKey(defaultValue: 10)
   @override
+  @JsonKey()
   final int maxPlayers;
-  @JsonKey(defaultValue: true)
   @override
+  @JsonKey()
   final bool autoStart;
-  @override
 
   /// [options] must be json serializable
-  final Map<String, dynamic>? options;
+  final Map<String, dynamic>? _options;
+
+  /// [options] must be json serializable
+  @override
+  Map<String, dynamic>? get options {
+    final value = _options;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
 
   @override
   String toString() {
@@ -284,58 +260,59 @@ class _$_GameConfig implements _GameConfig {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _GameConfig &&
-            (identical(other.gameType, gameType) ||
-                other.gameType == gameType) &&
-            (identical(other.adminID, adminID) || other.adminID == adminID) &&
-            (identical(other.nameSet, nameSet) || other.nameSet == nameSet) &&
-            (identical(other.customNames, customNames) ||
-                other.customNames == customNames) &&
-            (identical(other.rounds, rounds) || other.rounds == rounds) &&
-            (identical(other.minPlayers, minPlayers) ||
-                other.minPlayers == minPlayers) &&
-            (identical(other.maxPlayers, maxPlayers) ||
-                other.maxPlayers == maxPlayers) &&
-            (identical(other.autoStart, autoStart) ||
-                other.autoStart == autoStart) &&
-            const DeepCollectionEquality().equals(other.options, options));
+            other is _$_GameConfig &&
+            const DeepCollectionEquality().equals(other.gameType, gameType) &&
+            const DeepCollectionEquality().equals(other.adminID, adminID) &&
+            const DeepCollectionEquality().equals(other.nameSet, nameSet) &&
+            const DeepCollectionEquality()
+                .equals(other.customNames, customNames) &&
+            const DeepCollectionEquality().equals(other.rounds, rounds) &&
+            const DeepCollectionEquality()
+                .equals(other.minPlayers, minPlayers) &&
+            const DeepCollectionEquality()
+                .equals(other.maxPlayers, maxPlayers) &&
+            const DeepCollectionEquality().equals(other.autoStart, autoStart) &&
+            const DeepCollectionEquality().equals(other._options, _options));
   }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      gameType,
-      adminID,
-      nameSet,
-      customNames,
-      rounds,
-      minPlayers,
-      maxPlayers,
-      autoStart,
-      const DeepCollectionEquality().hash(options));
 
   @JsonKey(ignore: true)
   @override
-  _$GameConfigCopyWith<_GameConfig> get copyWith =>
-      __$GameConfigCopyWithImpl<_GameConfig>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(gameType),
+      const DeepCollectionEquality().hash(adminID),
+      const DeepCollectionEquality().hash(nameSet),
+      const DeepCollectionEquality().hash(customNames),
+      const DeepCollectionEquality().hash(rounds),
+      const DeepCollectionEquality().hash(minPlayers),
+      const DeepCollectionEquality().hash(maxPlayers),
+      const DeepCollectionEquality().hash(autoStart),
+      const DeepCollectionEquality().hash(_options));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_GameConfigCopyWith<_$_GameConfig> get copyWith =>
+      __$$_GameConfigCopyWithImpl<_$_GameConfig>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_GameConfigToJson(this);
+    return _$$_GameConfigToJson(
+      this,
+    );
   }
 }
 
 abstract class _GameConfig implements GameConfig {
   const factory _GameConfig(
-      {required String gameType,
-      String? adminID,
-      NameSet nameSet,
-      bool customNames,
-      int rounds,
-      int minPlayers,
-      int maxPlayers,
-      bool autoStart,
-      Map<String, dynamic>? options}) = _$_GameConfig;
+      {required final String gameType,
+      final String? adminID,
+      final NameSet nameSet,
+      final bool customNames,
+      final int rounds,
+      final int minPlayers,
+      final int maxPlayers,
+      final bool autoStart,
+      final Map<String, dynamic>? options}) = _$_GameConfig;
 
   factory _GameConfig.fromJson(Map<String, dynamic> json) =
       _$_GameConfig.fromJson;
@@ -362,42 +339,13 @@ abstract class _GameConfig implements GameConfig {
   Map<String, dynamic>? get options;
   @override
   @JsonKey(ignore: true)
-  _$GameConfigCopyWith<_GameConfig> get copyWith =>
+  _$$_GameConfigCopyWith<_$_GameConfig> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 GameInfo _$GameInfoFromJson(Map<String, dynamic> json) {
   return _GameInfo.fromJson(json);
 }
-
-/// @nodoc
-class _$GameInfoTearOff {
-  const _$GameInfoTearOff();
-
-  _GameInfo call(
-      {required String gameID,
-      required IList<String> players,
-      required String player,
-      required bool creator,
-      required String gameType,
-      required GameStatus status}) {
-    return _GameInfo(
-      gameID: gameID,
-      players: players,
-      player: player,
-      creator: creator,
-      gameType: gameType,
-      status: status,
-    );
-  }
-
-  GameInfo fromJson(Map<String, Object?> json) {
-    return GameInfo.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $GameInfo = _$GameInfoTearOff();
 
 /// @nodoc
 mixin _$GameInfo {
@@ -474,9 +422,10 @@ class _$GameInfoCopyWithImpl<$Res> implements $GameInfoCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$GameInfoCopyWith<$Res> implements $GameInfoCopyWith<$Res> {
-  factory _$GameInfoCopyWith(_GameInfo value, $Res Function(_GameInfo) then) =
-      __$GameInfoCopyWithImpl<$Res>;
+abstract class _$$_GameInfoCopyWith<$Res> implements $GameInfoCopyWith<$Res> {
+  factory _$$_GameInfoCopyWith(
+          _$_GameInfo value, $Res Function(_$_GameInfo) then) =
+      __$$_GameInfoCopyWithImpl<$Res>;
   @override
   $Res call(
       {String gameID,
@@ -488,13 +437,14 @@ abstract class _$GameInfoCopyWith<$Res> implements $GameInfoCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
-    implements _$GameInfoCopyWith<$Res> {
-  __$GameInfoCopyWithImpl(_GameInfo _value, $Res Function(_GameInfo) _then)
-      : super(_value, (v) => _then(v as _GameInfo));
+class __$$_GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
+    implements _$$_GameInfoCopyWith<$Res> {
+  __$$_GameInfoCopyWithImpl(
+      _$_GameInfo _value, $Res Function(_$_GameInfo) _then)
+      : super(_value, (v) => _then(v as _$_GameInfo));
 
   @override
-  _GameInfo get _value => super._value as _GameInfo;
+  _$_GameInfo get _value => super._value as _$_GameInfo;
 
   @override
   $Res call({
@@ -505,7 +455,7 @@ class __$GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
     Object? gameType = freezed,
     Object? status = freezed,
   }) {
-    return _then(_GameInfo(
+    return _then(_$_GameInfo(
       gameID: gameID == freezed
           ? _value.gameID
           : gameID // ignore: cast_nullable_to_non_nullable
@@ -570,39 +520,47 @@ class _$_GameInfo implements _GameInfo {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _GameInfo &&
-            (identical(other.gameID, gameID) || other.gameID == gameID) &&
-            (identical(other.players, players) || other.players == players) &&
-            (identical(other.player, player) || other.player == player) &&
-            (identical(other.creator, creator) || other.creator == creator) &&
-            (identical(other.gameType, gameType) ||
-                other.gameType == gameType) &&
-            (identical(other.status, status) || other.status == status));
+            other is _$_GameInfo &&
+            const DeepCollectionEquality().equals(other.gameID, gameID) &&
+            const DeepCollectionEquality().equals(other.players, players) &&
+            const DeepCollectionEquality().equals(other.player, player) &&
+            const DeepCollectionEquality().equals(other.creator, creator) &&
+            const DeepCollectionEquality().equals(other.gameType, gameType) &&
+            const DeepCollectionEquality().equals(other.status, status));
   }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, gameID, players, player, creator, gameType, status);
 
   @JsonKey(ignore: true)
   @override
-  _$GameInfoCopyWith<_GameInfo> get copyWith =>
-      __$GameInfoCopyWithImpl<_GameInfo>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(gameID),
+      const DeepCollectionEquality().hash(players),
+      const DeepCollectionEquality().hash(player),
+      const DeepCollectionEquality().hash(creator),
+      const DeepCollectionEquality().hash(gameType),
+      const DeepCollectionEquality().hash(status));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_GameInfoCopyWith<_$_GameInfo> get copyWith =>
+      __$$_GameInfoCopyWithImpl<_$_GameInfo>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_GameInfoToJson(this);
+    return _$$_GameInfoToJson(
+      this,
+    );
   }
 }
 
 abstract class _GameInfo implements GameInfo {
   const factory _GameInfo(
-      {required String gameID,
-      required IList<String> players,
-      required String player,
-      required bool creator,
-      required String gameType,
-      required GameStatus status}) = _$_GameInfo;
+      {required final String gameID,
+      required final IList<String> players,
+      required final String player,
+      required final bool creator,
+      required final String gameType,
+      required final GameStatus status}) = _$_GameInfo;
 
   factory _GameInfo.fromJson(Map<String, dynamic> json) = _$_GameInfo.fromJson;
 
@@ -620,38 +578,13 @@ abstract class _GameInfo implements GameInfo {
   GameStatus get status;
   @override
   @JsonKey(ignore: true)
-  _$GameInfoCopyWith<_GameInfo> get copyWith =>
+  _$$_GameInfoCopyWith<_$_GameInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 Lobby _$LobbyFromJson(Map<String, dynamic> json) {
   return _Lobby.fromJson(json);
 }
-
-/// @nodoc
-class _$LobbyTearOff {
-  const _$LobbyTearOff();
-
-  _Lobby call(
-      {required String code,
-      required ISet<Player> players,
-      required GameConfig config,
-      required GameStatus gameStatus}) {
-    return _Lobby(
-      code: code,
-      players: players,
-      config: config,
-      gameStatus: gameStatus,
-    );
-  }
-
-  Lobby fromJson(Map<String, Object?> json) {
-    return Lobby.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $Lobby = _$LobbyTearOff();
 
 /// @nodoc
 mixin _$Lobby {
@@ -722,9 +655,9 @@ class _$LobbyCopyWithImpl<$Res> implements $LobbyCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$LobbyCopyWith<$Res> implements $LobbyCopyWith<$Res> {
-  factory _$LobbyCopyWith(_Lobby value, $Res Function(_Lobby) then) =
-      __$LobbyCopyWithImpl<$Res>;
+abstract class _$$_LobbyCopyWith<$Res> implements $LobbyCopyWith<$Res> {
+  factory _$$_LobbyCopyWith(_$_Lobby value, $Res Function(_$_Lobby) then) =
+      __$$_LobbyCopyWithImpl<$Res>;
   @override
   $Res call(
       {String code,
@@ -737,13 +670,13 @@ abstract class _$LobbyCopyWith<$Res> implements $LobbyCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$LobbyCopyWithImpl<$Res> extends _$LobbyCopyWithImpl<$Res>
-    implements _$LobbyCopyWith<$Res> {
-  __$LobbyCopyWithImpl(_Lobby _value, $Res Function(_Lobby) _then)
-      : super(_value, (v) => _then(v as _Lobby));
+class __$$_LobbyCopyWithImpl<$Res> extends _$LobbyCopyWithImpl<$Res>
+    implements _$$_LobbyCopyWith<$Res> {
+  __$$_LobbyCopyWithImpl(_$_Lobby _value, $Res Function(_$_Lobby) _then)
+      : super(_value, (v) => _then(v as _$_Lobby));
 
   @override
-  _Lobby get _value => super._value as _Lobby;
+  _$_Lobby get _value => super._value as _$_Lobby;
 
   @override
   $Res call({
@@ -752,7 +685,7 @@ class __$LobbyCopyWithImpl<$Res> extends _$LobbyCopyWithImpl<$Res>
     Object? config = freezed,
     Object? gameStatus = freezed,
   }) {
-    return _then(_Lobby(
+    return _then(_$_Lobby(
       code: code == freezed
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -803,35 +736,42 @@ class _$_Lobby implements _Lobby {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Lobby &&
-            (identical(other.code, code) || other.code == code) &&
-            (identical(other.players, players) || other.players == players) &&
-            (identical(other.config, config) || other.config == config) &&
-            (identical(other.gameStatus, gameStatus) ||
-                other.gameStatus == gameStatus));
+            other is _$_Lobby &&
+            const DeepCollectionEquality().equals(other.code, code) &&
+            const DeepCollectionEquality().equals(other.players, players) &&
+            const DeepCollectionEquality().equals(other.config, config) &&
+            const DeepCollectionEquality()
+                .equals(other.gameStatus, gameStatus));
   }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, code, players, config, gameStatus);
 
   @JsonKey(ignore: true)
   @override
-  _$LobbyCopyWith<_Lobby> get copyWith =>
-      __$LobbyCopyWithImpl<_Lobby>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(code),
+      const DeepCollectionEquality().hash(players),
+      const DeepCollectionEquality().hash(config),
+      const DeepCollectionEquality().hash(gameStatus));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_LobbyCopyWith<_$_Lobby> get copyWith =>
+      __$$_LobbyCopyWithImpl<_$_Lobby>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_LobbyToJson(this);
+    return _$$_LobbyToJson(
+      this,
+    );
   }
 }
 
 abstract class _Lobby implements Lobby {
   const factory _Lobby(
-      {required String code,
-      required ISet<Player> players,
-      required GameConfig config,
-      required GameStatus gameStatus}) = _$_Lobby;
+      {required final String code,
+      required final ISet<Player> players,
+      required final GameConfig config,
+      required final GameStatus gameStatus}) = _$_Lobby;
 
   factory _Lobby.fromJson(Map<String, dynamic> json) = _$_Lobby.fromJson;
 
@@ -845,5 +785,6 @@ abstract class _Lobby implements Lobby {
   GameStatus get gameStatus;
   @override
   @JsonKey(ignore: true)
-  _$LobbyCopyWith<_Lobby> get copyWith => throw _privateConstructorUsedError;
+  _$$_LobbyCopyWith<_$_Lobby> get copyWith =>
+      throw _privateConstructorUsedError;
 }

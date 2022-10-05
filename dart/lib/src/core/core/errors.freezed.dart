@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'errors.dart';
@@ -11,7 +12,7 @@ part of 'errors.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 GameOrError<G> _$GameOrErrorFromJson<G extends Game<Event>>(
     Map<String, dynamic> json) {
@@ -26,31 +27,6 @@ GameOrError<G> _$GameOrErrorFromJson<G extends Game<Event>>(
           'Invalid union type "${json['runtimeType']}"!');
   }
 }
-
-/// @nodoc
-class _$GameOrErrorTearOff {
-  const _$GameOrErrorTearOff();
-
-  GameValue<G> game<G extends Game<Event>>(@GameConverter() G game) {
-    return GameValue<G>(
-      game,
-    );
-  }
-
-  GameError<G> error<G extends Game<Event>>(String message, String person) {
-    return GameError<G>(
-      message,
-      person,
-    );
-  }
-
-  GameOrError<G> fromJson<G extends Game<Event>>(Map<String, Object?> json) {
-    return GameOrError<G>.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $GameOrError = _$GameOrErrorTearOff();
 
 /// @nodoc
 mixin _$GameOrError<G extends Game<Event>> {
@@ -113,29 +89,29 @@ class _$GameOrErrorCopyWithImpl<G extends Game<Event>, $Res>
 }
 
 /// @nodoc
-abstract class $GameValueCopyWith<G extends Game<Event>, $Res> {
-  factory $GameValueCopyWith(
-          GameValue<G> value, $Res Function(GameValue<G>) then) =
-      _$GameValueCopyWithImpl<G, $Res>;
+abstract class _$$GameValueCopyWith<G extends Game<Event>, $Res> {
+  factory _$$GameValueCopyWith(
+          _$GameValue<G> value, $Res Function(_$GameValue<G>) then) =
+      __$$GameValueCopyWithImpl<G, $Res>;
   $Res call({@GameConverter() G game});
 }
 
 /// @nodoc
-class _$GameValueCopyWithImpl<G extends Game<Event>, $Res>
+class __$$GameValueCopyWithImpl<G extends Game<Event>, $Res>
     extends _$GameOrErrorCopyWithImpl<G, $Res>
-    implements $GameValueCopyWith<G, $Res> {
-  _$GameValueCopyWithImpl(
-      GameValue<G> _value, $Res Function(GameValue<G>) _then)
-      : super(_value, (v) => _then(v as GameValue<G>));
+    implements _$$GameValueCopyWith<G, $Res> {
+  __$$GameValueCopyWithImpl(
+      _$GameValue<G> _value, $Res Function(_$GameValue<G>) _then)
+      : super(_value, (v) => _then(v as _$GameValue<G>));
 
   @override
-  GameValue<G> get _value => super._value as GameValue<G>;
+  _$GameValue<G> get _value => super._value as _$GameValue<G>;
 
   @override
   $Res call({
     Object? game = freezed,
   }) {
-    return _then(GameValue<G>(
+    return _then(_$GameValue<G>(
       game == freezed
           ? _value.game
           : game // ignore: cast_nullable_to_non_nullable
@@ -147,7 +123,7 @@ class _$GameValueCopyWithImpl<G extends Game<Event>, $Res>
 /// @nodoc
 @JsonSerializable()
 class _$GameValue<G extends Game<Event>> extends GameValue<G> {
-  const _$GameValue(@GameConverter() this.game, {String? $type})
+  const _$GameValue(@GameConverter() this.game, {final String? $type})
       : $type = $type ?? 'game',
         super._();
 
@@ -170,18 +146,19 @@ class _$GameValue<G extends Game<Event>> extends GameValue<G> {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is GameValue<G> &&
+            other is _$GameValue<G> &&
             const DeepCollectionEquality().equals(other.game, game));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(game));
 
   @JsonKey(ignore: true)
   @override
-  $GameValueCopyWith<G, GameValue<G>> get copyWith =>
-      _$GameValueCopyWithImpl<G, GameValue<G>>(this, _$identity);
+  _$$GameValueCopyWith<G, _$GameValue<G>> get copyWith =>
+      __$$GameValueCopyWithImpl<G, _$GameValue<G>>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -247,12 +224,14 @@ class _$GameValue<G extends Game<Event>> extends GameValue<G> {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GameValueToJson(this);
+    return _$$GameValueToJson<G>(
+      this,
+    );
   }
 }
 
 abstract class GameValue<G extends Game<Event>> extends GameOrError<G> {
-  const factory GameValue(@GameConverter() G game) = _$GameValue<G>;
+  const factory GameValue(@GameConverter() final G game) = _$GameValue<G>;
   const GameValue._() : super._();
 
   factory GameValue.fromJson(Map<String, dynamic> json) =
@@ -261,35 +240,35 @@ abstract class GameValue<G extends Game<Event>> extends GameOrError<G> {
   @GameConverter()
   G get game;
   @JsonKey(ignore: true)
-  $GameValueCopyWith<G, GameValue<G>> get copyWith =>
+  _$$GameValueCopyWith<G, _$GameValue<G>> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $GameErrorCopyWith<G extends Game<Event>, $Res> {
-  factory $GameErrorCopyWith(
-          GameError<G> value, $Res Function(GameError<G>) then) =
-      _$GameErrorCopyWithImpl<G, $Res>;
+abstract class _$$GameErrorCopyWith<G extends Game<Event>, $Res> {
+  factory _$$GameErrorCopyWith(
+          _$GameError<G> value, $Res Function(_$GameError<G>) then) =
+      __$$GameErrorCopyWithImpl<G, $Res>;
   $Res call({String message, String person});
 }
 
 /// @nodoc
-class _$GameErrorCopyWithImpl<G extends Game<Event>, $Res>
+class __$$GameErrorCopyWithImpl<G extends Game<Event>, $Res>
     extends _$GameOrErrorCopyWithImpl<G, $Res>
-    implements $GameErrorCopyWith<G, $Res> {
-  _$GameErrorCopyWithImpl(
-      GameError<G> _value, $Res Function(GameError<G>) _then)
-      : super(_value, (v) => _then(v as GameError<G>));
+    implements _$$GameErrorCopyWith<G, $Res> {
+  __$$GameErrorCopyWithImpl(
+      _$GameError<G> _value, $Res Function(_$GameError<G>) _then)
+      : super(_value, (v) => _then(v as _$GameError<G>));
 
   @override
-  GameError<G> get _value => super._value as GameError<G>;
+  _$GameError<G> get _value => super._value as _$GameError<G>;
 
   @override
   $Res call({
     Object? message = freezed,
     Object? person = freezed,
   }) {
-    return _then(GameError<G>(
+    return _then(_$GameError<G>(
       message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -305,7 +284,7 @@ class _$GameErrorCopyWithImpl<G extends Game<Event>, $Res>
 /// @nodoc
 @JsonSerializable()
 class _$GameError<G extends Game<Event>> extends GameError<G> {
-  const _$GameError(this.message, this.person, {String? $type})
+  const _$GameError(this.message, this.person, {final String? $type})
       : $type = $type ?? 'error',
         super._();
 
@@ -329,18 +308,22 @@ class _$GameError<G extends Game<Event>> extends GameError<G> {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is GameError<G> &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.person, person) || other.person == person));
+            other is _$GameError<G> &&
+            const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality().equals(other.person, person));
   }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message, person);
 
   @JsonKey(ignore: true)
   @override
-  $GameErrorCopyWith<G, GameError<G>> get copyWith =>
-      _$GameErrorCopyWithImpl<G, GameError<G>>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(message),
+      const DeepCollectionEquality().hash(person));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$GameErrorCopyWith<G, _$GameError<G>> get copyWith =>
+      __$$GameErrorCopyWithImpl<G, _$GameError<G>>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -406,12 +389,15 @@ class _$GameError<G extends Game<Event>> extends GameError<G> {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GameErrorToJson(this);
+    return _$$GameErrorToJson<G>(
+      this,
+    );
   }
 }
 
 abstract class GameError<G extends Game<Event>> extends GameOrError<G> {
-  const factory GameError(String message, String person) = _$GameError<G>;
+  const factory GameError(final String message, final String person) =
+      _$GameError<G>;
   const GameError._() : super._();
 
   factory GameError.fromJson(Map<String, dynamic> json) =
@@ -420,6 +406,6 @@ abstract class GameError<G extends Game<Event>> extends GameOrError<G> {
   String get message;
   String get person;
   @JsonKey(ignore: true)
-  $GameErrorCopyWith<G, GameError<G>> get copyWith =>
+  _$$GameErrorCopyWith<G, _$GameError<G>> get copyWith =>
       throw _privateConstructorUsedError;
 }

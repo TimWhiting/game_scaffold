@@ -15,7 +15,7 @@ void main() {
   runApp(ProviderScope(
     overrides: [
       GameProviders.clientType
-          .overrideWithValue(StateController(OnDeviceClient)),
+          .overrideWithProvider(StateProvider((ref) => OnDeviceClient)),
     ],
     child: const TicTacToeApp(),
   ));
@@ -95,8 +95,8 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                     rounds: 2,
                     maxPlayers: 2,
                   );
-                  await GameProviders.createGame.refresh(ref);
-                  await GameProviders.joinGame.refresh(ref);
+                  await ref.refresh(GameProviders.createGame.future);
+                  await ref.refresh(GameProviders.joinGame.future);
                 },
                 child: const Text('Create Game'),
               ),
@@ -115,7 +115,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  GameProviders.joinGame.refresh(ref);
+                  ref.refresh(GameProviders.joinGame.future);
                 },
                 child: const Text('Join Game'),
               )
@@ -125,7 +125,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                 ElevatedButton(
                   onPressed: () async {
                     ref.read(GameProviders.code.notifier).state = info.gameID;
-                    await GameProviders.joinGame.refresh(ref);
+                    await ref.refresh(GameProviders.joinGame.future);
                   },
                   child: Text(
                       'Started Game: ${info.gameID}, Players: ${info.players}'),
@@ -191,9 +191,9 @@ class GameWidget extends HookConsumerWidget {
                       GestureDetector(
                         key: Key('$playerID square $r $c'),
                         onTap: () async {
-                          await GameProviders.sendEvent(
+                          await ref.refresh(GameProviders.sendEvent(
                             TicTacToeGameEvent(playerID, r * 3 + c).asGameEvent,
-                          ).refresh(ref);
+                          ).future);
                         },
                         child: ColoredBox(
                           color: Colors.black,
@@ -219,7 +219,7 @@ class GameWidget extends HookConsumerWidget {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () async {
-                    await GameProviders.newRound.refresh(ref);
+                    await ref.refresh(GameProviders.newRound.future);
                   },
                   child: const Text('Next Round'),
                 ),

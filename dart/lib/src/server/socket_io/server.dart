@@ -116,8 +116,7 @@ class IOServer {
     final lobby = scopedContainer.read(BackendProviders.lobby.notifier);
     lobby.setCode(gameID);
     lobby.setConfig(gameConfig);
-    final server = GameServer(
-        io, this, scopedContainer.read, gameID, servers.remove,
+    final server = GameServer(io, this, scopedContainer, gameID, servers.remove,
         debug: debug);
     servers[server.gameID] = server;
     client.emit(IOChannel.gameCreated.string, server.gameID);

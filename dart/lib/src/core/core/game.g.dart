@@ -24,7 +24,7 @@ Map<String, dynamic> _$$_GameConfigToJson(_$_GameConfig instance) =>
     <String, dynamic>{
       'gameType': instance.gameType,
       'adminID': instance.adminID,
-      'nameSet': _$NameSetEnumMap[instance.nameSet],
+      'nameSet': _$NameSetEnumMap[instance.nameSet]!,
       'customNames': instance.customNames,
       'rounds': instance.rounds,
       'minPlayers': instance.minPlayers,
@@ -56,14 +56,14 @@ Map<String, dynamic> _$$_GameInfoToJson(_$_GameInfo instance) =>
       'player': instance.player,
       'creator': instance.creator,
       'gameType': instance.gameType,
-      'status': _$GameStatusEnumMap[instance.status],
+      'status': _$GameStatusEnumMap[instance.status]!,
     };
 
 const _$GameStatusEnumMap = {
-  GameStatus.Lobby: 'Lobby',
-  GameStatus.Started: 'Started',
-  GameStatus.BetweenRounds: 'BetweenRounds',
-  GameStatus.Finished: 'Finished',
+  GameStatus.lobby: 'lobby',
+  GameStatus.started: 'started',
+  GameStatus.betweenRounds: 'betweenRounds',
+  GameStatus.finished: 'finished',
 };
 
 _$_Lobby _$$_LobbyFromJson(Map<String, dynamic> json) => _$_Lobby(
@@ -80,5 +80,5 @@ Map<String, dynamic> _$$_LobbyToJson(_$_Lobby instance) => <String, dynamic>{
         (value) => value,
       ),
       'config': instance.config,
-      'gameStatus': _$GameStatusEnumMap[instance.gameStatus],
+      'gameStatus': _$GameStatusEnumMap[instance.gameStatus]!,
     };

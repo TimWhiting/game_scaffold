@@ -42,7 +42,7 @@ Map<String, dynamic> _$$_GenericGameToJson(_$_GenericGame instance) =>
       'messages': instance.messages.toJson(
         (value) => value,
       ),
-      'status': _$GameStatusEnumMap[instance.status],
+      'status': _$GameStatusEnumMap[instance.status]!,
       'currentPlayerIndex': instance.currentPlayerIndex,
       'round': instance.round,
       'isMultiPly': instance.isMultiPly,
@@ -50,10 +50,10 @@ Map<String, dynamic> _$$_GenericGameToJson(_$_GenericGame instance) =>
     };
 
 const _$GameStatusEnumMap = {
-  GameStatus.Lobby: 'Lobby',
-  GameStatus.Started: 'Started',
-  GameStatus.BetweenRounds: 'BetweenRounds',
-  GameStatus.Finished: 'Finished',
+  GameStatus.lobby: 'lobby',
+  GameStatus.started: 'started',
+  GameStatus.betweenRounds: 'betweenRounds',
+  GameStatus.finished: 'finished',
 };
 
 _$GenericEventUndo _$$GenericEventUndoFromJson(Map<String, dynamic> json) =>

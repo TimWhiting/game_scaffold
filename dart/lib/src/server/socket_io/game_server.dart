@@ -14,7 +14,7 @@ class GameServer {
   GameServer(
     IO.Server _io,
     this.mainServer,
-    this._read,
+    this._container,
     this._gameID,
     this._onGameOver, {
     this.timeout = const Duration(hours: 2),
@@ -41,7 +41,7 @@ class GameServer {
 
   /// Gets [GameConfig] of this game
   GameConfig get gameConfig =>
-      _read(BackendProviders.state.notifier).gameConfig;
+      _container.read(BackendProviders.state.notifier).gameConfig;
 
   /// Gets the game's type from the config
   GameType get gameType => gameConfig.gameType;
@@ -54,10 +54,10 @@ class GameServer {
 
   /// Gets the client's name corresponding to [id]
   String? getClientName(PlayerID id) => _clientNames[id];
-
-  final Reader _read;
+  final ProviderContainer _container;
   final GameCode _gameID;
-  IList<Player> get _players => _read(BackendProviders.lobby).players.toIList();
+  IList<Player> get _players =>
+      _container.read(BackendProviders.lobby).players.toIList();
   final _clients = <PlayerID, IO.Socket?>{};
   final _clientNames = <PlayerID, String>{};
   // ignore: prefer_typing_uninitialized_variables
@@ -68,7 +68,7 @@ class GameServer {
 
   /// The notifier for the game state
   late final GameStateNotifier _gameState =
-      _read(BackendProviders.state.notifier);
+      _container.read(BackendProviders.state.notifier);
 
   /// The notifier for errors of the game
   // final GameErrorNotifier _gameError;
@@ -188,7 +188,7 @@ class GameServer {
   }
 
   void _addPlayer(Player player) {
-    _read(BackendProviders.lobby.notifier).addPlayer(player);
+    _container.read(BackendProviders.lobby.notifier).addPlayer(player);
     _serverLogger.info('Notifying ${_clients.length} clients of added player');
     for (final client in _clients.entries) {
       client.value?.emit(IOChannel.lobby.string, gameInfo(client.key).toJson());

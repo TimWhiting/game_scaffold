@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'markov.dart';
@@ -11,29 +12,11 @@ part of 'markov.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 Matrix _$MatrixFromJson(Map<String, dynamic> json) {
   return _Matrix.fromJson(json);
 }
-
-/// @nodoc
-class _$MatrixTearOff {
-  const _$MatrixTearOff();
-
-  _Matrix call(List<List<Reward>> rewards) {
-    return _Matrix(
-      rewards,
-    );
-  }
-
-  Matrix fromJson(Map<String, Object?> json) {
-    return Matrix.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $Matrix = _$MatrixTearOff();
 
 /// @nodoc
 mixin _$Matrix {
@@ -73,29 +56,29 @@ class _$MatrixCopyWithImpl<$Res> implements $MatrixCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$MatrixCopyWith<$Res> implements $MatrixCopyWith<$Res> {
-  factory _$MatrixCopyWith(_Matrix value, $Res Function(_Matrix) then) =
-      __$MatrixCopyWithImpl<$Res>;
+abstract class _$$_MatrixCopyWith<$Res> implements $MatrixCopyWith<$Res> {
+  factory _$$_MatrixCopyWith(_$_Matrix value, $Res Function(_$_Matrix) then) =
+      __$$_MatrixCopyWithImpl<$Res>;
   @override
   $Res call({List<List<Reward>> rewards});
 }
 
 /// @nodoc
-class __$MatrixCopyWithImpl<$Res> extends _$MatrixCopyWithImpl<$Res>
-    implements _$MatrixCopyWith<$Res> {
-  __$MatrixCopyWithImpl(_Matrix _value, $Res Function(_Matrix) _then)
-      : super(_value, (v) => _then(v as _Matrix));
+class __$$_MatrixCopyWithImpl<$Res> extends _$MatrixCopyWithImpl<$Res>
+    implements _$$_MatrixCopyWith<$Res> {
+  __$$_MatrixCopyWithImpl(_$_Matrix _value, $Res Function(_$_Matrix) _then)
+      : super(_value, (v) => _then(v as _$_Matrix));
 
   @override
-  _Matrix get _value => super._value as _Matrix;
+  _$_Matrix get _value => super._value as _$_Matrix;
 
   @override
   $Res call({
     Object? rewards = freezed,
   }) {
-    return _then(_Matrix(
+    return _then(_$_Matrix(
       rewards == freezed
-          ? _value.rewards
+          ? _value._rewards
           : rewards // ignore: cast_nullable_to_non_nullable
               as List<List<Reward>>,
     ));
@@ -105,13 +88,17 @@ class __$MatrixCopyWithImpl<$Res> extends _$MatrixCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Matrix implements _Matrix {
-  const _$_Matrix(this.rewards);
+  const _$_Matrix(final List<List<Reward>> rewards) : _rewards = rewards;
 
   factory _$_Matrix.fromJson(Map<String, dynamic> json) =>
       _$$_MatrixFromJson(json);
 
+  final List<List<Reward>> _rewards;
   @override
-  final List<List<Reward>> rewards;
+  List<List<Reward>> get rewards {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_rewards);
+  }
 
   @override
   String toString() {
@@ -122,27 +109,30 @@ class _$_Matrix implements _Matrix {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Matrix &&
-            const DeepCollectionEquality().equals(other.rewards, rewards));
+            other is _$_Matrix &&
+            const DeepCollectionEquality().equals(other._rewards, _rewards));
   }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(rewards));
 
   @JsonKey(ignore: true)
   @override
-  _$MatrixCopyWith<_Matrix> get copyWith =>
-      __$MatrixCopyWithImpl<_Matrix>(this, _$identity);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_rewards));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_MatrixCopyWith<_$_Matrix> get copyWith =>
+      __$$_MatrixCopyWithImpl<_$_Matrix>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_MatrixToJson(this);
+    return _$$_MatrixToJson(
+      this,
+    );
   }
 }
 
 abstract class _Matrix implements Matrix {
-  const factory _Matrix(List<List<Reward>> rewards) = _$_Matrix;
+  const factory _Matrix(final List<List<Reward>> rewards) = _$_Matrix;
 
   factory _Matrix.fromJson(Map<String, dynamic> json) = _$_Matrix.fromJson;
 
@@ -150,7 +140,8 @@ abstract class _Matrix implements Matrix {
   List<List<Reward>> get rewards;
   @override
   @JsonKey(ignore: true)
-  _$MatrixCopyWith<_Matrix> get copyWith => throw _privateConstructorUsedError;
+  _$$_MatrixCopyWith<_$_Matrix> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 JointAction _$JointActionFromJson(Map<String, dynamic> json) {
@@ -158,29 +149,9 @@ JointAction _$JointActionFromJson(Map<String, dynamic> json) {
 }
 
 /// @nodoc
-class _$JointActionTearOff {
-  const _$JointActionTearOff();
-
-  _JointAction twoPlayer({required int p1, required int p2}) {
-    return _JointAction(
-      p1: p1,
-      p2: p2,
-    );
-  }
-
-  JointAction fromJson(Map<String, Object?> json) {
-    return JointAction.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $JointAction = _$JointActionTearOff();
-
-/// @nodoc
 mixin _$JointAction {
   int get p1 => throw _privateConstructorUsedError;
   int get p2 => throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int p1, int p2) twoPlayer,
@@ -254,31 +225,31 @@ class _$JointActionCopyWithImpl<$Res> implements $JointActionCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$JointActionCopyWith<$Res>
+abstract class _$$_JointActionCopyWith<$Res>
     implements $JointActionCopyWith<$Res> {
-  factory _$JointActionCopyWith(
-          _JointAction value, $Res Function(_JointAction) then) =
-      __$JointActionCopyWithImpl<$Res>;
+  factory _$$_JointActionCopyWith(
+          _$_JointAction value, $Res Function(_$_JointAction) then) =
+      __$$_JointActionCopyWithImpl<$Res>;
   @override
   $Res call({int p1, int p2});
 }
 
 /// @nodoc
-class __$JointActionCopyWithImpl<$Res> extends _$JointActionCopyWithImpl<$Res>
-    implements _$JointActionCopyWith<$Res> {
-  __$JointActionCopyWithImpl(
-      _JointAction _value, $Res Function(_JointAction) _then)
-      : super(_value, (v) => _then(v as _JointAction));
+class __$$_JointActionCopyWithImpl<$Res> extends _$JointActionCopyWithImpl<$Res>
+    implements _$$_JointActionCopyWith<$Res> {
+  __$$_JointActionCopyWithImpl(
+      _$_JointAction _value, $Res Function(_$_JointAction) _then)
+      : super(_value, (v) => _then(v as _$_JointAction));
 
   @override
-  _JointAction get _value => super._value as _JointAction;
+  _$_JointAction get _value => super._value as _$_JointAction;
 
   @override
   $Res call({
     Object? p1 = freezed,
     Object? p2 = freezed,
   }) {
-    return _then(_JointAction(
+    return _then(_$_JointAction(
       p1: p1 == freezed
           ? _value.p1
           : p1 // ignore: cast_nullable_to_non_nullable
@@ -313,18 +284,22 @@ class _$_JointAction implements _JointAction {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _JointAction &&
-            (identical(other.p1, p1) || other.p1 == p1) &&
-            (identical(other.p2, p2) || other.p2 == p2));
+            other is _$_JointAction &&
+            const DeepCollectionEquality().equals(other.p1, p1) &&
+            const DeepCollectionEquality().equals(other.p2, p2));
   }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, p1, p2);
 
   @JsonKey(ignore: true)
   @override
-  _$JointActionCopyWith<_JointAction> get copyWith =>
-      __$JointActionCopyWithImpl<_JointAction>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(p1),
+      const DeepCollectionEquality().hash(p2));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_JointActionCopyWith<_$_JointAction> get copyWith =>
+      __$$_JointActionCopyWithImpl<_$_JointAction>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -384,12 +359,14 @@ class _$_JointAction implements _JointAction {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_JointActionToJson(this);
+    return _$$_JointActionToJson(
+      this,
+    );
   }
 }
 
 abstract class _JointAction implements JointAction {
-  const factory _JointAction({required int p1, required int p2}) =
+  const factory _JointAction({required final int p1, required final int p2}) =
       _$_JointAction;
 
   factory _JointAction.fromJson(Map<String, dynamic> json) =
@@ -401,32 +378,13 @@ abstract class _JointAction implements JointAction {
   int get p2;
   @override
   @JsonKey(ignore: true)
-  _$JointActionCopyWith<_JointAction> get copyWith =>
+  _$$_JointActionCopyWith<_$_JointAction> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 Reward _$RewardFromJson(Map<String, dynamic> json) {
   return _Reward.fromJson(json);
 }
-
-/// @nodoc
-class _$RewardTearOff {
-  const _$RewardTearOff();
-
-  _Reward call({required double p1, required double p2}) {
-    return _Reward(
-      p1: p1,
-      p2: p2,
-    );
-  }
-
-  Reward fromJson(Map<String, Object?> json) {
-    return Reward.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $Reward = _$RewardTearOff();
 
 /// @nodoc
 mixin _$Reward {
@@ -472,28 +430,28 @@ class _$RewardCopyWithImpl<$Res> implements $RewardCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$RewardCopyWith<$Res> implements $RewardCopyWith<$Res> {
-  factory _$RewardCopyWith(_Reward value, $Res Function(_Reward) then) =
-      __$RewardCopyWithImpl<$Res>;
+abstract class _$$_RewardCopyWith<$Res> implements $RewardCopyWith<$Res> {
+  factory _$$_RewardCopyWith(_$_Reward value, $Res Function(_$_Reward) then) =
+      __$$_RewardCopyWithImpl<$Res>;
   @override
   $Res call({double p1, double p2});
 }
 
 /// @nodoc
-class __$RewardCopyWithImpl<$Res> extends _$RewardCopyWithImpl<$Res>
-    implements _$RewardCopyWith<$Res> {
-  __$RewardCopyWithImpl(_Reward _value, $Res Function(_Reward) _then)
-      : super(_value, (v) => _then(v as _Reward));
+class __$$_RewardCopyWithImpl<$Res> extends _$RewardCopyWithImpl<$Res>
+    implements _$$_RewardCopyWith<$Res> {
+  __$$_RewardCopyWithImpl(_$_Reward _value, $Res Function(_$_Reward) _then)
+      : super(_value, (v) => _then(v as _$_Reward));
 
   @override
-  _Reward get _value => super._value as _Reward;
+  _$_Reward get _value => super._value as _$_Reward;
 
   @override
   $Res call({
     Object? p1 = freezed,
     Object? p2 = freezed,
   }) {
-    return _then(_Reward(
+    return _then(_$_Reward(
       p1: p1 == freezed
           ? _value.p1
           : p1 // ignore: cast_nullable_to_non_nullable
@@ -528,27 +486,34 @@ class _$_Reward implements _Reward {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Reward &&
-            (identical(other.p1, p1) || other.p1 == p1) &&
-            (identical(other.p2, p2) || other.p2 == p2));
+            other is _$_Reward &&
+            const DeepCollectionEquality().equals(other.p1, p1) &&
+            const DeepCollectionEquality().equals(other.p2, p2));
   }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, p1, p2);
 
   @JsonKey(ignore: true)
   @override
-  _$RewardCopyWith<_Reward> get copyWith =>
-      __$RewardCopyWithImpl<_Reward>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(p1),
+      const DeepCollectionEquality().hash(p2));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_RewardCopyWith<_$_Reward> get copyWith =>
+      __$$_RewardCopyWithImpl<_$_Reward>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_RewardToJson(this);
+    return _$$_RewardToJson(
+      this,
+    );
   }
 }
 
 abstract class _Reward implements Reward {
-  const factory _Reward({required double p1, required double p2}) = _$_Reward;
+  const factory _Reward({required final double p1, required final double p2}) =
+      _$_Reward;
 
   factory _Reward.fromJson(Map<String, dynamic> json) = _$_Reward.fromJson;
 
@@ -558,5 +523,6 @@ abstract class _Reward implements Reward {
   double get p2;
   @override
   @JsonKey(ignore: true)
-  _$RewardCopyWith<_Reward> get copyWith => throw _privateConstructorUsedError;
+  _$$_RewardCopyWith<_$_Reward> get copyWith =>
+      throw _privateConstructorUsedError;
 }

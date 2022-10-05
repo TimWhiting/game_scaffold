@@ -20,29 +20,40 @@ void testGame<T extends Game>(
 }) {
   darttest.test(testName, () async {
     final root = ProviderContainer();
-    final readers = <PlayerID, Reader>{};
+    final ref = <PlayerID, ProviderContainer>{};
+    final sub = <PlayerID, ProviderSubscription>{};
 
     root.read(GameProviders.clientType.notifier).state = OnDeviceClient;
 
     for (final p in players) {
-      readers[p.id] = ProviderContainer(
+      ref[p.id] = ProviderContainer(
           parent: root,
-          overrides: [GameProviders.playerID.overrideWithValue(p.id)]).read;
+          overrides: [GameProviders.playerID.overrideWithValue(p.id)]);
     }
-    readers[players.first.id]!(GameProviders.config.notifier).state = config;
+    ref[players.first.id]!.read(GameProviders.config.notifier).state = config;
     final code =
-        await readers[players.first.id]!(GameProviders.createGame.future);
+        await ref[players.first.id]!.read(GameProviders.createGame.future);
     for (final p in players) {
-      readers[p.id]!(GameProviders.code.notifier).state = code;
-      await readers[p.id]!(GameProviders.joinGame.future);
+      sub[p.id] = ref[p.id]!.listen(GameProviders.gameClient, (_, __) {});
+      ref[p.id]!.read(GameProviders.code.notifier).state = code;
+      await ref[p.id]!.read(GameProviders.joinGame.future);
     }
 
-    if (readers[players.first.id]!(GameProviders.status) !=
+    if (ref[players.first.id]!.read(GameProviders.status) !=
         GameStatus.started) {
-      await readers[players.first.id]!(GameProviders.startGame.future);
+      await ref[players.first.id]!.read(GameProviders.startGame.future);
     }
+    final tester = GameTester<T>(ref, players, code);
+    await test(tester);
 
-    await test(GameTester<T>(root.read, readers, players, code));
+    for (final s in sub.keys) {
+      sub[s]!.close();
+      ref[s]!.dispose();
+    }
+    tester.dispose();
+    await root
+        .read(GameProviders.gameClient)
+        .deleteGame(players.first.id, code);
   });
 }
 
@@ -51,14 +62,19 @@ void testGame<T extends Game>(
 /// Just call [event] with your event, and a function that receives a game and error
 /// and check the properties you want
 class GameTester<T extends Game> {
-  GameTester(this.read, this.readers, this._players, this.code);
+  GameTester(this.readers, this._players, this.code) {
+    sub = backendContainer.listen(BackendProviders.lobby, (previous, next) {
+      print('Next: $next');
+    });
+  }
 
   final List<Player> _players;
   final GameCode code;
-  final Reader read;
-  final Map<PlayerID, Reader> readers;
-  late final backendReader = NoGameClient.games[code]!.read;
+  late final ProviderContainer backendContainer =
+      NoGameClient.games[code]!.container;
+  final Map<PlayerID, ProviderContainer> readers;
   GameError? _lastError;
+  ProviderSubscription? sub;
 
   /// Event lets you test the [outcome] of an [event]
   ///
@@ -70,7 +86,8 @@ class GameTester<T extends Game> {
   /// });
   /// ```
   void event(Event event, Function(T, GameError?) outcome) {
-    backendReader(BackendProviders.state.notifier)
+    backendContainer
+        .read(BackendProviders.state.notifier)
         .handleEvent(event.asGameEvent);
 
     final g = game;
@@ -83,21 +100,27 @@ class GameTester<T extends Game> {
     }
   }
 
+  void dispose() {
+    sub?.close();
+  }
+
   /// Returns the current game state
   ///
   /// If testing the outcome of an event prefer using [event]
-  T get game => backendReader(BackendProviders.state.notifier).gameState as T;
+  T get game =>
+      backendContainer.read(BackendProviders.state.notifier).gameState as T;
 
   /// Returns the current error state
   ///
   /// If testing the outcome of an event prefer using [event]
-  GameError? get error => backendReader(BackendProviders.error);
+  GameError? get error => backendContainer.read(BackendProviders.error);
 
   /// Advances to the next round, and checks the [expectation] of the game after
   /// the round has advanced
   void nextRound(Function(T) expectation) {
     for (final p in _players) {
-      backendReader(BackendProviders.state.notifier)
+      backendContainer
+          .read(BackendProviders.state.notifier)
           .handleEvent(GenericEvent.readyNextRound(p.id).asGameEvent);
     }
 

@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'generic.dart';
@@ -11,48 +12,11 @@ part of 'generic.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 GenericGame _$GenericGameFromJson(Map<String, dynamic> json) {
   return _GenericGame.fromJson(json);
 }
-
-/// @nodoc
-class _$GenericGameTearOff {
-  const _$GenericGameTearOff();
-
-  _GenericGame call(
-      IList<Player> players,
-      IList<String> readyPlayers,
-      IList<IList<double>> allRoundScores,
-      DateTime time,
-      IList<GameMessage> messages,
-      GameStatus status,
-      int? currentPlayerIndex,
-      int round,
-      bool isMultiPly,
-      bool isSimultaneousAction) {
-    return _GenericGame(
-      players,
-      readyPlayers,
-      allRoundScores,
-      time,
-      messages,
-      status,
-      currentPlayerIndex,
-      round,
-      isMultiPly,
-      isSimultaneousAction,
-    );
-  }
-
-  GenericGame fromJson(Map<String, Object?> json) {
-    return GenericGame.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $GenericGame = _$GenericGameTearOff();
 
 /// @nodoc
 mixin _$GenericGame {
@@ -159,11 +123,11 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$GenericGameCopyWith<$Res>
+abstract class _$$_GenericGameCopyWith<$Res>
     implements $GenericGameCopyWith<$Res> {
-  factory _$GenericGameCopyWith(
-          _GenericGame value, $Res Function(_GenericGame) then) =
-      __$GenericGameCopyWithImpl<$Res>;
+  factory _$$_GenericGameCopyWith(
+          _$_GenericGame value, $Res Function(_$_GenericGame) then) =
+      __$$_GenericGameCopyWithImpl<$Res>;
   @override
   $Res call(
       {IList<Player> players,
@@ -179,14 +143,14 @@ abstract class _$GenericGameCopyWith<$Res>
 }
 
 /// @nodoc
-class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
-    implements _$GenericGameCopyWith<$Res> {
-  __$GenericGameCopyWithImpl(
-      _GenericGame _value, $Res Function(_GenericGame) _then)
-      : super(_value, (v) => _then(v as _GenericGame));
+class __$$_GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
+    implements _$$_GenericGameCopyWith<$Res> {
+  __$$_GenericGameCopyWithImpl(
+      _$_GenericGame _value, $Res Function(_$_GenericGame) _then)
+      : super(_value, (v) => _then(v as _$_GenericGame));
 
   @override
-  _GenericGame get _value => super._value as _GenericGame;
+  _$_GenericGame get _value => super._value as _$_GenericGame;
 
   @override
   $Res call({
@@ -201,7 +165,7 @@ class __$GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
     Object? isMultiPly = freezed,
     Object? isSimultaneousAction = freezed,
   }) {
-    return _then(_GenericGame(
+    return _then(_$_GenericGame(
       players == freezed
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
@@ -281,7 +245,8 @@ class _$_GenericGame extends _GenericGame {
   final int? currentPlayerIndex;
   @override
   final int round;
-  @override // ignore: avoid_positional_boolean_parameters
+// ignore: avoid_positional_boolean_parameters
+  @override
   final bool isMultiPly;
   @override
   final bool isSimultaneousAction;
@@ -295,62 +260,64 @@ class _$_GenericGame extends _GenericGame {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _GenericGame &&
-            (identical(other.players, players) || other.players == players) &&
-            (identical(other.readyPlayers, readyPlayers) ||
-                other.readyPlayers == readyPlayers) &&
-            (identical(other.allRoundScores, allRoundScores) ||
-                other.allRoundScores == allRoundScores) &&
-            (identical(other.time, time) || other.time == time) &&
-            (identical(other.messages, messages) ||
-                other.messages == messages) &&
-            (identical(other.status, status) || other.status == status) &&
-            (identical(other.currentPlayerIndex, currentPlayerIndex) ||
-                other.currentPlayerIndex == currentPlayerIndex) &&
-            (identical(other.round, round) || other.round == round) &&
-            (identical(other.isMultiPly, isMultiPly) ||
-                other.isMultiPly == isMultiPly) &&
-            (identical(other.isSimultaneousAction, isSimultaneousAction) ||
-                other.isSimultaneousAction == isSimultaneousAction));
+            other is _$_GenericGame &&
+            const DeepCollectionEquality().equals(other.players, players) &&
+            const DeepCollectionEquality()
+                .equals(other.readyPlayers, readyPlayers) &&
+            const DeepCollectionEquality()
+                .equals(other.allRoundScores, allRoundScores) &&
+            const DeepCollectionEquality().equals(other.time, time) &&
+            const DeepCollectionEquality().equals(other.messages, messages) &&
+            const DeepCollectionEquality().equals(other.status, status) &&
+            const DeepCollectionEquality()
+                .equals(other.currentPlayerIndex, currentPlayerIndex) &&
+            const DeepCollectionEquality().equals(other.round, round) &&
+            const DeepCollectionEquality()
+                .equals(other.isMultiPly, isMultiPly) &&
+            const DeepCollectionEquality()
+                .equals(other.isSimultaneousAction, isSimultaneousAction));
   }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      players,
-      readyPlayers,
-      allRoundScores,
-      time,
-      messages,
-      status,
-      currentPlayerIndex,
-      round,
-      isMultiPly,
-      isSimultaneousAction);
 
   @JsonKey(ignore: true)
   @override
-  _$GenericGameCopyWith<_GenericGame> get copyWith =>
-      __$GenericGameCopyWithImpl<_GenericGame>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(players),
+      const DeepCollectionEquality().hash(readyPlayers),
+      const DeepCollectionEquality().hash(allRoundScores),
+      const DeepCollectionEquality().hash(time),
+      const DeepCollectionEquality().hash(messages),
+      const DeepCollectionEquality().hash(status),
+      const DeepCollectionEquality().hash(currentPlayerIndex),
+      const DeepCollectionEquality().hash(round),
+      const DeepCollectionEquality().hash(isMultiPly),
+      const DeepCollectionEquality().hash(isSimultaneousAction));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_GenericGameCopyWith<_$_GenericGame> get copyWith =>
+      __$$_GenericGameCopyWithImpl<_$_GenericGame>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_GenericGameToJson(this);
+    return _$$_GenericGameToJson(
+      this,
+    );
   }
 }
 
 abstract class _GenericGame extends GenericGame {
   const factory _GenericGame(
-      IList<Player> players,
-      IList<String> readyPlayers,
-      IList<IList<double>> allRoundScores,
-      DateTime time,
-      IList<GameMessage> messages,
-      GameStatus status,
-      int? currentPlayerIndex,
-      int round,
-      bool isMultiPly,
-      bool isSimultaneousAction) = _$_GenericGame;
+      final IList<Player> players,
+      final IList<String> readyPlayers,
+      final IList<IList<double>> allRoundScores,
+      final DateTime time,
+      final IList<GameMessage> messages,
+      final GameStatus status,
+      final int? currentPlayerIndex,
+      final int round,
+      final bool isMultiPly,
+      final bool isSimultaneousAction) = _$_GenericGame;
   const _GenericGame._() : super._();
 
   factory _GenericGame.fromJson(Map<String, dynamic> json) =
@@ -378,7 +345,7 @@ abstract class _GenericGame extends GenericGame {
   bool get isSimultaneousAction;
   @override
   @JsonKey(ignore: true)
-  _$GenericGameCopyWith<_GenericGame> get copyWith =>
+  _$$_GenericGameCopyWith<_$_GenericGame> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -396,37 +363,6 @@ GenericEvent _$GenericEventFromJson(Map<String, dynamic> json) {
           'Invalid union type "${json['runtimeType']}"!');
   }
 }
-
-/// @nodoc
-class _$GenericEventTearOff {
-  const _$GenericEventTearOff();
-
-  GenericEventUndo undo() {
-    return const GenericEventUndo();
-  }
-
-  _GenericReadyNextRoundEvent readyNextRound(String player) {
-    return _GenericReadyNextRoundEvent(
-      player,
-    );
-  }
-
-  GameMessage message(String message,
-      {required String from, required String? to}) {
-    return GameMessage(
-      message,
-      from: from,
-      to: to,
-    );
-  }
-
-  GenericEvent fromJson(Map<String, Object?> json) {
-    return GenericEvent.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $GenericEvent = _$GenericEventTearOff();
 
 /// @nodoc
 mixin _$GenericEvent {
@@ -494,28 +430,28 @@ class _$GenericEventCopyWithImpl<$Res> implements $GenericEventCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class $GenericEventUndoCopyWith<$Res> {
-  factory $GenericEventUndoCopyWith(
-          GenericEventUndo value, $Res Function(GenericEventUndo) then) =
-      _$GenericEventUndoCopyWithImpl<$Res>;
+abstract class _$$GenericEventUndoCopyWith<$Res> {
+  factory _$$GenericEventUndoCopyWith(
+          _$GenericEventUndo value, $Res Function(_$GenericEventUndo) then) =
+      __$$GenericEventUndoCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$GenericEventUndoCopyWithImpl<$Res>
+class __$$GenericEventUndoCopyWithImpl<$Res>
     extends _$GenericEventCopyWithImpl<$Res>
-    implements $GenericEventUndoCopyWith<$Res> {
-  _$GenericEventUndoCopyWithImpl(
-      GenericEventUndo _value, $Res Function(GenericEventUndo) _then)
-      : super(_value, (v) => _then(v as GenericEventUndo));
+    implements _$$GenericEventUndoCopyWith<$Res> {
+  __$$GenericEventUndoCopyWithImpl(
+      _$GenericEventUndo _value, $Res Function(_$GenericEventUndo) _then)
+      : super(_value, (v) => _then(v as _$GenericEventUndo));
 
   @override
-  GenericEventUndo get _value => super._value as GenericEventUndo;
+  _$GenericEventUndo get _value => super._value as _$GenericEventUndo;
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$GenericEventUndo extends GenericEventUndo {
-  const _$GenericEventUndo({String? $type})
+  const _$GenericEventUndo({final String? $type})
       : $type = $type ?? 'undo',
         super._();
 
@@ -533,9 +469,10 @@ class _$GenericEventUndo extends GenericEventUndo {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is GenericEventUndo);
+        (other.runtimeType == runtimeType && other is _$GenericEventUndo);
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => runtimeType.hashCode;
 
@@ -609,7 +546,9 @@ class _$GenericEventUndo extends GenericEventUndo {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GenericEventUndoToJson(this);
+    return _$$GenericEventUndoToJson(
+      this,
+    );
   }
 }
 
@@ -622,31 +561,32 @@ abstract class GenericEventUndo extends GenericEvent {
 }
 
 /// @nodoc
-abstract class _$GenericReadyNextRoundEventCopyWith<$Res> {
-  factory _$GenericReadyNextRoundEventCopyWith(
-          _GenericReadyNextRoundEvent value,
-          $Res Function(_GenericReadyNextRoundEvent) then) =
-      __$GenericReadyNextRoundEventCopyWithImpl<$Res>;
+abstract class _$$_GenericReadyNextRoundEventCopyWith<$Res> {
+  factory _$$_GenericReadyNextRoundEventCopyWith(
+          _$_GenericReadyNextRoundEvent value,
+          $Res Function(_$_GenericReadyNextRoundEvent) then) =
+      __$$_GenericReadyNextRoundEventCopyWithImpl<$Res>;
   $Res call({String player});
 }
 
 /// @nodoc
-class __$GenericReadyNextRoundEventCopyWithImpl<$Res>
+class __$$_GenericReadyNextRoundEventCopyWithImpl<$Res>
     extends _$GenericEventCopyWithImpl<$Res>
-    implements _$GenericReadyNextRoundEventCopyWith<$Res> {
-  __$GenericReadyNextRoundEventCopyWithImpl(_GenericReadyNextRoundEvent _value,
-      $Res Function(_GenericReadyNextRoundEvent) _then)
-      : super(_value, (v) => _then(v as _GenericReadyNextRoundEvent));
+    implements _$$_GenericReadyNextRoundEventCopyWith<$Res> {
+  __$$_GenericReadyNextRoundEventCopyWithImpl(
+      _$_GenericReadyNextRoundEvent _value,
+      $Res Function(_$_GenericReadyNextRoundEvent) _then)
+      : super(_value, (v) => _then(v as _$_GenericReadyNextRoundEvent));
 
   @override
-  _GenericReadyNextRoundEvent get _value =>
-      super._value as _GenericReadyNextRoundEvent;
+  _$_GenericReadyNextRoundEvent get _value =>
+      super._value as _$_GenericReadyNextRoundEvent;
 
   @override
   $Res call({
     Object? player = freezed,
   }) {
-    return _then(_GenericReadyNextRoundEvent(
+    return _then(_$_GenericReadyNextRoundEvent(
       player == freezed
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
@@ -658,7 +598,7 @@ class __$GenericReadyNextRoundEventCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
-  const _$_GenericReadyNextRoundEvent(this.player, {String? $type})
+  const _$_GenericReadyNextRoundEvent(this.player, {final String? $type})
       : $type = $type ?? 'readyNextRound',
         super._();
 
@@ -680,18 +620,20 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _GenericReadyNextRoundEvent &&
-            (identical(other.player, player) || other.player == player));
+            other is _$_GenericReadyNextRoundEvent &&
+            const DeepCollectionEquality().equals(other.player, player));
   }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, player);
 
   @JsonKey(ignore: true)
   @override
-  _$GenericReadyNextRoundEventCopyWith<_GenericReadyNextRoundEvent>
-      get copyWith => __$GenericReadyNextRoundEventCopyWithImpl<
-          _GenericReadyNextRoundEvent>(this, _$identity);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(player));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_GenericReadyNextRoundEventCopyWith<_$_GenericReadyNextRoundEvent>
+      get copyWith => __$$_GenericReadyNextRoundEventCopyWithImpl<
+          _$_GenericReadyNextRoundEvent>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -763,12 +705,14 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_GenericReadyNextRoundEventToJson(this);
+    return _$$_GenericReadyNextRoundEventToJson(
+      this,
+    );
   }
 }
 
 abstract class _GenericReadyNextRoundEvent extends GenericEvent {
-  const factory _GenericReadyNextRoundEvent(String player) =
+  const factory _GenericReadyNextRoundEvent(final String player) =
       _$_GenericReadyNextRoundEvent;
   const _GenericReadyNextRoundEvent._() : super._();
 
@@ -777,27 +721,27 @@ abstract class _GenericReadyNextRoundEvent extends GenericEvent {
 
   String get player;
   @JsonKey(ignore: true)
-  _$GenericReadyNextRoundEventCopyWith<_GenericReadyNextRoundEvent>
+  _$$_GenericReadyNextRoundEventCopyWith<_$_GenericReadyNextRoundEvent>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $GameMessageCopyWith<$Res> {
-  factory $GameMessageCopyWith(
-          GameMessage value, $Res Function(GameMessage) then) =
-      _$GameMessageCopyWithImpl<$Res>;
+abstract class _$$GameMessageCopyWith<$Res> {
+  factory _$$GameMessageCopyWith(
+          _$GameMessage value, $Res Function(_$GameMessage) then) =
+      __$$GameMessageCopyWithImpl<$Res>;
   $Res call({String message, String from, String? to});
 }
 
 /// @nodoc
-class _$GameMessageCopyWithImpl<$Res> extends _$GenericEventCopyWithImpl<$Res>
-    implements $GameMessageCopyWith<$Res> {
-  _$GameMessageCopyWithImpl(
-      GameMessage _value, $Res Function(GameMessage) _then)
-      : super(_value, (v) => _then(v as GameMessage));
+class __$$GameMessageCopyWithImpl<$Res> extends _$GenericEventCopyWithImpl<$Res>
+    implements _$$GameMessageCopyWith<$Res> {
+  __$$GameMessageCopyWithImpl(
+      _$GameMessage _value, $Res Function(_$GameMessage) _then)
+      : super(_value, (v) => _then(v as _$GameMessage));
 
   @override
-  GameMessage get _value => super._value as GameMessage;
+  _$GameMessage get _value => super._value as _$GameMessage;
 
   @override
   $Res call({
@@ -805,7 +749,7 @@ class _$GameMessageCopyWithImpl<$Res> extends _$GenericEventCopyWithImpl<$Res>
     Object? from = freezed,
     Object? to = freezed,
   }) {
-    return _then(GameMessage(
+    return _then(_$GameMessage(
       message == freezed
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -826,7 +770,7 @@ class _$GameMessageCopyWithImpl<$Res> extends _$GenericEventCopyWithImpl<$Res>
 @JsonSerializable()
 class _$GameMessage extends GameMessage {
   const _$GameMessage(this.message,
-      {required this.from, required this.to, String? $type})
+      {required this.from, required this.to, final String? $type})
       : $type = $type ?? 'message',
         super._();
 
@@ -852,19 +796,24 @@ class _$GameMessage extends GameMessage {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is GameMessage &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.from, from) || other.from == from) &&
-            (identical(other.to, to) || other.to == to));
+            other is _$GameMessage &&
+            const DeepCollectionEquality().equals(other.message, message) &&
+            const DeepCollectionEquality().equals(other.from, from) &&
+            const DeepCollectionEquality().equals(other.to, to));
   }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message, from, to);
 
   @JsonKey(ignore: true)
   @override
-  $GameMessageCopyWith<GameMessage> get copyWith =>
-      _$GameMessageCopyWithImpl<GameMessage>(this, _$identity);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(message),
+      const DeepCollectionEquality().hash(from),
+      const DeepCollectionEquality().hash(to));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$GameMessageCopyWith<_$GameMessage> get copyWith =>
+      __$$GameMessageCopyWithImpl<_$GameMessage>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -936,13 +885,15 @@ class _$GameMessage extends GameMessage {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$GameMessageToJson(this);
+    return _$$GameMessageToJson(
+      this,
+    );
   }
 }
 
 abstract class GameMessage extends GenericEvent {
-  const factory GameMessage(String message,
-      {required String from, required String? to}) = _$GameMessage;
+  const factory GameMessage(final String message,
+      {required final String from, required final String? to}) = _$GameMessage;
   const GameMessage._() : super._();
 
   factory GameMessage.fromJson(Map<String, dynamic> json) =
@@ -952,6 +903,6 @@ abstract class GameMessage extends GenericEvent {
   String get from;
   String? get to;
   @JsonKey(ignore: true)
-  $GameMessageCopyWith<GameMessage> get copyWith =>
+  _$$GameMessageCopyWith<_$GameMessage> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -142,24 +142,26 @@ class NoGameClient extends GameClient {
 
   @override
   Future<IList<GameInfo>> getGames(PlayerID playerID) async {
-    final gms = games.values.where((g) =>
-        g.read(BackendProviders.lobby).players.any((p) => p.id == playerID));
+    final gms = games.values.where((g) => g.container
+        .read(BackendProviders.lobby)
+        .players
+        .any((p) => p.id == playerID));
     return [
       for (final g in gms)
         GameInfo(
-          status: g.read(BackendProviders.lobby).gameStatus,
+          status: g.container.read(BackendProviders.lobby).gameStatus,
           gameID: g.gameCode,
-          player: g
+          player: g.container
               .read(BackendProviders.lobby)
               .players
               .firstWhere((p) => p.id == playerID)
               .name,
-          players: g
+          players: g.container
               .read(BackendProviders.lobby)
               .players
               .map((p) => p.name)
               .toIList(),
-          gameType: g.read(BackendProviders.lobby).config.gameType,
+          gameType: g.container.read(BackendProviders.lobby).config.gameType,
           creator: g.creator == playerID,
         )
     ].lock;
@@ -176,7 +178,7 @@ final onDeviceGameServerClient = Provider<GameClient>(
     return client;
   },
   name: 'onDeviceGameServerClient',
-  dependencies: [GameProviders.connected.notifier],
+  dependencies: [GameProviders.connected],
 );
 
 /// Keeps track of some metadata about a game for an [OnDeviceClient] game
@@ -185,5 +187,4 @@ class LocalGame {
   final GameCode gameCode;
   final PlayerID creator;
   final ProviderContainer container;
-  Reader get read => container.read;
 }

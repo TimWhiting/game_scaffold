@@ -268,17 +268,3 @@ class GameNavigator extends HookConsumerWidget {
     );
   }
 }
-
-extension RefreshFuture<State> on AlwaysAliveProviderBase<AsyncValue<State>> {
-  Future<State> refresh(WidgetRef ref) {
-    ref.refresh(this);
-    return ref.read(future);
-  }
-}
-
-extension RefreshADFuture<State> on AutoDisposeProviderBase<AsyncValue<State>> {
-  Future<State> refresh(WidgetRef ref) {
-    ref.refresh(this);
-    return ref.read(future);
-  }
-}

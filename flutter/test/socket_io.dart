@@ -7,9 +7,9 @@ Future<void> main() async {
   final ioServer = IOServer();
 
   await test('Created', (read) async {
-    final gameCode = read.gameFor(P1)(GameProviders.code);
+    final gameCode = read.gameFor(P1).read(GameProviders.code);
     assert(ioServer.servers[gameCode] != null, 'Game Server Created');
-    final gameStatus = read.gameFor(P1)(GameProviders.status);
+    final gameStatus = read.gameFor(P1).read(GameProviders.status);
     print(gameStatus);
     assert(gameStatus == null, 'Game Starts out Not Joined');
   });
@@ -17,14 +17,14 @@ Future<void> main() async {
   await Future.delayed(const Duration(milliseconds: 100));
 
   await test('Registered Start Game', (read) async {
-    final gameCode = read.gameFor(P1)(GameProviders.code);
-    await read.gameFor(P1)(GameProviders.joinGame.future);
-    await read.gameFor(P1)(GameProviders.startGame.future);
+    final gameCode = read.gameFor(P1).read(GameProviders.code);
+    await read.gameFor(P1).read(GameProviders.joinGame.future);
+    await read.gameFor(P1).read(GameProviders.startGame.future);
     await Future.delayed(const Duration(milliseconds: 100));
     assert(ioServer.servers[gameCode]!.playerNames.length == 1,
         'One Player Joined');
     assert(
-        read.gameFor(P1)(GameProviders.game).asData?.value.status ==
+        read.gameFor(P1).read(GameProviders.game).asData?.value.status ==
             GameStatus.started,
         'Game is Started');
   });
@@ -39,26 +39,26 @@ Future<void> test(
   final readers = Readers({
     P1: ProviderContainer(
         parent: root,
-        overrides: [GameProviders.playerID.overrideWithValue(P1)]).read,
+        overrides: [GameProviders.playerID.overrideWithValue(P1)]),
     P2: ProviderContainer(
-        parent: root,
-        overrides: [GameProviders.playerID.overrideWithValue(P2)]).read
+        parent: root, overrides: [GameProviders.playerID.overrideWithValue(P2)])
   });
   root.read(GameProviders.remoteUri.notifier).state =
       Uri.parse('http://127.0.0.1:$defaultGamePort');
   const config = GameConfig(adminID: P1, gameType: 'tictactoe');
-  readers.gameFor(P1)(GameProviders.config.notifier).state = config;
-  final code = await readers.gameFor(P1)(GameProviders.createGame.future);
+  readers.gameFor(P1).read(GameProviders.config.notifier).state = config;
+  final code = await readers.gameFor(P1).read(GameProviders.createGame.future);
   await Future.delayed(const Duration(milliseconds: 100));
   await testFn(readers);
-  final deleted = await readers.gameFor(P1)(GameProviders.deleteGame.future);
+  final deleted =
+      await readers.gameFor(P1).read(GameProviders.deleteGame.future);
   print(
       '########## Finished Test $testName GameCode: $code, deleted: $deleted ##########');
 }
 
 class Readers {
   const Readers(this._readers);
-  final Map<String, dynamic> _readers;
+  final Map<String, ProviderContainer> _readers;
 
-  Reader gameFor(String player) => _readers[player] as Reader;
+  ProviderContainer gameFor(String player) => _readers[player]!;
 }

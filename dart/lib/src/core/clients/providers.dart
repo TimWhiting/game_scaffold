@@ -128,20 +128,20 @@ class GameProviders {
   );
 
   static final gameConnect = FutureProvider.autoDispose<void>(
-    (ref) => ref.watch(gameClient).connect(),
+    (ref) => ref.read(gameClient).connect(),
     name: 'GameConnect',
     dependencies: [gameClient],
   );
 
   static final gameDisconnect = FutureProvider.autoDispose<void>(
-    (ref) => ref.watch(gameClient).disconnect(),
+    (ref) => ref.read(gameClient).disconnect(),
     name: 'GameDisconnect',
     dependencies: [gameClient],
   );
 
   static final createGame = FutureProvider.autoDispose<String>(
     (ref) async {
-      final c = await ref.watch(gameClient).createGame(
+      final c = await ref.read(gameClient).createGame(
             ref.read(playerID),
             ref.read(config),
           );
@@ -153,20 +153,20 @@ class GameProviders {
       gameClient,
       playerID,
       config,
-      code.notifier,
+      code,
     ],
   );
   static final connected = StateProvider<bool>((ref) => false);
 
   static final allGames = FutureProvider.autoDispose<IList<GameInfo>>(
-    (ref) => ref.watch(gameClient).getGames(ref.read(playerID)),
+    (ref) => ref.read(gameClient).getGames(ref.read(playerID)),
     name: 'AllGames',
     dependencies: [gameClient, playerID],
   );
 
   static final deleteGame = FutureProvider.autoDispose<bool>(
     (ref) =>
-        ref.watch(gameClient).deleteGame(ref.read(playerID), ref.read(code)),
+        ref.read(gameClient).deleteGame(ref.read(playerID), ref.read(code)),
     name: 'DeleteGame',
     dependencies: [gameClient, playerID, code],
   );
@@ -197,7 +197,7 @@ class GameProviders {
   static final joinGame = FutureProvider.autoDispose<String?>(
     (ref) async {
       final name = await ref
-          .watch(roundClient)
+          .read(roundClient)
           .joinGame(ref.read(playerID), ref.read(code), ref.read(playerName));
       if (name != null) {
         ref.read(playerName.notifier).state = name;
@@ -210,33 +210,30 @@ class GameProviders {
       playerID,
       code,
       playerName,
-      playerName.notifier,
     ],
   );
 
   static final startGame = FutureProvider.autoDispose<bool>(
     (ref) =>
-        ref.watch(roundClient).startGame(ref.read(playerID), ref.read(code)),
+        ref.read(roundClient).startGame(ref.read(playerID), ref.read(code)),
     name: 'StartGame',
     dependencies: [roundClient, playerID, code],
   );
 
   static final exitGame = FutureProvider.autoDispose<bool>(
-    (ref) =>
-        ref.watch(roundClient).exitGame(ref.read(playerID), ref.read(code)),
+    (ref) => ref.read(roundClient).exitGame(ref.read(playerID), ref.read(code)),
     name: 'ExitGame',
     dependencies: [roundClient, playerID, code],
   );
 
   static final undo = FutureProvider.autoDispose<bool>(
-    (ref) => ref.watch(roundClient).undo(ref.read(playerID), ref.read(code)),
+    (ref) => ref.read(roundClient).undo(ref.read(playerID), ref.read(code)),
     name: 'Undo',
     dependencies: [roundClient, playerID, code],
   );
 
   static final newRound = FutureProvider.autoDispose<bool>(
-    (ref) =>
-        ref.watch(roundClient).newRound(ref.read(playerID), ref.read(code)),
+    (ref) => ref.read(roundClient).newRound(ref.read(playerID), ref.read(code)),
     name: 'NewRound',
     dependencies: [roundClient, playerID, code],
   );
@@ -248,7 +245,7 @@ class GameProviders {
 
   static final sendMessage = FutureProvider.autoDispose<bool>(
     (ref) => ref
-        .watch(roundClient)
+        .read(roundClient)
         .sendMessage(ref.read(playerID), ref.read(code), ref.read(chatMessage)),
     name: 'NewRound',
     dependencies: [roundClient, playerID, code, chatMessage],
@@ -256,7 +253,7 @@ class GameProviders {
 
   static final sendEvent = FutureProvider.autoDispose.family<bool, GameEvent>(
     (ref, event) => ref
-        .watch(roundClient)
+        .read(roundClient)
         .sendEvent(ref.read(playerID), ref.read(code), event),
     name: 'SendEvent',
     dependencies: [roundClient, playerID, code],
@@ -265,7 +262,7 @@ class GameProviders {
   /// Provides game lobby info in the form of [GameInfo] for the lobby
   static final lobby = StreamProvider.autoDispose<GameInfo>(
     (ref) async* {
-      final c = ref.watch(roundClient);
+      final c = ref.read(roundClient);
       yield* c.gameLobby(ref.watch(playerID), ref.watch(code));
     },
     name: 'Lobby',
@@ -275,7 +272,7 @@ class GameProviders {
   /// Provides the game or error state for the current game of the client with specified id
   static final gameOrError = StreamProvider.autoDispose<GameOrError>(
     (ref) {
-      final c = ref.watch(roundClient);
+      final c = ref.read(roundClient);
       return c.gameStream(ref.watch(playerID), ref.watch(code));
     },
     name: 'GameOrErrorStream',
@@ -292,7 +289,7 @@ class GameProviders {
       }
     },
     name: 'GameStateStream',
-    dependencies: [gameOrError.stream, playerID],
+    dependencies: [gameOrError, playerID],
   );
 
   /// Provides the game error for the current game of the client with specified id
@@ -305,7 +302,7 @@ class GameProviders {
       }
     },
     name: 'GameError',
-    dependencies: [gameOrError.stream, playerID],
+    dependencies: [gameOrError, playerID],
   );
 }
 

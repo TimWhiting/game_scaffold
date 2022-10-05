@@ -220,7 +220,7 @@ final socketIOGameServerClient = Provider<GameClient>(
     return client;
   },
   name: 'socketIOGameServerClient',
-  dependencies: [GameProviders.remoteUri, GameProviders.connected.notifier],
+  dependencies: [GameProviders.remoteUri, GameProviders.connected],
 );
 
 /// Options for a socket io server
