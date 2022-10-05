@@ -11,11 +11,15 @@ class GameOrError<G extends Game> with _$GameOrError {
   const GameOrError._();
 
   /// Represents a game
-  const factory GameOrError.game(@GameConverter() G game) = GameValue<G>;
+  const factory GameOrError.game({
+    @GameConverter() required G game,
+    required Map<PlayerName, double> rewards,
+  }) = GameValue<G>;
 
-  /// Represets an error
+  /// Represents an error
   const factory GameOrError.error(String message, PlayerID person) = GameError;
-  factory GameOrError.fromJson(Map<String, dynamic> json) => _$GameOrErrorFromJson(json);
+  factory GameOrError.fromJson(Map<String, dynamic> json) =>
+      _$GameOrErrorFromJson(json);
 
   /// Returns whether this instance is an error
   bool get isError => this is GameError;
@@ -27,17 +31,27 @@ class GameOrError<G extends Game> with _$GameOrError {
   String get errorString => isError ? error!.message : 'No Error';
 
   /// Returns the game value or null
-  G? get value => when(error: (m, p) => null, game: (g) => g as G);
+  G? get value => when(error: (m, p) => null, game: (g, r) => g as G);
+
+  /// Returns the rewards or null
+  Map<PlayerName, double>? get reward =>
+      when(error: (m, p) => null, game: (g, r) => r);
 
   /// Returns whether this instance is a game
   bool get isGame => this is GameValue;
 }
 
 extension GameOrErrorGameX<E extends Event> on Game<E> {
-  GameOrError<G> gameValue<G extends Game<E>>() => GameValue(this as G);
+  GameOrError<G> gameValue<G extends Game<E>>(
+          Map<PlayerName, double> rewards) =>
+      GameValue(
+        game: this as G,
+        rewards: rewards,
+      );
 }
 
-class GameConverter<T extends Game> implements JsonConverter<T, Map<String, dynamic>> {
+class GameConverter<T extends Game>
+    implements JsonConverter<T, Map<String, dynamic>> {
   const GameConverter();
   @override
   T fromJson(Map<String, dynamic> json) => Game.fromJson(json) as T;

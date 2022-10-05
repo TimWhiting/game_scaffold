@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'core.dart';
@@ -8,14 +7,14 @@ import 'core.dart';
 part 'generic.freezed.dart';
 part 'generic.g.dart';
 
+typedef FullRoundState<T extends Event> = ({Game<T> game, IList<GameMessage> messages, GenericGame generic});
+
 /// Represents a generic game, with common fields that can be manipulated by
 /// common [GenericEvent]s
 ///
 /// Includes
 /// * List of [players]
-/// * A list of scores for all rounds [allRoundScores]
 /// * The [time] of the last game update
-/// * A list of [messages] that were sent
 /// * The current [status]
 /// * The [currentPlayerIndex]
 /// * The current [round]
@@ -24,15 +23,10 @@ class GenericGame with _$GenericGame {
   const factory GenericGame(
     IList<Player> players,
     IList<PlayerID> readyPlayers,
-    IList<IList<double>> allRoundScores,
     DateTime time,
-    IList<GameMessage> messages,
     GameStatus status,
     int? currentPlayerIndex,
     int round,
-    // ignore: avoid_positional_boolean_parameters
-    bool isMultiPly,
-    bool isSimultaneousAction,
   ) = _GenericGame;
   const GenericGame._();
 
@@ -40,64 +34,28 @@ class GenericGame with _$GenericGame {
       _$GenericGameFromJson(map);
 
   /// Creates a default initialized game with [players]
-  factory GenericGame.start(
-    IList<Player> players, {
-    required bool multiPly,
-    required bool simultaneousAction,
-  }) =>
-      GenericGame(
+  factory GenericGame.start(IList<Player> players) => GenericGame(
         players.toIList(),
         <PlayerID>[].lock,
-        <IList<double>>[].lock,
         DateTime.now(),
-        <GameMessage>[].lock,
         GameStatus.started,
         0,
         0,
-        multiPly,
-        simultaneousAction,
       );
 
   /// Creates a default initialized game where the first player is chosen at random
-  factory GenericGame.startRandom(
-    IList<Player> players, {
-    required bool multiPly,
-    required bool simultaneousAction,
-  }) =>
-      GenericGame(
+  factory GenericGame.startRandom(IList<Player> players) => GenericGame(
         players,
         <PlayerID>[].lock,
-        <IList<double>>[].lock,
         DateTime.now(),
-        <GameMessage>[].lock,
         GameStatus.started,
         0,
         Random().nextInt(players.length),
-        multiPly,
-        simultaneousAction,
       );
 
   /// Gets the player at the [currentPlayerIndex]
   Player? get currentPlayer =>
       currentPlayerIndex == null ? null : players[currentPlayerIndex!];
-
-  /// Gets the total score for each player based off of [allRoundScores]
-  IMap<PlayerID, double> get totalScores =>
-      playerRoundScores.mapValues((entry) => entry.value.sum);
-
-  /// Gets the scores for each player for all rounds based off of [allRoundScores]
-  IMap<PlayerID, IList<double>> get playerRoundScores => IMap({
-        for (var p = 0; p < players.length; p++)
-          players[p].id: IList(allRoundScores.map((rs) => rs[p])),
-      });
-
-  /// Gets the scores for each round for each player based off of [allRoundScores]
-  IList<IMap<PlayerID, double>> get roundPlayerScores =>
-      IList(allRoundScores.map((rs) => IMap(
-            {
-              for (var i = 0; i < players.length; i++) players[i].id: rs[i],
-            },
-          )));
 
   /// Gets whether the game is over
   bool get gameOver => status == GameStatus.finished;
@@ -118,26 +76,10 @@ class GenericGame with _$GenericGame {
   /// Returns a copy of the [GenericGame] with the time updated to the current time
   GenericGame updateTime() => copyWith(time: DateTime.now());
 
-  /// Returns a copy of the [GenericGame] with the [msg] added to [messages]
-  GenericGame addMessage(GameMessage msg) => copyWith(
-        messages: messages.add(msg),
-      );
-
   /// Returns a copy of the [GenericGame] with the [round] incremented,
-  /// [status] set to [GameStatus.started] and optionally the
-  /// players' [scores] added to [allRoundScores]
-  GenericGame finishRound([Map<PlayerID, double>? scores]) => scores != null
-      ? updateScores(scores).copyWith(
-          round: round + 1,
-          status: GameStatus.started,
-        )
-      : copyWith(round: round + 1, status: GameStatus.started);
-
-  /// Returns a copy of the [GenericGame] with the [scores] added to
-  /// [allRoundScores]
-  GenericGame updateScores(Map<PlayerID, double> scores) => copyWith(
-      allRoundScores:
-          allRoundScores.add(players.map((p) => scores[p.id]!).toIList()));
+  /// [status] set to [GameStatus.started]
+  GenericGame finishRound() =>
+      copyWith(round: round + 1, status: GameStatus.started);
 
   /// Returns a copy of the [GenericGame] with the [status] updated to [status]
   GenericGame updateStatus(GameStatus status) => copyWith(status: status);

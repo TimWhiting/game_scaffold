@@ -22,7 +22,7 @@ extension EventX on Event {
 }
 
 /// Some extensions on `Game` to more easily get some of the `GenericGame` fields
-extension GameX on Game {
+extension GameX<E extends Event> on FullRoundState<E> {
   /// Gets the current player's index
   int? get currentPlayerIndex => generic.currentPlayerIndex;
 
@@ -41,37 +41,17 @@ extension GameX on Game {
   /// Gets the `DateTime` that this state was updated
   DateTime get time => generic.time;
 
-  /// Gets the list of `GameMessage`s that have been exchanged this game
-  IList<GameMessage> get messages => generic.messages;
-
   /// Gets the status of the game
   GameStatus get status => generic.status;
 
   /// Gets the current round number
   int get round => generic.round;
 
-  /// Gets the total score for each player mapped by player id
-  IMap<PlayerID, double> get totalScores => generic.totalScores;
-
-  /// Gets the list of round scores for each player mapped by their id
-  IMap<PlayerID, IList<double>> get playerRoundScores =>
-      generic.playerRoundScores;
-
-  /// Gets the map of player scores grouped by round
-  IList<IMap<PlayerID, double>> get roundPlayerScores =>
-      generic.roundPlayerScores;
-
   /// Gets whether the game is over
   bool get gameOver => generic.gameOver;
 
   /// Gets whether the round is over
   bool get roundOver => generic.roundOver;
-
-  /// Gets whether the game has multiple actions before a reward
-  bool get isMultiPly => generic.isMultiPly;
-
-  /// Gets whether the game is simultaneous action at this ply
-  bool get isSimultaneousAction => generic.isSimultaneousAction;
 
   /// Gets the players who are ready for the next round
   IList<PlayerID> get readyPlayers => generic.readyPlayers;

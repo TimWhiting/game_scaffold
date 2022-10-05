@@ -11,18 +11,10 @@ _$_GenericGame _$$_GenericGameFromJson(Map<String, dynamic> json) =>
       IList<Player>.fromJson(json['players'],
           (value) => Player.fromJson(value as Map<String, dynamic>)),
       IList<String>.fromJson(json['readyPlayers'], (value) => value as String),
-      IList<IList<double>>.fromJson(
-          json['allRoundScores'],
-          (value) => IList<double>.fromJson(
-              value, (value) => (value as num).toDouble())),
       DateTime.parse(json['time'] as String),
-      IList<GameMessage>.fromJson(json['messages'],
-          (value) => GameMessage.fromJson(value as Map<String, dynamic>)),
       $enumDecode(_$GameStatusEnumMap, json['status']),
       json['currentPlayerIndex'] as int?,
       json['round'] as int,
-      json['isMultiPly'] as bool,
-      json['isSimultaneousAction'] as bool,
     );
 
 Map<String, dynamic> _$$_GenericGameToJson(_$_GenericGame instance) =>
@@ -33,20 +25,10 @@ Map<String, dynamic> _$$_GenericGameToJson(_$_GenericGame instance) =>
       'readyPlayers': instance.readyPlayers.toJson(
         (value) => value,
       ),
-      'allRoundScores': instance.allRoundScores.toJson(
-        (value) => value.toJson(
-          (value) => value,
-        ),
-      ),
       'time': instance.time.toIso8601String(),
-      'messages': instance.messages.toJson(
-        (value) => value,
-      ),
       'status': _$GameStatusEnumMap[instance.status]!,
       'currentPlayerIndex': instance.currentPlayerIndex,
       'round': instance.round,
-      'isMultiPly': instance.isMultiPly,
-      'isSimultaneousAction': instance.isSimultaneousAction,
     };
 
 const _$GameStatusEnumMap = {

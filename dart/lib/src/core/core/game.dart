@@ -12,9 +12,6 @@ typedef GameType = String;
 
 /// Abstract class that all games must inherit from
 abstract class Game<E extends Event> {
-  /// [generic] game holding some commonly used state
-  GenericGame get generic;
-
   /// This method takes an event and returns the changed game state or an error
   ///
   /// Errors are typically for displaying on the UI why the particular player can't make that move.
@@ -22,18 +19,6 @@ abstract class Game<E extends Event> {
   /// undo functionality needs to work. (i.e. the class should be immutable), for high performance you can
   /// make the changes and just return the changed instance itself, but undo functionality won't work.
   GameOrError next(E event);
-
-  /// Copies the state of the game with generic replaced by the function applying updates to the most recent copy of generic
-  ///
-  /// This method should be implemented as follows for Games created with freezed and a field called generic:
-  ///
-  /// ```dart
-  /// @override
-  /// Game copyWithGeneric(GenericGame Function(GenericGame p1) updates) {
-  ///  return copyWith(generic: updates(generic));
-  ///}
-  /// ```
-  Game copyWithGeneric(GenericGame Function(GenericGame) updates);
 
   /// Logic to apply after all players have consented they want to play another round
   /// to initialize the next round
@@ -145,8 +130,8 @@ enum GameStatus {
 ///
 /// Custom options can be added to the [options] map, but must be in a json
 /// compatible form
-@freezed
-class GameConfig with _$GameConfig {
+@Freezed(genericArgumentFactories: true)
+class GameConfig<T> with _$GameConfig<T> {
   const factory GameConfig({
     required GameType gameType,
     PlayerID? adminID,
@@ -156,12 +141,18 @@ class GameConfig with _$GameConfig {
     @Default(1) int minPlayers,
     @Default(10) int maxPlayers,
     @Default(true) bool autoStart,
-
-    /// [options] must be json serializable
-    Map<String, dynamic>? options,
+    T? options,
   }) = _GameConfig;
-  factory GameConfig.fromJson(Map<String, dynamic> map) =>
-      _$GameConfigFromJson(map);
+  const GameConfig._();
+  factory GameConfig.fromJson(
+          Map<String, Object?> map,
+          // ignore: avoid_annotating_with_dynamic
+          T Function(Object?) fromJsonT) =>
+      _$GameConfigFromJson(map, fromJsonT);
+
+  @override
+  Map<String, dynamic> toJson(Object? Function(T) toJsonT) =>
+      super.toJson(toJsonT);
 }
 
 /// An object to provide info about a particular game to the client

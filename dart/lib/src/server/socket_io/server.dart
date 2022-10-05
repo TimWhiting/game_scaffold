@@ -110,7 +110,7 @@ class IOServer {
     Map<String, dynamic> config,
   ) {
     logger.fine('Creating game');
-    final gameConfig = GameConfig.fromJson(config);
+    final gameConfig = GameConfig.fromJson(config, (_) => _);
     final gameID = generateGameID(servers.keys.toList());
     final scopedContainer = ProviderContainer();
     final lobby = scopedContainer.read(BackendProviders.lobby.notifier);

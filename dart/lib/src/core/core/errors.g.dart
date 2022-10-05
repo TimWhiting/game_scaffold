@@ -9,7 +9,10 @@ part of 'errors.dart';
 _$GameValue<G> _$$GameValueFromJson<G extends Game<Event>>(
         Map<String, dynamic> json) =>
     _$GameValue<G>(
-      GameConverter<G>().fromJson(json['game'] as Map<String, dynamic>),
+      game: GameConverter<G>().fromJson(json['game'] as Map<String, dynamic>),
+      rewards: (json['rewards'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, (e as num).toDouble()),
+      ),
       $type: json['runtimeType'] as String?,
     );
 
@@ -17,6 +20,7 @@ Map<String, dynamic> _$$GameValueToJson<G extends Game<Event>>(
         _$GameValue<G> instance) =>
     <String, dynamic>{
       'game': GameConverter<G>().toJson(instance.game),
+      'rewards': instance.rewards,
       'runtimeType': instance.$type,
     };
 

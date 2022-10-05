@@ -22,15 +22,10 @@ GenericGame _$GenericGameFromJson(Map<String, dynamic> json) {
 mixin _$GenericGame {
   IList<Player> get players => throw _privateConstructorUsedError;
   IList<String> get readyPlayers => throw _privateConstructorUsedError;
-  IList<IList<double>> get allRoundScores => throw _privateConstructorUsedError;
   DateTime get time => throw _privateConstructorUsedError;
-  IList<GameMessage> get messages => throw _privateConstructorUsedError;
   GameStatus get status => throw _privateConstructorUsedError;
   int? get currentPlayerIndex => throw _privateConstructorUsedError;
-  int get round =>
-      throw _privateConstructorUsedError; // ignore: avoid_positional_boolean_parameters
-  bool get isMultiPly => throw _privateConstructorUsedError;
-  bool get isSimultaneousAction => throw _privateConstructorUsedError;
+  int get round => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,14 +41,10 @@ abstract class $GenericGameCopyWith<$Res> {
   $Res call(
       {IList<Player> players,
       IList<String> readyPlayers,
-      IList<IList<double>> allRoundScores,
       DateTime time,
-      IList<GameMessage> messages,
       GameStatus status,
       int? currentPlayerIndex,
-      int round,
-      bool isMultiPly,
-      bool isSimultaneousAction});
+      int round});
 }
 
 /// @nodoc
@@ -68,14 +59,10 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
   $Res call({
     Object? players = freezed,
     Object? readyPlayers = freezed,
-    Object? allRoundScores = freezed,
     Object? time = freezed,
-    Object? messages = freezed,
     Object? status = freezed,
     Object? currentPlayerIndex = freezed,
     Object? round = freezed,
-    Object? isMultiPly = freezed,
-    Object? isSimultaneousAction = freezed,
   }) {
     return _then(_value.copyWith(
       players: players == freezed
@@ -86,18 +73,10 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
           ? _value.readyPlayers
           : readyPlayers // ignore: cast_nullable_to_non_nullable
               as IList<String>,
-      allRoundScores: allRoundScores == freezed
-          ? _value.allRoundScores
-          : allRoundScores // ignore: cast_nullable_to_non_nullable
-              as IList<IList<double>>,
       time: time == freezed
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      messages: messages == freezed
-          ? _value.messages
-          : messages // ignore: cast_nullable_to_non_nullable
-              as IList<GameMessage>,
       status: status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -110,14 +89,6 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
           ? _value.round
           : round // ignore: cast_nullable_to_non_nullable
               as int,
-      isMultiPly: isMultiPly == freezed
-          ? _value.isMultiPly
-          : isMultiPly // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isSimultaneousAction: isSimultaneousAction == freezed
-          ? _value.isSimultaneousAction
-          : isSimultaneousAction // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -132,14 +103,10 @@ abstract class _$$_GenericGameCopyWith<$Res>
   $Res call(
       {IList<Player> players,
       IList<String> readyPlayers,
-      IList<IList<double>> allRoundScores,
       DateTime time,
-      IList<GameMessage> messages,
       GameStatus status,
       int? currentPlayerIndex,
-      int round,
-      bool isMultiPly,
-      bool isSimultaneousAction});
+      int round});
 }
 
 /// @nodoc
@@ -156,14 +123,10 @@ class __$$_GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
   $Res call({
     Object? players = freezed,
     Object? readyPlayers = freezed,
-    Object? allRoundScores = freezed,
     Object? time = freezed,
-    Object? messages = freezed,
     Object? status = freezed,
     Object? currentPlayerIndex = freezed,
     Object? round = freezed,
-    Object? isMultiPly = freezed,
-    Object? isSimultaneousAction = freezed,
   }) {
     return _then(_$_GenericGame(
       players == freezed
@@ -174,18 +137,10 @@ class __$$_GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
           ? _value.readyPlayers
           : readyPlayers // ignore: cast_nullable_to_non_nullable
               as IList<String>,
-      allRoundScores == freezed
-          ? _value.allRoundScores
-          : allRoundScores // ignore: cast_nullable_to_non_nullable
-              as IList<IList<double>>,
       time == freezed
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      messages == freezed
-          ? _value.messages
-          : messages // ignore: cast_nullable_to_non_nullable
-              as IList<GameMessage>,
       status == freezed
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -198,14 +153,6 @@ class __$$_GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
           ? _value.round
           : round // ignore: cast_nullable_to_non_nullable
               as int,
-      isMultiPly == freezed
-          ? _value.isMultiPly
-          : isMultiPly // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isSimultaneousAction == freezed
-          ? _value.isSimultaneousAction
-          : isSimultaneousAction // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -213,17 +160,8 @@ class __$$_GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_GenericGame extends _GenericGame {
-  const _$_GenericGame(
-      this.players,
-      this.readyPlayers,
-      this.allRoundScores,
-      this.time,
-      this.messages,
-      this.status,
-      this.currentPlayerIndex,
-      this.round,
-      this.isMultiPly,
-      this.isSimultaneousAction)
+  const _$_GenericGame(this.players, this.readyPlayers, this.time, this.status,
+      this.currentPlayerIndex, this.round)
       : super._();
 
   factory _$_GenericGame.fromJson(Map<String, dynamic> json) =>
@@ -234,26 +172,17 @@ class _$_GenericGame extends _GenericGame {
   @override
   final IList<String> readyPlayers;
   @override
-  final IList<IList<double>> allRoundScores;
-  @override
   final DateTime time;
-  @override
-  final IList<GameMessage> messages;
   @override
   final GameStatus status;
   @override
   final int? currentPlayerIndex;
   @override
   final int round;
-// ignore: avoid_positional_boolean_parameters
-  @override
-  final bool isMultiPly;
-  @override
-  final bool isSimultaneousAction;
 
   @override
   String toString() {
-    return 'GenericGame(players: $players, readyPlayers: $readyPlayers, allRoundScores: $allRoundScores, time: $time, messages: $messages, status: $status, currentPlayerIndex: $currentPlayerIndex, round: $round, isMultiPly: $isMultiPly, isSimultaneousAction: $isSimultaneousAction)';
+    return 'GenericGame(players: $players, readyPlayers: $readyPlayers, time: $time, status: $status, currentPlayerIndex: $currentPlayerIndex, round: $round)';
   }
 
   @override
@@ -264,18 +193,11 @@ class _$_GenericGame extends _GenericGame {
             const DeepCollectionEquality().equals(other.players, players) &&
             const DeepCollectionEquality()
                 .equals(other.readyPlayers, readyPlayers) &&
-            const DeepCollectionEquality()
-                .equals(other.allRoundScores, allRoundScores) &&
             const DeepCollectionEquality().equals(other.time, time) &&
-            const DeepCollectionEquality().equals(other.messages, messages) &&
             const DeepCollectionEquality().equals(other.status, status) &&
             const DeepCollectionEquality()
                 .equals(other.currentPlayerIndex, currentPlayerIndex) &&
-            const DeepCollectionEquality().equals(other.round, round) &&
-            const DeepCollectionEquality()
-                .equals(other.isMultiPly, isMultiPly) &&
-            const DeepCollectionEquality()
-                .equals(other.isSimultaneousAction, isSimultaneousAction));
+            const DeepCollectionEquality().equals(other.round, round));
   }
 
   @JsonKey(ignore: true)
@@ -284,14 +206,10 @@ class _$_GenericGame extends _GenericGame {
       runtimeType,
       const DeepCollectionEquality().hash(players),
       const DeepCollectionEquality().hash(readyPlayers),
-      const DeepCollectionEquality().hash(allRoundScores),
       const DeepCollectionEquality().hash(time),
-      const DeepCollectionEquality().hash(messages),
       const DeepCollectionEquality().hash(status),
       const DeepCollectionEquality().hash(currentPlayerIndex),
-      const DeepCollectionEquality().hash(round),
-      const DeepCollectionEquality().hash(isMultiPly),
-      const DeepCollectionEquality().hash(isSimultaneousAction));
+      const DeepCollectionEquality().hash(round));
 
   @JsonKey(ignore: true)
   @override
@@ -310,14 +228,10 @@ abstract class _GenericGame extends GenericGame {
   const factory _GenericGame(
       final IList<Player> players,
       final IList<String> readyPlayers,
-      final IList<IList<double>> allRoundScores,
       final DateTime time,
-      final IList<GameMessage> messages,
       final GameStatus status,
       final int? currentPlayerIndex,
-      final int round,
-      final bool isMultiPly,
-      final bool isSimultaneousAction) = _$_GenericGame;
+      final int round) = _$_GenericGame;
   const _GenericGame._() : super._();
 
   factory _GenericGame.fromJson(Map<String, dynamic> json) =
@@ -328,21 +242,13 @@ abstract class _GenericGame extends GenericGame {
   @override
   IList<String> get readyPlayers;
   @override
-  IList<IList<double>> get allRoundScores;
-  @override
   DateTime get time;
-  @override
-  IList<GameMessage> get messages;
   @override
   GameStatus get status;
   @override
   int? get currentPlayerIndex;
   @override
   int get round;
-  @override // ignore: avoid_positional_boolean_parameters
-  bool get isMultiPly;
-  @override
-  bool get isSimultaneousAction;
   @override
   @JsonKey(ignore: true)
   _$$_GenericGameCopyWith<_$_GenericGame> get copyWith =>
