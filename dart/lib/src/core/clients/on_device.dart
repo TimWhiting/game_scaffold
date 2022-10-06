@@ -62,9 +62,9 @@ class NoServerRoundClient extends RoundClient {
   }
 
   @override
-  Stream<GameOrError> gameStream(PlayerID playerID, GameCode code) async* {
+  Stream<NextStateOrError> gameStream(PlayerID playerID, GameCode code) async* {
     logger.info('Watching backend');
-    final ss = StreamController<GameOrError>();
+    final ss = StreamController<NextStateOrError>();
     final backendReader = NoGameClient.games[code]?.container;
     backendReader?.listen<GameStateNotifier>(
       BackendProviders.state.notifier,

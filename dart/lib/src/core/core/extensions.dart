@@ -22,15 +22,24 @@ extension EventX on Event {
 }
 
 /// Some extensions on `Game` to more easily get some of the `GenericGame` fields
-extension GameX<E extends Event> on FullRoundState<E> {
-  /// Gets the current player's index
-  int? get currentPlayerIndex => generic.currentPlayerIndex;
+extension GameX<T> on State<T> {
 
-  /// Gets the current [Player] or null if the game is not turn based
-  Player? get currentPlayer => generic.currentPlayer;
+  /// Gets the player at the [currentPlayerIndex]
+  Player? get currentPlayer =>
+      currentPlayerIndex == null ? null : generic.players[currentPlayerIndex!];
+
+  /// Returns a copy of the [GenericGame] with the next player in the player
+  /// array as the current player
+  State<T> nextPlayer() => (game: game, messages: messages, generic: generic, rewards: rewards, currentPlayerIndex: (currentPlayerIndex! + 1) % players.length);
+
+  /// Returns a copy of the [GenericGame] with the current player being the one
+  /// with id [player]
+  State<T> setNextPlayer(PlayerID player) => (game: game, messages: messages, generic: generic, rewards: rewards, currentPlayerIndex: players.indexWhere((p) => p.id == player));
+
+  State<T> updateReward(IMap<String, double> rewards) => (game: game, messages: messages, generic: generic, rewards: rewards.unlock, currentPlayerIndex: currentPlayerIndex);
 
   /// Gets the current Player ID
-  String get currentPlayerID => generic.currentPlayer!.id;
+  String get currentPlayerID => currentPlayer!.id;
 
   /// Gets an unmodifiable list of players that are a part of this game
   IList<Player> get players => generic.players;

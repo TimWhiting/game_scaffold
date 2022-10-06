@@ -24,7 +24,6 @@ mixin _$GenericGame {
   IList<String> get readyPlayers => throw _privateConstructorUsedError;
   DateTime get time => throw _privateConstructorUsedError;
   GameStatus get status => throw _privateConstructorUsedError;
-  int? get currentPlayerIndex => throw _privateConstructorUsedError;
   int get round => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,7 +42,6 @@ abstract class $GenericGameCopyWith<$Res> {
       IList<String> readyPlayers,
       DateTime time,
       GameStatus status,
-      int? currentPlayerIndex,
       int round});
 }
 
@@ -61,7 +59,6 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
     Object? readyPlayers = freezed,
     Object? time = freezed,
     Object? status = freezed,
-    Object? currentPlayerIndex = freezed,
     Object? round = freezed,
   }) {
     return _then(_value.copyWith(
@@ -81,10 +78,6 @@ class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as GameStatus,
-      currentPlayerIndex: currentPlayerIndex == freezed
-          ? _value.currentPlayerIndex
-          : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
-              as int?,
       round: round == freezed
           ? _value.round
           : round // ignore: cast_nullable_to_non_nullable
@@ -105,7 +98,6 @@ abstract class _$$_GenericGameCopyWith<$Res>
       IList<String> readyPlayers,
       DateTime time,
       GameStatus status,
-      int? currentPlayerIndex,
       int round});
 }
 
@@ -125,7 +117,6 @@ class __$$_GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
     Object? readyPlayers = freezed,
     Object? time = freezed,
     Object? status = freezed,
-    Object? currentPlayerIndex = freezed,
     Object? round = freezed,
   }) {
     return _then(_$_GenericGame(
@@ -145,10 +136,6 @@ class __$$_GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as GameStatus,
-      currentPlayerIndex == freezed
-          ? _value.currentPlayerIndex
-          : currentPlayerIndex // ignore: cast_nullable_to_non_nullable
-              as int?,
       round == freezed
           ? _value.round
           : round // ignore: cast_nullable_to_non_nullable
@@ -160,8 +147,8 @@ class __$$_GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_GenericGame extends _GenericGame {
-  const _$_GenericGame(this.players, this.readyPlayers, this.time, this.status,
-      this.currentPlayerIndex, this.round)
+  const _$_GenericGame(
+      this.players, this.readyPlayers, this.time, this.status, this.round)
       : super._();
 
   factory _$_GenericGame.fromJson(Map<String, dynamic> json) =>
@@ -176,13 +163,11 @@ class _$_GenericGame extends _GenericGame {
   @override
   final GameStatus status;
   @override
-  final int? currentPlayerIndex;
-  @override
   final int round;
 
   @override
   String toString() {
-    return 'GenericGame(players: $players, readyPlayers: $readyPlayers, time: $time, status: $status, currentPlayerIndex: $currentPlayerIndex, round: $round)';
+    return 'GenericGame(players: $players, readyPlayers: $readyPlayers, time: $time, status: $status, round: $round)';
   }
 
   @override
@@ -195,8 +180,6 @@ class _$_GenericGame extends _GenericGame {
                 .equals(other.readyPlayers, readyPlayers) &&
             const DeepCollectionEquality().equals(other.time, time) &&
             const DeepCollectionEquality().equals(other.status, status) &&
-            const DeepCollectionEquality()
-                .equals(other.currentPlayerIndex, currentPlayerIndex) &&
             const DeepCollectionEquality().equals(other.round, round));
   }
 
@@ -208,7 +191,6 @@ class _$_GenericGame extends _GenericGame {
       const DeepCollectionEquality().hash(readyPlayers),
       const DeepCollectionEquality().hash(time),
       const DeepCollectionEquality().hash(status),
-      const DeepCollectionEquality().hash(currentPlayerIndex),
       const DeepCollectionEquality().hash(round));
 
   @JsonKey(ignore: true)
@@ -230,7 +212,6 @@ abstract class _GenericGame extends GenericGame {
       final IList<String> readyPlayers,
       final DateTime time,
       final GameStatus status,
-      final int? currentPlayerIndex,
       final int round) = _$_GenericGame;
   const _GenericGame._() : super._();
 
@@ -245,8 +226,6 @@ abstract class _GenericGame extends GenericGame {
   DateTime get time;
   @override
   GameStatus get status;
-  @override
-  int? get currentPlayerIndex;
   @override
   int get round;
   @override

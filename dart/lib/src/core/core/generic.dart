@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -7,7 +6,11 @@ import 'core.dart';
 part 'generic.freezed.dart';
 part 'generic.g.dart';
 
-typedef FullRoundState<T extends Event> = ({Game<T> game, IList<GameMessage> messages, GenericGame generic});
+
+typedef Rewards = Map<PlayerID, double>;
+typedef State<T> = ({T game, int? currentPlayerIndex, Rewards rewards, GenericGame generic, IList<GameMessage> messages});
+typedef NextStateOrError<T> = ({State<T> state, GameError? error});
+typedef GameError = ({String message, PlayerID player});
 
 /// Represents a generic game, with common fields that can be manipulated by
 /// common [GenericEvent]s
@@ -25,7 +28,6 @@ class GenericGame with _$GenericGame {
     IList<PlayerID> readyPlayers,
     DateTime time,
     GameStatus status,
-    int? currentPlayerIndex,
     int round,
   ) = _GenericGame;
   const GenericGame._();
@@ -40,7 +42,6 @@ class GenericGame with _$GenericGame {
         DateTime.now(),
         GameStatus.started,
         0,
-        0,
       );
 
   /// Creates a default initialized game where the first player is chosen at random
@@ -50,12 +51,8 @@ class GenericGame with _$GenericGame {
         DateTime.now(),
         GameStatus.started,
         0,
-        Random().nextInt(players.length),
       );
 
-  /// Gets the player at the [currentPlayerIndex]
-  Player? get currentPlayer =>
-      currentPlayerIndex == null ? null : players[currentPlayerIndex!];
 
   /// Gets whether the game is over
   bool get gameOver => status == GameStatus.finished;
@@ -63,15 +60,6 @@ class GenericGame with _$GenericGame {
   /// Gets whether the round is over
   bool get roundOver => status == GameStatus.betweenRounds;
 
-  /// Returns a copy of the [GenericGame] with the next player in the player
-  /// array as the current player
-  GenericGame nextPlayer() =>
-      copyWith(currentPlayerIndex: (currentPlayerIndex! + 1) % players.length);
-
-  /// Returns a copy of the [GenericGame] with the current player being the one
-  /// with id [player]
-  GenericGame setNextPlayer(PlayerID player) =>
-      copyWith(currentPlayerIndex: players.indexWhere((p) => p.id == player));
 
   /// Returns a copy of the [GenericGame] with the time updated to the current time
   GenericGame updateTime() => copyWith(time: DateTime.now());
@@ -85,10 +73,7 @@ class GenericGame with _$GenericGame {
   GenericGame updateStatus(GameStatus status) => copyWith(status: status);
 
   /// Shuffles the player list, and resets the [currentPlayerIndex] to the first
-  GenericGame shufflePlayers() => copyWith(
-        players: players.shuffle(),
-        currentPlayerIndex: 0,
-      );
+  GenericGame shufflePlayers() => copyWith(players: players.shuffle());
 
   /// Clears the list of ready players
   GenericGame clearReadyPlayers() => copyWith(readyPlayers: <PlayerID>[].lock);

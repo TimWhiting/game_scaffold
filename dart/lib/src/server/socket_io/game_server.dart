@@ -195,7 +195,7 @@ class GameServer {
     }
   }
 
-  void _sendUpdates(GameOrError? state) {
+  void _sendUpdates<T>(NextStateOrError<T>? state) {
     if (state == null) {
       return;
     }

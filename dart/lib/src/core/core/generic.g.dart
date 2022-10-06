@@ -13,7 +13,6 @@ _$_GenericGame _$$_GenericGameFromJson(Map<String, dynamic> json) =>
       IList<String>.fromJson(json['readyPlayers'], (value) => value as String),
       DateTime.parse(json['time'] as String),
       $enumDecode(_$GameStatusEnumMap, json['status']),
-      json['currentPlayerIndex'] as int?,
       json['round'] as int,
     );
 
@@ -27,7 +26,6 @@ Map<String, dynamic> _$$_GenericGameToJson(_$_GenericGame instance) =>
       ),
       'time': instance.time.toIso8601String(),
       'status': _$GameStatusEnumMap[instance.status]!,
-      'currentPlayerIndex': instance.currentPlayerIndex,
       'round': instance.round,
     };
 

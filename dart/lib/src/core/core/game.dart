@@ -10,25 +10,9 @@ part 'game.g.dart';
 typedef GameCode = String;
 typedef GameType = String;
 
+// ignore: avoid_classes_with_only_static_members
 /// Abstract class that all games must inherit from
-abstract class Game<E extends Event> {
-  /// This method takes an event and returns the changed game state or an error
-  ///
-  /// Errors are typically for displaying on the UI why the particular player can't make that move.
-  /// So make the error as informative as possible. This method should return a copy of the state if
-  /// undo functionality needs to work. (i.e. the class should be immutable), for high performance you can
-  /// make the changes and just return the changed instance itself, but undo functionality won't work.
-  GameOrError next(E event);
-
-  /// Logic to apply after all players have consented they want to play another round
-  /// to initialize the next round
-  Game moveNextRound(GameConfig config);
-
-  /// Serializes the state for consumption by the frontend
-  Map<String, dynamic> toJson();
-
-  /// Returns the name game type that is registered for serialization
-  GameType get type;
+abstract class Game {
   static bool _generalIsRegistered = false;
 
   /// Registers a game type with the server
@@ -61,7 +45,7 @@ abstract class Game<E extends Event> {
   }
 
   /// Optionally converts the game from a full game state to a view of the game from the client's perspective
-  static Game toClientView(Game g) => _toClientViews[g.type]!(g);
+  static Game toClientView(Game g) => _toClientViews[g]!(g);
 
   /// Will get the initial state for a particular configuration
   static Game getInitialState(GameConfig gameConfig, IList<Player> players) {
