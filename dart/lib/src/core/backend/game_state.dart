@@ -63,8 +63,7 @@ class BackendProviders {
       return GameStateNotifier(
         l.config,
         l.code,
-        Game.functions[l.config.gameType]!
-            .initialState(l.config, l.players.map((p) => p.id).toIList()),
+        Game.fromType(l.config.gameType).initialState(l.config, l.players.toIList()),
         ref.read(error.notifier),
       );
     },
@@ -138,9 +137,9 @@ class GameStateNotifier<E, G> extends StateNotifier<State<G>> {
     var error = false;
     try {
       final game = gameState;
-      state = event.when(
-        general: (e) => e.maybeWhen(
-          undo: () {
+      final e = event.$0;
+      if (e is GenericEvent){
+        state = e.maybeWhen(undo: () {
             // Remove the current state
             _previousStates.removeLast();
             final lastState = _previousStates.removeLast();
@@ -165,17 +164,16 @@ class GameStateNotifier<E, G> extends StateNotifier<State<G>> {
           orElse: () {
             errorNotifier.state = (message: 'General Event not implemented yet $e', player: 'Player');
             return game;
-          },
-        ),
-        game: (e) {
-          final next = game.next(e as E, gameConfig);
+          });
+      }else {
+         final next = game.next(e as E, gameConfig);
           if (next.error != null) {
             errorNotifier.state = next.error;
             error = true;
           }
-          return next.state;
-        },
-      );
+          state =  next.state;
+      }
+      
       if (error) {
         return false;
       }
@@ -198,4 +196,3 @@ GameCode generateGameID(List<String> avoidList) {
   }
   return gameID;
 }
-// (game: initialState, generic: GenericGame.start(lobby.players.toIList()), messages: <GameMessage>[].lock, rewards: [])

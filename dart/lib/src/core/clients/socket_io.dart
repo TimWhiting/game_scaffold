@@ -76,13 +76,12 @@ class IORoundClient extends RoundClient {
   }
 
   @override
-  Stream<GameOrError> gameStream(PlayerID playerID, GameCode code) async* {
-    final sc = StreamController<GameOrError>();
+  Stream<State> gameStream(PlayerID playerID, GameCode code) async* {
+    final sc = StreamController<State>();
     _socket!.on(IOChannel.gameState.string, (data) {
       _socket!.off(IOChannel.lobby.string);
       // ignore: avoid_print
-      print('game or error $data');
-      final gameState = GameOrError.fromJson(data as Map<String, dynamic>);
+      final gameState = GameStateFromJson(data as Map<String, dynamic>);
       logger.info('Got gameState $data');
       sc.add(gameState);
     });
@@ -92,8 +91,25 @@ class IORoundClient extends RoundClient {
   }
 
   @override
-  Future<bool> sendEvent(PlayerID playerID, GameCode code, Event event) async {
-    final js = event.asGameEvent.toJson();
+  Stream<GameError> errorStream(PlayerID playerID, GameCode code) async* {
+    final sc = StreamController<GameError>();
+    _socket!.on(IOChannel.gameError.string, (data) {
+      _socket!.off(IOChannel.lobby.string);
+      data as JsonMap;
+      // ignore: avoid_print
+      final error = (message: data['message'] as String, player: data['player'] as String);
+      logger.info('Got gameState $data');
+      sc.add(error);
+    });
+
+    yield* sc.stream;
+    await sc.close();
+  }
+
+  @override
+  Future<bool> sendEvent(
+      PlayerID playerID, GameCode code, GameEvent event) async {
+    final js = event.toJson();
     logger.info('Sending event $js');
     final result = await _socket!.call(IOChannel.event, js);
     return result as bool;
@@ -157,8 +173,9 @@ class IOGameClient extends GameClient {
     return gameCode;
   }
 
-  Future<GameCode> _createGame(GameConfig config) async {
-    final result = await socket.call(IOChannel.createGame, config.toJson());
+  Future<GameCode> _createGame<C>(GameConfig<C> config) async {
+    final result = await socket.call(IOChannel.createGame,
+        config.toJson(Game.fromType(config.gameType).toJsonC));
     return result as GameCode;
   }
 

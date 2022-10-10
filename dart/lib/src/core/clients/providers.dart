@@ -95,7 +95,13 @@ class GameProviders {
 
   /// Provides the game type's name for the game specified by [config]
   static final gameType = Provider.autoDispose<String>(
-    (ref) => ref.watch(game).asData?.value.type.name ?? '',
+    (ref) {
+      final type = ref.watch(game).asData?.value.gameType;
+      if (type == null) {
+        return '';
+      }
+      return Game.fromType(type).gameName;
+    },
     name: 'GameType',
     dependencies: [game, playerID],
   );
@@ -269,40 +275,24 @@ class GameProviders {
     dependencies: [roundClient, playerID, code],
   );
 
-  /// Provides the game or error state for the current game of the client with specified id
-  static final gameOrError = StreamProvider.autoDispose<GameOrError>(
+  /// Provides the game state for the current game of the client with specified id
+  static final game = StreamProvider.autoDispose<State>(
     (ref) {
       final c = ref.read(roundClient);
       return c.gameStream(ref.watch(playerID), ref.watch(code));
     },
-    name: 'GameOrErrorStream',
-    dependencies: [roundClient, playerID, code],
-  );
-
-  /// Provides the game state for the current game of the client with specified id
-  static final game = StreamProvider.autoDispose<Game>(
-    (ref) async* {
-      await for (final g in ref.watch(gameOrError.stream)) {
-        if (g.isGame) {
-          yield g.value!;
-        }
-      }
-    },
     name: 'GameStateStream',
-    dependencies: [gameOrError, playerID],
+    dependencies: [playerID],
   );
 
   /// Provides the game error for the current game of the client with specified id
   static final error = StreamProvider.autoDispose<GameError>(
-    (ref) async* {
-      await for (final g in ref.watch(gameOrError.stream)) {
-        if (g.isError) {
-          yield g.error!;
-        }
-      }
+    (ref) {
+      final c = ref.read(roundClient);
+      return c.errorStream(ref.watch(playerID), ref.watch(code));
     },
     name: 'GameError',
-    dependencies: [gameOrError, playerID],
+    dependencies: [playerID],
   );
 }
 

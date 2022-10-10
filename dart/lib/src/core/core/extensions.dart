@@ -1,12 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'game.dart';
 
 export 'package:fast_immutable_collections/fast_immutable_collections.dart';
-
-extension GameTypeOf on String {
-  /// Returns the game's user friendly name based on the game's type identifier
-  String get name => Game.gameNames[this]!;
-}
 
 extension GameMapExtensions<K, V> on IMap<K, V> {
   IMap<K, S> mapValues<S>(S Function(MapEntry<K, V> entry) fn) => IMap({
@@ -17,3 +11,11 @@ extension GameMapExtensions<K, V> on IMap<K, V> {
         for (final entry in entries) fn(entry): entry.value,
       });
 }
+
+extension AddRewards on List<double> {
+  // ignore: unused_element
+  List<double> operator +(List<double> other) =>
+      [for (var i = 0; i < length; i++) this[i] + other[i]];
+}
+
+typedef JsonMap = Map<String, Object?>;

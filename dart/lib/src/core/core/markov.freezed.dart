@@ -95,8 +95,8 @@ as List<List<(double, double)>>,
 /// @nodoc
 @JsonSerializable()
 
-class _$_Matrix  implements _Matrix {
-  const _$_Matrix(final  List<List<(double, double)>> rewards): _rewards = rewards;
+class _$_Matrix extends _Matrix  {
+  const _$_Matrix(final  List<List<(double, double)>> rewards): _rewards = rewards,super._();
 
   factory _$_Matrix.fromJson(Map<String, dynamic> json) => _$$_MatrixFromJson(json);
 
@@ -139,9 +139,9 @@ Map<String, dynamic> toJson() {
 }
 
 
-abstract class _Matrix implements Matrix {
+abstract class _Matrix extends Matrix {
   const factory _Matrix(final  List<List<(double, double)>> rewards) = _$_Matrix;
-  
+  const _Matrix._(): super._();
 
   factory _Matrix.fromJson(Map<String, dynamic> json) = _$_Matrix.fromJson;
 

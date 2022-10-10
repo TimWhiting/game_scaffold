@@ -233,9 +233,9 @@ class GameServer {
   }
 
   dynamic _handleRequest(gameEvent) {
-    final event = Game.gameEventFromJson(gameEvent as Map<String, dynamic>);
+    final event = GameEventFromJson(gameEvent as Map<String, dynamic>);
     _serverLogger.info(event);
-    if (event is GameEventGame) {
+    if (event.$0 is! GenericEvent) {
       _start();
     }
     _gameState.handleEvent(event);

@@ -21,7 +21,7 @@ abstract class RoundClient {
   );
 
   /// Sends [event] to the game server
-  Future<bool> sendEvent(PlayerID playerID, GameCode code, Event event);
+  Future<bool> sendEvent(PlayerID playerID, GameCode code, GameEvent event);
 
   /// Sends a start event to the game server
   Future<bool> startGame(PlayerID playerID, GameCode code);
@@ -30,14 +30,14 @@ abstract class RoundClient {
   Future<bool> undo(PlayerID playerID, GameCode code) => sendEvent(
         playerID,
         code,
-        const GenericEvent.undo().asGameEvent,
+        const GenericEvent.undo().gameEvent,
       );
 
   /// Sends a new round event to the game server
   Future<bool> newRound(PlayerID playerID, GameCode code) => sendEvent(
         playerID,
         code,
-        GenericEvent.readyNextRound(playerID).asGameEvent,
+        GenericEvent.readyNextRound(playerID).gameEvent,
       );
 
   /// Sends a message event to the game server
@@ -45,13 +45,14 @@ abstract class RoundClient {
       sendEvent(
         playerID,
         code,
-        GenericEvent.message(message, from: playerID, to: null).asGameEvent,
+        GenericEvent.message(message, from: playerID, to: null).gameEvent,
       );
 
   /// Disposes of the game client
   void dispose();
 
-  Stream<GameOrError> gameStream(PlayerID playerID, GameCode code);
+  Stream<State> gameStream(PlayerID playerID, GameCode code);
+  Stream<GameError> errorStream(PlayerID playerID, GameCode code);
 
   Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code);
 }

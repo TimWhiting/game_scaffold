@@ -4,7 +4,7 @@ import 'core.dart';
 
 part 'markov.freezed.dart';
 
-abstract class MarkovGame<T extends Event> {
+abstract class MarkovGame {
   int get numFeatures;
   IList<int> get features;
   int get markovId => features.hashCode;
@@ -14,6 +14,7 @@ abstract class MarkovGame<T extends Event> {
 @freezed
 class Matrix with _$Matrix {
   const factory Matrix(List<List<JointReward>> rewards) = _Matrix;
+  const Matrix._();
 
   factory Matrix.fromJson(JsonMap map) => Matrix([for (final row in map['rewards'] as List) [for (final reward in row as List) (reward as JsonMap).toReward()]]); 
 

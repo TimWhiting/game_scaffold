@@ -62,14 +62,14 @@ class NoServerRoundClient extends RoundClient {
   }
 
   @override
-  Stream<NextStateOrError> gameStream(PlayerID playerID, GameCode code) async* {
+  Stream<State> gameStream(PlayerID playerID, GameCode code) async* {
     logger.info('Watching backend');
-    final ss = StreamController<NextStateOrError>();
+    final ss = StreamController<State>();
     final backendReader = NoGameClient.games[code]?.container;
     backendReader?.listen<GameStateNotifier>(
       BackendProviders.state.notifier,
       (prev, curr) async {
-        ss.add(curr.gameState.gameValue());
+        ss.add(curr.gameState);
         // ignore: prefer_foreach
         await for (final e in curr.stream) {
           ss.add(e);
@@ -83,22 +83,41 @@ class NoServerRoundClient extends RoundClient {
   }
 
   @override
-  Future<bool> sendEvent(PlayerID playerID, GameCode code, Event event) async {
-    final js = event.asGameEvent.toJson();
+  Future<bool> sendEvent(
+      PlayerID playerID, GameCode code, GameEvent event) async {
+    final js = event.toJson();
     logger.info('Sending event $js');
     final backendReader = NoGameClient.games[code]!.container;
     // If the gameClient is initializing
     // we cannot edit the backend provider synchronously
     await Future.delayed(const Duration(microseconds: 1));
-    final result = backendReader
-        .read(BackendProviders.state.notifier)
-        .handleEvent(event.asGameEvent);
+    final result =
+        backendReader.read(BackendProviders.state.notifier).handleEvent(event);
     return result;
   }
 
   @override
   void dispose() {
     logger.info('Disposing game client');
+  }
+
+  @override
+  Stream<GameError> errorStream(PlayerID playerID, GameCode code) async* {
+    final ss = StreamController<GameError>();
+
+    final backendReader = NoGameClient.games[code]?.container;
+
+    backendReader?.listen<GameError?>(
+      BackendProviders.error,
+      (prev, curr) async {
+        if (curr != null) {
+          ss.add(curr);
+        }
+      },
+      fireImmediately: true,
+    );
+    yield* ss.stream;
+    await ss.close();
   }
 }
 

@@ -14,12 +14,23 @@ final IList<IList<int>> winningLocationCombinations = [
   [2, 4, 6]
 ].map((l) => l.lock).toIList();
 
-final GameFunctions<TicTacToeGame, TicTacToeGameEvent> ticTacToeFunctions = (
-  game: (game) => (next: game.nextState, error: game.error),
+extension RegisterTicTacToe on Game {
+  void registerTicTacToe() {
+  Game.register('tictactoe', TicTacToeGame, TicTacToeGameEvent, JsonMap, ticTacToeFunctions);
+  }
+}
+
+final GameFunctions<TicTacToeGame, TicTacToeGameEvent, JsonMap> ticTacToeFunctions = (
+  game: (game) => (next: game.nextState, error: game.error, nextRound: game.nextRound),
   toJson: (game) => {'board': game.board.toList(), 'currentPlayer': game.currentPlayer},
   fromJson: (map) => (board: (map['board'] as List).cast<int?>().lock, currentPlayer: map['currentPlayer'] as int),
   toJsonE: (event) => {'player': event.player, 'location': event.location},
   fromJsonE: (map) => (player: map['player'] as int, location: map['location'] as int),
+  toJsonC: (m) => m,
+  fromJsonC: (m) => m,
+  gameName: 'Tic Tac Toe',
+  gameType: 'tictactoe',
+  initialState: (config, players) => (game: (board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0), messages: <GameMessage>[].lock, generic: GenericGame.start(players), rewards: <double>[0, 0]),
 );
 
 enum Winner {
@@ -31,6 +42,8 @@ enum Winner {
 }
 
 extension TicTacToeGameX on TicTacToeGame {
+  State<TicTacToeGame> nextRound(GameConfig config) => ();
+  
   TicTacToeGame next(TicTacToeGameEvent event, GameConfig config) => 
   (
     currentPlayer: currentPlayer == 0 ? 1 : 0,
