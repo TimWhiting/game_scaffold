@@ -6,11 +6,83 @@ import 'core.dart';
 part 'generic.freezed.dart';
 part 'generic.g.dart';
 
-
-typedef Rewards = Map<PlayerID, double>;
-typedef State<T> = ({T game, int? currentPlayerIndex, Rewards rewards, GenericGame generic, IList<GameMessage> messages});
+typedef JsonMap = Map<String, Object?>;
+typedef PlayerIndex = int;
+typedef Rewards = List<double>;
+typedef State<T> = ({T game, Rewards rewards, GenericGame generic, IList<GameMessage> messages});
 typedef NextStateOrError<T> = ({State<T> state, GameError? error});
 typedef GameError = ({String message, PlayerID player});
+typedef NextState<T> = (T, Rewards?, GameStatus);
+typedef GameFunctions<T, E> = ({
+  GameStateFunctions<T, E> Function(T) game,
+  State<T> Function(GameConfig config, IList<PlayerID> players) initialState,
+  JsonMap Function(T) toJson,
+  T Function(JsonMap) fromJson,
+  JsonMap Function(E) toJsonE,
+  E Function(JsonMap) fromJsonE,
+});
+typedef GameStateFunctions<T, E> = ({
+  NextState<T> Function(E, GameConfig config) next,
+  T Function(GameConfig config) nextRound,
+  String? Function(E, GameConfig) error,
+});
+
+
+extension AddRewards on List<double> {
+  // ignore: unused_element
+  List<double> operator +(List<double> other) => [for (var i = 0; i < length; i++) this[i] + other[i]];
+}
+
+extension StateX<T> on State<T> {
+  State<T> updateReward(List<double> rewards) => (game: game, messages: messages, generic: generic, rewards: rewards);
+
+  State<T> updateGame(T game) => (game: game, messages: messages, generic: generic, rewards: rewards);
+
+  State<T> updateGeneric(GenericGame Function(GenericGame) update) => (game: game, messages: messages, generic: update(generic), rewards: rewards);
+
+  State<T> updateMessages(IList<GameMessage> Function(IList<GameMessage>) update) => (game: game, messages: update(messages), generic: generic, rewards: rewards);
+
+  /// Gets an unmodifiable list of players that are a part of this game
+  IList<Player> get players => generic.players;
+
+  /// Gets the players that are a part of this game
+  IList<PlayerID> get playerIDs => generic.players.map((p) => p.id).toIList();
+
+  /// Gets the `DateTime` that this state was updated
+  DateTime get time => generic.time;
+
+  /// Gets the status of the game
+  GameStatus get status => generic.status;
+
+  /// Gets the current round number
+  int get round => generic.round;
+
+  /// Gets whether the game is over
+  bool get gameOver => generic.gameOver;
+
+  /// Gets whether the round is over
+  bool get roundOver => generic.roundOver;
+
+  /// Gets the players who are ready for the next round
+  IList<PlayerID> get readyPlayers => generic.readyPlayers;
+
+  NextStateOrError<T> next<E>(E event, GameConfig config) {
+    final functions = Game.functions[T] as GameFunctions<T, E>;
+    final error = functions.game(game).error(event, config);
+    if (error != null){
+       return (state: this, error: (message: error, player: ''));
+    }
+    final next = functions.game(game).next(event, config);
+    return (state: (game: next.$0, rewards: next.$1 == null  ? rewards : next.$1! + rewards, generic: generic.updateStatus(next.$2).updateTime(), messages: messages), error: null);
+  }
+
+  NextStateOrError<T> nextRound<E>(GameConfig config) {
+    final functions = Game.functions[T] as GameFunctions<T, E>;
+    final next = functions.game(game).nextRound(config);
+    return (state: (game: next, rewards: rewards, generic: generic.updateStatus(GameStatus.started).updateTime(), messages: messages), error: null);
+  }
+}
+
 
 /// Represents a generic game, with common fields that can be manipulated by
 /// common [GenericEvent]s

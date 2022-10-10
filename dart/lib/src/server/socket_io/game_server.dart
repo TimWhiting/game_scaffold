@@ -118,7 +118,7 @@ class GameServer {
     );
     _serverLogger.info('Sending first update');
     if (_started) {
-      _sendUpdates(_gameState.gameState.gameValue());
+      _sendUpdates(_gameState.gameState);
     }
   }
 
@@ -141,8 +141,8 @@ class GameServer {
       _serverLogger.info('Client $id rejoining');
       _clients[id] = client;
       if (_started) {
-        _clients[id]?.emit(IOChannel.gameState.string,
-            _gameState.gameState.gameValue().toJson());
+        _clients[id]
+            ?.emit(IOChannel.gameState.string, _gameState.gameState.toJson());
       } else {
         _clients[id]?.emit(IOChannel.lobby.string, gameInfo(id).toJson());
       }
@@ -151,7 +151,7 @@ class GameServer {
       return;
     }
     if (_clients.length > gameConfig.maxPlayers) {
-      _sendUpdates(GameError('Too many players already, sorry', id));
+      _sendError((message: 'Too many players already, sorry', player: id));
       _clients[id]?.emit(IOChannel.name.string);
     } else {
       if (gameConfig.customNames) {
@@ -195,7 +195,14 @@ class GameServer {
     }
   }
 
-  void _sendUpdates<T>(NextStateOrError<T>? state) {
+  void _sendError(GameError error){
+    final message = error.message; 
+    final client = _clients[error.player];
+    // TODO: Change channel
+    client?.emit(IOChannel.gameError.string, message);
+  }
+
+  void _sendUpdates<T>(State<T>? state) {
     if (state == null) {
       return;
     }
@@ -206,7 +213,7 @@ class GameServer {
 
       client.value?.emit(IOChannel.gameState.string, json);
     }
-    if (state.value?.status == GameStatus.finished) {
+    if (state.status == GameStatus.finished) {
       killGame();
     }
   }

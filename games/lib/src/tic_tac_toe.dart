@@ -1,10 +1,7 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
-part 'tic_tac_toe.freezed.dart';
-part 'tic_tac_toe.g.dart';
 
-typedef TicTacToeGame = ({IList<String?> board});
-
+typedef TicTacToeGame = ({IList<int?> board, int currentPlayer});
+typedef TicTacToeGameEvent = ({int player, int location});
 
 final IList<IList<int>> winningLocationCombinations = [
   [0, 1, 2],
@@ -17,46 +14,66 @@ final IList<IList<int>> winningLocationCombinations = [
   [2, 4, 6]
 ].map((l) => l.lock).toIList();
 
-extension TicTacToeGameXX on State<TicTacToeGame> {
-   NextStateOrError<TicTacToeGame> next(TicTacToeGameEvent event) {
-    if (event.player != generic.players[currentPlayerIndex!].id){
-      return (state: this, error: (message: 'Not your turn', playerId: event.player));
+final GameFunctions<TicTacToeGame, TicTacToeGameEvent> ticTacToeFunctions = (
+  game: (game) => (next: game.nextState, error: game.error),
+  toJson: (game) => {'board': game.board.toList(), 'currentPlayer': game.currentPlayer},
+  fromJson: (map) => (board: (map['board'] as List).cast<int?>().lock, currentPlayer: map['currentPlayer'] as int),
+  toJsonE: (event) => {'player': event.player, 'location': event.location},
+  fromJsonE: (map) => (player: map['player'] as int, location: map['location'] as int),
+);
+
+enum Winner {
+  p1,
+  p2,
+  tie;
+ double get p1Points => this == p1 ? 1.0 : this == p2 ? 0.0 : 0.5;
+ double get p2Points => this == p2 ? 1.0 : this == p1 ? 0.0 : 0.5;
+}
+
+extension TicTacToeGameX on TicTacToeGame {
+  TicTacToeGame next(TicTacToeGameEvent event, GameConfig config) => 
+  (
+    currentPlayer: currentPlayer == 0 ? 1 : 0,
+    board: board.replace(event.location,  currentPlayer),
+  );
+
+  NextState<TicTacToeGame> nextState(TicTacToeGameEvent event, GameConfig config){
+    final n = next(event, config);
+    final winner = n.winner;
+    if (winner != null){
+      return (n, [winner.p1Points, winner.p2Points], GameStatus.betweenRounds);
     }
-    if (!canMove(event.player, event.location)){
-      return (state: this, error: (message:'Invalid move', playerId: event.playerId));
-    }
-    return (state: updateReward(points).nextPlayer(), error: null);
+    return (n, null, GameStatus.started);
   }
 
-   bool canMove(PlayerID player, int location) =>
-      location >= 0 && location < 9 && game.board[location] == null;
+  bool canMove(int player, int location) =>
+      location >= 0 && location < 9 && board[location] == null;
 
-  IMap<String, double> get points => IMap({
-        for (final p in playerIDs)
-          p: isWinner(p)
-              ? 1.0
-              : isLoser(p)
-                  ? 0.0
-                  : .5,
-      });
+  String? error(TicTacToeGameEvent event, GameConfig config){
+     if (event.player != currentPlayer){
+      return 'Not your turn';
+    }
+    if (!canMove(event.player, event.location)){
+      return 'Invalid move';
+    }
+    return null;
+  }
 
+  Winner? get winner => 
+    isWinner(0)  ? Winner.p1 : 
+    isWinner(1) ? Winner.p2  :  
+    board.every((e) => e != null) ? Winner.tie : null;
 
-  bool isWinner(PlayerID playerID) {
+  bool isWinner(int player) {
     if (winningLocationCombinations
-        .any((comb) => comb.every((loc) => game.board[loc] == playerID))) {
+        .any((comb) => comb.every((loc) => board[loc] == player))) {
       return true;
     }
     return false;
   }
 
-  bool isLoser(PlayerID playerID) {
-    if (isWinner(playerIDs.firstWhere((id) => id != playerID))) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-}
+  bool isLoser(int player) => isWinner(player == 0 ? 1 : 0);
 
-typedef TicTacToeGameEvent = ({PlayerID player, int location});
+  IList<int> get availableLocations => board.asMap().entries.where((e) => e.value == null).map((e) => e.key).toIList();
+}
 

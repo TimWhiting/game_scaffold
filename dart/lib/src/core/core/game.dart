@@ -13,7 +13,7 @@ typedef GameType = String;
 // ignore: avoid_classes_with_only_static_members
 /// Abstract class that all games must inherit from
 abstract class Game {
-  static bool _generalIsRegistered = false;
+  static Map<Type, GameFunctions> functions = {};
 
   /// Registers a game type with the server
   static void registerGameType<T extends Game, Q extends Game>(
@@ -24,10 +24,6 @@ abstract class Game {
     required GameEvent Function(Map<String, dynamic>) gameEventFromJson,
     Q Function(T)? toClientView,
   }) {
-    if (!_generalIsRegistered) {
-      _generalIsRegistered = true;
-      _registerGeneralEvents();
-    }
     gameNames[type] = name;
     _fromJsonFactory[type] = fromJson;
     _eventFromJsonFactory[type] = gameEventFromJson;
@@ -65,12 +61,6 @@ abstract class Game {
           'No GameEvent of that type exists ${json['type']}');
     }
     return fromJson(json);
-  }
-
-  /// Registers the set of general events
-  static void _registerGeneralEvents() {
-    _eventFromJsonFactory['GenericEvent'] =
-        (j) => GenericEvent.fromJson(j).asGameEvent;
   }
 
   /// Some private fields to keep track of information about registered games

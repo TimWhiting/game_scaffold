@@ -232,6 +232,7 @@ final socketIOOpts = <String, dynamic>{
 /// The IO Channels used by the socket io implementations of [GameClient] and [RoundClient]
 enum IOChannel {
   gameState,
+  gameError,
   event,
   register,
   connect,
@@ -266,6 +267,7 @@ extension IOChannelX on IOChannel {
     switch (this) {
       case IOChannel.lobby:
       case IOChannel.gameState:
+      case IOChannel.gameError:
       case IOChannel.connect:
       case IOChannel.connection:
       case IOChannel.gameCreated:

@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'core.dart';
 
 part 'markov.freezed.dart';
-part 'markov.g.dart';
 
 abstract class MarkovGame<T extends Event> {
   int get numFeatures;
@@ -15,7 +14,19 @@ abstract class MarkovGame<T extends Event> {
 @freezed
 class Matrix with _$Matrix {
   const factory Matrix(List<List<JointReward>> rewards) = _Matrix;
-  factory Matrix.fromJson(Map<String, dynamic> map) => _$MatrixFromJson(map);
+
+  factory Matrix.fromJson(JsonMap map) => Matrix([for (final row in map['rewards'] as List) [for (final reward in row as List) (reward as JsonMap).toReward()]]); 
+
+  @override
+  JsonMap toJson() => {'rewards': [for (final row in rewards) [for (final reward in row) reward.toJson()]]};
+}
+
+extension ToReward on JsonMap {
+  JointReward toReward() => (this['p1'] as double, this['p2'] as double);
+}
+
+extension ToJsonReward on JointReward {
+  JsonMap toJson() => {'p1': $0, 'p2': $1};
 }
 
 typedef JointAction = (int p1, int p2);
