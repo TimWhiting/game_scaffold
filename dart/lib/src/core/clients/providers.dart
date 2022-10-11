@@ -1,13 +1,9 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'dart:async';
-
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../core.dart';
 import 'clients.dart';
-part 'providers.freezed.dart';
 
 /// The default port
 const defaultGamePort = 45912;
@@ -30,7 +26,7 @@ class GameProviders {
   );
 
   /// Allows one config to write all players' configs
-  static final singleConfig = StateProvider<GameConfig>(
+  static final singleConfig = StateProvider<GameConfig<dynamic>>(
     (ref) => const GameConfig(gameType: ''),
     name: 'SingleGameConfig',
   );
@@ -87,7 +83,7 @@ class GameProviders {
   // }, name: 'GameTurn', dependencies: [playerID, code, game]);
 
   /// Provides the way to configure the game for starting
-  static final config = StateProvider<GameConfig>(
+  static final config = StateProvider<GameConfig<dynamic>>(
     (ref) => ref.watch(singleConfig),
     name: 'GameConfig',
     dependencies: [singleConfig, playerID],
@@ -276,7 +272,7 @@ class GameProviders {
   );
 
   /// Provides the game state for the current game of the client with specified id
-  static final game = StreamProvider.autoDispose<GameState>(
+  static final game = StreamProvider.autoDispose<GameState<dynamic>>(
     (ref) {
       final c = ref.read(roundClient);
       return c.gameStream(ref.watch(playerID), ref.watch(code));
@@ -294,37 +290,4 @@ class GameProviders {
     name: 'GameError',
     dependencies: [playerID],
   );
-}
-
-class LastOrLoadingStateNotifier<T> extends StateNotifier<LoadingFuture<T>> {
-  LastOrLoadingStateNotifier(this._creator)
-      : super(const LoadingFuture.loading()) {
-    scheduleMicrotask(refresh);
-  }
-  final Future<T> Function() _creator;
-  Future<T> refresh() async {
-    if (state is FutureLoading) {
-      final result = await _creator();
-      state = LoadingFuture.value(result);
-      return result;
-    } else {
-      state = LoadingFuture.refreshing(state.value);
-      final result = await _creator();
-      state = LoadingFuture.value(result);
-      return result;
-    }
-  }
-}
-
-@freezed
-class LoadingFuture<T> with _$LoadingFuture {
-  const LoadingFuture._();
-  const factory LoadingFuture.loading() = FutureLoading<T>;
-  const factory LoadingFuture.refreshing(T lastValue) = FutureRefreshing<T>;
-  const factory LoadingFuture.value(T value) = FutureValue<T>;
-  bool get hasData => maybeMap(loading: (_) => false, orElse: () => true);
-  T get value => when(
-      loading: () => throw Exception('Got value in loading state'),
-      refreshing: (v) => v as T,
-      value: (v) => v as T);
 }
