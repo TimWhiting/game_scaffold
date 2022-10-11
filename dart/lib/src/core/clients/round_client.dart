@@ -51,7 +51,7 @@ abstract class RoundClient {
   /// Disposes of the game client
   void dispose();
 
-  Stream<State> gameStream(PlayerID playerID, GameCode code);
+  Stream<GameState> gameStream(PlayerID playerID, GameCode code);
   Stream<GameError> errorStream(PlayerID playerID, GameCode code);
 
   Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code);

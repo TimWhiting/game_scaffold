@@ -100,9 +100,9 @@ class LobbyNotifier extends StateNotifier<Lobby> {
 }
 
 /// A [StateNotifier] that handles events for a particular game, delegating to the game's implementation for non generic events
-class GameStateNotifier<E, G> extends StateNotifier<State<G>> {
+class GameStateNotifier<E, G> extends StateNotifier<GameState<G>> {
   GameStateNotifier(
-      this.gameConfig, this.code, State<G> initialState, this.errorNotifier)
+      this.gameConfig, this.code, GameState<G> initialState, this.errorNotifier)
       : _gameStateLogger = Logger('GameStateNotifier $code'),
         _previousStates = [initialState],
         super(initialState);
@@ -118,14 +118,14 @@ class GameStateNotifier<E, G> extends StateNotifier<State<G>> {
   final GameConfig gameConfig;
 
   /// A list of previous states
-  final List<State<G>> _previousStates;
+  final List<GameState<G>> _previousStates;
 
   /// Returns the [state] of the game
   ///
   /// Remember to watch / listen to the state of the [GameStateNotifier]
   /// rather than just watching changes in the notifier itself, otherwise changes
   /// in the [gameState] will not trigger updates of the ui
-  State<G> get gameState => _previousStates.last;
+  GameState<G> get gameState => _previousStates.last;
 
   /// Handles a [GameEvent] and updates the state accordingly
   ///

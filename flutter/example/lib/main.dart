@@ -5,8 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 
 void main() {
-  TicTacToeGame.register();
-
+  registerTicTacToe();
   Logger.root.clearListeners();
   Logger.root.level = Level.FINE;
   Logger.root.onRecord.listen((record) =>
@@ -176,7 +175,10 @@ class GameWidget extends HookConsumerWidget {
     return gameState.when(
       error: (e, st) => Text('$e, $st'),
       loading: () => const Center(child: CircularProgressIndicator()),
-      data: (g) => Scaffold(
+      data: (g) {
+        g as GameState<TicTacToeGame>;
+        final player = g.players.indexWhere((p) => p.id == playerID);
+        return Scaffold(
         appBar: AppBar(),
         body: Center(
           child: ListView(
@@ -192,7 +194,7 @@ class GameWidget extends HookConsumerWidget {
                         key: Key('$playerID square $r $c'),
                         onTap: () async {
                           await ref.refresh(GameProviders.sendEvent(
-                            TicTacToeGameEvent(playerID, r * 3 + c).asGameEvent,
+                            ((player: player, location: r * 3 + c), ),
                           ).future);
                         },
                         child: ColoredBox(
@@ -206,7 +208,7 @@ class GameWidget extends HookConsumerWidget {
                               child: Text(
                                 (g as TicTacToeGame)
                                     .board
-                                    .xOrO(playerID, r * 3 + c),
+                                    .xOrO(player, r * 3 + c),
                               ),
                             ),
                           ),
@@ -227,16 +229,17 @@ class GameWidget extends HookConsumerWidget {
             ],
           ),
         ),
-      ),
+      );
+      },
     );
   }
 }
 
-extension TextX on IList<String?> {
-  String xOrO(String playerID, int location) {
+extension TextX on IList<int?> {
+  String xOrO(int playerID, int location) {
     if (this[location] == null) {
       return '';
-    } else if (this[location] == P1) {
+    } else if (this[location] == 0) {
       return 'X';
     } else {
       return 'O';

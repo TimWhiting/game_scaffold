@@ -1,9 +1,9 @@
 import 'package:game_scaffold_dart/server.dart';
-import 'package:game_scaffold_games/game_scaffold_games.dart';
+import 'package:game_scaffold_games/games.dart';
 
 // ignore_for_file: avoid_print
 Future<void> main() async {
-  TicTacToeGame.register();
+  registerTicTacToe();
   final ioServer = IOServer();
 
   await test('Created', (read) async {

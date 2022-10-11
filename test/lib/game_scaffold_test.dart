@@ -12,7 +12,7 @@ import 'package:test/test.dart' as darttest;
 /// Uses the OnDevice clients
 /// TODO: Maybe try to use only Backend Providers as long as nothing need to be async (which it shouldn't since the game method are all non-async)?
 @isTest
-void testGame<T extends Game>(
+void testGame<T>(
   String testName, {
   required GameConfig config,
   required List<Player> players,
@@ -61,7 +61,7 @@ void testGame<T extends Game>(
 ///
 /// Just call [event] with your event, and a function that receives a game and error
 /// and check the properties you want
-class GameTester<T extends Game> {
+class GameTester<T> {
   GameTester(this.readers, this._players, this.code) {
     sub = backendContainer.listen(BackendProviders.lobby, (previous, next) {
       print('Next: $next');
@@ -85,10 +85,8 @@ class GameTester<T extends Game> {
   ///   expect(game.players.size, 2);
   /// });
   /// ```
-  void event(Event event, Function(T, GameError?) outcome) {
-    backendContainer
-        .read(BackendProviders.state.notifier)
-        .handleEvent(event.asGameEvent);
+  void event(GameEvent event, Function(GameState<T>, GameError?) outcome) {
+    backendContainer.read(BackendProviders.state.notifier).handleEvent(event);
 
     final g = game;
     final e = error;
@@ -107,8 +105,9 @@ class GameTester<T extends Game> {
   /// Returns the current game state
   ///
   /// If testing the outcome of an event prefer using [event]
-  T get game =>
-      backendContainer.read(BackendProviders.state.notifier).gameState as T;
+  GameState<T> get game =>
+      backendContainer.read(BackendProviders.state.notifier).gameState
+          as GameState<T>;
 
   /// Returns the current error state
   ///
@@ -117,11 +116,11 @@ class GameTester<T extends Game> {
 
   /// Advances to the next round, and checks the [expectation] of the game after
   /// the round has advanced
-  void nextRound(Function(T) expectation) {
+  void nextRound(Function(GameState<T>) expectation) {
     for (final p in _players) {
       backendContainer
           .read(BackendProviders.state.notifier)
-          .handleEvent(GenericEvent.readyNextRound(p.id).asGameEvent);
+          .handleEvent(GenericEvent.readyNextRound(p.id).gameEvent);
     }
 
     expectation(game);

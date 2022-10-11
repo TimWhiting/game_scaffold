@@ -14,14 +14,13 @@ final IList<IList<int>> winningLocationCombinations = [
   [2, 4, 6]
 ].map((l) => l.lock).toIList();
 
-extension RegisterTicTacToe on Game {
-  void registerTicTacToe() {
-  Game.register('tictactoe', TicTacToeGame, TicTacToeGameEvent, JsonMap, ticTacToeFunctions);
-  }
+void registerTicTacToe() {
+  Game.register<TicTacToeGame, TicTacToeGameEvent, JsonMap>('tictactoe', tttFunctions);
 }
 
-final GameFunctions<TicTacToeGame, TicTacToeGameEvent, JsonMap> ticTacToeFunctions = (
-  game: (game) => (next: game.nextState, error: game.error, nextRound: game.nextRound),
+final GameFunctions<TicTacToeGame, TicTacToeGameEvent, JsonMap> tttFunctions = (
+  game: (game) => (next: game.nextState, error: game.error),
+  state: (state) => (nextRound: state.nextRound),
   toJson: (game) => {'board': game.board.toList(), 'currentPlayer': game.currentPlayer},
   fromJson: (map) => (board: (map['board'] as List).cast<int?>().lock, currentPlayer: map['currentPlayer'] as int),
   toJsonE: (event) => {'player': event.player, 'location': event.location},
@@ -30,7 +29,7 @@ final GameFunctions<TicTacToeGame, TicTacToeGameEvent, JsonMap> ticTacToeFunctio
   fromJsonC: (m) => m,
   gameName: 'Tic Tac Toe',
   gameType: 'tictactoe',
-  initialState: (config, players) => (game: (board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0), messages: <GameMessage>[].lock, generic: GenericGame.start(players), rewards: <double>[0, 0]),
+  initialState: (config, players) => (game: (board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0), gameType: 'tictactoe', messages: <GameMessage>[].lock, generic: GenericGame.start(players), rewards: <double>[0, 0]),
 );
 
 enum Winner {
@@ -41,8 +40,17 @@ enum Winner {
  double get p2Points => this == p2 ? 1.0 : this == p1 ? 0.0 : 0.5;
 }
 
+extension TicTacToeStateX on GameState<TicTacToeGame> {
+  GameState<TicTacToeGame> nextRound(GameConfig config) => (
+    game: (board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: game.currentPlayer == 0 ? 1 : 0),
+    gameType: 'tictactoe',
+    generic: generic.finishRound(),
+    messages: messages,
+    rewards: rewards,
+  );
+}
+
 extension TicTacToeGameX on TicTacToeGame {
-  State<TicTacToeGame> nextRound(GameConfig config) => ();
   
   TicTacToeGame next(TicTacToeGameEvent event, GameConfig config) => 
   (

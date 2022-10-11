@@ -78,13 +78,13 @@ class GameProviders {
   );
 
   /// Provides whether it is the players turn for the current game of the client with the specified id
-  static final turn = Provider.autoDispose<bool>((ref) {
-    final pID = ref.watch(playerID);
-    final _ = ref.watch(code); // Invalidate on change of gameCode
-    final currentPlayer = ref.watch(game).asData?.value.currentPlayer?.id;
-    // Null indicates that all players can go simultaneously
-    return currentPlayer == null || currentPlayer == pID;
-  }, name: 'GameTurn', dependencies: [playerID, code, game]);
+  // static final turn = Provider.autoDispose<bool>((ref) {
+  //   final pID = ref.watch(playerID);
+  //   final _ = ref.watch(code); // Invalidate on change of gameCode
+  //   final currentPlayer = ref.watch(game).asData?.value.currentPlayer?.id;
+  //   // Null indicates that all players can go simultaneously
+  //   return currentPlayer == null || currentPlayer == pID;
+  // }, name: 'GameTurn', dependencies: [playerID, code, game]);
 
   /// Provides the way to configure the game for starting
   static final config = StateProvider<GameConfig>(
@@ -276,7 +276,7 @@ class GameProviders {
   );
 
   /// Provides the game state for the current game of the client with specified id
-  static final game = StreamProvider.autoDispose<State>(
+  static final game = StreamProvider.autoDispose<GameState>(
     (ref) {
       final c = ref.read(roundClient);
       return c.gameStream(ref.watch(playerID), ref.watch(code));

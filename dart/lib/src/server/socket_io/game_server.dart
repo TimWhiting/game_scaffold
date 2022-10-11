@@ -202,7 +202,7 @@ class GameServer {
     client?.emit(IOChannel.gameError.string, message);
   }
 
-  void _sendUpdates<T>(State<T>? state) {
+  void _sendUpdates<T>(GameState<T>? state) {
     if (state == null) {
       return;
     }

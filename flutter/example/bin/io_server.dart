@@ -3,7 +3,7 @@ import 'package:game_scaffold_games/games.dart';
 
 void main(List<String> arguments) {
   // Must be done on both client and server
-  TicTacToeGame.register();
+  registerTicTacToe();
 
   // Actually starts up the IO server.
   final _ = IOServer();

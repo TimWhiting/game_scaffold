@@ -5,7 +5,7 @@ import 'package:game_scaffold_games/games.dart';
 import 'package:test/test.dart';
 
 Future<void> main() async {
-  TicTacToeGame.register();
+  registerTicTacToe();
   late ProviderContainer rootProvider;
   late ProviderContainer p1Game;
   final _ = IOServer();

@@ -130,7 +130,7 @@ class MultiPlayerWidget extends HookConsumerWidget {
                                   in ref.watch(GameProviders.allClientTypes))
                                 DropdownMenuItem<ClientType>(
                                   value: backendType,
-                                  child: Text(backendType.name),
+                                  child: Text(backendType),
                                 ),
                             ],
                             onChanged: (v) => ref

@@ -76,8 +76,8 @@ class IORoundClient extends RoundClient {
   }
 
   @override
-  Stream<State> gameStream(PlayerID playerID, GameCode code) async* {
-    final sc = StreamController<State>();
+  Stream<GameState> gameStream(PlayerID playerID, GameCode code) async* {
+    final sc = StreamController<GameState>();
     _socket!.on(IOChannel.gameState.string, (data) {
       _socket!.off(IOChannel.lobby.string);
       // ignore: avoid_print
