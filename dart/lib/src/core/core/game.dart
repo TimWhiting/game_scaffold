@@ -18,7 +18,7 @@ abstract class Game {
   static GameFunctions<T, E, C> fromType<T, E, C>(GameType type) => Game._functions[type]! as GameFunctions<T, E, C>;
 
   static void register<T, E, C>(GameType type, GameFunctions<T,E,C> functions) {
-    _functions[type] = functions as GameFunctions;
+    _functions[type] = functions;
     _gameTypeMap[T] = type;
     _eventTypeMap[E] = type;
     _configTypeMap[C] = type;
@@ -34,11 +34,11 @@ typedef GameEvent<T> = (T,);
 extension GameEventX<T> on GameEvent<T> {
   Map<String, dynamic> toJson() => {
       'type': T.event().gameType,
-      'data': T.event().toJsonE($0),
+      'data': T.event().toJsonE.call($0),
     };
 }
 // ignore: non_constant_identifier_names
-GameEvent<T> GameEventFromJson<T>(Map<String, dynamic> json) => (Game.fromType(json['type'] as String).fromJsonE(json['data'] as JsonMap),);
+GameEvent<T> GameEventFromJson<T>(Map<String, dynamic> json) => (Game.fromType(json['type'] as String).fromJsonE.call(json['data'] as JsonMap),);
 
 typedef GameError = ({String message, PlayerID player});
 /// A error notifier that lets the client clear the error
@@ -94,7 +94,7 @@ typedef GameStateFunctions<T, E, C> = ({
 GameState<T> GameStateFromJson<T, E, C>(Map<String, dynamic> json) => 
   (
     gameType: json['gameType'] as String,
-    game: Game.fromType<T, E, C>(json['gameType'] as String).fromJson(json['data'] as JsonMap), 
+    game: Game.fromType<T, E, C>(json['gameType'] as String).fromJson.call(json['data'] as JsonMap), 
     rewards: (json['rewards'] as List).cast<double>(), 
     generic: GenericGame.fromJson(json['generic'] as JsonMap), 
     messages: (json['messages'] as List).map((e) => GameMessage.fromJson(e as JsonMap)).toIList(),
@@ -103,7 +103,7 @@ GameState<T> GameStateFromJson<T, E, C>(Map<String, dynamic> json) =>
 extension StateX<T> on GameState<T> {
   JsonMap toJson() => {
       'gameType': gameType,
-      'game': T.game().toJson(game),
+      'game': T.game().toJson.call(game),
       'rewards': rewards,
       'generic': generic.toJson(),
       'messages': [for (final message in messages) message.toJson()],
@@ -143,17 +143,17 @@ extension StateX<T> on GameState<T> {
 
   NextStateOrError<T> next<E, C>(E event, GameConfig<C> config) {
     final functions = T.game<T, E, C>();
-    final error = functions.game(game).error(event, config);
+    final error = functions.game.call(game).error.call(event, config);
     if (error != null){
        return (state: this, error: (message: error, player: ''));
     }
-    final next = functions.game(game).next(event, config);
+    final next = functions.game.call(game).next.call(event, config);
     return (state: (gameType: gameType, game: next.$0, rewards: next.$1 == null  ? rewards : next.$1! + rewards, generic: generic.updateStatus(next.$2).updateTime(), messages: messages), error: null);
   }
 
   NextStateOrError<T> nextRound<E, C>(GameConfig<C> config) {
     final functions = T.game<T, E, C>();
-    final next = functions.state(this).nextRound(config);
+    final next = functions.state.call(this).nextRound.call(config);
     return (state: (gameType: gameType, game: next.game, rewards: next.rewards, generic: next.generic.updateStatus(GameStatus.started).updateTime(), messages:next.messages), error: null);
   }
 }

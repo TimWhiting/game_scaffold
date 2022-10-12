@@ -57,13 +57,13 @@ class BackendProviders {
 
   /// Provides the [GameStateNotifier] based on the [GameConfig] from [lobby]'s config
   static final state =
-      StateNotifierProvider.autoDispose<GameStateNotifier, NextState>(
+      StateNotifierProvider.autoDispose<GameStateNotifier, GameState>(
     (ref) {
       final l = ref.watch(lobby);
       return GameStateNotifier(
         l.config,
         l.code,
-        Game.fromType(l.config.gameType).initialState(l.config, l.players.toIList()),
+        Game.fromType(l.config.gameType).initialState.call(l.config, l.players.toIList()),
         ref.read(error.notifier),
       );
     },

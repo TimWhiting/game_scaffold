@@ -92,11 +92,12 @@ class GameProviders {
   /// Provides the game type's name for the game specified by [config]
   static final gameType = Provider.autoDispose<String>(
     (ref) {
-      final type = ref.watch(game).asData?.value.gameType;
-      if (type == null) {
-        return '';
-      }
-      return Game.fromType(type).gameName;
+      return '';
+      // final type = ref.watch(game).asData?.value.gameType;
+      // if (type == null) {
+      //   return '';
+      // }
+      // return Game.fromType(type).gameName;
     },
     name: 'GameType',
     dependencies: [game, playerID],
