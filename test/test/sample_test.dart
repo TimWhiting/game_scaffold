@@ -12,8 +12,8 @@ void main() {
     config: const GameConfig(
         gameType: 'tictactoe', rounds: 3, customNames: false, maxPlayers: 2),
     players: [
-      const Player(P1),
-      const Player(P2),
+      const Player('0'),
+      const Player('1'),
     ],
     test: (tester) async {
       final initialState = tester.game;

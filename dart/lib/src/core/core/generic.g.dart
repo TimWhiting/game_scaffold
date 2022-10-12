@@ -84,7 +84,7 @@ _$_GameConfig<T> _$$_GameConfigFromJson<T>(
       gameType: json['gameType'] as String,
       adminID: json['adminID'] as String?,
       nameSet: $enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ??
-          NameSet.Basic,
+          NameSet.basic,
       customNames: json['customNames'] as bool? ?? false,
       rounds: json['rounds'] as int? ?? 15,
       minPlayers: json['minPlayers'] as int? ?? 1,
@@ -110,7 +110,7 @@ Map<String, dynamic> _$$_GameConfigToJson<T>(
     };
 
 const _$NameSetEnumMap = {
-  NameSet.Basic: 'Basic',
+  NameSet.basic: 'basic',
 };
 
 T? _$nullableGenericFromJson<T>(

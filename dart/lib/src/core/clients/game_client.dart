@@ -14,8 +14,8 @@ typedef GameAddress = Uri;
 /// * Delete
 /// * Get Game Info
 /// * Get List of Games
-abstract class GameClient {
-  GameClient() : logger = Logger('GameClient');
+abstract class GameService {
+  GameService() : logger = Logger('GameClient');
 
   final Logger logger;
 
@@ -28,7 +28,7 @@ abstract class GameClient {
   /// Gets a list of games on the server
   Future<IList<GameInfo>> getGames(PlayerID playerID);
 
-  /// Disposes of the [GameClient] (i.e. disconnects from the server)
+  /// Disposes of the [GameService] (i.e. disconnects from the server)
   void dispose();
 
   /// Connects to the backend

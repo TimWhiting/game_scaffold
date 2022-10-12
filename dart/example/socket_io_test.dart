@@ -12,8 +12,9 @@ Future<void> main() async {
   setUp(() {
     rootProvider = ProviderContainer();
     p1Game = ProviderContainer(
-        parent: rootProvider,
-        overrides: [GameProviders.playerID.overrideWithValue(P1)]);
+      parent: rootProvider,
+      overrides: [GameProviders.playerID.overrideWithValue('1')],
+    );
   });
   test('io', () async {
     rootProvider.read(GameProviders.clientType.notifier).state = IOClient;

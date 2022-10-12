@@ -7,10 +7,11 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../../game_scaffold_dart.dart';
 
 /// Location that corresponds to using an io-server for the backend
+// ignore: constant_identifier_names
 const IOClient = 'io-server';
 
-/// The socket IO implementation of [RoundClient]
-class IORoundClient extends RoundClient {
+/// The socket IO implementation of [RoundService]
+class IORoundClient extends RoundService {
   IORoundClient({
     required this.address,
     required GameCode code,
@@ -22,7 +23,7 @@ class IORoundClient extends RoundClient {
     );
   }
   final GameAddress address;
-  final ProviderRef<RoundClient> ref;
+  final ProviderRef<RoundService> ref;
 
   IO.Socket? _socket;
   GameCode? _lastGameCode;
@@ -129,7 +130,7 @@ class IORoundClient extends RoundClient {
   }
 }
 
-final socketIOGameClient = Provider<RoundClient>(
+final socketIOGameClient = Provider<RoundService>(
   (ref) {
     final client = IORoundClient(
       code: ref.read(GameProviders.code),
@@ -153,15 +154,15 @@ final socketIOGameClient = Provider<RoundClient>(
   ],
 );
 
-/// The socket IO implementation of [GameClient]
-class IOGameClient extends GameClient {
+/// The socket IO implementation of [GameService]
+class IOGameClient extends GameService {
   IOGameClient({
     required this.address,
     required this.ref,
   }) {
     Future.delayed(const Duration(milliseconds: 10), connect);
   }
-  final ProviderRef<GameClient> ref;
+  final ProviderRef<GameService> ref;
 
   final GameAddress address;
   late final IO.Socket socket = IO.io(address.toString(), socketIOOpts);
@@ -227,7 +228,7 @@ class IOGameClient extends GameClient {
   }
 }
 
-final socketIOGameServerClient = Provider<GameClient>(
+final socketIOGameServerClient = Provider<GameService>(
   (ref) {
     final client = IOGameClient(
       address: ref.watch(GameProviders.remoteUri),
@@ -246,7 +247,7 @@ final socketIOOpts = <String, dynamic>{
   'forceNew': true,
 };
 
-/// The IO Channels used by the socket io implementations of [GameClient] and [RoundClient]
+/// The IO Channels used by the socket io implementations of [GameService] and [RoundService]
 enum IOChannel {
   gameState,
   gameError,
@@ -282,20 +283,6 @@ extension IOChannelX on IOChannel {
     final error = UnimplementedError('No corresponding response channel');
 
     switch (this) {
-      case IOChannel.lobby:
-      case IOChannel.gameState:
-      case IOChannel.gameError:
-      case IOChannel.connect:
-      case IOChannel.connection:
-      case IOChannel.gameCreated:
-      case IOChannel.gameInfo:
-      case IOChannel.name:
-      case IOChannel.disconnect:
-      case IOChannel.allGames:
-      case IOChannel.eventAck:
-      case IOChannel.gameStarted:
-      case IOChannel.gameDeleted:
-        throw error;
       case IOChannel.startGame:
         return IOChannel.gameStarted;
       case IOChannel.event:
@@ -310,8 +297,11 @@ extension IOChannelX on IOChannel {
         return IOChannel.gameInfo;
       case IOChannel.getGames:
         return IOChannel.allGames;
+      // ignore: no_default_cases
+      default:
+        throw error;
     }
-  }
+ }
 }
 
 extension SocketIOX on IO.Socket {

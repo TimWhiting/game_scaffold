@@ -40,14 +40,14 @@ class TicTacToeWidget extends StatelessWidget {
         body: Row(children: [
           Expanded(
             child: ProviderScope(
-              overrides: [GameProviders.playerID.overrideWithValue(P1)],
+              overrides: [GameProviders.playerID.overrideWithValue('0')],
               child: const Player(),
             ),
           ),
           Container(width: 10, color: Colors.black),
           Expanded(
             child: ProviderScope(
-              overrides: [GameProviders.playerID.overrideWithValue(P2)],
+              overrides: [GameProviders.playerID.overrideWithValue('1')],
               child: const Player(),
             ),
           ),
@@ -82,13 +82,13 @@ class CreateOrJoinWidget extends HookConsumerWidget {
             const SizedBox(height: 40),
             Text('Player $playerID'),
             const SizedBox(height: 20),
-            if (playerID == P1)
+            if (playerID == '0')
               ElevatedButton(
                 key: Key('Create Game Button $playerID'),
                 onPressed: () async {
                   ref.read(GameProviders.config.notifier).state =
                       const GameConfig(
-                    adminID: P1,
+                    adminID: '0',
                     customNames: false,
                     gameType: 'tictactoe',
                     rounds: 2,
@@ -99,7 +99,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                 },
                 child: const Text('Create Game'),
               ),
-            if (playerID == P2) ...[
+            if (playerID == '1') ...[
               SizedBox(
                 width: 200,
                 height: 30,

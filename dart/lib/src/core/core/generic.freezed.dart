@@ -984,7 +984,7 @@ class _$_GameConfig<T> extends _GameConfig<T> {
   const _$_GameConfig(
       {required this.gameType,
       this.adminID,
-      this.nameSet = NameSet.Basic,
+      this.nameSet = NameSet.basic,
       this.customNames = false,
       this.rounds = 15,
       this.minPlayers = 1,

@@ -31,7 +31,7 @@ class GameProviders {
     name: 'SingleGameConfig',
   );
 
-  /// The provider that controls the [RoundClient] and [GameClient]
+  /// The provider that controls the [RoundService] and [GameService]
   /// implementation to use
   static final clientType = StateProvider<ClientType>(
     (ref) => IOClient,
@@ -92,20 +92,19 @@ class GameProviders {
   /// Provides the game type's name for the game specified by [config]
   static final gameType = Provider.autoDispose<String>(
     (ref) {
-      return '';
-      // final type = ref.watch(game).asData?.value.gameType;
-      // if (type == null) {
-      //   return '';
-      // }
-      // return Game.fromType(type).gameName;
+      final type = ref.watch(game).asData?.value;
+      if (type == null) {
+        return '';
+      }
+      return type.gameType;
     },
     name: 'GameType',
     dependencies: [game, playerID],
   );
 
-  /// Provides the [GameClient] for each client id
+  /// Provides the [GameService] for each client id
   static final gameClientFamily =
-      Provider.autoDispose.family<GameClient, ClientType>(
+      Provider.autoDispose.family<GameService, ClientType>(
     (ref, clientType) {
       switch (clientType) {
         case IOClient:
@@ -124,7 +123,7 @@ class GameProviders {
     ],
   );
 
-  static final gameClient = Provider.autoDispose<GameClient>(
+  static final gameClient = Provider.autoDispose<GameService>(
     (ref) => ref.watch(gameClientFamily(ref.watch(clientType))),
     name: 'GameClient',
     dependencies: [clientType, gameClientFamily],
@@ -174,9 +173,9 @@ class GameProviders {
     dependencies: [gameClient, playerID, code],
   );
 
-  /// Provides a [RoundClient] for the client with the specified id
+  /// Provides a [RoundService] for the client with the specified id
   static final roundClientFamily =
-      Provider.family.autoDispose<RoundClient, ClientType>(
+      Provider.family.autoDispose<RoundService, ClientType>(
     (ref, clientType) {
       switch (clientType) {
         case IOClient:
@@ -191,7 +190,7 @@ class GameProviders {
     dependencies: [socketIOGameClient, onDeviceGameClient, playerID],
   );
 
-  static final roundClient = Provider.autoDispose<RoundClient>(
+  static final roundClient = Provider.autoDispose<RoundService>(
     (ref) => ref.watch(roundClientFamily(ref.watch(clientType))),
     name: 'GameClient',
     dependencies: [clientType, roundClientFamily],

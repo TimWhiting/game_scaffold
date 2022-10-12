@@ -3,20 +3,21 @@ import 'dart:async';
 import '../../../server.dart';
 
 /// Location that corresponds to running the game on-device
+// ignore: constant_identifier_names
 const OnDeviceClient = 'on-device';
 
-/// An implementation of a [RoundClient] for a local game on device with no server connection
+/// An implementation of a [RoundService] for a local game on device with no server connection
 ///
 /// Warning implementation not complete or tested yet
-class NoServerRoundClient extends RoundClient {
-  NoServerRoundClient();
+class OnDeviceRoundService extends RoundService {
+  OnDeviceRoundService();
   @override
   Future<bool> exitGame(PlayerID playerID, GameCode code) async => true;
 
   @override
   Future<String?> joinGame(
       PlayerID playerID, GameCode code, PlayerName name) async {
-    final backendReader = NoGameClient.games[code]!.container.read;
+    final backendReader = OnDeviceGameService.games[code]!.container.read;
 
     final notifier = backendReader(BackendProviders.lobby.notifier);
     await Future.delayed(const Duration(microseconds: 1));
@@ -35,7 +36,7 @@ class NoServerRoundClient extends RoundClient {
 
   @override
   Future<bool> startGame(PlayerID playerID, GameCode code) async {
-    final backendReader = NoGameClient.games[code]!.container.read;
+    final backendReader = OnDeviceGameService.games[code]!.container.read;
     final notifier = backendReader(BackendProviders.lobby.notifier);
     await Future.delayed(const Duration(microseconds: 1));
     notifier.start();
@@ -44,19 +45,22 @@ class NoServerRoundClient extends RoundClient {
 
   @override
   Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) async* {
-    final backend = NoGameClient.games[code]?.container;
+    final backend = OnDeviceGameService.games[code]?.container;
     final ss = StreamController<GameInfo>();
     if (backend == null) {
       return;
     }
 
     backend.listen<Stream<GameInfo>>(
-        BackendProviders.playerLobby(playerID).stream, (prev, curr) async {
-      // ignore: prefer_foreach
-      await for (final e in curr) {
-        ss.add(e);
-      }
-    }, fireImmediately: true);
+      fireImmediately: true,
+      BackendProviders.playerLobby(playerID).stream,
+      (prev, curr) async {
+        // ignore: prefer_foreach
+        await for (final e in curr) {
+          ss.add(e);
+        }
+      },
+    );
     yield* ss.stream;
     await ss.close();
   }
@@ -65,17 +69,13 @@ class NoServerRoundClient extends RoundClient {
   Stream<GameState> gameStream(PlayerID playerID, GameCode code) async* {
     logger.info('Watching backend');
     final ss = StreamController<GameState>();
-    final backendReader = NoGameClient.games[code]?.container;
-    backendReader?.listen<GameStateNotifier>(
-      BackendProviders.state.notifier,
-      (prev, curr) async {
-        ss.add(curr.gameState);
-        // ignore: prefer_foreach
-        await for (final e in curr.stream) {
-          ss.add(e);
-        }
-      },
+    final backendReader = OnDeviceGameService.games[code]?.container;
+    backendReader?.listen<GameState>(
       fireImmediately: true,
+      BackendProviders.state,
+      (prev, curr) async {
+        ss.add(curr);
+      },
     );
 
     yield* ss.stream;
@@ -87,7 +87,7 @@ class NoServerRoundClient extends RoundClient {
       PlayerID playerID, GameCode code, GameEvent event) async {
     final js = event.toJson();
     logger.info('Sending event $js');
-    final backendReader = NoGameClient.games[code]!.container;
+    final backendReader = OnDeviceGameService.games[code]!.container;
     // If the gameClient is initializing
     // we cannot edit the backend provider synchronously
     await Future.delayed(const Duration(microseconds: 1));
@@ -105,40 +105,40 @@ class NoServerRoundClient extends RoundClient {
   Stream<GameError> errorStream(PlayerID playerID, GameCode code) async* {
     final ss = StreamController<GameError>();
 
-    final backendReader = NoGameClient.games[code]?.container;
+    final backendReader = OnDeviceGameService.games[code]?.container;
 
     backendReader?.listen<GameError?>(
+      fireImmediately: true,
       BackendProviders.error,
       (prev, curr) async {
         if (curr != null) {
           ss.add(curr);
         }
       },
-      fireImmediately: true,
     );
     yield* ss.stream;
     await ss.close();
   }
 }
 
-final onDeviceGameClient = Provider<RoundClient>((ref) {
-  final client = NoServerRoundClient();
+final onDeviceGameClient = Provider<RoundService>((ref) {
+  final client = OnDeviceRoundService();
   ref.onDispose(client.dispose);
   return client;
 }, dependencies: [GameProviders.playerID]);
 
-/// An on device implementation of [GameClient]
+/// An on device implementation of [GameService]
 ///
 /// Warning implementation not complete or tested yet
-class NoGameClient extends GameClient {
-  NoGameClient() : super();
+class OnDeviceGameService extends GameService {
+  OnDeviceGameService() : super();
   static final games = <GameCode, LocalGame>{};
   @override
   Future<String> createGame(PlayerID playerID, GameConfig config) async {
     final gameCode = generateGameID([]);
     final backendRead = ProviderContainer(overrides: []);
     final lobby = backendRead.read(BackendProviders.lobby.notifier);
-    await Future.delayed(const Duration(microseconds: 1));
+    // await Future.delayed(const Duration(microseconds: 1));
     lobby.setCode(gameCode);
     lobby.setConfig(config);
     games[gameCode] = LocalGame(gameCode, playerID, backendRead);
@@ -161,10 +161,12 @@ class NoGameClient extends GameClient {
 
   @override
   Future<IList<GameInfo>> getGames(PlayerID playerID) async {
-    final gms = games.values.where((g) => g.container
-        .read(BackendProviders.lobby)
-        .players
-        .any((p) => p.id == playerID));
+    final gms = games.values.where(
+      (g) => g.container
+          .read(BackendProviders.lobby)
+          .players
+          .any((p) => p.id == playerID),
+    );
     return [
       for (final g in gms)
         GameInfo(
@@ -187,9 +189,9 @@ class NoGameClient extends GameClient {
   }
 }
 
-final onDeviceGameServerClient = Provider<GameClient>(
+final onDeviceGameServerClient = Provider<GameService>(
   (ref) {
-    final client = NoGameClient();
+    final client = OnDeviceGameService();
     ref.onDispose(client.dispose);
     scheduleMicrotask(() {
       ref.read(GameProviders.connected.notifier).state = true;

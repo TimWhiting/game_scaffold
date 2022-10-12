@@ -23,7 +23,7 @@ String get homeDir {
 class BackendProviders {
   BackendProviders._();
 
-  static final lobby = StateNotifierProvider.autoDispose<LobbyNotifier, Lobby>(
+  static final lobby = StateNotifierProvider<LobbyNotifier, Lobby>(
     (ref) => LobbyNotifier(
       Lobby(
         gameStatus: GameStatus.lobby,
@@ -57,9 +57,10 @@ class BackendProviders {
 
   /// Provides the [GameStateNotifier] based on the [GameConfig] from [lobby]'s config
   static final state =
-      StateNotifierProvider.autoDispose<GameStateNotifier, GameState>(
+      StateNotifierProvider<GameStateNotifier, GameState>(
     (ref) {
       final l = ref.watch(lobby);
+      print('new lobby $l');
       return GameStateNotifier(
         l.config,
         l.code,
@@ -87,6 +88,7 @@ class LobbyNotifier extends StateNotifier<Lobby> {
   }
 
   void setConfig(GameConfig config) {
+    print('Setting config $config ${state.code}');
     state = state.copyWith(config: config);
   }
 
@@ -100,9 +102,9 @@ class LobbyNotifier extends StateNotifier<Lobby> {
 }
 
 /// A [StateNotifier] that handles events for a particular game, delegating to the game's implementation for non generic events
-class GameStateNotifier<E, G> extends StateNotifier<GameState<G>> {
+class GameStateNotifier extends StateNotifier<GameState> {
   GameStateNotifier(
-      this.gameConfig, this.code, GameState<G> initialState, this.errorNotifier)
+      this.gameConfig, this.code, GameState initialState, this.errorNotifier)
       : _gameStateLogger = Logger('GameStateNotifier $code'),
         _previousStates = [initialState],
         super(initialState);
@@ -118,14 +120,14 @@ class GameStateNotifier<E, G> extends StateNotifier<GameState<G>> {
   final GameConfig gameConfig;
 
   /// A list of previous states
-  final List<GameState<G>> _previousStates;
+  final List<GameState> _previousStates;
 
   /// Returns the [state] of the game
   ///
   /// Remember to watch / listen to the state of the [GameStateNotifier]
   /// rather than just watching changes in the notifier itself, otherwise changes
   /// in the [gameState] will not trigger updates of the ui
-  GameState<G> get gameState => _previousStates.last;
+  GameState get gameState => _previousStates.last;
 
   /// Handles a [GameEvent] and updates the state accordingly
   ///
@@ -166,7 +168,7 @@ class GameStateNotifier<E, G> extends StateNotifier<GameState<G>> {
             return game;
           });
       }else {
-         final next = game.next(e as E, gameConfig);
+         final next = game.next(e, gameConfig);
           if (next.error != null) {
             errorNotifier.state = next.error;
             error = true;

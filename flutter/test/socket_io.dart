@@ -1,6 +1,10 @@
 import 'package:game_scaffold_dart/server.dart';
 import 'package:game_scaffold_games/games.dart';
 
+// ignore: constant_identifier_names
+const P1 = '0';
+// ignore: constant_identifier_names
+const P2 = '1';
 // ignore_for_file: avoid_print
 Future<void> main() async {
   registerTicTacToe();

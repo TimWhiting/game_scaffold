@@ -71,7 +71,7 @@ class GameTester<T> {
   final List<Player> _players;
   final GameCode code;
   late final ProviderContainer backendContainer =
-      NoGameClient.games[code]!.container;
+      OnDeviceGameService.games[code]!.container;
   final Map<PlayerID, ProviderContainer> readers;
   GameError? _lastError;
   ProviderSubscription? sub;

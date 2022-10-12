@@ -124,7 +124,7 @@ class GameConfig<T> with _$GameConfig<T> {
   const factory GameConfig({
     required GameType gameType,
     PlayerID? adminID,
-    @Default(NameSet.Basic) NameSet nameSet,
+    @Default(NameSet.basic) NameSet nameSet,
     @Default(false) bool customNames,
     @Default(15) int rounds,
     @Default(1) int minPlayers,

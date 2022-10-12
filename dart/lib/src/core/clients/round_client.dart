@@ -5,8 +5,8 @@ import '../../../game_scaffold_dart.dart';
 import '../core.dart';
 
 /// A client for a particular game
-abstract class RoundClient {
-  RoundClient() : logger = Logger('RoundClient');
+abstract class RoundService {
+  RoundService() : logger = Logger('RoundClient');
 
   final Logger logger;
 
