@@ -1,7 +1,22 @@
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 
-typedef TicTacToeGame = ({IList<int?> board, int currentPlayer});
-typedef TicTacToeGameEvent = ({int player, int location});
+class TicTacToeGameEvent {
+  TicTacToeGameEvent({required this.player, required this.location});
+final int player; final int location;
+}
+
+class TicTacToeGame {
+  TicTacToeGame({required this.board, required this.currentPlayer});
+
+  final IList<int?> board;
+  final int currentPlayer;
+
+  TicTacToeGame copyWith({IList<int?>? board, int? currentPlayer}) =>
+      TicTacToeGame(
+        board: board ?? this.board,
+        currentPlayer: currentPlayer ?? this.currentPlayer,
+      );
+}
 
 final IList<IList<int>> winningLocationCombinations = [
   [0, 1, 2],
@@ -15,21 +30,19 @@ final IList<IList<int>> winningLocationCombinations = [
 ].map((l) => l.lock).toIList();
 
 void registerTicTacToe() {
-  Game.register<TicTacToeGame, TicTacToeGameEvent, JsonMap>(tttFunctions);
+  Game.register<TicTacToeGame, TicTacToeGameEvent>(tttFunctions);
 }
 
-final GameFunctions<TicTacToeGame, TicTacToeGameEvent, JsonMap> tttFunctions = GameFunctions(
-  game: (game) => (next: game.nextState, error: game.error),
-  state: (state) => (nextRound: state.nextRound),
+final GameFunctions<TicTacToeGame, TicTacToeGameEvent> tttFunctions = GameFunctions(
+  game: (game) => GameStateFunctions(next: game.nextState, error: game.error),
+  state: (state) => StateFunctions(nextRound: TicTacToeStateX(state).nextRound),
   toJson: (game) => {'board': game.board.toList(), 'currentPlayer': game.currentPlayer},
-  fromJson: (map) => (board: (map['board'] as List).cast<int?>().lock, currentPlayer: map['currentPlayer'] as int),
+  fromJson: (map) => TicTacToeGame(board: (map['board'] as List).cast<int?>().lock, currentPlayer: map['currentPlayer'] as int),
   toJsonE: (event) => {'player': event.player, 'location': event.location},
-  fromJsonE: (map) => (player: map['player'] as int, location: map['location'] as int),
-  toJsonC: (m) => m,
-  fromJsonC: (m) => m,
+  fromJsonE: (map) => TicTacToeGameEvent(player: map['player'] as int, location: map['location'] as int),
   gameName: 'Tic Tac Toe',
   gameType: 'tictactoe',
-  initialState: (config, players) => GameState(game: (board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0), gameType: 'tictactoe', messages: <GameMessage>[].lock, generic: GenericGame.start(players), rewards: <double>[0, 0]),
+  initialState: (config, players) => GameState(game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0), gameType: 'tictactoe', messages: <GameMessage>[].lock, generic: GenericGame.start(players), rewards: <double>[0, 0]),
 );
 
 enum Winner {
@@ -42,7 +55,7 @@ enum Winner {
 
 extension TicTacToeStateX on GameState<TicTacToeGame> {
   GameState<TicTacToeGame> nextRound(GameConfig config) => GameState(
-    game: (board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: game.currentPlayer == 0 ? 1 : 0),
+    game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: game.currentPlayer == 0 ? 1 : 0),
     gameType: 'tictactoe',
     generic: generic.finishRound(),
     messages: messages,
@@ -53,7 +66,7 @@ extension TicTacToeStateX on GameState<TicTacToeGame> {
 extension TicTacToeGameX on TicTacToeGame {
   
   TicTacToeGame next(TicTacToeGameEvent event, GameConfig config) => 
-  (
+  TicTacToeGame(
     currentPlayer: currentPlayer == 0 ? 1 : 0,
     board: board.replace(event.location,  currentPlayer),
   );

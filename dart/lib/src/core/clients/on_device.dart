@@ -66,15 +66,15 @@ class OnDeviceRoundService extends RoundService {
   }
 
   @override
-  Stream<GameState> gameStream(PlayerID playerID, GameCode code) async* {
+  Stream<GameState<T>> gameStream<T>(PlayerID playerID, GameCode code) async* {
     logger.info('Watching backend');
-    final ss = StreamController<GameState>();
+    final ss = StreamController<GameState<T>>();
     final backendReader = OnDeviceGameService.games[code]?.container;
     backendReader?.listen<GameState>(
       fireImmediately: true,
       BackendProviders.state,
       (prev, curr) async {
-        ss.add(curr);
+        ss.add(curr as GameState<T>);
       },
     );
 
@@ -83,8 +83,8 @@ class OnDeviceRoundService extends RoundService {
   }
 
   @override
-  Future<bool> sendEvent(
-      PlayerID playerID, GameCode code, GameEvent event) async {
+  Future<bool> sendEvent<E>(
+      PlayerID playerID, GameCode code, GameEvent<E> event) async {
     final js = event.toJson();
     logger.info('Sending event $js');
     final backendReader = OnDeviceGameService.games[code]!.container;

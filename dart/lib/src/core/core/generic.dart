@@ -119,8 +119,9 @@ enum GameStatus {
 ///
 /// Custom options can be added to the [options] map, but must be in a json
 /// compatible form
-@Freezed(genericArgumentFactories: true)
-class GameConfig<T> with _$GameConfig<T> {
+// @Freezed(genericArgumentFactories: true)
+@freezed
+class GameConfig with _$GameConfig {
   const factory GameConfig({
     required GameType gameType,
     PlayerID? adminID,
@@ -130,18 +131,13 @@ class GameConfig<T> with _$GameConfig<T> {
     @Default(1) int minPlayers,
     @Default(10) int maxPlayers,
     @Default(true) bool autoStart,
-    T? options,
+    // T? options,
   }) = _GameConfig;
   const GameConfig._();
   factory GameConfig.fromJson(
-          Map<String, Object?> map,
-          // ignore: avoid_annotating_with_dynamic
-          T Function(Object?) fromJsonT) =>
-      _$GameConfigFromJson(map, fromJsonT);
+          Map<String, Object?> map) => 
+        _$GameConfigFromJson(map);
 
-  @override
-  Map<String, dynamic> toJson(Object? Function(T) toJsonT) =>
-      super.toJson(toJsonT);
 }
 
 /// An object to provide info about a particular game to the client

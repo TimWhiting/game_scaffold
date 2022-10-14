@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'package:riverpod/riverpod.dart';
 
@@ -13,22 +14,19 @@ abstract class Game {
 
   static final Map<Type, GameType> _eventTypeMap = {};
   static final Map<Type, GameType> _gameTypeMap = {};
-  static final Map<Type, GameType> _configTypeMap = {};
 
-  static GameFunctions<T, E, C> fromType<T, E, C>(GameType type) => Game._functions[type]! as GameFunctions<T, E, C>;
+  static GameFunctions fromType(GameType type) => Game._functions[type]!;
 
-  static void register<T, E, C>(GameFunctions<T,E,C> functions) {
+  static void register<T,E>(GameFunctions<T,E> functions) {
     final type = functions.gameType;
     _functions[type] = functions;
     _gameTypeMap[T] = type;
     _eventTypeMap[E] = type;
-    _configTypeMap[C] = type;
   }
 }
 extension GameTypeName on Type {
-  GameFunctions<T, E, C> event<T, E, C>() => Game._functions[Game._eventTypeMap[this]]! as GameFunctions<T, E, C>;
-  GameFunctions<T, E, C> game<T, E, C>() => Game._functions[Game._gameTypeMap[this]]! as GameFunctions<T, E, C>;
-  GameFunctions<T, E, C> config<T, E, C>() => Game._functions[Game._configTypeMap[this]]! as GameFunctions<T, E, C>;
+  GameFunctions event() => Game._functions[Game._eventTypeMap[this]]!;
+  GameFunctions game() => Game._functions[Game._gameTypeMap[this]]!;
 }
 
 typedef GameEvent<T> = (T,);
@@ -74,47 +72,8 @@ class GameState<T> {
   final Rewards rewards;
   final GenericGame generic;
   final IList<GameMessage> messages;
-}
 
-class GameFunctions<T, E, C> {
-  GameFunctions({required this.game,required this.state,required this.initialState, required this.toJson, required this.fromJson, required this.toJsonE,required this.fromJsonE,required this.toJsonC,required this.fromJsonC,required this.gameType, required this.gameName,});
-
-  final GameStateFunctions<T, E, C> Function(T) game;
-  final StateFunctions<T, E, C> Function(GameState<T>) state;
-  final GameState<T> Function(GameConfig<C> config, IList<Player> players) initialState;
-  final JsonMap Function(T) toJson;
-  final T Function(JsonMap) fromJson;
-  final JsonMap Function(E) toJsonE;
-  final E Function(JsonMap) fromJsonE;
-  final JsonMap Function(C) toJsonC;
-  final C Function(JsonMap) fromJsonC;
-  final GameType gameType;
-  final GameName gameName;
-}
-
-
-typedef StateFunctions<T, E, C> = ({
-  GameState<T> Function(GameConfig<C> config) nextRound,
-});
-
-typedef GameStateFunctions<T, E, C> = ({
-  NextState<T> Function(E, GameConfig<C> config) next,
-  String? Function(E, GameConfig<C>) error,
-});
-
-
-// ignore: non_constant_identifier_names
-GameState<T> GameStateFromJson<T, E, C>(Map<String, dynamic> json) => 
-  GameState(
-    gameType: json['gameType'] as String,
-    game: Game.fromType<T, E, C>(json['gameType'] as String).fromJson.call(json['data'] as JsonMap), 
-    rewards: (json['rewards'] as List).cast<double>(), 
-    generic: GenericGame.fromJson(json['generic'] as JsonMap), 
-    messages: (json['messages'] as List).map((e) => GameMessage.fromJson(e as JsonMap)).toIList(),
-  );
-
-extension StateX<T> on GameState<T> {
-  JsonMap toJson() => {
+   JsonMap toJson() => {
       'gameType': gameType,
       'game': T.game().toJson.call(game),
       'rewards': rewards,
@@ -122,13 +81,13 @@ extension StateX<T> on GameState<T> {
       'messages': [for (final message in messages) message.toJson()],
     };
 
-  GameState<T> updateReward(List<double> rewards) => GameState(gameType: gameType, game: game, messages: messages, generic: generic, rewards: rewards);
+  GameState<T> updateReward(List<double> rewards) => copyWith(rewards: rewards);
 
-  GameState<T> updateGame(T game) => GameState(gameType: gameType, game: game, messages: messages, generic: generic, rewards: rewards);
+  GameState<T> updateGame(T game) => copyWith(game: game);
 
-  GameState<T> updateGeneric(GenericGame Function(GenericGame) update) => GameState(gameType: gameType, game: game, messages: messages, generic: update(generic), rewards: rewards);
+  GameState<T> updateGeneric(GenericGame Function(GenericGame) update) => copyWith( generic: update(generic), rewards: rewards);
 
-  GameState<T> updateMessages(IList<GameMessage> Function(IList<GameMessage>) update) => GameState(gameType: gameType, game: game, messages: update(messages), generic: generic, rewards: rewards);
+  GameState<T> updateMessages(IList<GameMessage> Function(IList<GameMessage>) update) => copyWith(messages: update(messages));
 
   /// Gets an unmodifiable list of players that are a part of this game
   IList<Player> get players => generic.players;
@@ -154,20 +113,83 @@ extension StateX<T> on GameState<T> {
   /// Gets the players who are ready for the next round
   IList<PlayerID> get readyPlayers => generic.readyPlayers;
 
-  NextStateOrError<T> next<E, C>(E event, GameConfig<C> config) {
-    final functions = T.game<T, E, C>();
-    final error = functions.game.call(game).error.call(event, config);
+  NextStateOrError<T> next<E>(E event, GameConfig config) {
+    final functions = T.game();
+    final error = functions.game(game).error.call(event, config);
     if (error != null){
        return (state: this, error: (message: error, player: ''));
     }
-    final next = functions.game.call(game).next.call(event, config);
-    return (state: GameState(gameType: gameType, game: next.$0, rewards: next.$1 == null  ? rewards : next.$1! + rewards, generic: generic.updateStatus(next.$2).updateTime(), messages: messages), error: null);
+    final next = functions.game(game).next.call(event, config);
+    return (state: copyWith( game: next.$0 as T, rewards: next.$1 == null  ? rewards : next.$1! + rewards, generic: generic.updateStatus(next.$2).updateTime()), error: null);
   }
 
-  NextStateOrError<T> nextRound<E, C>(GameConfig<C> config) {
-    final functions = T.game<T, E, C>();
-    final next = functions.state.call(this).nextRound.call(config);
-    return (state: GameState(gameType: gameType, game: next.game, rewards: next.rewards, generic: next.generic.updateStatus(GameStatus.started).updateTime(), messages:next.messages), error: null);
+  NextStateOrError<T> nextRound<E>(GameConfig config) {
+    final functions = T.game();
+    final next = functions.state(this).nextRound.call(config);
+    return (state: next.copyWith(generic: next.generic.updateStatus(GameStatus.started).updateTime()) as GameState<T>, error: null);
   }
+
+  GameState<T> copyWith({
+    GameType? gameType,
+    T? game,
+    Rewards? rewards,
+    GenericGame? generic,
+    IList<GameMessage>? messages,
+  }) => GameState<T>(
+      gameType: gameType ?? this.gameType,
+      game: game ?? this.game,
+      rewards: rewards ?? this.rewards,
+      generic: generic ?? this.generic,
+      messages: messages ?? this.messages,
+    );
 }
+
+class GameFunctions<T, E> {
+  GameFunctions({required this.game,required this.state,required this.initialState, required this.toJson, required this.fromJson, required this.toJsonE,required this.fromJsonE,required this.gameType, required this.gameName,});
+
+  final GameStateFunctions<T, E> Function(T) game;
+  final StateFunctions<T, E> Function(GameState<T>) state;
+  final GameState<T> Function(GameConfig config, IList<Player> players) initialState;
+  final JsonMap Function(T) toJson;
+  final T Function(JsonMap) fromJson;
+  final JsonMap Function(E) toJsonE;
+  final E Function(JsonMap) fromJsonE;
+  final GameType gameType;
+  final GameName gameName;
+
+  // GameFunctions<T1,E1> cast<T1,E1>() => GameFunctions<T1, E1>(
+  //   fromJson: fromJson as T1 Function(JsonMap), 
+  //   fromJsonE: fromJsonE as E1 Function(JsonMap), 
+  //   game: game as GameStateFunctions<T1, E1> Function(T1), 
+  //   initialState: initialState as GameState<T1> Function(GameConfig, IList<Player>), 
+  //   toJson: toJson as JsonMap Function(T1), 
+  //   toJsonE: toJsonE as JsonMap Function(E1), 
+  //   state: state as StateFunctions<T1, E1> Function(GameState<T1>), 
+  //   gameType: gameType, gameName: gameName);
+}
+
+
+class StateFunctions<T, E> {
+  StateFunctions({required this.nextRound});
+
+ final GameState<T> Function(GameConfig config) nextRound;
+}
+
+class GameStateFunctions<T, E> {
+  GameStateFunctions({required this.next,required this.error});
+
+  final NextState<T> Function(E, GameConfig config) next;
+  final String? Function(E, GameConfig) error;
+}
+
+
+// ignore: non_constant_identifier_names
+GameState<T> GameStateFromJson<T>(Map<String, dynamic> json) => 
+  GameState(
+    gameType: json['gameType'] as String,
+    game: Game.fromType(json['gameType'] as String).fromJson.call(json['data'] as JsonMap) as T, 
+    rewards: (json['rewards'] as List).cast<double>(), 
+    generic: GenericGame.fromJson(json['generic'] as JsonMap), 
+    messages: (json['messages'] as List).map((e) => GameMessage.fromJson(e as JsonMap)).toIList(),
+  );
 

@@ -76,11 +76,8 @@ Map<String, dynamic> _$$GameMessageToJson(_$GameMessage instance) =>
       'runtimeType': instance.$type,
     };
 
-_$_GameConfig<T> _$$_GameConfigFromJson<T>(
-  Map<String, dynamic> json,
-  T Function(Object? json) fromJsonT,
-) =>
-    _$_GameConfig<T>(
+_$_GameConfig _$$_GameConfigFromJson(Map<String, dynamic> json) =>
+    _$_GameConfig(
       gameType: json['gameType'] as String,
       adminID: json['adminID'] as String?,
       nameSet: $enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ??
@@ -90,13 +87,9 @@ _$_GameConfig<T> _$$_GameConfigFromJson<T>(
       minPlayers: json['minPlayers'] as int? ?? 1,
       maxPlayers: json['maxPlayers'] as int? ?? 10,
       autoStart: json['autoStart'] as bool? ?? true,
-      options: _$nullableGenericFromJson(json['options'], fromJsonT),
     );
 
-Map<String, dynamic> _$$_GameConfigToJson<T>(
-  _$_GameConfig<T> instance,
-  Object? Function(T value) toJsonT,
-) =>
+Map<String, dynamic> _$$_GameConfigToJson(_$_GameConfig instance) =>
     <String, dynamic>{
       'gameType': instance.gameType,
       'adminID': instance.adminID,
@@ -106,24 +99,11 @@ Map<String, dynamic> _$$_GameConfigToJson<T>(
       'minPlayers': instance.minPlayers,
       'maxPlayers': instance.maxPlayers,
       'autoStart': instance.autoStart,
-      'options': _$nullableGenericToJson(instance.options, toJsonT),
     };
 
 const _$NameSetEnumMap = {
   NameSet.basic: 'basic',
 };
-
-T? _$nullableGenericFromJson<T>(
-  Object? input,
-  T Function(Object? json) fromJson,
-) =>
-    input == null ? null : fromJson(input);
-
-Object? _$nullableGenericToJson<T>(
-  T? input,
-  Object? Function(T value) toJson,
-) =>
-    input == null ? null : toJson(input);
 
 _$_GameInfo _$$_GameInfoFromJson(Map<String, dynamic> json) => _$_GameInfo(
       gameID: json['gameID'] as String,
@@ -151,8 +131,7 @@ _$_Lobby _$$_LobbyFromJson(Map<String, dynamic> json) => _$_Lobby(
       code: json['code'] as String,
       players: ISet<Player>.fromJson(json['players'],
           (value) => Player.fromJson(value as Map<String, dynamic>)),
-      config: GameConfig<dynamic>.fromJson(
-          json['config'] as Map<String, dynamic>, (value) => value),
+      config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
       gameStatus: $enumDecode(_$GameStatusEnumMap, json['gameStatus']),
     );
 
@@ -161,8 +140,6 @@ Map<String, dynamic> _$$_LobbyToJson(_$_Lobby instance) => <String, dynamic>{
       'players': instance.players.toJson(
         (value) => value,
       ),
-      'config': instance.config.toJson(
-        (value) => value,
-      ),
+      'config': instance.config,
       'gameStatus': _$GameStatusEnumMap[instance.gameStatus]!,
     };

@@ -110,7 +110,7 @@ Future<void> loop(
 
 void printStateAndAction(GameState<TicTacToeGame> state) {
   print("Player ${state.game.currentPlayer}'s turn");
-  final gameState = state as TicTacToeGame;
+  final gameState = state.game;
   String strFor(int index) => gameState.board[index] == 0
       ? 'X'
       : gameState.board[index] == 1

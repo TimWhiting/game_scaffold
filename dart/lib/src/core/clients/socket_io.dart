@@ -77,12 +77,12 @@ class IORoundClient extends RoundService {
   }
 
   @override
-  Stream<GameState> gameStream(PlayerID playerID, GameCode code) async* {
-    final sc = StreamController<GameState>();
+  Stream<GameState<T>> gameStream<T>(PlayerID playerID, GameCode code) async* {
+    final sc = StreamController<GameState<T>>();
     _socket!.on(IOChannel.gameState.string, (data) {
       _socket!.off(IOChannel.lobby.string);
       // ignore: avoid_print
-      final gameState = GameStateFromJson(data as Map<String, dynamic>);
+      final gameState = GameStateFromJson<T>(data as Map<String, dynamic>);
       logger.info('Got gameState $data');
       sc.add(gameState);
     });
@@ -108,8 +108,8 @@ class IORoundClient extends RoundService {
   }
 
   @override
-  Future<bool> sendEvent(
-      PlayerID playerID, GameCode code, GameEvent event) async {
+  Future<bool> sendEvent<E>(
+      PlayerID playerID, GameCode code, GameEvent<E> event) async {
     final js = event.toJson();
     logger.info('Sending event $js');
     final result = await _socket!.call(IOChannel.event, js);
@@ -174,9 +174,9 @@ class IOGameClient extends GameService {
     return gameCode;
   }
 
-  Future<GameCode> _createGame<C>(GameConfig<C> config) async {
+  Future<GameCode> _createGame(GameConfig config) async {
     final result = await socket.call(IOChannel.createGame,
-        config.toJson(Game.fromType(config.gameType).toJsonC));
+        config.toJson());
     return result as GameCode;
   }
 

@@ -26,7 +26,7 @@ class GameProviders {
   );
 
   /// Allows one config to write all players' configs
-  static final singleConfig = StateProvider<GameConfig<dynamic>>(
+  static final singleConfig = StateProvider<GameConfig>(
     (ref) => const GameConfig(gameType: ''),
     name: 'SingleGameConfig',
   );
@@ -83,7 +83,7 @@ class GameProviders {
   // }, name: 'GameTurn', dependencies: [playerID, code, game]);
 
   /// Provides the way to configure the game for starting
-  static final config = StateProvider<GameConfig<dynamic>>(
+  static final config = StateProvider<GameConfig>(
     (ref) => ref.watch(singleConfig),
     name: 'GameConfig',
     dependencies: [singleConfig, playerID],

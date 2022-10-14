@@ -21,7 +21,8 @@ abstract class RoundService {
   );
 
   /// Sends [event] to the game server
-  Future<bool> sendEvent(PlayerID playerID, GameCode code, GameEvent event);
+  Future<bool> sendEvent<E>(
+      PlayerID playerID, GameCode code, GameEvent<E> event);
 
   /// Sends a start event to the game server
   Future<bool> startGame(PlayerID playerID, GameCode code);
@@ -51,7 +52,7 @@ abstract class RoundService {
   /// Disposes of the game client
   void dispose();
 
-  Stream<GameState> gameStream(PlayerID playerID, GameCode code);
+  Stream<GameState<T>> gameStream<T>(PlayerID playerID, GameCode code);
   Stream<GameError> errorStream(PlayerID playerID, GameCode code);
 
   Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code);

@@ -64,7 +64,7 @@ class BackendProviders {
       return GameStateNotifier(
         l.config,
         l.code,
-        Game.fromType(l.config.gameType).initialState.call(l.config, l.players.toIList()),
+        Game.fromType(l.config.gameType).initialState(l.config, l.players.toIList()),
         ref.read(error.notifier),
       );
     },
