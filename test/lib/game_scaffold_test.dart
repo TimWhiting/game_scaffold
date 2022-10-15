@@ -12,11 +12,11 @@ import 'package:test/test.dart' as darttest;
 /// Uses the OnDevice clients
 /// TODO: Maybe try to use only Backend Providers as long as nothing need to be async (which it shouldn't since the game method are all non-async)?
 @isTest
-void testGame<T>(
+void testGame<T extends Object, E extends Object>(
   String testName, {
   required GameConfig config,
   required List<Player> players,
-  required Future<void> Function(GameTester<T>) test,
+  required Future<void> Function(GameTester<T, E>) test,
 }) {
   darttest.test(testName, () async {
     final root = ProviderContainer();
@@ -43,7 +43,7 @@ void testGame<T>(
         GameStatus.started) {
       await ref[players.first.id]!.read(GameProviders.startGame.future);
     }
-    final tester = GameTester<T>(ref, players, code);
+    final tester = GameTester<T, E>(ref, players, code);
     await test(tester);
 
     for (final s in sub.keys) {
@@ -61,7 +61,7 @@ void testGame<T>(
 ///
 /// Just call [event] with your event, and a function that receives a game and error
 /// and check the properties you want
-class GameTester<T> {
+class GameTester<T extends Object, E extends Object> {
   GameTester(this.readers, this._players, this.code) {
     sub = backendContainer.listen(BackendProviders.lobby, (previous, next) {
       print('Next: $next');
@@ -85,7 +85,7 @@ class GameTester<T> {
   ///   expect(game.players.size, 2);
   /// });
   /// ```
-  void event(GameEvent event, Function(GameState<T>, GameError?) outcome) {
+  void event(E event, Function(GameState<T>, GameError?) outcome) {
     backendContainer.read(BackendProviders.state.notifier).handleEvent(event);
 
     final g = game;
@@ -120,7 +120,7 @@ class GameTester<T> {
     for (final p in _players) {
       backendContainer
           .read(BackendProviders.state.notifier)
-          .handleEvent(GenericEvent.readyNextRound(p.id).gameEvent);
+          .handleEvent(GenericEvent.readyNextRound(p.id));
     }
 
     expectation(game);

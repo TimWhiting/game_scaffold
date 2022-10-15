@@ -95,8 +95,6 @@ class GenericEvent with _$GenericEvent {
 
   factory GenericEvent.fromJson(Map<String, dynamic> map) =>
       _$GenericEventFromJson(map);
-
-  GameEvent<GenericEvent> get gameEvent => (this,);
 }
 
 /// Represents the current status of the game as seen by the client
@@ -134,10 +132,8 @@ class GameConfig with _$GameConfig {
     // T? options,
   }) = _GameConfig;
   const GameConfig._();
-  factory GameConfig.fromJson(
-          Map<String, Object?> map) => 
-        _$GameConfigFromJson(map);
-
+  factory GameConfig.fromJson(Map<String, Object?> map) =>
+      _$GameConfigFromJson(map);
 }
 
 /// An object to provide info about a particular game to the client

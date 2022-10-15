@@ -77,7 +77,7 @@ class IORoundClient extends RoundService {
   }
 
   @override
-  Stream<GameState<T>> gameStream<T>(PlayerID playerID, GameCode code) async* {
+  Stream<GameState<T>> gameStream<T extends Object>(PlayerID playerID, GameCode code) async* {
     final sc = StreamController<GameState<T>>();
     _socket!.on(IOChannel.gameState.string, (data) {
       _socket!.off(IOChannel.lobby.string);
@@ -108,9 +108,9 @@ class IORoundClient extends RoundService {
   }
 
   @override
-  Future<bool> sendEvent<E>(
-      PlayerID playerID, GameCode code, GameEvent<E> event) async {
-    final js = event.toJson();
+  Future<bool> sendEvent<E extends Object>(
+      PlayerID playerID, GameCode code, E event) async {
+    final js = Game.toEventJson(event);
     logger.info('Sending event $js');
     final result = await _socket!.call(IOChannel.event, js);
     return result as bool;

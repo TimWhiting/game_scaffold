@@ -42,7 +42,7 @@ final GameFunctions<TicTacToeGame, TicTacToeGameEvent> tttFunctions = GameFuncti
   fromJsonE: (map) => TicTacToeGameEvent(player: map['player'] as int, location: map['location'] as int),
   gameName: 'Tic Tac Toe',
   gameType: 'tictactoe',
-  initialState: (config, players) => GameState(game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0), gameType: 'tictactoe', messages: <GameMessage>[].lock, generic: GenericGame.start(players), rewards: <double>[0, 0]),
+  initialState: (config, players) => GameState(game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0),  messages: <GameMessage>[].lock, generic: GenericGame.start(players), rewards: <double>[0, 0]),
 );
 
 enum Winner {
@@ -55,8 +55,7 @@ enum Winner {
 
 extension TicTacToeStateX on GameState<TicTacToeGame> {
   GameState<TicTacToeGame> nextRound(GameConfig config) => GameState(
-    game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: game.currentPlayer == 0 ? 1 : 0),
-    gameType: 'tictactoe',
+    game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: game.currentPlayer == 0 ? 1 : 0),    
     generic: generic.finishRound(),
     messages: messages,
     rewards: rewards,

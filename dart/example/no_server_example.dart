@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_locals
+
 import 'dart:io';
 
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
@@ -8,11 +10,13 @@ Future<void> main(List<String> arguments) async {
   registerTicTacToe();
   final rootProvider = ProviderContainer();
   final p1Ref = ProviderContainer(
-      parent: rootProvider,
-      overrides: [GameProviders.playerID.overrideWithValue('0')],);
+    parent: rootProvider,
+    overrides: [GameProviders.playerID.overrideWithValue('0')],
+  );
   final p2Ref = ProviderContainer(
-      parent: rootProvider,
-      overrides: [GameProviders.playerID.overrideWithValue('1')],);
+    parent: rootProvider,
+    overrides: [GameProviders.playerID.overrideWithValue('1')],
+  );
   rootProvider.read(GameProviders.clientType.notifier).state = OnDeviceClient;
   const config = GameConfig(
     adminID: '0',
@@ -29,8 +33,8 @@ Future<void> main(List<String> arguments) async {
   final r = await p1Ref.read(GameProviders.joinGame.future);
   p2Ref.read(GameProviders.code.notifier).state = code;
   final r1 = await p2Ref.read(GameProviders.joinGame.future);
-  p1Ref.listen(GameProviders.lobby, (_, __){});
-  p2Ref.listen(GameProviders.lobby, (_, __){});
+  p1Ref.listen(GameProviders.lobby, (_, __) {});
+  p2Ref.listen(GameProviders.lobby, (_, __) {});
   final r2 = await p1Ref.read(GameProviders.startGame.future);
 
   print(r);
@@ -39,11 +43,9 @@ Future<void> main(List<String> arguments) async {
 
   late ProviderSubscription sub;
   sub = p1Ref.listen<AsyncValue<GameState>>(
-    fireImmediately: true,
-    GameProviders.game,
-    (last, value) async {
+      fireImmediately: true, GameProviders.game, (last, value) async {
     print(value);
-    if (value.value == null){
+    if (value.value == null) {
       return;
     }
     if (value.asData?.value.gameOver ?? false) {
@@ -77,7 +79,7 @@ Future<void> main(List<String> arguments) async {
       await loop(gameState, {0: p1Ref, 1: p2Ref});
     }
   });
-  
+
   await Future.delayed(const Duration(seconds: 10));
 }
 
@@ -93,7 +95,8 @@ Future<void> loop(
     location = command!.split(',').map(int.tryParse).toList();
   } while (location.any((l) => l == null));
 
-  final event = ((player: player, location: location[0]! * 3 + location[1]!), );
+  final event = TicTacToeGameEvent(
+      player: player, location: location[0]! * 3 + location[1]!);
   playerContainers[player]!.refresh(GameProviders.sendEvent(event));
   await playerContainers[player]!.read(GameProviders.sendEvent(event).future);
 

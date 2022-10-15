@@ -64,7 +64,7 @@ class BackendProviders {
       return GameStateNotifier(
         l.config,
         l.code,
-        Game.fromType(l.config.gameType).initialState(l.config, l.players.toIList()),
+        Game.initialState(l.config.gameType, l.config, l.players.toIList()),
         ref.read(error.notifier),
       );
     },
@@ -134,14 +134,14 @@ class GameStateNotifier extends StateNotifier<GameState> {
   /// Delegates to the game implementation for a game specific event [E]
   ///
   /// In case of a [GenericEvent] this handles the implementation of handling the event
-  bool handleEvent(GameEvent event) {
+  // ignore: type_annotate_public_apis
+  bool handleEvent(Object event) {
     // print('${event.toJson()}');
     var error = false;
     try {
       final game = gameState;
-      final e = event.$0;
-      if (e is GenericEvent){
-        state = e.maybeWhen(undo: () {
+      if (event is GenericEvent){
+        state = event.maybeWhen(undo: () {
             // Remove the current state
             _previousStates.removeLast();
             final lastState = _previousStates.removeLast();
@@ -161,14 +161,14 @@ class GameStateNotifier extends StateNotifier<GameState> {
             return newState;
           },
           message: (_, __, ___) => game
-              .updateMessages((m) => m.add(e as GameMessage))
+              .updateMessages((m) => m.add(event as GameMessage))
               .updateGeneric((g) => g.updateTime()),
           orElse: () {
-            errorNotifier.state = (message: 'General Event not implemented yet $e', player: 'Player');
+            errorNotifier.state = (message: 'General Event not implemented yet $event', player: 'Player');
             return game;
           });
       }else {
-         final next = game.next(e, gameConfig);
+         final next = game.next(event, gameConfig);
           if (next.error != null) {
             errorNotifier.state = next.error;
             error = true;

@@ -96,7 +96,7 @@ class GameProviders {
       if (type == null) {
         return '';
       }
-      return type.gameType;
+      return Game.typeName<Object>(type);
     },
     name: 'GameType',
     dependencies: [game, playerID],
@@ -253,7 +253,7 @@ class GameProviders {
     dependencies: [roundClient, playerID, code, chatMessage],
   );
 
-  static final sendEvent = FutureProvider.autoDispose.family<bool, GameEvent>(
+  static final sendEvent = FutureProvider.autoDispose.family<bool, Object>(
     (ref, event) => ref
         .read(roundClient)
         .sendEvent(ref.read(playerID), ref.read(code), event),
@@ -272,7 +272,7 @@ class GameProviders {
   );
 
   /// Provides the game state for the current game of the client with specified id
-  static final game = StreamProvider.autoDispose<GameState<dynamic>>(
+  static final game = StreamProvider.autoDispose<GameState<Object>>(
     (ref) {
       final c = ref.read(roundClient);
       return c.gameStream(ref.watch(playerID), ref.watch(code));

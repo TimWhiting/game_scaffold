@@ -202,7 +202,7 @@ class GameServer {
     client?.emit(IOChannel.gameError.string, message);
   }
 
-  void _sendUpdates<T>(GameState<T>? state) {
+  void _sendUpdates<T extends Object>(GameState<T>? state) {
     if (state == null) {
       return;
     }
@@ -233,12 +233,12 @@ class GameServer {
   }
 
   dynamic _handleRequest(gameEvent) {
-    final event = GameEventFromJson(gameEvent as Map<String, dynamic>);
+    final event = Game.eventFromJson(gameEvent as Map<String, dynamic>);
     _serverLogger.info(event);
-    if (event.$0 is! GenericEvent) {
+    if (event is! GenericEvent) {
       _start();
     }
-    _gameState.handleEvent(event);
+    _gameState.handleEvent(event as Object);
 
     _active = true;
   }
