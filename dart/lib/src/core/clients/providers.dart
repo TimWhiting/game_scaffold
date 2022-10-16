@@ -1,9 +1,13 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
-
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../core.dart';
 import 'clients.dart';
+
+part 'providers.freezed.dart';
+part 'providers.g.dart';
 
 /// The default port
 const defaultGamePort = 45912;
@@ -89,18 +93,14 @@ class GameProviders {
   GameProviders._();
 
   /// Provides the player's name
-  static final playerName = StateProvider<String>(
+  static final playerName = Provider<String>(
     (ref) => '',
     name: 'PlayerName',
     dependencies: [playerIDProvider],
   );
 
   /// Provides the game code for each client id
-  static final code = StateProvider<GameCode>(
-    (ref) => '',
-    name: 'GameCode',
-    dependencies: [playerIDProvider],
-  );
+  static final code = gameClientProvider.select((c) => c.code ?? '');
 
   /// Provides the game status for the current game of the client with specified id
   static final status = StateProvider.autoDispose<GameStatus?>(
@@ -120,12 +120,12 @@ class GameProviders {
 
   /// Provides whether it is the players turn for the current game of the client with the specified id
   // static final turn = Provider.autoDispose<bool>((ref) {
-  //   final pID = ref.watch(playerID);
+  //   final pID = ref.watch(playerIDProvider);
   //   final _ = ref.watch(code); // Invalidate on change of gameCode
   //   final currentPlayer = ref.watch(game).asData?.value.currentPlayer?.id;
   //   // Null indicates that all players can go simultaneously
   //   return currentPlayer == null || currentPlayer == pID;
-  // }, name: 'GameTurn', dependencies: [playerID, code, game]);
+  // }, name: 'GameTurn', dependencies: [playerIDProvider, code, game]);
 
   /// Provides the way to configure the game for starting
   static final config = StateProvider<GameConfig>(
@@ -147,25 +147,13 @@ class GameProviders {
     dependencies: [game, playerIDProvider],
   );
 
-  static final gameConnect = FutureProvider.autoDispose<void>(
-    (ref) => ref.read(gameService).connect(),
-    name: 'GameConnect',
-    dependencies: [gameService],
-  );
-
-  static final gameDisconnect = FutureProvider.autoDispose<void>(
-    (ref) => ref.read(gameService).disconnect(),
-    name: 'GameDisconnect',
-    dependencies: [gameService],
-  );
-
   static final createGame = FutureProvider.autoDispose<String>(
     (ref) async {
       final c = await ref.read(gameService).createGame(
             ref.read(playerIDProvider),
             ref.read(config),
           );
-      ref.read(code.notifier).state = c;
+      ref.read(gameClientProvider.notifier).setGameCode(c);
       return c;
     },
     name: 'CreateGame',
@@ -173,23 +161,8 @@ class GameProviders {
       gameService,
       playerIDProvider,
       config,
-      code,
+      gameClientProvider,
     ],
-  );
-  static final connected = StateProvider<bool>((ref) => false);
-
-  static final allGames = FutureProvider.autoDispose<IList<GameInfo>>(
-    (ref) => ref.read(gameService).getGames(ref.read(playerIDProvider)),
-    name: 'AllGames',
-    dependencies: [gameService, playerIDProvider],
-  );
-
-  static final deleteGame = FutureProvider.autoDispose<bool>(
-    (ref) => ref
-        .read(gameService)
-        .deleteGame(ref.read(playerIDProvider), ref.read(code)),
-    name: 'DeleteGame',
-    dependencies: [gameService, playerIDProvider, code],
   );
 
   static final joinGame = FutureProvider.autoDispose<String?>(
@@ -197,7 +170,7 @@ class GameProviders {
       final name = await ref.read(roundClient).joinGame(
           ref.read(playerIDProvider), ref.read(code), ref.read(playerName));
       if (name != null) {
-        ref.read(playerName.notifier).state = name;
+        ref.read(gameClientProvider.notifier).setPlayerName(name);
       }
       return name;
     },
@@ -205,7 +178,7 @@ class GameProviders {
     dependencies: [
       roundClient,
       playerIDProvider,
-      code,
+      gameClientProvider,
       playerName,
     ],
   );
@@ -215,7 +188,7 @@ class GameProviders {
         .read(roundClient)
         .startGame(ref.read(playerIDProvider), ref.read(code)),
     name: 'StartGame',
-    dependencies: [roundClient, playerIDProvider, code],
+    dependencies: [roundClient, playerIDProvider, gameClientProvider],
   );
 
   static final exitGame = FutureProvider.autoDispose<bool>(
@@ -223,14 +196,14 @@ class GameProviders {
         .read(roundClient)
         .exitGame(ref.read(playerIDProvider), ref.read(code)),
     name: 'ExitGame',
-    dependencies: [roundClient, playerIDProvider, code],
+    dependencies: [roundClient, playerIDProvider, gameClientProvider],
   );
 
   static final undo = FutureProvider.autoDispose<bool>(
     (ref) =>
         ref.read(roundClient).undo(ref.read(playerIDProvider), ref.read(code)),
     name: 'Undo',
-    dependencies: [roundClient, playerIDProvider, code],
+    dependencies: [roundClient, playerIDProvider, gameClientProvider],
   );
 
   static final newRound = FutureProvider.autoDispose<bool>(
@@ -238,7 +211,7 @@ class GameProviders {
         .read(roundClient)
         .newRound(ref.read(playerIDProvider), ref.read(code)),
     name: 'NewRound',
-    dependencies: [roundClient, playerIDProvider, code],
+    dependencies: [roundClient, playerIDProvider, gameClientProvider],
   );
 
   static final chatMessage = StateProvider<String>(
@@ -250,7 +223,12 @@ class GameProviders {
     (ref) => ref.read(roundClient).sendMessage(
         ref.read(playerIDProvider), ref.read(code), ref.read(chatMessage)),
     name: 'NewRound',
-    dependencies: [roundClient, playerIDProvider, code, chatMessage],
+    dependencies: [
+      roundClient,
+      playerIDProvider,
+      gameClientProvider,
+      chatMessage
+    ],
   );
 
   static final sendEvent = FutureProvider.autoDispose.family<bool, Object>(
@@ -258,7 +236,7 @@ class GameProviders {
         .read(roundClient)
         .sendEvent(ref.read(playerIDProvider), ref.read(code), event),
     name: 'SendEvent',
-    dependencies: [roundClient, playerIDProvider, code],
+    dependencies: [roundClient, playerIDProvider, gameClientProvider],
   );
 
   /// Provides game lobby info in the form of [GameInfo] for the lobby
@@ -268,7 +246,7 @@ class GameProviders {
       yield* c.gameLobby(ref.watch(playerIDProvider), ref.watch(code));
     },
     name: 'Lobby',
-    dependencies: [roundClient, playerIDProvider, code],
+    dependencies: [roundClient, playerIDProvider, gameClientProvider],
   );
 
   /// Provides the game state for the current game of the client with specified id
@@ -290,4 +268,69 @@ class GameProviders {
     name: 'GameError',
     dependencies: [playerIDProvider],
   );
+}
+
+@riverpod
+class GameClient extends _$GameClient {
+  @override
+  GameClientInfo build() {
+    final service = ref.watch(gameService);
+    service.connect().then((_) {
+      state = GameClientInfo.connected(
+          service: service,
+          playerName: state.playerName,
+          config: state.config,
+          games: state.games,
+          code: state.code);
+      fetchOldGames();
+      ref.listen(singleConfig, (_, value) {
+        setGameConfig(value);
+      });
+      ref.onDispose(service.disconnect);
+    });
+    return const GameClientInfo.connecting();
+  }
+
+  T service<T>(T Function(GameClientInfoConnected) conn) => state.map(
+        connecting: (_) => throw Exception('Connecting'),
+        connected: conn,
+      );
+
+  void setGameCode(GameCode code) =>
+      service((c) => state = c.copyWith(code: code));
+  void setPlayerName(PlayerName playerName) =>
+      service((c) => state = c.copyWith(playerName: playerName));
+  void setGameConfig(GameConfig config) =>
+      service((c) => state = c.copyWith(config: config));
+  void fetchOldGames() {
+    service((c) async {
+      state = c.copyWith(
+          games: await c.service.getGames(ref.read(playerIDProvider)));
+    });
+  }
+
+  void deleteGame(GameCode code) {
+    service((c) async {
+      await c.service.deleteGame(ref.read(playerIDProvider), code);
+      state = c.copyWith(code: null, games: null);
+      fetchOldGames();
+    });
+  }
+}
+
+@freezed
+class GameClientInfo with _$GameClientInfo {
+  const factory GameClientInfo.connecting({
+    String? code,
+    PlayerName? playerName,
+    GameConfig? config,
+    IList<GameInfo>? games,
+  }) = GameClientInfoConnecting;
+  const factory GameClientInfo.connected({
+    required GameService service,
+    String? code,
+    PlayerName? playerName,
+    GameConfig? config,
+    IList<GameInfo>? games,
+  }) = GameClientInfoConnected;
 }
