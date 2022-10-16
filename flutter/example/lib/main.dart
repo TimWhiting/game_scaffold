@@ -13,8 +13,8 @@ void main() {
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
   runApp(ProviderScope(
     overrides: [
-      GameProviders.clientType
-          .overrideWithProvider(StateProvider((ref) => OnDeviceClient)),
+      serviceType
+          .overrideWithProvider(StateProvider((ref) => OnDeviceService)),
     ],
     child: const TicTacToeApp(),
   ));
@@ -40,14 +40,14 @@ class TicTacToeWidget extends StatelessWidget {
         body: Row(children: [
           Expanded(
             child: ProviderScope(
-              overrides: [GameProviders.playerID.overrideWithValue('0')],
+              overrides: [playerIDProvider.overrideWithValue('0')],
               child: const Player(),
             ),
           ),
           Container(width: 10, color: Colors.black),
           Expanded(
             child: ProviderScope(
-              overrides: [GameProviders.playerID.overrideWithValue('1')],
+              overrides: [playerIDProvider.overrideWithValue('1')],
               child: const Player(),
             ),
           ),
@@ -71,7 +71,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerID = ref.watch(GameProviders.playerID);
+    final playerID = ref.watch(playerIDProvider);
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
     final allGames = ref.watch(GameProviders.allGames);
 
@@ -160,7 +160,7 @@ class GameWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(GameProviders.game);
     final gameStatus = ref.watch(GameProviders.status);
-    final playerID = ref.watch(GameProviders.playerID);
+    final playerID = ref.watch(playerIDProvider);
     ref.listen<AsyncValue<GameError>>(GameProviders.error, (prevError, error) {
       if (error != prevError) {
         showDialog(

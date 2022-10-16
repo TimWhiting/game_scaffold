@@ -16,9 +16,8 @@ void main() {
   registerTicTacToe();
   runApp(ProviderScope(
     overrides: [
-      GameProviders.clientType
-          .overrideWithProvider(StateProvider((ref) => IOClient)),
-      GameProviders.remoteUri.overrideWithProvider(StateProvider(
+      serviceType.overrideWithProvider(StateProvider((ref) => IOService)),
+      remoteUriProvider.overrideWithProvider(StateProvider(
           (ref) => Uri.parse('http://localhost:$defaultGamePort'))),
     ],
     child: const TicTacToeApp(),

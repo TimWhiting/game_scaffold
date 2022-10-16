@@ -4,7 +4,7 @@ import '../../../server.dart';
 
 /// Location that corresponds to running the game on-device
 // ignore: constant_identifier_names
-const OnDeviceClient = 'on-device';
+const OnDeviceService = 'on-device';
 
 /// An implementation of a [RoundService] for a local game on device with no server connection
 ///
@@ -122,11 +122,11 @@ class OnDeviceRoundService extends RoundService {
   }
 }
 
-final onDeviceGameClient = Provider<RoundService>((ref) {
+final onDeviceRoundService = Provider<RoundService>((ref) {
   final client = OnDeviceRoundService();
   ref.onDispose(client.dispose);
   return client;
-}, dependencies: [GameProviders.playerID]);
+}, dependencies: [playerIDProvider]);
 
 /// An on device implementation of [GameService]
 ///
@@ -190,7 +190,7 @@ class OnDeviceGameService extends GameService {
   }
 }
 
-final onDeviceGameServerClient = Provider<GameService>(
+final onDeviceGameService = Provider<GameService>(
   (ref) {
     final client = OnDeviceGameService();
     ref.onDispose(client.dispose);
@@ -203,7 +203,7 @@ final onDeviceGameServerClient = Provider<GameService>(
   dependencies: [GameProviders.connected],
 );
 
-/// Keeps track of some metadata about a game for an [OnDeviceClient] game
+/// Keeps track of some metadata about a game for an [OnDeviceService] game
 class LocalGame {
   LocalGame(this.gameCode, this.creator, this.container);
   final GameCode gameCode;

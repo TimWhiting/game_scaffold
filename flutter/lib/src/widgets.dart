@@ -41,7 +41,7 @@ class MultiPlayerWidget extends HookConsumerWidget {
     final currentApp = useState(0);
     final sideBySide = useState(isDesktop);
     final ipAddress =
-        useTextEditingController(text: '${ref.watch(GameProviders.remoteUri)}');
+        useTextEditingController(text: '${ref.watch(remoteUriProvider)}');
     if (multiplayerTest) {
       return Scaffold(
         body: Column(
@@ -123,23 +123,21 @@ class MultiPlayerWidget extends HookConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const SizedBox(width: 20),
-                          DropdownButton<ClientType>(
-                            value: ref.watch(GameProviders.clientType),
+                          DropdownButton<ServiceType>(
+                            value: ref.watch(serviceType),
                             items: [
                               for (final backendType
-                                  in ref.watch(GameProviders.allClientTypes))
-                                DropdownMenuItem<ClientType>(
+                                  in ref.watch(allServiceTypes))
+                                DropdownMenuItem<ServiceType>(
                                   value: backendType,
                                   child: Text(backendType),
                                 ),
                             ],
-                            onChanged: (v) => ref
-                                .read(GameProviders.clientType.notifier)
-                                .state = v!,
+                            onChanged: (v) =>
+                                ref.read(serviceType.notifier).state = v!,
                           ),
                           const SizedBox(width: 20),
-                          if (ref.watch(GameProviders.clientType) ==
-                              IOClient) ...[
+                          if (ref.watch(serviceType) == IOService) ...[
                             const SizedBox(width: 20),
                             SizedBox(
                               width: 200,
@@ -153,9 +151,8 @@ class MultiPlayerWidget extends HookConsumerWidget {
                                   // TODO: Use a formatter to limit what someone can type in the field
                                   final uri = Uri.tryParse(value);
                                   if (uri != null) {
-                                    ref
-                                        .read(GameProviders.remoteUri.notifier)
-                                        .state = uri;
+                                    ref.read(remoteUriProvider.notifier).state =
+                                        uri;
                                   }
                                 },
                               ),
@@ -222,7 +219,7 @@ class GameNavigator extends HookConsumerWidget {
 
     final pages = {'disconnected': disconnected};
     navigationLogger.info(
-        'PlayerID: ${ref.read(GameProviders.playerID)} gameStatus: $gameStatus');
+        'PlayerID: ${ref.read(playerIDProvider)} gameStatus: $gameStatus');
 
     if (conn) {
       pages['connected'] = connected;
@@ -260,7 +257,7 @@ class GameNavigator extends HookConsumerWidget {
           route.didPop(null);
           return true;
         } else if (status == 'connected') {
-          ref.read(GameProviders.gameClient).disconnect();
+          ref.read(gameService).disconnect();
           return true;
         }
         return false;

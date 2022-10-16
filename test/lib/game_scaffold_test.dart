@@ -23,18 +23,17 @@ void testGame<T extends Object, E extends Object>(
     final ref = <PlayerID, ProviderContainer>{};
     final sub = <PlayerID, ProviderSubscription>{};
 
-    root.read(GameProviders.clientType.notifier).state = OnDeviceClient;
+    root.read(serviceType.notifier).state = OnDeviceService;
 
     for (final p in players) {
       ref[p.id] = ProviderContainer(
-          parent: root,
-          overrides: [GameProviders.playerID.overrideWithValue(p.id)]);
+          parent: root, overrides: [playerIDProvider.overrideWithValue(p.id)]);
     }
     ref[players.first.id]!.read(GameProviders.config.notifier).state = config;
     final code =
         await ref[players.first.id]!.read(GameProviders.createGame.future);
     for (final p in players) {
-      sub[p.id] = ref[p.id]!.listen(GameProviders.gameClient, (_, __) {});
+      sub[p.id] = ref[p.id]!.listen(gameService, (_, __) {});
       ref[p.id]!.read(GameProviders.code.notifier).state = code;
       await ref[p.id]!.read(GameProviders.joinGame.future);
     }
@@ -51,9 +50,7 @@ void testGame<T extends Object, E extends Object>(
       ref[s]!.dispose();
     }
     tester.dispose();
-    await root
-        .read(GameProviders.gameClient)
-        .deleteGame(players.first.id, code);
+    await root.read(gameService).deleteGame(players.first.id, code);
   });
 }
 

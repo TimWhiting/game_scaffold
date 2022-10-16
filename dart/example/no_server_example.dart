@@ -11,13 +11,13 @@ Future<void> main(List<String> arguments) async {
   final rootProvider = ProviderContainer();
   final p1Ref = ProviderContainer(
     parent: rootProvider,
-    overrides: [GameProviders.playerID.overrideWithValue('0')],
+    overrides: [playerIDProvider.overrideWithValue('0')],
   );
   final p2Ref = ProviderContainer(
     parent: rootProvider,
-    overrides: [GameProviders.playerID.overrideWithValue('1')],
+    overrides: [playerIDProvider.overrideWithValue('1')],
   );
-  rootProvider.read(GameProviders.clientType.notifier).state = OnDeviceClient;
+  rootProvider.read(serviceType.notifier).state = OnDeviceService;
   const config = GameConfig(
     adminID: '0',
     customNames: false,
@@ -97,7 +97,7 @@ Future<void> loop(
 
   final event = TicTacToeGameEvent(
       player: player, location: location[0]! * 3 + location[1]!);
-  playerContainers[player]!.refresh(GameProviders.sendEvent(event));
+  playerContainers[player]!.invalidate(GameProviders.sendEvent(event));
   await playerContainers[player]!.read(GameProviders.sendEvent(event).future);
 
   await Future.delayed(const Duration(milliseconds: 100));

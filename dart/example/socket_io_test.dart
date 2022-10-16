@@ -13,12 +13,12 @@ Future<void> main() async {
     rootProvider = ProviderContainer();
     p1Game = ProviderContainer(
       parent: rootProvider,
-      overrides: [GameProviders.playerID.overrideWithValue('1')],
+      overrides: [playerIDProvider.overrideWithValue('1')],
     );
   });
   test('io', () async {
-    rootProvider.read(GameProviders.clientType.notifier).state = IOClient;
-    rootProvider.read(GameProviders.remoteUri.notifier).state =
+    rootProvider.read(serviceType.notifier).state = IOService;
+    rootProvider.read(remoteUriProvider.notifier).state =
         Uri.parse('http://localhost:$defaultGamePort');
 
     expect(p1Game.read(GameProviders.status), null);

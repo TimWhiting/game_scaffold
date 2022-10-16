@@ -42,12 +42,11 @@ Future<void> test(
   final root = ProviderContainer();
   final readers = Readers({
     P1: ProviderContainer(
-        parent: root,
-        overrides: [GameProviders.playerID.overrideWithValue(P1)]),
+        parent: root, overrides: [playerIDProvider.overrideWithValue(P1)]),
     P2: ProviderContainer(
-        parent: root, overrides: [GameProviders.playerID.overrideWithValue(P2)])
+        parent: root, overrides: [playerIDProvider.overrideWithValue(P2)])
   });
-  root.read(GameProviders.remoteUri.notifier).state =
+  root.read(remoteUriProvider.notifier).state =
       Uri.parse('http://127.0.0.1:$defaultGamePort');
   const config = GameConfig(adminID: P1, gameType: 'tictactoe');
   readers.gameFor(P1).read(GameProviders.config.notifier).state = config;

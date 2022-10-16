@@ -3,7 +3,7 @@ import 'package:logging/logging.dart';
 import '../../core.dart';
 import '../core.dart';
 
-typedef ClientType = String;
+typedef ServiceType = String;
 
 typedef GameAddress = Uri;
 

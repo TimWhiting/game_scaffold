@@ -8,7 +8,7 @@ import '../../../game_scaffold_dart.dart';
 
 /// Location that corresponds to using an io-server for the backend
 // ignore: constant_identifier_names
-const IOClient = 'io-server';
+const IOService = 'io-server';
 
 /// The socket IO implementation of [RoundService]
 class IORoundClient extends RoundService {
@@ -130,16 +130,16 @@ class IORoundClient extends RoundService {
   }
 }
 
-final socketIOGameClient = Provider<RoundService>(
+final socketIORoundService = Provider<RoundService>(
   (ref) {
     final client = IORoundClient(
       code: ref.read(GameProviders.code),
-      address: ref.watch(GameProviders.remoteUri),
+      address: ref.watch(remoteUriProvider),
       ref: ref,
     );
     ref.onDispose(() {
       client.exitGame(
-        ref.read(GameProviders.playerID),
+        ref.read(playerIDProvider),
         ref.read(GameProviders.code),
       );
       client.dispose();
@@ -148,9 +148,9 @@ final socketIOGameClient = Provider<RoundService>(
   },
   name: 'socketIOGameClient',
   dependencies: [
-    GameProviders.remoteUri,
+    remoteUriProvider,
     GameProviders.code,
-    GameProviders.playerID,
+    playerIDProvider,
   ],
 );
 
@@ -228,17 +228,17 @@ class IOGameClient extends GameService {
   }
 }
 
-final socketIOGameServerClient = Provider<GameService>(
+final socketIOGameService = Provider<GameService>(
   (ref) {
     final client = IOGameClient(
-      address: ref.watch(GameProviders.remoteUri),
+      address: ref.watch(remoteUriProvider),
       ref: ref,
     );
     ref.onDispose(client.dispose);
     return client;
   },
   name: 'socketIOGameServerClient',
-  dependencies: [GameProviders.remoteUri, GameProviders.connected],
+  dependencies: [remoteUriProvider, GameProviders.connected],
 );
 
 /// Options for a socket io server
