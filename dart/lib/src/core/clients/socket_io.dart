@@ -149,7 +149,7 @@ final socketIORoundService = Provider<RoundService>(
   name: 'socketIOGameClient',
   dependencies: [
     remoteUriProvider,
-    GameProviders.code,
+    gameClientProvider,
     playerIDProvider,
   ],
 );
@@ -200,22 +200,26 @@ class IOGameClient extends GameService {
     disconnect();
     logger.info('Dispose');
     socket.dispose();
+    _connectionStream.close();
   }
-
+  final _connectionStream = StreamController<bool>.broadcast();
   /// Connects to the backend
   @override
-  Future<void> connect() async {
+  Stream<bool> connect() async* {
     logger.info('Connecting, to $address');
+    
     socket.on(IOChannel.connection.string, (_) {
-      ref.read(GameProviders.connected.notifier).state = true;
+      _connectionStream.add(true);
     });
     socket.on(IOChannel.disconnect.string, (_) {
-      ref.read(GameProviders.connected.notifier).state = false;
+      _connectionStream.add(false);
     });
     if (socket.connected) {
-      ref.read(GameProviders.connected.notifier).state = true;
+      _connectionStream.add(true);
     }
+  
     logger.info('Created ServerClient');
+    yield* _connectionStream.stream;
   }
 
   /// Disconnect from the backend
@@ -223,8 +227,8 @@ class IOGameClient extends GameService {
   /// Default implementation does nothing
   @override
   Future<void> disconnect() async {
+    _connectionStream.add( false);
     socket.dispose();
-    ref.read(GameProviders.connected.notifier).state = false;
   }
 }
 
@@ -238,7 +242,7 @@ final socketIOGameService = Provider<GameService>(
     return client;
   },
   name: 'socketIOGameServerClient',
-  dependencies: [remoteUriProvider, GameProviders.connected],
+  dependencies: [remoteUriProvider],
 );
 
 /// Options for a socket io server

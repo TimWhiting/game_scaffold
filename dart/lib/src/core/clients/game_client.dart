@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:logging/logging.dart';
 
 import '../../core.dart';
@@ -29,15 +31,24 @@ abstract class GameService {
   Future<IList<GameInfo>> getGames(PlayerID playerID);
 
   /// Disposes of the [GameService] (i.e. disconnects from the server)
-  void dispose();
+  void dispose() {
+    sc.close();
+  }
 
   /// Connects to the backend
   ///
   /// Default implementation does nothing
-  Future<void> connect() async {}
+  Stream<bool> connect() async* {
+    yield true;
+    yield* sc.stream;
+  }
+
+  StreamController<bool> sc = StreamController<bool>.broadcast();
 
   /// Disconnect from the backend
   ///
   /// Default implementation does nothing
-  Future<void> disconnect() async {}
+  Future<void> disconnect() async {
+    sc.add(false);
+  }
 }

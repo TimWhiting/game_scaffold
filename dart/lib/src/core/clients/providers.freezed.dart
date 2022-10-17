@@ -16,60 +16,11 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$GameClientInfo {
+  GameService? get service => throw _privateConstructorUsedError;
   String? get code => throw _privateConstructorUsedError;
   String? get playerName => throw _privateConstructorUsedError;
   GameConfig? get config => throw _privateConstructorUsedError;
   IList<GameInfo>? get games => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String? code, String? playerName,
-            GameConfig? config, IList<GameInfo>? games)
-        connecting,
-    required TResult Function(GameService service, String? code,
-            String? playerName, GameConfig? config, IList<GameInfo>? games)
-        connected,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? code, String? playerName, GameConfig? config,
-            IList<GameInfo>? games)?
-        connecting,
-    TResult Function(GameService service, String? code, String? playerName,
-            GameConfig? config, IList<GameInfo>? games)?
-        connected,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? code, String? playerName, GameConfig? config,
-            IList<GameInfo>? games)?
-        connecting,
-    TResult Function(GameService service, String? code, String? playerName,
-            GameConfig? config, IList<GameInfo>? games)?
-        connected,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GameClientInfoConnecting value) connecting,
-    required TResult Function(GameClientInfoConnected value) connected,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(GameClientInfoConnecting value)? connecting,
-    TResult Function(GameClientInfoConnected value)? connected,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GameClientInfoConnecting value)? connecting,
-    TResult Function(GameClientInfoConnected value)? connected,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $GameClientInfoCopyWith<GameClientInfo> get copyWith =>
@@ -82,7 +33,8 @@ abstract class $GameClientInfoCopyWith<$Res> {
           GameClientInfo value, $Res Function(GameClientInfo) then) =
       _$GameClientInfoCopyWithImpl<$Res>;
   $Res call(
-      {String? code,
+      {GameService? service,
+      String? code,
       String? playerName,
       GameConfig? config,
       IList<GameInfo>? games});
@@ -101,12 +53,17 @@ class _$GameClientInfoCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? service = freezed,
     Object? code = freezed,
     Object? playerName = freezed,
     Object? config = freezed,
     Object? games = freezed,
   }) {
     return _then(_value.copyWith(
+      service: service == freezed
+          ? _value.service
+          : service // ignore: cast_nullable_to_non_nullable
+              as GameService?,
       code: code == freezed
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -139,214 +96,14 @@ class _$GameClientInfoCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$$GameClientInfoConnectingCopyWith<$Res>
+abstract class _$$_GameClientInfoCopyWith<$Res>
     implements $GameClientInfoCopyWith<$Res> {
-  factory _$$GameClientInfoConnectingCopyWith(_$GameClientInfoConnecting value,
-          $Res Function(_$GameClientInfoConnecting) then) =
-      __$$GameClientInfoConnectingCopyWithImpl<$Res>;
+  factory _$$_GameClientInfoCopyWith(
+          _$_GameClientInfo value, $Res Function(_$_GameClientInfo) then) =
+      __$$_GameClientInfoCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? code,
-      String? playerName,
-      GameConfig? config,
-      IList<GameInfo>? games});
-
-  @override
-  $GameConfigCopyWith<$Res>? get config;
-}
-
-/// @nodoc
-class __$$GameClientInfoConnectingCopyWithImpl<$Res>
-    extends _$GameClientInfoCopyWithImpl<$Res>
-    implements _$$GameClientInfoConnectingCopyWith<$Res> {
-  __$$GameClientInfoConnectingCopyWithImpl(_$GameClientInfoConnecting _value,
-      $Res Function(_$GameClientInfoConnecting) _then)
-      : super(_value, (v) => _then(v as _$GameClientInfoConnecting));
-
-  @override
-  _$GameClientInfoConnecting get _value =>
-      super._value as _$GameClientInfoConnecting;
-
-  @override
-  $Res call({
-    Object? code = freezed,
-    Object? playerName = freezed,
-    Object? config = freezed,
-    Object? games = freezed,
-  }) {
-    return _then(_$GameClientInfoConnecting(
-      code: code == freezed
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String?,
-      playerName: playerName == freezed
-          ? _value.playerName
-          : playerName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      config: config == freezed
-          ? _value.config
-          : config // ignore: cast_nullable_to_non_nullable
-              as GameConfig?,
-      games: games == freezed
-          ? _value.games
-          : games // ignore: cast_nullable_to_non_nullable
-              as IList<GameInfo>?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$GameClientInfoConnecting implements GameClientInfoConnecting {
-  const _$GameClientInfoConnecting(
-      {this.code, this.playerName, this.config, this.games});
-
-  @override
-  final String? code;
-  @override
-  final String? playerName;
-  @override
-  final GameConfig? config;
-  @override
-  final IList<GameInfo>? games;
-
-  @override
-  String toString() {
-    return 'GameClientInfo.connecting(code: $code, playerName: $playerName, config: $config, games: $games)';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GameClientInfoConnecting &&
-            const DeepCollectionEquality().equals(other.code, code) &&
-            const DeepCollectionEquality()
-                .equals(other.playerName, playerName) &&
-            const DeepCollectionEquality().equals(other.config, config) &&
-            const DeepCollectionEquality().equals(other.games, games));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(code),
-      const DeepCollectionEquality().hash(playerName),
-      const DeepCollectionEquality().hash(config),
-      const DeepCollectionEquality().hash(games));
-
-  @JsonKey(ignore: true)
-  @override
-  _$$GameClientInfoConnectingCopyWith<_$GameClientInfoConnecting>
-      get copyWith =>
-          __$$GameClientInfoConnectingCopyWithImpl<_$GameClientInfoConnecting>(
-              this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String? code, String? playerName,
-            GameConfig? config, IList<GameInfo>? games)
-        connecting,
-    required TResult Function(GameService service, String? code,
-            String? playerName, GameConfig? config, IList<GameInfo>? games)
-        connected,
-  }) {
-    return connecting(code, playerName, config, games);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? code, String? playerName, GameConfig? config,
-            IList<GameInfo>? games)?
-        connecting,
-    TResult Function(GameService service, String? code, String? playerName,
-            GameConfig? config, IList<GameInfo>? games)?
-        connected,
-  }) {
-    return connecting?.call(code, playerName, config, games);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? code, String? playerName, GameConfig? config,
-            IList<GameInfo>? games)?
-        connecting,
-    TResult Function(GameService service, String? code, String? playerName,
-            GameConfig? config, IList<GameInfo>? games)?
-        connected,
-    required TResult orElse(),
-  }) {
-    if (connecting != null) {
-      return connecting(code, playerName, config, games);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GameClientInfoConnecting value) connecting,
-    required TResult Function(GameClientInfoConnected value) connected,
-  }) {
-    return connecting(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(GameClientInfoConnecting value)? connecting,
-    TResult Function(GameClientInfoConnected value)? connected,
-  }) {
-    return connecting?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GameClientInfoConnecting value)? connecting,
-    TResult Function(GameClientInfoConnected value)? connected,
-    required TResult orElse(),
-  }) {
-    if (connecting != null) {
-      return connecting(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class GameClientInfoConnecting implements GameClientInfo {
-  const factory GameClientInfoConnecting(
-      {final String? code,
-      final String? playerName,
-      final GameConfig? config,
-      final IList<GameInfo>? games}) = _$GameClientInfoConnecting;
-
-  @override
-  String? get code;
-  @override
-  String? get playerName;
-  @override
-  GameConfig? get config;
-  @override
-  IList<GameInfo>? get games;
-  @override
-  @JsonKey(ignore: true)
-  _$$GameClientInfoConnectingCopyWith<_$GameClientInfoConnecting>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$GameClientInfoConnectedCopyWith<$Res>
-    implements $GameClientInfoCopyWith<$Res> {
-  factory _$$GameClientInfoConnectedCopyWith(_$GameClientInfoConnected value,
-          $Res Function(_$GameClientInfoConnected) then) =
-      __$$GameClientInfoConnectedCopyWithImpl<$Res>;
-  @override
-  $Res call(
-      {GameService service,
+      {GameService? service,
       String? code,
       String? playerName,
       GameConfig? config,
@@ -357,16 +114,15 @@ abstract class _$$GameClientInfoConnectedCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$GameClientInfoConnectedCopyWithImpl<$Res>
+class __$$_GameClientInfoCopyWithImpl<$Res>
     extends _$GameClientInfoCopyWithImpl<$Res>
-    implements _$$GameClientInfoConnectedCopyWith<$Res> {
-  __$$GameClientInfoConnectedCopyWithImpl(_$GameClientInfoConnected _value,
-      $Res Function(_$GameClientInfoConnected) _then)
-      : super(_value, (v) => _then(v as _$GameClientInfoConnected));
+    implements _$$_GameClientInfoCopyWith<$Res> {
+  __$$_GameClientInfoCopyWithImpl(
+      _$_GameClientInfo _value, $Res Function(_$_GameClientInfo) _then)
+      : super(_value, (v) => _then(v as _$_GameClientInfo));
 
   @override
-  _$GameClientInfoConnected get _value =>
-      super._value as _$GameClientInfoConnected;
+  _$_GameClientInfo get _value => super._value as _$_GameClientInfo;
 
   @override
   $Res call({
@@ -376,11 +132,11 @@ class __$$GameClientInfoConnectedCopyWithImpl<$Res>
     Object? config = freezed,
     Object? games = freezed,
   }) {
-    return _then(_$GameClientInfoConnected(
+    return _then(_$_GameClientInfo(
       service: service == freezed
           ? _value.service
           : service // ignore: cast_nullable_to_non_nullable
-              as GameService,
+              as GameService?,
       code: code == freezed
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -403,16 +159,13 @@ class __$$GameClientInfoConnectedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GameClientInfoConnected implements GameClientInfoConnected {
-  const _$GameClientInfoConnected(
-      {required this.service,
-      this.code,
-      this.playerName,
-      this.config,
-      this.games});
+class _$_GameClientInfo extends _GameClientInfo {
+  const _$_GameClientInfo(
+      {this.service, this.code, this.playerName, this.config, this.games})
+      : super._();
 
   @override
-  final GameService service;
+  final GameService? service;
   @override
   final String? code;
   @override
@@ -424,14 +177,14 @@ class _$GameClientInfoConnected implements GameClientInfoConnected {
 
   @override
   String toString() {
-    return 'GameClientInfo.connected(service: $service, code: $code, playerName: $playerName, config: $config, games: $games)';
+    return 'GameClientInfo(service: $service, code: $code, playerName: $playerName, config: $config, games: $games)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GameClientInfoConnected &&
+            other is _$_GameClientInfo &&
             const DeepCollectionEquality().equals(other.service, service) &&
             const DeepCollectionEquality().equals(other.code, code) &&
             const DeepCollectionEquality()
@@ -451,94 +204,21 @@ class _$GameClientInfoConnected implements GameClientInfoConnected {
 
   @JsonKey(ignore: true)
   @override
-  _$$GameClientInfoConnectedCopyWith<_$GameClientInfoConnected> get copyWith =>
-      __$$GameClientInfoConnectedCopyWithImpl<_$GameClientInfoConnected>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String? code, String? playerName,
-            GameConfig? config, IList<GameInfo>? games)
-        connecting,
-    required TResult Function(GameService service, String? code,
-            String? playerName, GameConfig? config, IList<GameInfo>? games)
-        connected,
-  }) {
-    return connected(service, code, playerName, config, games);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String? code, String? playerName, GameConfig? config,
-            IList<GameInfo>? games)?
-        connecting,
-    TResult Function(GameService service, String? code, String? playerName,
-            GameConfig? config, IList<GameInfo>? games)?
-        connected,
-  }) {
-    return connected?.call(service, code, playerName, config, games);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String? code, String? playerName, GameConfig? config,
-            IList<GameInfo>? games)?
-        connecting,
-    TResult Function(GameService service, String? code, String? playerName,
-            GameConfig? config, IList<GameInfo>? games)?
-        connected,
-    required TResult orElse(),
-  }) {
-    if (connected != null) {
-      return connected(service, code, playerName, config, games);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GameClientInfoConnecting value) connecting,
-    required TResult Function(GameClientInfoConnected value) connected,
-  }) {
-    return connected(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(GameClientInfoConnecting value)? connecting,
-    TResult Function(GameClientInfoConnected value)? connected,
-  }) {
-    return connected?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GameClientInfoConnecting value)? connecting,
-    TResult Function(GameClientInfoConnected value)? connected,
-    required TResult orElse(),
-  }) {
-    if (connected != null) {
-      return connected(this);
-    }
-    return orElse();
-  }
+  _$$_GameClientInfoCopyWith<_$_GameClientInfo> get copyWith =>
+      __$$_GameClientInfoCopyWithImpl<_$_GameClientInfo>(this, _$identity);
 }
 
-abstract class GameClientInfoConnected implements GameClientInfo {
-  const factory GameClientInfoConnected(
-      {required final GameService service,
+abstract class _GameClientInfo extends GameClientInfo {
+  const factory _GameClientInfo(
+      {final GameService? service,
       final String? code,
       final String? playerName,
       final GameConfig? config,
-      final IList<GameInfo>? games}) = _$GameClientInfoConnected;
+      final IList<GameInfo>? games}) = _$_GameClientInfo;
+  const _GameClientInfo._() : super._();
 
-  GameService get service;
+  @override
+  GameService? get service;
   @override
   String? get code;
   @override
@@ -549,6 +229,171 @@ abstract class GameClientInfoConnected implements GameClientInfo {
   IList<GameInfo>? get games;
   @override
   @JsonKey(ignore: true)
-  _$$GameClientInfoConnectedCopyWith<_$GameClientInfoConnected> get copyWith =>
+  _$$_GameClientInfoCopyWith<_$_GameClientInfo> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$RoundInfo {
+  Lobby? get lobby => throw _privateConstructorUsedError;
+  GameState<Object>? get game => throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $RoundInfoCopyWith<RoundInfo> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $RoundInfoCopyWith<$Res> {
+  factory $RoundInfoCopyWith(RoundInfo value, $Res Function(RoundInfo) then) =
+      _$RoundInfoCopyWithImpl<$Res>;
+  $Res call({Lobby? lobby, GameState<Object>? game, String? error});
+
+  $LobbyCopyWith<$Res>? get lobby;
+}
+
+/// @nodoc
+class _$RoundInfoCopyWithImpl<$Res> implements $RoundInfoCopyWith<$Res> {
+  _$RoundInfoCopyWithImpl(this._value, this._then);
+
+  final RoundInfo _value;
+  // ignore: unused_field
+  final $Res Function(RoundInfo) _then;
+
+  @override
+  $Res call({
+    Object? lobby = freezed,
+    Object? game = freezed,
+    Object? error = freezed,
+  }) {
+    return _then(_value.copyWith(
+      lobby: lobby == freezed
+          ? _value.lobby
+          : lobby // ignore: cast_nullable_to_non_nullable
+              as Lobby?,
+      game: game == freezed
+          ? _value.game
+          : game // ignore: cast_nullable_to_non_nullable
+              as GameState<Object>?,
+      error: error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+
+  @override
+  $LobbyCopyWith<$Res>? get lobby {
+    if (_value.lobby == null) {
+      return null;
+    }
+
+    return $LobbyCopyWith<$Res>(_value.lobby!, (value) {
+      return _then(_value.copyWith(lobby: value));
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$_RoundInfoCopyWith<$Res> implements $RoundInfoCopyWith<$Res> {
+  factory _$$_RoundInfoCopyWith(
+          _$_RoundInfo value, $Res Function(_$_RoundInfo) then) =
+      __$$_RoundInfoCopyWithImpl<$Res>;
+  @override
+  $Res call({Lobby? lobby, GameState<Object>? game, String? error});
+
+  @override
+  $LobbyCopyWith<$Res>? get lobby;
+}
+
+/// @nodoc
+class __$$_RoundInfoCopyWithImpl<$Res> extends _$RoundInfoCopyWithImpl<$Res>
+    implements _$$_RoundInfoCopyWith<$Res> {
+  __$$_RoundInfoCopyWithImpl(
+      _$_RoundInfo _value, $Res Function(_$_RoundInfo) _then)
+      : super(_value, (v) => _then(v as _$_RoundInfo));
+
+  @override
+  _$_RoundInfo get _value => super._value as _$_RoundInfo;
+
+  @override
+  $Res call({
+    Object? lobby = freezed,
+    Object? game = freezed,
+    Object? error = freezed,
+  }) {
+    return _then(_$_RoundInfo(
+      lobby: lobby == freezed
+          ? _value.lobby
+          : lobby // ignore: cast_nullable_to_non_nullable
+              as Lobby?,
+      game: game == freezed
+          ? _value.game
+          : game // ignore: cast_nullable_to_non_nullable
+              as GameState<Object>?,
+      error: error == freezed
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_RoundInfo implements _RoundInfo {
+  const _$_RoundInfo({this.lobby, this.game, this.error});
+
+  @override
+  final Lobby? lobby;
+  @override
+  final GameState<Object>? game;
+  @override
+  final String? error;
+
+  @override
+  String toString() {
+    return 'RoundInfo(lobby: $lobby, game: $game, error: $error)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_RoundInfo &&
+            const DeepCollectionEquality().equals(other.lobby, lobby) &&
+            const DeepCollectionEquality().equals(other.game, game) &&
+            const DeepCollectionEquality().equals(other.error, error));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(lobby),
+      const DeepCollectionEquality().hash(game),
+      const DeepCollectionEquality().hash(error));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_RoundInfoCopyWith<_$_RoundInfo> get copyWith =>
+      __$$_RoundInfoCopyWithImpl<_$_RoundInfo>(this, _$identity);
+}
+
+abstract class _RoundInfo implements RoundInfo {
+  const factory _RoundInfo(
+      {final Lobby? lobby,
+      final GameState<Object>? game,
+      final String? error}) = _$_RoundInfo;
+
+  @override
+  Lobby? get lobby;
+  @override
+  GameState<Object>? get game;
+  @override
+  String? get error;
+  @override
+  @JsonKey(ignore: true)
+  _$$_RoundInfoCopyWith<_$_RoundInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }

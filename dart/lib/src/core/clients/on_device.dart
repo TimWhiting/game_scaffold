@@ -194,13 +194,10 @@ final onDeviceGameService = Provider<GameService>(
   (ref) {
     final client = OnDeviceGameService();
     ref.onDispose(client.dispose);
-    scheduleMicrotask(() {
-      ref.read(GameProviders.connected.notifier).state = true;
-    });
     return client;
   },
   name: 'onDeviceGameServerClient',
-  dependencies: [GameProviders.connected],
+  dependencies: const [],
 );
 
 /// Keeps track of some metadata about a game for an [OnDeviceService] game
