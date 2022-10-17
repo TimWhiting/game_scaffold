@@ -93,11 +93,8 @@ class GameProviders {
   GameProviders._();
 
   /// Provides the player's name
-  static final playerName = Provider<String>(
-    (ref) => '',
-    name: 'PlayerName',
-    dependencies: [playerIDProvider],
-  );
+  static final playerName =
+      gameClientProvider.select((c) => c.playerName ?? '');
 
   /// Provides the game code for each client id
   static final code = gameClientProvider.select((c) => c.code ?? '');
@@ -128,11 +125,8 @@ class GameProviders {
   // }, name: 'GameTurn', dependencies: [playerIDProvider, code, game]);
 
   /// Provides the way to configure the game for starting
-  static final config = StateProvider<GameConfig>(
-    (ref) => ref.watch(singleConfig),
-    name: 'GameConfig',
-    dependencies: [singleConfig, playerIDProvider],
-  );
+  static final config = gameClientProvider
+      .select((c) => c.config ?? const GameConfig(gameType: ''));
 
   /// Provides the game type's name for the game specified by [config]
   static final gameType = Provider.autoDispose<String>(
@@ -160,7 +154,6 @@ class GameProviders {
     dependencies: [
       gameService,
       playerIDProvider,
-      config,
       gameClientProvider,
     ],
   );
@@ -179,7 +172,6 @@ class GameProviders {
       roundClient,
       playerIDProvider,
       gameClientProvider,
-      playerName,
     ],
   );
 
@@ -273,46 +265,53 @@ class GameProviders {
 @riverpod
 class GameClient extends _$GameClient {
   @override
-  GameClientInfo build() {
-    final service = ref.watch(gameService);
-    service.connect().then((_) {
-      state = GameClientInfo.connected(
+  GameClientInfo build(PlayerID multiplayerID) {
+    connect();
+    return const GameClientInfo();
+  }
+
+  void connect() {
+    final service = ref.read(gameService);
+    service.connect().map((conn) {
+      if (conn) {
+        state = GameClientInfo(
           service: service,
           playerName: state.playerName,
           config: state.config,
           games: state.games,
-          code: state.code);
-      fetchOldGames();
-      ref.listen(singleConfig, (_, value) {
-        setGameConfig(value);
-      });
-      ref.onDispose(service.disconnect);
+          code: state.code,
+        );
+        fetchOldGames();
+        ref.listen(singleConfig, (_, value) {
+          setGameConfig(value);
+        });
+        ref.onDispose(service.disconnect);
+      } else {
+        state = state.copyWith(service: null);
+      }
     });
-    return const GameClientInfo.connecting();
   }
 
-  T service<T>(T Function(GameClientInfoConnected) conn) => state.map(
-        connecting: (_) => throw Exception('Connecting'),
-        connected: conn,
-      );
+  T service<T>(T Function(GameService) service) => state.connected
+      ? service(state.service!)
+      : throw Exception('Not connected');
 
-  void setGameCode(GameCode code) =>
-      service((c) => state = c.copyWith(code: code));
+  void setGameCode(GameCode code) => state = state.copyWith(code: code);
   void setPlayerName(PlayerName playerName) =>
-      service((c) => state = c.copyWith(playerName: playerName));
+      state = state.copyWith(playerName: playerName);
   void setGameConfig(GameConfig config) =>
-      service((c) => state = c.copyWith(config: config));
+      state = state.copyWith(config: config);
   void fetchOldGames() {
     service((c) async {
-      state = c.copyWith(
-          games: await c.service.getGames(ref.read(playerIDProvider)));
+      state =
+          state.copyWith(games: await c.getGames(ref.read(playerIDProvider)));
     });
   }
 
   void deleteGame(GameCode code) {
     service((c) async {
-      await c.service.deleteGame(ref.read(playerIDProvider), code);
-      state = c.copyWith(code: null, games: null);
+      await c.deleteGame(ref.read(playerIDProvider), code);
+      state = state.copyWith(code: null, games: null);
       fetchOldGames();
     });
   }
@@ -320,17 +319,29 @@ class GameClient extends _$GameClient {
 
 @freezed
 class GameClientInfo with _$GameClientInfo {
-  const factory GameClientInfo.connecting({
+  const factory GameClientInfo({
+    GameService? service,
     String? code,
     PlayerName? playerName,
     GameConfig? config,
     IList<GameInfo>? games,
-  }) = GameClientInfoConnecting;
-  const factory GameClientInfo.connected({
-    required GameService service,
-    String? code,
-    PlayerName? playerName,
-    GameConfig? config,
-    IList<GameInfo>? games,
-  }) = GameClientInfoConnected;
+  }) = _GameClientInfo;
+  const GameClientInfo._();
+  bool get connected => service != null;
+}
+
+@riverpod
+class RoundClient extends _$RoundClient {
+  @override
+  RoundInfo build(PlayerID multiplayerID) {}
+
+  void clearError() {
+    state = state.copyWith(error: null);
+  }
+}
+
+@freezed
+class RoundInfo with _$RoundInfo {
+  const factory RoundInfo({Lobby? lobby, GameState? game, String? error}) =
+      _RoundInfo;
 }
