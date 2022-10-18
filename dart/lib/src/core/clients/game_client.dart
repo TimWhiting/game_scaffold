@@ -5,8 +5,26 @@ import 'clients.dart';
 part 'game_client.freezed.dart';
 part 'game_client.g.dart';
 
+final gameInfoProvider = Provider.autoDispose<GameClientInfo>(
+  (ref) =>
+      ref.watch(multiplayerGameClientProvider(ref.watch(playerIDProvider))),
+  dependencies: [
+    multiplayerGameClientProvider,
+    playerIDProvider,
+  ],
+);
+
+final gameClientProvider = Provider.autoDispose<MultiplayerGameClient>(
+  (ref) => ref.watch(
+      multiplayerGameClientProvider(ref.watch(playerIDProvider)).notifier),
+  dependencies: [
+    multiplayerGameClientProvider,
+    playerIDProvider,
+  ],
+);
+
 @riverpod
-class GameClient extends _$GameClient {
+class MultiplayerGameClient extends _$MultiplayerGameClient {
   @override
   GameClientInfo build(PlayerID multiplayerID) {
     connect();
@@ -46,23 +64,22 @@ class GameClient extends _$GameClient {
       state = state.copyWith(config: config);
   void fetchOldGames() {
     service((c) async {
-      state =
-          state.copyWith(games: await c.getGames(ref.read(playerIDProvider)));
+      state = state.copyWith(games: await c.getGames(multiplayerID));
     });
   }
 
   Future<GameCode> createGame() async {
-    final code = await service(
-        (c) => c.createGame(ref.read(playerIDProvider), state.config!));
+    final code =
+        await service((c) => c.createGame(multiplayerID, state.config!));
     setGameCode(code);
     return code;
   }
 
-  Future<PlayerName?> joinGame() => service((c) => c.joinGame(
-      ref.read(playerIDProvider), state.code!, state.playerName ?? ''));
+  Future<PlayerName?> joinGame() => service(
+      (c) => c.joinGame(multiplayerID, state.code!, state.playerName ?? ''));
 
   Future<bool> deleteGame(GameCode code) => service((c) async {
-        final result = await c.deleteGame(ref.read(playerIDProvider), code);
+        final result = await c.deleteGame(multiplayerID, code);
         state = state.copyWith(code: null, games: null);
         fetchOldGames();
         return result;

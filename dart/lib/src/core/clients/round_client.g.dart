@@ -29,28 +29,30 @@ class _SystemHash {
   }
 }
 
-String $RoundClientHash() => r'6b008cecd79c59b97a306b794341ef4f34cac246';
+String $MultiplayerRoundClientHash() =>
+    r'a16dd5c4ac3fa4448a11d014cbe5a0231bd8f216';
 
-/// See also [RoundClient].
-class RoundClientProvider
-    extends AutoDisposeNotifierProviderImpl<RoundClient, RoundInfo> {
-  RoundClientProvider(
+/// See also [MultiplayerRoundClient].
+class MultiplayerRoundClientProvider
+    extends AutoDisposeNotifierProviderImpl<MultiplayerRoundClient, RoundInfo> {
+  MultiplayerRoundClientProvider(
     this.multiplayerID,
   ) : super(
-          () => RoundClient()..multiplayerID = multiplayerID,
-          from: roundClientProvider,
-          name: r'roundClientProvider',
+          () => MultiplayerRoundClient()..multiplayerID = multiplayerID,
+          from: multiplayerRoundClientProvider,
+          name: r'multiplayerRoundClientProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : $RoundClientHash,
+                  : $MultiplayerRoundClientHash,
         );
 
   final String multiplayerID;
 
   @override
   bool operator ==(Object other) {
-    return other is RoundClientProvider && other.multiplayerID == multiplayerID;
+    return other is MultiplayerRoundClientProvider &&
+        other.multiplayerID == multiplayerID;
   }
 
   @override
@@ -63,7 +65,7 @@ class RoundClientProvider
 
   @override
   RoundInfo runNotifierBuild(
-    covariant _$RoundClient notifier,
+    covariant _$MultiplayerRoundClient notifier,
   ) {
     return notifier.build(
       multiplayerID,
@@ -71,25 +73,26 @@ class RoundClientProvider
   }
 }
 
-typedef RoundClientRef = AutoDisposeNotifierProviderRef<RoundInfo>;
+typedef MultiplayerRoundClientRef = AutoDisposeNotifierProviderRef<RoundInfo>;
 
-/// See also [RoundClient].
-final roundClientProvider = RoundClientFamily();
+/// See also [MultiplayerRoundClient].
+final multiplayerRoundClientProvider = MultiplayerRoundClientFamily();
 
-class RoundClientFamily extends Family<RoundInfo> {
-  RoundClientFamily();
+class MultiplayerRoundClientFamily extends Family<RoundInfo> {
+  MultiplayerRoundClientFamily();
 
-  RoundClientProvider call(
+  MultiplayerRoundClientProvider call(
     String multiplayerID,
   ) {
-    return RoundClientProvider(
+    return MultiplayerRoundClientProvider(
       multiplayerID,
     );
   }
 
   @override
-  AutoDisposeNotifierProviderImpl<RoundClient, RoundInfo> getProviderOverride(
-    covariant RoundClientProvider provider,
+  AutoDisposeNotifierProviderImpl<MultiplayerRoundClient, RoundInfo>
+      getProviderOverride(
+    covariant MultiplayerRoundClientProvider provider,
   ) {
     return call(
       provider.multiplayerID,
@@ -103,10 +106,11 @@ class RoundClientFamily extends Family<RoundInfo> {
   List<ProviderOrFamily>? get dependencies => null;
 
   @override
-  String? get name => r'roundClientProvider';
+  String? get name => r'multiplayerRoundClientProvider';
 }
 
-abstract class _$RoundClient extends BuildlessAutoDisposeNotifier<RoundInfo> {
+abstract class _$MultiplayerRoundClient
+    extends BuildlessAutoDisposeNotifier<RoundInfo> {
   late final String multiplayerID;
 
   RoundInfo build(

@@ -89,16 +89,14 @@ class GameProviders {
 
   /// Provides the player's name
   static final playerName = Provider.autoDispose(
-    (ref) => ref.watch(gameClientProvider(ref.watch(playerIDProvider))
-        .select((c) => c.playerName ?? '')),
-    dependencies: [playerIDProvider, gameClientProvider],
+    (ref) => ref.watch(gameInfoProvider.select((c) => c.playerName ?? '')),
+    dependencies: [gameInfoProvider],
   );
 
   /// Provides the game code for each client id
   static final code = Provider.autoDispose(
-    (ref) => ref.watch(gameClientProvider(ref.watch(playerIDProvider))
-        .select((c) => c.code ?? '')),
-    dependencies: [playerIDProvider, gameClientProvider],
+    (ref) => ref.watch(gameInfoProvider.select((c) => c.code ?? '')),
+    dependencies: [gameInfoProvider],
   );
 
   /// Provides the game status for the current game of the client with specified id
@@ -128,11 +126,10 @@ class GameProviders {
 
   /// Provides the way to configure the game for starting
   static final config = Provider.autoDispose(
-    (ref) => ref.watch(gameClientProvider(ref.watch(playerIDProvider))
+    (ref) => ref.watch(gameInfoProvider
         .select((c) => c.config ?? const GameConfig(gameType: ''))),
     dependencies: [
-      playerIDProvider,
-      gameClientProvider,
+      gameInfoProvider,
     ],
   );
 

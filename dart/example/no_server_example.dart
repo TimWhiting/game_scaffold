@@ -26,8 +26,8 @@ Future<void> main(List<String> arguments) async {
     maxPlayers: 2,
   );
 
-  final p1Client = p1Ref.listen(gameClientProvider('0').notifier, (_, __) {});
-  final p2Client = p2Ref.listen(gameClientProvider('1').notifier, (_, __) {});
+  final p1Client = p1Ref.listen(gameClientProvider, (_, __) {});
+  final p2Client = p2Ref.listen(gameClientProvider, (_, __) {});
 
   p1Client.read().setGameConfig(config);
   final code = await p1Client.read().createGame();

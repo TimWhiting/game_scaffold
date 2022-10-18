@@ -98,6 +98,7 @@ class GameServer {
   }
 
   GameInfo gameInfo(PlayerID? id) => GameInfo(
+    config: gameConfig,
         status: _started ? GameStatus.started : GameStatus.lobby,
         gameID: _gameID,
         players: _players.map((p) => p.name).toIList(),

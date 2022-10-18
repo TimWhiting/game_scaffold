@@ -8,11 +8,29 @@ import 'clients.dart';
 part 'round_client.g.dart';
 part 'round_client.freezed.dart';
 
+final roundInfoProvider = Provider.autoDispose<RoundInfo>(
+  (ref) =>
+      ref.watch(multiplayerRoundClientProvider(ref.watch(playerIDProvider))),
+  dependencies: [
+    multiplayerRoundClientProvider,
+    playerIDProvider,
+  ],
+);
+
+final roundClientProvider = Provider.autoDispose<MultiplayerRoundClient>(
+  (ref) => ref.watch(
+      multiplayerRoundClientProvider(ref.watch(playerIDProvider)).notifier),
+  dependencies: [
+    multiplayerRoundClientProvider,
+    playerIDProvider,
+  ],
+);
+
 @riverpod
-class RoundClient extends _$RoundClient {
+class MultiplayerRoundClient extends _$MultiplayerRoundClient {
   @override
   RoundInfo build(PlayerID multiplayerID) {
-    final gameInfo = ref.read(gameClientProvider(multiplayerID));
+    final gameInfo = ref.read(multiplayerGameClientProvider(multiplayerID));
     connect();
     return RoundInfo(
       null,
@@ -65,7 +83,7 @@ class RoundClient extends _$RoundClient {
   Future<bool> startGame() async =>
       state.connected &&
       await service(
-        (c) => c.startGame(ref.read(playerIDProvider), state.code),
+        (c) => c.startGame(multiplayerID, state.code),
       );
 }
 

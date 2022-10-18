@@ -29,28 +29,30 @@ class _SystemHash {
   }
 }
 
-String $GameClientHash() => r'02605cc330e84f8809763a5f88a90058bd96a213';
+String $MultiplayerGameClientHash() =>
+    r'ff7d6f85faa543edfdae78c8217ec15582a51087';
 
-/// See also [GameClient].
-class GameClientProvider
-    extends AutoDisposeNotifierProviderImpl<GameClient, GameClientInfo> {
-  GameClientProvider(
+/// See also [MultiplayerGameClient].
+class MultiplayerGameClientProvider extends AutoDisposeNotifierProviderImpl<
+    MultiplayerGameClient, GameClientInfo> {
+  MultiplayerGameClientProvider(
     this.multiplayerID,
   ) : super(
-          () => GameClient()..multiplayerID = multiplayerID,
-          from: gameClientProvider,
-          name: r'gameClientProvider',
+          () => MultiplayerGameClient()..multiplayerID = multiplayerID,
+          from: multiplayerGameClientProvider,
+          name: r'multiplayerGameClientProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : $GameClientHash,
+                  : $MultiplayerGameClientHash,
         );
 
   final String multiplayerID;
 
   @override
   bool operator ==(Object other) {
-    return other is GameClientProvider && other.multiplayerID == multiplayerID;
+    return other is MultiplayerGameClientProvider &&
+        other.multiplayerID == multiplayerID;
   }
 
   @override
@@ -63,7 +65,7 @@ class GameClientProvider
 
   @override
   GameClientInfo runNotifierBuild(
-    covariant _$GameClient notifier,
+    covariant _$MultiplayerGameClient notifier,
   ) {
     return notifier.build(
       multiplayerID,
@@ -71,26 +73,27 @@ class GameClientProvider
   }
 }
 
-typedef GameClientRef = AutoDisposeNotifierProviderRef<GameClientInfo>;
+typedef MultiplayerGameClientRef
+    = AutoDisposeNotifierProviderRef<GameClientInfo>;
 
-/// See also [GameClient].
-final gameClientProvider = GameClientFamily();
+/// See also [MultiplayerGameClient].
+final multiplayerGameClientProvider = MultiplayerGameClientFamily();
 
-class GameClientFamily extends Family<GameClientInfo> {
-  GameClientFamily();
+class MultiplayerGameClientFamily extends Family<GameClientInfo> {
+  MultiplayerGameClientFamily();
 
-  GameClientProvider call(
+  MultiplayerGameClientProvider call(
     String multiplayerID,
   ) {
-    return GameClientProvider(
+    return MultiplayerGameClientProvider(
       multiplayerID,
     );
   }
 
   @override
-  AutoDisposeNotifierProviderImpl<GameClient, GameClientInfo>
+  AutoDisposeNotifierProviderImpl<MultiplayerGameClient, GameClientInfo>
       getProviderOverride(
-    covariant GameClientProvider provider,
+    covariant MultiplayerGameClientProvider provider,
   ) {
     return call(
       provider.multiplayerID,
@@ -104,10 +107,10 @@ class GameClientFamily extends Family<GameClientInfo> {
   List<ProviderOrFamily>? get dependencies => null;
 
   @override
-  String? get name => r'gameClientProvider';
+  String? get name => r'multiplayerGameClientProvider';
 }
 
-abstract class _$GameClient
+abstract class _$MultiplayerGameClient
     extends BuildlessAutoDisposeNotifier<GameClientInfo> {
   late final String multiplayerID;
 

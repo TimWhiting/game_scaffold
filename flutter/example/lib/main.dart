@@ -73,8 +73,8 @@ class CreateOrJoinWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final playerID = ref.watch(playerIDProvider);
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
-    final allGames = ref.watch(gameClientProvider(playerID)).games;
-    final gameClient = ref.watch(gameClientProvider(playerID).notifier);
+    final allGames = ref.watch(gameInfoProvider).games;
+    final gameClient = ref.watch(gameClientProvider);
 
     return Scaffold(
       body: Center(

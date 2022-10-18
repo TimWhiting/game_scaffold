@@ -22,8 +22,8 @@ Future<void> main() async {
         Uri.parse('http://localhost:$defaultGamePort');
 
     expect(p1Game.read(GameProviders.status), null);
-    final gClient = p1Game.listen(gameClientProvider('1').notifier, (_, __) {});
-    final gClientState = p1Game.listen(gameClientProvider('1'), (_, __) {});
+    final gClient = p1Game.listen(gameClientProvider, (_, __) {});
+    final gClientState = p1Game.listen(gameInfoProvider, (_, __) {});
 
     gClient.read().setGameConfig(const GameConfig(gameType: 'tictactoe'));
     final code = await gClient.read().createGame();

@@ -215,8 +215,7 @@ class GameNavigator extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playerID = ref.watch(playerIDProvider);
-    final conn =
-        ref.watch(gameClientProvider(playerID).select((r) => r.connected));
+    final conn = ref.watch(gameInfoProvider.select((r) => r.connected));
     final gameStatus = ref.watch(GameProviders.status);
 
     final pages = {'disconnected': disconnected};
@@ -255,7 +254,7 @@ class GameNavigator extends HookConsumerWidget {
         if (status == 'lobby' || status == 'started') {
           ref.refresh(GameProviders.exitGame);
           ref.read(GameProviders.exitGame.future);
-          ref.read(gameClientProvider(playerID).notifier).fetchOldGames();
+          ref.read(gameClientProvider).fetchOldGames();
           route.didPop(null);
           return true;
         } else if (status == 'connected') {

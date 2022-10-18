@@ -21,24 +21,22 @@ void testGame<T extends Object, E extends Object>(
   darttest.test(testName, () async {
     final root = ProviderContainer();
     final ref = <PlayerID, ProviderContainer>{};
-    final g = <PlayerID, ProviderSubscription<GameClient>>{};
-    final r = <PlayerID, ProviderSubscription<RoundClient>>{};
+    final g = <PlayerID, ProviderSubscription<MultiplayerGameClient>>{};
+    final r = <PlayerID, ProviderSubscription<MultiplayerRoundClient>>{};
 
     root.read(serviceType.notifier).state = OnDeviceService;
 
     for (final p in players) {
       ref[p.id] = ProviderContainer(
           parent: root, overrides: [playerIDProvider.overrideWithValue(p.id)]);
-      g[p.id] = ref[p.id]!
-          .listen(gameClientProvider(p.id).notifier, (previous, next) {});
+      g[p.id] = ref[p.id]!.listen(gameClientProvider, (previous, next) {});
     }
     g[players.first.id]!.read().setGameConfig(config);
     final code = await g[players.first.id]!.read().createGame();
     for (final p in players) {
       g[p.id]!.read().setGameCode(code);
       await g[p.id]!.read().joinGame();
-      r[p.id] = ref[p.id]!
-          .listen(roundClientProvider(p.id).notifier, (previous, next) {});
+      r[p.id] = ref[p.id]!.listen(roundClientProvider, (previous, next) {});
     }
 
     if (ref[players.first.id]!.read(GameProviders.status) !=

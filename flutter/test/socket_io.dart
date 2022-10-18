@@ -65,12 +65,12 @@ class Readers {
   ProviderContainer gameFor(String player) => _readers[player]!;
   ProviderContainer get p1 => _readers[P1]!;
   ProviderContainer get p2 => _readers[P2]!;
-  ProviderSubscription<GameClient> get p1G =>
-      p1.listen(gameClientProvider(P1).notifier, (_, __) {});
-  ProviderSubscription<GameClient> get p2G =>
-      p2.listen(gameClientProvider(P2).notifier, (_, __) {});
-  ProviderSubscription<RoundClient> get p1R =>
-      p1.listen(roundClientProvider(P1).notifier, (_, __) {});
-  ProviderSubscription<RoundClient> get p2R =>
-      p2.listen(roundClientProvider(P2).notifier, (_, __) {});
+  ProviderSubscription<MultiplayerGameClient> get p1G =>
+      p1.listen(gameClientProvider, (_, __) {});
+  ProviderSubscription<MultiplayerGameClient> get p2G =>
+      p2.listen(gameClientProvider, (_, __) {});
+  ProviderSubscription<MultiplayerRoundClient> get p1R =>
+      p1.listen(roundClientProvider, (_, __) {});
+  ProviderSubscription<MultiplayerRoundClient> get p2R =>
+      p2.listen(roundClientProvider, (_, __) {});
 }
