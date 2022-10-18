@@ -1,60 +1,22 @@
-import 'dart:async';
-
-import 'package:logging/logging.dart';
-import '../../../game_scaffold_dart.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../core.dart';
 
-/// A client for a particular game
-abstract class RoundService {
-  RoundService() : logger = Logger('RoundClient');
+part 'round_client.g.dart';
+part 'round_client.freezed.dart';
 
-  final Logger logger;
+@riverpod
+class RoundClient extends _$RoundClient {
+  @override
+  RoundInfo build(PlayerID multiplayerID) {}
 
-  /// Causes the client to exit the game
-  Future<bool> exitGame(PlayerID playerID, GameCode code);
+  void clearError() {
+    state = state.copyWith(error: null);
+  }
+}
 
-  /// Registers the client with the game server
-  Future<PlayerName?> joinGame(
-    PlayerID playerID,
-    GameCode code,
-    PlayerName name,
-  );
-
-  /// Sends [event] to the game server
-  Future<bool> sendEvent<E extends Object>(
-      PlayerID playerID, GameCode code, E event);
-
-  /// Sends a start event to the game server
-  Future<bool> startGame(PlayerID playerID, GameCode code);
-
-  /// Sends an undo event to the game server
-  Future<bool> undo(PlayerID playerID, GameCode code) => sendEvent(
-        playerID,
-        code,
-        const GenericEvent.undo(),
-      );
-
-  /// Sends a new round event to the game server
-  Future<bool> newRound(PlayerID playerID, GameCode code) => sendEvent(
-        playerID,
-        code,
-        GenericEvent.readyNextRound(playerID),
-      );
-
-  /// Sends a message event to the game server
-  Future<bool> sendMessage(PlayerID playerID, GameCode code, String message) =>
-      sendEvent(
-        playerID,
-        code,
-        GenericEvent.message(message, from: playerID, to: null),
-      );
-
-  /// Disposes of the game client
-  void dispose();
-
-  Stream<GameState<T>> gameStream<T extends Object>(
-      PlayerID playerID, GameCode code);
-  Stream<GameError> errorStream(PlayerID playerID, GameCode code);
-
-  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code);
+@freezed
+class RoundInfo with _$RoundInfo {
+  const factory RoundInfo({Lobby? lobby, GameState? game, String? error}) =
+      _RoundInfo;
 }

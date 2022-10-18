@@ -22,7 +22,7 @@ Future<void> main() async {
         Uri.parse('http://localhost:$defaultGamePort');
 
     expect(p1Game.read(GameProviders.status), null);
-    p1Game.read(GameProviders.config.notifier).state =
+    p1Game.read(gameClientProvider('1').notifier).state =
         const GameConfig(gameType: 'tictactoe');
     final code = await p1Game.read(GameProviders.createGame.future);
     expect(p1Game.read(GameProviders.status), null);

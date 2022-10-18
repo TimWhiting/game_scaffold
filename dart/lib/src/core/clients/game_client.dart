@@ -1,54 +1,83 @@
-import 'dart:async';
-
-import 'package:logging/logging.dart';
-
-import '../../core.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../core.dart';
+import 'clients.dart';
+part 'game_client.freezed.dart';
+part 'game_client.g.dart';
 
-typedef ServiceType = String;
-
-typedef GameAddress = Uri;
-
-/// A Client that can contact the server to manage games
-///
-/// The client can
-/// * Start
-/// * Delete
-/// * Get Game Info
-/// * Get List of Games
-abstract class GameService {
-  GameService() : logger = Logger('GameClient');
-
-  final Logger logger;
-
-  /// Creates a game on the server
-  Future<GameCode> createGame(PlayerID playerID, GameConfig config);
-
-  /// Deletes the game on the server
-  Future<bool> deleteGame(PlayerID playerID, GameCode code);
-
-  /// Gets a list of games on the server
-  Future<IList<GameInfo>> getGames(PlayerID playerID);
-
-  /// Disposes of the [GameService] (i.e. disconnects from the server)
-  void dispose() {
-    sc.close();
+@riverpod
+class GameClient extends _$GameClient {
+  @override
+  GameClientInfo build(PlayerID multiplayerID) {
+    connect();
+    return const GameClientInfo();
   }
 
-  /// Connects to the backend
-  ///
-  /// Default implementation does nothing
-  Stream<bool> connect() async* {
-    yield true;
-    yield* sc.stream;
+  void connect() {
+    final service = ref.read(gameService);
+    service.connect().map((conn) {
+      if (conn) {
+        state = GameClientInfo(
+          service: service,
+          playerName: state.playerName,
+          config: state.config,
+          games: state.games,
+          code: state.code,
+        );
+        fetchOldGames();
+        ref.listen(singleConfig, (_, value) {
+          setGameConfig(value);
+        });
+        ref.onDispose(service.disconnect);
+      } else {
+        state = state.copyWith(service: null);
+      }
+    });
   }
 
-  StreamController<bool> sc = StreamController<bool>.broadcast();
+  T service<T>(T Function(GameService) service) => state.connected
+      ? service(state.service!)
+      : throw Exception('Not connected');
 
-  /// Disconnect from the backend
-  ///
-  /// Default implementation does nothing
-  Future<void> disconnect() async {
-    sc.add(false);
+  void setGameCode(GameCode code) => state = state.copyWith(code: code);
+  void setPlayerName(PlayerName playerName) =>
+      state = state.copyWith(playerName: playerName);
+  void setGameConfig(GameConfig config) =>
+      state = state.copyWith(config: config);
+  void fetchOldGames() {
+    service((c) async {
+      state =
+          state.copyWith(games: await c.getGames(ref.read(playerIDProvider)));
+    });
   }
+
+  Future<String> createGame() async {
+    final code = await service(
+        (c) => c.createGame(ref.read(playerIDProvider), state.config!));
+    setGameCode(code);
+    return code;
+  }
+
+  void deleteGame(GameCode code) {
+    service((c) async {
+      await c.deleteGame(ref.read(playerIDProvider), code);
+      state = state.copyWith(code: null, games: null);
+      fetchOldGames();
+    });
+  }
+}
+
+@freezed
+class GameClientInfo with _$GameClientInfo {
+  const factory GameClientInfo({
+    GameService? service,
+    String? code,
+    PlayerName? playerName,
+    GameConfig? config,
+    IList<GameInfo>? games,
+  }) = _GameClientInfo;
+  const GameClientInfo._();
+  bool get connected => service != null;
+  bool get canCreateGame => connected && config != null;
+  bool get canJoinGame => connected && code != null;
 }

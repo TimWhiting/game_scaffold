@@ -26,7 +26,7 @@ Future<void> main(List<String> arguments) async {
     maxPlayers: 2,
   );
 
-  p1Ref.read(GameProviders.config.notifier).state = config;
+  p1Ref.read(GameProviders.config).state = config;
   final code = await p1Ref.read(GameProviders.createGame.future);
   p1Ref.read(GameProviders.playerName.notifier).state = 'Player 1';
   p2Ref.read(GameProviders.playerName.notifier).state = 'Player 2';

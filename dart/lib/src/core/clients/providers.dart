@@ -1,13 +1,8 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../core.dart';
 import 'clients.dart';
-
-part 'providers.freezed.dart';
-part 'providers.g.dart';
 
 /// The default port
 const defaultGamePort = 45912;
@@ -93,16 +88,16 @@ class GameProviders {
   GameProviders._();
 
   /// Provides the player's name
-  static final playerName = Provider(
-    (ref) => gameClientProvider(ref.watch(playerIDProvider))
-        .select((c) => c.playerName ?? ''),
+  static final playerName = Provider.autoDispose(
+    (ref) => ref.watch(gameClientProvider(ref.watch(playerIDProvider))
+        .select((c) => c.playerName ?? '')),
     dependencies: [playerIDProvider, gameClientProvider],
   );
 
   /// Provides the game code for each client id
-  static final code = Provider(
-    (ref) => gameClientProvider(ref.watch(playerIDProvider))
-        .select((c) => c.code ?? ''),
+  static final code = Provider.autoDispose(
+    (ref) => ref.watch(gameClientProvider(ref.watch(playerIDProvider))
+        .select((c) => c.code ?? '')),
     dependencies: [playerIDProvider, gameClientProvider],
   );
 
@@ -132,9 +127,9 @@ class GameProviders {
   // }, name: 'GameTurn', dependencies: [playerIDProvider, code, game]);
 
   /// Provides the way to configure the game for starting
-  static final config = Provider(
-    (ref) => gameClientProvider(ref.watch(playerIDProvider))
-        .select((c) => c.config ?? const GameConfig(gameType: '')),
+  static final config = Provider.autoDispose(
+    (ref) => ref.watch(gameClientProvider(ref.watch(playerIDProvider))
+        .select((c) => c.config ?? const GameConfig(gameType: ''))),
     dependencies: [
       playerIDProvider,
       gameClientProvider,
@@ -152,48 +147,6 @@ class GameProviders {
     },
     name: 'GameType',
     dependencies: [game, playerIDProvider],
-  );
-
-  static final createGame = FutureProvider.autoDispose<String>(
-    (ref) async {
-      final c = await ref.read(gameService).createGame(
-            ref.read(playerIDProvider),
-            ref.read(config),
-          );
-      ref.read(gameClientProvider.notifier).setGameCode(c);
-      return c;
-    },
-    name: 'CreateGame',
-    dependencies: [
-      gameService,
-      playerIDProvider,
-      gameClientProvider,
-    ],
-  );
-
-  static final joinGame = FutureProvider.autoDispose<String?>(
-    (ref) async {
-      final name = await ref.read(roundClient).joinGame(
-          ref.read(playerIDProvider), ref.read(code), ref.read(playerName));
-      if (name != null) {
-        ref.read(gameClientProvider.notifier).setPlayerName(name);
-      }
-      return name;
-    },
-    name: 'JoinGame',
-    dependencies: [
-      roundClient,
-      playerIDProvider,
-      gameClientProvider,
-    ],
-  );
-
-  static final startGame = FutureProvider.autoDispose<bool>(
-    (ref) => ref
-        .read(roundClient)
-        .startGame(ref.read(playerIDProvider), ref.read(code)),
-    name: 'StartGame',
-    dependencies: [roundClient, playerIDProvider, gameClientProvider],
   );
 
   static final exitGame = FutureProvider.autoDispose<bool>(
@@ -247,11 +200,15 @@ class GameProviders {
   /// Provides game lobby info in the form of [GameInfo] for the lobby
   static final lobby = StreamProvider.autoDispose<GameInfo>(
     (ref) async* {
-      final c = ref.read(roundClient);
-      yield* c.gameLobby(ref.watch(playerIDProvider), ref.watch(code));
+      final c = ref.read(gameService);
+      final cde = ref.watch(code);
+      if (cde.isEmpty) {
+        return;
+      }
+      yield* c.gameLobby(ref.watch(playerIDProvider), cde);
     },
     name: 'Lobby',
-    dependencies: [roundClient, playerIDProvider, gameClientProvider],
+    dependencies: [gameService, code, playerIDProvider],
   );
 
   /// Provides the game state for the current game of the client with specified id
@@ -273,88 +230,4 @@ class GameProviders {
     name: 'GameError',
     dependencies: [playerIDProvider],
   );
-}
-
-@riverpod
-class GameClient extends _$GameClient {
-  @override
-  GameClientInfo build(PlayerID multiplayerID) {
-    connect();
-    return const GameClientInfo();
-  }
-
-  void connect() {
-    final service = ref.read(gameService);
-    service.connect().map((conn) {
-      if (conn) {
-        state = GameClientInfo(
-          service: service,
-          playerName: state.playerName,
-          config: state.config,
-          games: state.games,
-          code: state.code,
-        );
-        fetchOldGames();
-        ref.listen(singleConfig, (_, value) {
-          setGameConfig(value);
-        });
-        ref.onDispose(service.disconnect);
-      } else {
-        state = state.copyWith(service: null);
-      }
-    });
-  }
-
-  T service<T>(T Function(GameService) service) => state.connected
-      ? service(state.service!)
-      : throw Exception('Not connected');
-
-  void setGameCode(GameCode code) => state = state.copyWith(code: code);
-  void setPlayerName(PlayerName playerName) =>
-      state = state.copyWith(playerName: playerName);
-  void setGameConfig(GameConfig config) =>
-      state = state.copyWith(config: config);
-  void fetchOldGames() {
-    service((c) async {
-      state =
-          state.copyWith(games: await c.getGames(ref.read(playerIDProvider)));
-    });
-  }
-
-  void deleteGame(GameCode code) {
-    service((c) async {
-      await c.deleteGame(ref.read(playerIDProvider), code);
-      state = state.copyWith(code: null, games: null);
-      fetchOldGames();
-    });
-  }
-}
-
-@freezed
-class GameClientInfo with _$GameClientInfo {
-  const factory GameClientInfo({
-    GameService? service,
-    String? code,
-    PlayerName? playerName,
-    GameConfig? config,
-    IList<GameInfo>? games,
-  }) = _GameClientInfo;
-  const GameClientInfo._();
-  bool get connected => service != null;
-}
-
-@riverpod
-class RoundClient extends _$RoundClient {
-  @override
-  RoundInfo build(PlayerID multiplayerID) {}
-
-  void clearError() {
-    state = state.copyWith(error: null);
-  }
-}
-
-@freezed
-class RoundInfo with _$RoundInfo {
-  const factory RoundInfo({Lobby? lobby, GameState? game, String? error}) =
-      _RoundInfo;
 }

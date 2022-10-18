@@ -15,57 +15,6 @@ class OnDeviceRoundService extends RoundService {
   Future<bool> exitGame(PlayerID playerID, GameCode code) async => true;
 
   @override
-  Future<String?> joinGame(
-      PlayerID playerID, GameCode code, PlayerName name) async {
-    final backendReader = OnDeviceGameService.games[code]!.container.read;
-
-    final notifier = backendReader(BackendProviders.lobby.notifier);
-    await Future.delayed(const Duration(microseconds: 1));
-    notifier.addPlayer(Player(playerID, name: name));
-    await Future.delayed(const Duration(microseconds: 1));
-
-    final lobby = backendReader(BackendProviders.lobby);
-    final config = lobby.config;
-    final players = lobby.players;
-    if (players.length == config.maxPlayers && config.autoStart) {
-      notifier.start();
-    }
-
-    return name;
-  }
-
-  @override
-  Future<bool> startGame(PlayerID playerID, GameCode code) async {
-    final backendReader = OnDeviceGameService.games[code]!.container.read;
-    final notifier = backendReader(BackendProviders.lobby.notifier);
-    await Future.delayed(const Duration(microseconds: 1));
-    notifier.start();
-    return true;
-  }
-
-  @override
-  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) async* {
-    final backend = OnDeviceGameService.games[code]?.container;
-    final ss = StreamController<GameInfo>();
-    if (backend == null) {
-      return;
-    }
-
-    backend.listen<Stream<GameInfo>>(
-      fireImmediately: true,
-      BackendProviders.playerLobby(playerID).stream,
-      (prev, curr) async {
-        // ignore: prefer_foreach
-        await for (final e in curr) {
-          ss.add(e);
-        }
-      },
-    );
-    yield* ss.stream;
-    await ss.close();
-  }
-
-  @override
   Stream<GameState<T>> gameStream<T extends Object>(
       PlayerID playerID, GameCode code) async* {
     logger.info('Watching backend');
@@ -159,6 +108,57 @@ class OnDeviceGameService extends GameService {
 
   @override
   void dispose() {}
+
+  @override
+  Future<String?> joinGame(
+      PlayerID playerID, GameCode code, PlayerName name) async {
+    final backendReader = OnDeviceGameService.games[code]!.container.read;
+
+    final notifier = backendReader(BackendProviders.lobby.notifier);
+    await Future.delayed(const Duration(microseconds: 1));
+    notifier.addPlayer(Player(playerID, name: name));
+    await Future.delayed(const Duration(microseconds: 1));
+
+    final lobby = backendReader(BackendProviders.lobby);
+    final config = lobby.config;
+    final players = lobby.players;
+    if (players.length == config.maxPlayers && config.autoStart) {
+      notifier.start();
+    }
+
+    return name;
+  }
+
+  @override
+  Future<bool> startGame(PlayerID playerID, GameCode code) async {
+    final backendReader = OnDeviceGameService.games[code]!.container.read;
+    final notifier = backendReader(BackendProviders.lobby.notifier);
+    await Future.delayed(const Duration(microseconds: 1));
+    notifier.start();
+    return true;
+  }
+
+  @override
+  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) async* {
+    final backend = OnDeviceGameService.games[code]?.container;
+    final ss = StreamController<GameInfo>();
+    if (backend == null) {
+      return;
+    }
+
+    backend.listen<Stream<GameInfo>>(
+      fireImmediately: true,
+      BackendProviders.playerLobby(playerID).stream,
+      (prev, curr) async {
+        // ignore: prefer_foreach
+        await for (final e in curr) {
+          ss.add(e);
+        }
+      },
+    );
+    yield* ss.stream;
+    await ss.close();
+  }
 
   @override
   Future<IList<GameInfo>> getGames(PlayerID playerID) async {

@@ -50,31 +50,6 @@ class IORoundClient extends RoundService {
     return true;
   }
 
-  @override
-  Future<PlayerName> joinGame(
-      PlayerID playerID, GameCode code, PlayerName name) async {
-    await _ensureConnected(code);
-    logger.info('Registering');
-    final assignedName = await _socket!
-        .call(IOChannel.register, {'name': name, 'id': playerID}) as String?;
-    if (assignedName != null) {
-      return assignedName;
-    }
-    return name;
-  }
-
-  @override
-  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) async* {
-    final sc = StreamController<GameInfo>();
-    _socket!.on(IOChannel.lobby.string, (d) {
-      final gameInfo = GameInfo.fromJson(d as Map<String, dynamic>);
-      sc.add(gameInfo);
-      logger.info('Got Lobby $gameInfo');
-    });
-
-    yield* sc.stream;
-    await sc.close();
-  }
 
   @override
   Stream<GameState<T>> gameStream<T extends Object>(PlayerID playerID, GameCode code) async* {
@@ -122,12 +97,6 @@ class IORoundClient extends RoundService {
     _socket!.dispose();
   }
 
-  @override
-  Future<bool> startGame(PlayerID playerID, GameCode code) async {
-    final result = await _socket!
-        .call(IOChannel.startGame, {'playerID': playerID, 'code': code});
-    return result as bool;
-  }
 }
 
 final socketIORoundService = Provider<RoundService>(
@@ -193,6 +162,36 @@ class IOGameClient extends GameService {
     return (json.decode(result as String) as List<dynamic>)
         .map((v) => GameInfo.fromJson(v as Map<String, dynamic>))
         .toIList();
+  }
+
+  @override
+  Future<PlayerName> joinGame(
+      PlayerID playerID, GameCode code, PlayerName name) async {
+    logger.info('Registering');
+    final assignedName = await socket.call(IOChannel.register, {'name': name, 'id': playerID}) as String?;
+    if (assignedName != null) {
+      return assignedName;
+    }
+    return name;
+  }
+
+  @override
+  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) async* {
+    final sc = StreamController<GameInfo>();
+    socket.on(IOChannel.lobby.string, (d) {
+      final gameInfo = GameInfo.fromJson(d as Map<String, dynamic>);
+      sc.add(gameInfo);
+      logger.info('Got Lobby $gameInfo');
+    });
+
+    yield* sc.stream;
+    await sc.close();
+  }
+
+  @override
+  Future<bool> startGame(PlayerID playerID, GameCode code) async {
+    final result = await socket.call(IOChannel.startGame, {'playerID': playerID, 'code': code});
+    return result as bool;
   }
 
   @override
