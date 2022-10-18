@@ -362,6 +362,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  riverpod_annotation:
+    dependency: transitive
+    description:
+      name: riverpod_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.4"
   rxdart:
     dependency: transitive
     description:

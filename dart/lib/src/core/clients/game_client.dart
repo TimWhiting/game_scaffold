@@ -10,7 +10,7 @@ class GameClient extends _$GameClient {
   @override
   GameClientInfo build(PlayerID multiplayerID) {
     connect();
-    return const GameClientInfo();
+    return const GameClientInfo(null);
   }
 
   void connect() {
@@ -18,7 +18,7 @@ class GameClient extends _$GameClient {
     service.connect().map((conn) {
       if (conn) {
         state = GameClientInfo(
-          service: service,
+          service,
           playerName: state.playerName,
           config: state.config,
           games: state.games,
@@ -30,13 +30,13 @@ class GameClient extends _$GameClient {
         });
         ref.onDispose(service.disconnect);
       } else {
-        state = state.copyWith(service: null);
+        state = state.copyWith(_service: null);
       }
     });
   }
 
   T service<T>(T Function(GameService) service) => state.connected
-      ? service(state.service!)
+      ? service(state._service!)
       : throw Exception('Not connected');
 
   void setGameCode(GameCode code) => state = state.copyWith(code: code);
@@ -51,33 +51,35 @@ class GameClient extends _$GameClient {
     });
   }
 
-  Future<String> createGame() async {
+  Future<GameCode> createGame() async {
     final code = await service(
         (c) => c.createGame(ref.read(playerIDProvider), state.config!));
     setGameCode(code);
     return code;
   }
 
-  void deleteGame(GameCode code) {
-    service((c) async {
-      await c.deleteGame(ref.read(playerIDProvider), code);
-      state = state.copyWith(code: null, games: null);
-      fetchOldGames();
-    });
-  }
+  Future<PlayerName?> joinGame() => service((c) => c.joinGame(
+      ref.read(playerIDProvider), state.code!, state.playerName ?? ''));
+
+  Future<bool> deleteGame(GameCode code) => service((c) async {
+        final result = await c.deleteGame(ref.read(playerIDProvider), code);
+        state = state.copyWith(code: null, games: null);
+        fetchOldGames();
+        return result;
+      });
 }
 
 @freezed
 class GameClientInfo with _$GameClientInfo {
-  const factory GameClientInfo({
-    GameService? service,
+  const factory GameClientInfo(
+    GameService? _service, {
     String? code,
     PlayerName? playerName,
     GameConfig? config,
     IList<GameInfo>? games,
   }) = _GameClientInfo;
   const GameClientInfo._();
-  bool get connected => service != null;
+  bool get connected => _service != null;
   bool get canCreateGame => connected && config != null;
   bool get canJoinGame => connected && code != null;
 }

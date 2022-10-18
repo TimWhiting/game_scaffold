@@ -39,10 +39,33 @@ abstract class RoundService {
         GenericEvent.message(message, from: playerID, to: null),
       );
 
-  /// Disposes of the game client
-  void dispose();
-
   Stream<GameState<T>> gameStream<T extends Object>(
       PlayerID playerID, GameCode code);
   Stream<GameError> errorStream(PlayerID playerID, GameCode code);
+  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code);
+
+  /// Sends a start event to the game server
+  Future<bool> startGame(PlayerID playerID, GameCode code);
+
+  /// Disposes of the [RoundService] (i.e. disconnects from the server)
+  void dispose() {
+    sc.close();
+  }
+
+  /// Connects to the backend
+  ///
+  /// Default implementation does nothing
+  Stream<bool> connect() async* {
+    yield true;
+    yield* sc.stream;
+  }
+
+  StreamController<bool> sc = StreamController<bool>.broadcast();
+
+  /// Disconnect from the backend
+  ///
+  /// Default implementation does nothing
+  Future<void> disconnect() async {
+    sc.add(false);
+  }
 }

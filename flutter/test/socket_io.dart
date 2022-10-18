@@ -11,9 +11,9 @@ Future<void> main() async {
   final ioServer = IOServer();
 
   await test('Created', (read) async {
-    final gameCode = read.gameFor(P1).read(GameProviders.code);
+    final gameCode = read.p1.read(GameProviders.code);
     assert(ioServer.servers[gameCode] != null, 'Game Server Created');
-    final gameStatus = read.gameFor(P1).read(GameProviders.status);
+    final gameStatus = read.p1.read(GameProviders.status);
     print(gameStatus);
     assert(gameStatus == null, 'Game Starts out Not Joined');
   });
@@ -21,14 +21,14 @@ Future<void> main() async {
   await Future.delayed(const Duration(milliseconds: 100));
 
   await test('Registered Start Game', (read) async {
-    final gameCode = read.gameFor(P1).read(GameProviders.code);
-    await read.gameFor(P1).read(GameProviders.joinGame.future);
-    await read.gameFor(P1).read(GameProviders.startGame.future);
+    final gameCode = read.p1.read(GameProviders.code);
+    await read.p1G.read().joinGame();
+    await read.p1R.read().startGame();
     await Future.delayed(const Duration(milliseconds: 100));
     assert(ioServer.servers[gameCode]!.playerNames.length == 1,
         'One Player Joined');
     assert(
-        read.gameFor(P1).read(GameProviders.game).asData?.value.status ==
+        read.p1.read(GameProviders.game).asData?.value.status ==
             GameStatus.started,
         'Game is Started');
   });
@@ -49,12 +49,11 @@ Future<void> test(
   root.read(remoteUriProvider.notifier).state =
       Uri.parse('http://127.0.0.1:$defaultGamePort');
   const config = GameConfig(adminID: P1, gameType: 'tictactoe');
-  readers.gameFor(P1).read(GameProviders.config.notifier).state = config;
-  final code = await readers.gameFor(P1).read(GameProviders.createGame.future);
+  readers.p1G.read().setGameConfig(config);
+  final code = await readers.p1G.read().createGame();
   await Future.delayed(const Duration(milliseconds: 100));
   await testFn(readers);
-  final deleted =
-      await readers.gameFor(P1).read(GameProviders.deleteGame.future);
+  final deleted = await readers.p1G.read().deleteGame(code);
   print(
       '########## Finished Test $testName GameCode: $code, deleted: $deleted ##########');
 }
@@ -64,4 +63,14 @@ class Readers {
   final Map<String, ProviderContainer> _readers;
 
   ProviderContainer gameFor(String player) => _readers[player]!;
+  ProviderContainer get p1 => _readers[P1]!;
+  ProviderContainer get p2 => _readers[P2]!;
+  ProviderSubscription<GameClient> get p1G =>
+      p1.listen(gameClientProvider(P1).notifier, (_, __) {});
+  ProviderSubscription<GameClient> get p2G =>
+      p2.listen(gameClientProvider(P2).notifier, (_, __) {});
+  ProviderSubscription<RoundClient> get p1R =>
+      p1.listen(roundClientProvider(P1).notifier, (_, __) {});
+  ProviderSubscription<RoundClient> get p2R =>
+      p2.listen(roundClientProvider(P2).notifier, (_, __) {});
 }

@@ -22,12 +22,14 @@ Future<void> main() async {
         Uri.parse('http://localhost:$defaultGamePort');
 
     expect(p1Game.read(GameProviders.status), null);
-    p1Game.read(gameClientProvider('1').notifier).state =
-        const GameConfig(gameType: 'tictactoe');
-    final code = await p1Game.read(GameProviders.createGame.future);
+    final gClient = p1Game.listen(gameClientProvider('1').notifier, (_, __) {});
+    final gClientState = p1Game.listen(gameClientProvider('1'), (_, __) {});
+
+    gClient.read().setGameConfig(const GameConfig(gameType: 'tictactoe'));
+    final code = await gClient.read().createGame();
     expect(p1Game.read(GameProviders.status), null);
-    p1Game.read(GameProviders.code.notifier).state = code;
-    await p1Game.read(GameProviders.joinGame.future);
+    assert(gClientState.read().code == code, 'Code is set');
+    await gClient.read().joinGame();
     await Future.delayed(const Duration(milliseconds: 1));
     expect(p1Game.read(GameProviders.status), GameStatus.lobby);
   });

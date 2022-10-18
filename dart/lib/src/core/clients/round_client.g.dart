@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $RoundClientHash() => r'61cfd7953822a56cc761fe67305123ebb07f7b27';
+String $RoundClientHash() => r'6b008cecd79c59b97a306b794341ef4f34cac246';
 
 /// See also [RoundClient].
 class RoundClientProvider

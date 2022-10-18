@@ -37,11 +37,6 @@ abstract class GameService {
     PlayerName name,
   );
 
-  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code);
-
-  /// Sends a start event to the game server
-  Future<bool> startGame(PlayerID playerID, GameCode code);
-
   /// Disposes of the [GameService] (i.e. disconnects from the server)
   void dispose() {
     sc.close();

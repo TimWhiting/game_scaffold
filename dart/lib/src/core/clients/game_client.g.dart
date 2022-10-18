@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $GameClientHash() => r'8675f0383837ba23bb15f261fd039a82d3260c9b';
+String $GameClientHash() => r'02605cc330e84f8809763a5f88a90058bd96a213';
 
 /// See also [GameClient].
 class GameClientProvider

@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$GameClientInfo {
-  GameService? get service => throw _privateConstructorUsedError;
+  GameService? get _service => throw _privateConstructorUsedError;
   String? get code => throw _privateConstructorUsedError;
   String? get playerName => throw _privateConstructorUsedError;
   GameConfig? get config => throw _privateConstructorUsedError;
@@ -33,7 +33,7 @@ abstract class $GameClientInfoCopyWith<$Res> {
           GameClientInfo value, $Res Function(GameClientInfo) then) =
       _$GameClientInfoCopyWithImpl<$Res>;
   $Res call(
-      {GameService? service,
+      {GameService? _service,
       String? code,
       String? playerName,
       GameConfig? config,
@@ -53,16 +53,16 @@ class _$GameClientInfoCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? service = freezed,
+    Object? _service = freezed,
     Object? code = freezed,
     Object? playerName = freezed,
     Object? config = freezed,
     Object? games = freezed,
   }) {
     return _then(_value.copyWith(
-      service: service == freezed
-          ? _value.service
-          : service // ignore: cast_nullable_to_non_nullable
+      _service: _service == freezed
+          ? _value._service
+          : _service // ignore: cast_nullable_to_non_nullable
               as GameService?,
       code: code == freezed
           ? _value.code
@@ -103,7 +103,7 @@ abstract class _$$_GameClientInfoCopyWith<$Res>
       __$$_GameClientInfoCopyWithImpl<$Res>;
   @override
   $Res call(
-      {GameService? service,
+      {GameService? _service,
       String? code,
       String? playerName,
       GameConfig? config,
@@ -126,16 +126,16 @@ class __$$_GameClientInfoCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? service = freezed,
+    Object? _service = freezed,
     Object? code = freezed,
     Object? playerName = freezed,
     Object? config = freezed,
     Object? games = freezed,
   }) {
     return _then(_$_GameClientInfo(
-      service: service == freezed
-          ? _value.service
-          : service // ignore: cast_nullable_to_non_nullable
+      _service == freezed
+          ? _value._service
+          : _service // ignore: cast_nullable_to_non_nullable
               as GameService?,
       code: code == freezed
           ? _value.code
@@ -160,12 +160,12 @@ class __$$_GameClientInfoCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_GameClientInfo extends _GameClientInfo {
-  const _$_GameClientInfo(
-      {this.service, this.code, this.playerName, this.config, this.games})
+  const _$_GameClientInfo(this._service,
+      {this.code, this.playerName, this.config, this.games})
       : super._();
 
   @override
-  final GameService? service;
+  final GameService? _service;
   @override
   final String? code;
   @override
@@ -177,7 +177,7 @@ class _$_GameClientInfo extends _GameClientInfo {
 
   @override
   String toString() {
-    return 'GameClientInfo(service: $service, code: $code, playerName: $playerName, config: $config, games: $games)';
+    return 'GameClientInfo(_service: $_service, code: $code, playerName: $playerName, config: $config, games: $games)';
   }
 
   @override
@@ -185,7 +185,7 @@ class _$_GameClientInfo extends _GameClientInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_GameClientInfo &&
-            const DeepCollectionEquality().equals(other.service, service) &&
+            const DeepCollectionEquality().equals(other._service, _service) &&
             const DeepCollectionEquality().equals(other.code, code) &&
             const DeepCollectionEquality()
                 .equals(other.playerName, playerName) &&
@@ -196,7 +196,7 @@ class _$_GameClientInfo extends _GameClientInfo {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(service),
+      const DeepCollectionEquality().hash(_service),
       const DeepCollectionEquality().hash(code),
       const DeepCollectionEquality().hash(playerName),
       const DeepCollectionEquality().hash(config),
@@ -209,16 +209,15 @@ class _$_GameClientInfo extends _GameClientInfo {
 }
 
 abstract class _GameClientInfo extends GameClientInfo {
-  const factory _GameClientInfo(
-      {final GameService? service,
-      final String? code,
+  const factory _GameClientInfo(final GameService? _service,
+      {final String? code,
       final String? playerName,
       final GameConfig? config,
       final IList<GameInfo>? games}) = _$_GameClientInfo;
   const _GameClientInfo._() : super._();
 
   @override
-  GameService? get service;
+  GameService? get _service;
   @override
   String? get code;
   @override

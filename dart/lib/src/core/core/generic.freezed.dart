@@ -1097,6 +1097,7 @@ mixin _$GameInfo {
   IList<String> get players => throw _privateConstructorUsedError;
   String get player => throw _privateConstructorUsedError;
   bool get creator => throw _privateConstructorUsedError;
+  GameConfig get config => throw _privateConstructorUsedError;
   String get gameType => throw _privateConstructorUsedError;
   GameStatus get status => throw _privateConstructorUsedError;
 
@@ -1115,8 +1116,11 @@ abstract class $GameInfoCopyWith<$Res> {
       IList<String> players,
       String player,
       bool creator,
+      GameConfig config,
       String gameType,
       GameStatus status});
+
+  $GameConfigCopyWith<$Res> get config;
 }
 
 /// @nodoc
@@ -1133,6 +1137,7 @@ class _$GameInfoCopyWithImpl<$Res> implements $GameInfoCopyWith<$Res> {
     Object? players = freezed,
     Object? player = freezed,
     Object? creator = freezed,
+    Object? config = freezed,
     Object? gameType = freezed,
     Object? status = freezed,
   }) {
@@ -1153,6 +1158,10 @@ class _$GameInfoCopyWithImpl<$Res> implements $GameInfoCopyWith<$Res> {
           ? _value.creator
           : creator // ignore: cast_nullable_to_non_nullable
               as bool,
+      config: config == freezed
+          ? _value.config
+          : config // ignore: cast_nullable_to_non_nullable
+              as GameConfig,
       gameType: gameType == freezed
           ? _value.gameType
           : gameType // ignore: cast_nullable_to_non_nullable
@@ -1162,6 +1171,13 @@ class _$GameInfoCopyWithImpl<$Res> implements $GameInfoCopyWith<$Res> {
           : status // ignore: cast_nullable_to_non_nullable
               as GameStatus,
     ));
+  }
+
+  @override
+  $GameConfigCopyWith<$Res> get config {
+    return $GameConfigCopyWith<$Res>(_value.config, (value) {
+      return _then(_value.copyWith(config: value));
+    });
   }
 }
 
@@ -1176,8 +1192,12 @@ abstract class _$$_GameInfoCopyWith<$Res> implements $GameInfoCopyWith<$Res> {
       IList<String> players,
       String player,
       bool creator,
+      GameConfig config,
       String gameType,
       GameStatus status});
+
+  @override
+  $GameConfigCopyWith<$Res> get config;
 }
 
 /// @nodoc
@@ -1196,6 +1216,7 @@ class __$$_GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
     Object? players = freezed,
     Object? player = freezed,
     Object? creator = freezed,
+    Object? config = freezed,
     Object? gameType = freezed,
     Object? status = freezed,
   }) {
@@ -1216,6 +1237,10 @@ class __$$_GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
           ? _value.creator
           : creator // ignore: cast_nullable_to_non_nullable
               as bool,
+      config: config == freezed
+          ? _value.config
+          : config // ignore: cast_nullable_to_non_nullable
+              as GameConfig,
       gameType: gameType == freezed
           ? _value.gameType
           : gameType // ignore: cast_nullable_to_non_nullable
@@ -1236,6 +1261,7 @@ class _$_GameInfo implements _GameInfo {
       required this.players,
       required this.player,
       required this.creator,
+      required this.config,
       required this.gameType,
       required this.status});
 
@@ -1251,13 +1277,15 @@ class _$_GameInfo implements _GameInfo {
   @override
   final bool creator;
   @override
+  final GameConfig config;
+  @override
   final String gameType;
   @override
   final GameStatus status;
 
   @override
   String toString() {
-    return 'GameInfo(gameID: $gameID, players: $players, player: $player, creator: $creator, gameType: $gameType, status: $status)';
+    return 'GameInfo(gameID: $gameID, players: $players, player: $player, creator: $creator, config: $config, gameType: $gameType, status: $status)';
   }
 
   @override
@@ -1269,6 +1297,7 @@ class _$_GameInfo implements _GameInfo {
             const DeepCollectionEquality().equals(other.players, players) &&
             const DeepCollectionEquality().equals(other.player, player) &&
             const DeepCollectionEquality().equals(other.creator, creator) &&
+            const DeepCollectionEquality().equals(other.config, config) &&
             const DeepCollectionEquality().equals(other.gameType, gameType) &&
             const DeepCollectionEquality().equals(other.status, status));
   }
@@ -1281,6 +1310,7 @@ class _$_GameInfo implements _GameInfo {
       const DeepCollectionEquality().hash(players),
       const DeepCollectionEquality().hash(player),
       const DeepCollectionEquality().hash(creator),
+      const DeepCollectionEquality().hash(config),
       const DeepCollectionEquality().hash(gameType),
       const DeepCollectionEquality().hash(status));
 
@@ -1303,6 +1333,7 @@ abstract class _GameInfo implements GameInfo {
       required final IList<String> players,
       required final String player,
       required final bool creator,
+      required final GameConfig config,
       required final String gameType,
       required final GameStatus status}) = _$_GameInfo;
 
@@ -1316,6 +1347,8 @@ abstract class _GameInfo implements GameInfo {
   String get player;
   @override
   bool get creator;
+  @override
+  GameConfig get config;
   @override
   String get gameType;
   @override

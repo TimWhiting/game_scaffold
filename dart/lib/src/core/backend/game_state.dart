@@ -42,6 +42,7 @@ class BackendProviders {
       final pls = l.players;
       if (pls.any((p) => p.id == player)) {
         yield GameInfo(
+          config: l.config,
           gameID: l.code,
           status: l.gameStatus,
           player: pls.firstWhere((p) => p.id == player).name,

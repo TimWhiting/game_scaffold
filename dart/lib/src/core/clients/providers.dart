@@ -51,13 +51,13 @@ final gameServiceFamily = Provider.autoDispose.family<GameService, ServiceType>(
         throw UnsupportedError('Unsupported service type');
     }
   },
-  name: 'GameClientFamily',
+  name: 'GameServiceFamily',
   dependencies: [socketIOGameService, onDeviceGameService, playerIDProvider],
 );
 
 final gameService = Provider.autoDispose<GameService>(
   (ref) => ref.watch(gameServiceFamily(ref.watch(serviceType))),
-  name: 'GameClient',
+  name: 'GameService',
   dependencies: [serviceType, gameServiceFamily],
 );
 
@@ -74,13 +74,13 @@ final roundServiceFamily =
         throw UnsupportedError('Unsupported service type');
     }
   },
-  name: 'GameClientFamily',
+  name: 'RoundServiceFamily',
   dependencies: [socketIORoundService, onDeviceRoundService, playerIDProvider],
 );
 
-final roundClient = Provider.autoDispose<RoundService>(
+final roundService = Provider.autoDispose<RoundService>(
   (ref) => ref.watch(roundServiceFamily(ref.watch(serviceType))),
-  name: 'GameClient',
+  name: 'RoundService',
   dependencies: [serviceType, roundServiceFamily],
 );
 
@@ -151,25 +151,25 @@ class GameProviders {
 
   static final exitGame = FutureProvider.autoDispose<bool>(
     (ref) => ref
-        .read(roundClient)
+        .read(roundService)
         .exitGame(ref.read(playerIDProvider), ref.read(code)),
     name: 'ExitGame',
-    dependencies: [roundClient, playerIDProvider, gameClientProvider],
+    dependencies: [roundService, playerIDProvider, gameClientProvider],
   );
 
   static final undo = FutureProvider.autoDispose<bool>(
     (ref) =>
-        ref.read(roundClient).undo(ref.read(playerIDProvider), ref.read(code)),
+        ref.read(roundService).undo(ref.read(playerIDProvider), ref.read(code)),
     name: 'Undo',
-    dependencies: [roundClient, playerIDProvider, gameClientProvider],
+    dependencies: [roundService, playerIDProvider, gameClientProvider],
   );
 
   static final newRound = FutureProvider.autoDispose<bool>(
     (ref) => ref
-        .read(roundClient)
+        .read(roundService)
         .newRound(ref.read(playerIDProvider), ref.read(code)),
     name: 'NewRound',
-    dependencies: [roundClient, playerIDProvider, gameClientProvider],
+    dependencies: [roundService, playerIDProvider, gameClientProvider],
   );
 
   static final chatMessage = StateProvider<String>(
@@ -178,11 +178,11 @@ class GameProviders {
   );
 
   static final sendMessage = FutureProvider.autoDispose<bool>(
-    (ref) => ref.read(roundClient).sendMessage(
+    (ref) => ref.read(roundService).sendMessage(
         ref.read(playerIDProvider), ref.read(code), ref.read(chatMessage)),
     name: 'NewRound',
     dependencies: [
-      roundClient,
+      roundService,
       playerIDProvider,
       gameClientProvider,
       chatMessage
@@ -191,16 +191,16 @@ class GameProviders {
 
   static final sendEvent = FutureProvider.autoDispose.family<bool, Object>(
     (ref, event) => ref
-        .read(roundClient)
+        .read(roundService)
         .sendEvent(ref.read(playerIDProvider), ref.read(code), event),
     name: 'SendEvent',
-    dependencies: [roundClient, playerIDProvider, gameClientProvider],
+    dependencies: [roundService, playerIDProvider, gameClientProvider],
   );
 
   /// Provides game lobby info in the form of [GameInfo] for the lobby
   static final lobby = StreamProvider.autoDispose<GameInfo>(
     (ref) async* {
-      final c = ref.read(gameService);
+      final c = ref.read(roundService);
       final cde = ref.watch(code);
       if (cde.isEmpty) {
         return;
@@ -208,13 +208,13 @@ class GameProviders {
       yield* c.gameLobby(ref.watch(playerIDProvider), cde);
     },
     name: 'Lobby',
-    dependencies: [gameService, code, playerIDProvider],
+    dependencies: [roundService, code, playerIDProvider],
   );
 
   /// Provides the game state for the current game of the client with specified id
   static final game = StreamProvider.autoDispose<GameState<Object>>(
     (ref) {
-      final c = ref.read(roundClient);
+      final c = ref.read(roundService);
       return c.gameStream(ref.watch(playerIDProvider), ref.watch(code));
     },
     name: 'GameStateStream',
@@ -224,7 +224,7 @@ class GameProviders {
   /// Provides the game error for the current game of the client with specified id
   static final error = StreamProvider.autoDispose<GameError>(
     (ref) {
-      final c = ref.read(roundClient);
+      final c = ref.read(roundService);
       return c.errorStream(ref.watch(playerIDProvider), ref.watch(code));
     },
     name: 'GameError',

@@ -73,7 +73,8 @@ class CreateOrJoinWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final playerID = ref.watch(playerIDProvider);
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
-    final allGames = ref.watch(GameProviders.allGames);
+    final allGames = ref.watch(gameClientProvider(playerID)).games;
+    final gameClient = ref.watch(gameClientProvider(playerID).notifier);
 
     return Scaffold(
       body: Center(
@@ -86,16 +87,16 @@ class CreateOrJoinWidget extends HookConsumerWidget {
               ElevatedButton(
                 key: Key('Create Game Button $playerID'),
                 onPressed: () async {
-                  ref.read(GameProviders.config.notifier).state =
+                  gameClient.setGameConfig(
                       const GameConfig(
                     adminID: '0',
                     customNames: false,
                     gameType: 'tictactoe',
                     rounds: 2,
                     maxPlayers: 2,
-                  );
-                  await ref.refresh(GameProviders.createGame.future);
-                  await ref.refresh(GameProviders.joinGame.future);
+                  ));
+                  await gameClient.createGame();
+                  await gameClient.joinGame();
                 },
                 child: const Text('Create Game'),
               ),
@@ -107,24 +108,21 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                   textAlignVertical: TextAlignVertical.center,
                   decoration:
                       const InputDecoration(hintText: 'Enter Game Code'),
-                  onChanged: (text) =>
-                      ref.read(GameProviders.code.notifier).state = text,
+                  onChanged: gameClient.setGameCode,
                 ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  ref.refresh(GameProviders.joinGame.future);
-                },
+                onPressed: gameClient.joinGame,
                 child: const Text('Join Game'),
               )
             ],
-            if (allGames.value != null)
-              for (final info in allGames.value!)
+            if (allGames != null)
+              for (final info in allGames)
                 ElevatedButton(
                   onPressed: () async {
-                    ref.read(GameProviders.code.notifier).state = info.gameID;
-                    await ref.refresh(GameProviders.joinGame.future);
+                    gameClient.setGameCode(info.gameID);
+                    await gameClient.joinGame();
                   },
                   child: Text(
                       'Started Game: ${info.gameID}, Players: ${info.players}'),

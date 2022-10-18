@@ -111,6 +111,7 @@ _$_GameInfo _$$_GameInfoFromJson(Map<String, dynamic> json) => _$_GameInfo(
           IList<String>.fromJson(json['players'], (value) => value as String),
       player: json['player'] as String,
       creator: json['creator'] as bool,
+      config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
       gameType: json['gameType'] as String,
       status: $enumDecode(_$GameStatusEnumMap, json['status']),
     );
@@ -123,6 +124,7 @@ Map<String, dynamic> _$$_GameInfoToJson(_$_GameInfo instance) =>
       ),
       'player': instance.player,
       'creator': instance.creator,
+      'config': instance.config,
       'gameType': instance.gameType,
       'status': _$GameStatusEnumMap[instance.status]!,
     };

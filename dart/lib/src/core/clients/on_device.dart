@@ -69,6 +69,37 @@ class OnDeviceRoundService extends RoundService {
     yield* ss.stream;
     await ss.close();
   }
+
+  @override
+  Future<bool> startGame(PlayerID playerID, GameCode code) async {
+    final backendReader = OnDeviceGameService.games[code]!.container.read;
+    final notifier = backendReader(BackendProviders.lobby.notifier);
+    await Future.delayed(const Duration(microseconds: 1));
+    notifier.start();
+    return true;
+  }
+
+  @override
+  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) async* {
+    final backend = OnDeviceGameService.games[code]?.container;
+    final ss = StreamController<GameInfo>();
+    if (backend == null) {
+      return;
+    }
+
+    backend.listen<Stream<GameInfo>>(
+      fireImmediately: true,
+      BackendProviders.playerLobby(playerID).stream,
+      (prev, curr) async {
+        // ignore: prefer_foreach
+        await for (final e in curr) {
+          ss.add(e);
+        }
+      },
+    );
+    yield* ss.stream;
+    await ss.close();
+  }
 }
 
 final onDeviceRoundService = Provider<RoundService>((ref) {
@@ -130,37 +161,6 @@ class OnDeviceGameService extends GameService {
   }
 
   @override
-  Future<bool> startGame(PlayerID playerID, GameCode code) async {
-    final backendReader = OnDeviceGameService.games[code]!.container.read;
-    final notifier = backendReader(BackendProviders.lobby.notifier);
-    await Future.delayed(const Duration(microseconds: 1));
-    notifier.start();
-    return true;
-  }
-
-  @override
-  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) async* {
-    final backend = OnDeviceGameService.games[code]?.container;
-    final ss = StreamController<GameInfo>();
-    if (backend == null) {
-      return;
-    }
-
-    backend.listen<Stream<GameInfo>>(
-      fireImmediately: true,
-      BackendProviders.playerLobby(playerID).stream,
-      (prev, curr) async {
-        // ignore: prefer_foreach
-        await for (final e in curr) {
-          ss.add(e);
-        }
-      },
-    );
-    yield* ss.stream;
-    await ss.close();
-  }
-
-  @override
   Future<IList<GameInfo>> getGames(PlayerID playerID) async {
     final gms = games.values.where(
       (g) => g.container
@@ -171,6 +171,7 @@ class OnDeviceGameService extends GameService {
     return [
       for (final g in gms)
         GameInfo(
+          config: g.container.read(BackendProviders.lobby).config,
           status: g.container.read(BackendProviders.lobby).gameStatus,
           gameID: g.gameCode,
           player: g.container

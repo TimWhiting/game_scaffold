@@ -32,6 +32,11 @@ class IORoundClient extends RoundService {
     ref.read(GameProviders.status.notifier).state = status;
   }
 
+  @override
+  Future<bool> startGame(PlayerID playerID, GameCode code) async {
+    final result = await _socket?.call(IOChannel.startGame, {'playerID': playerID, 'code': code}) ?? false;
+    return result as bool;
+  }
   Future<void> _ensureConnected(GameCode code) async {
     if (code != _lastGameCode || (_socket?.disconnected ?? true)) {
       _socket?.dispose();
@@ -90,7 +95,18 @@ class IORoundClient extends RoundService {
     final result = await _socket!.call(IOChannel.event, js);
     return result as bool;
   }
+  @override
+  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) async* {
+    final sc = StreamController<GameInfo>();
+    _socket!.on(IOChannel.lobby.string, (d) {
+      final gameInfo = GameInfo.fromJson(d as Map<String, dynamic>);
+      sc.add(gameInfo);
+      logger.info('Got Lobby $gameInfo');
+    });
 
+    yield* sc.stream;
+    await sc.close();
+  }
   @override
   void dispose() {
     logger.info('Dispose');
@@ -175,24 +191,8 @@ class IOGameClient extends GameService {
     return name;
   }
 
-  @override
-  Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) async* {
-    final sc = StreamController<GameInfo>();
-    socket.on(IOChannel.lobby.string, (d) {
-      final gameInfo = GameInfo.fromJson(d as Map<String, dynamic>);
-      sc.add(gameInfo);
-      logger.info('Got Lobby $gameInfo');
-    });
 
-    yield* sc.stream;
-    await sc.close();
-  }
 
-  @override
-  Future<bool> startGame(PlayerID playerID, GameCode code) async {
-    final result = await socket.call(IOChannel.startGame, {'playerID': playerID, 'code': code});
-    return result as bool;
-  }
 
   @override
   void dispose() {

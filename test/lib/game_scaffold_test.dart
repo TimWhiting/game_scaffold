@@ -21,32 +21,35 @@ void testGame<T extends Object, E extends Object>(
   darttest.test(testName, () async {
     final root = ProviderContainer();
     final ref = <PlayerID, ProviderContainer>{};
-    final sub = <PlayerID, ProviderSubscription>{};
+    final g = <PlayerID, ProviderSubscription<GameClient>>{};
+    final r = <PlayerID, ProviderSubscription<RoundClient>>{};
 
     root.read(serviceType.notifier).state = OnDeviceService;
 
     for (final p in players) {
       ref[p.id] = ProviderContainer(
           parent: root, overrides: [playerIDProvider.overrideWithValue(p.id)]);
+      g[p.id] = ref[p.id]!
+          .listen(gameClientProvider(p.id).notifier, (previous, next) {});
     }
-    ref[players.first.id]!.read(GameProviders.config.notifier).state = config;
-    final code =
-        await ref[players.first.id]!.read(GameProviders.createGame.future);
+    g[players.first.id]!.read().setGameConfig(config);
+    final code = await g[players.first.id]!.read().createGame();
     for (final p in players) {
-      sub[p.id] = ref[p.id]!.listen(gameService, (_, __) {});
-      ref[p.id]!.read(GameProviders.code.notifier).state = code;
-      await ref[p.id]!.read(GameProviders.joinGame.future);
+      g[p.id]!.read().setGameCode(code);
+      await g[p.id]!.read().joinGame();
+      r[p.id] = ref[p.id]!
+          .listen(roundClientProvider(p.id).notifier, (previous, next) {});
     }
 
     if (ref[players.first.id]!.read(GameProviders.status) !=
         GameStatus.started) {
-      await ref[players.first.id]!.read(GameProviders.startGame.future);
+      await r[players.first.id]!.read().startGame();
     }
     final tester = GameTester<T, E>(ref, players, code);
     await test(tester);
 
-    for (final s in sub.keys) {
-      sub[s]!.close();
+    for (final s in g.keys) {
+      g[s]!.close();
       ref[s]!.dispose();
     }
     tester.dispose();

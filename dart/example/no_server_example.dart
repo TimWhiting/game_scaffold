@@ -26,20 +26,24 @@ Future<void> main(List<String> arguments) async {
     maxPlayers: 2,
   );
 
-  p1Ref.read(GameProviders.config).state = config;
-  final code = await p1Ref.read(GameProviders.createGame.future);
-  p1Ref.read(GameProviders.playerName.notifier).state = 'Player 1';
-  p2Ref.read(GameProviders.playerName.notifier).state = 'Player 2';
-  final r = await p1Ref.read(GameProviders.joinGame.future);
-  p2Ref.read(GameProviders.code.notifier).state = code;
-  final r1 = await p2Ref.read(GameProviders.joinGame.future);
+  final p1Client = p1Ref.listen(gameClientProvider('0').notifier, (_, __) {});
+  final p2Client = p2Ref.listen(gameClientProvider('1').notifier, (_, __) {});
+
+  p1Client.read().setGameConfig(config);
+  final code = await p1Client.read().createGame();
+  p1Client.read().setPlayerName('Player 1');
+  p2Client.read()
+    ..setGameCode(code)
+    ..setPlayerName('Player 2');
+  final r = await p1Client.read().joinGame();
+  final r1 = await p2Client.read().joinGame();
   p1Ref.listen(GameProviders.lobby, (_, __) {});
   p2Ref.listen(GameProviders.lobby, (_, __) {});
-  final r2 = await p1Ref.read(GameProviders.startGame.future);
+  // final r2 = await p1Client.read().startGame();
 
   print(r);
   print(r1);
-  print(r2);
+  // print(r2);
 
   late ProviderSubscription sub;
   sub = p1Ref.listen<AsyncValue<GameState>>(

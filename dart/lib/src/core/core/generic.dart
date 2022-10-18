@@ -151,6 +151,7 @@ class GameInfo with _$GameInfo {
     required IList<PlayerName> players,
     required PlayerName player,
     required bool creator,
+    required GameConfig config,
     required GameType gameType,
     required GameStatus status,
   }) = _GameInfo;
