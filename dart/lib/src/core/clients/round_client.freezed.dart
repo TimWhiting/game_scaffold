@@ -16,7 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$RoundInfo {
-  RoundService? get _service => throw _privateConstructorUsedError;
+  @protected
+  RoundService? get service => throw _privateConstructorUsedError;
   String get code => throw _privateConstructorUsedError;
   String get playerName => throw _privateConstructorUsedError;
   GameInfo? get lobby => throw _privateConstructorUsedError;
@@ -33,7 +34,7 @@ abstract class $RoundInfoCopyWith<$Res> {
   factory $RoundInfoCopyWith(RoundInfo value, $Res Function(RoundInfo) then) =
       _$RoundInfoCopyWithImpl<$Res>;
   $Res call(
-      {RoundService? _service,
+      {@protected RoundService? service,
       String code,
       String playerName,
       GameInfo? lobby,
@@ -53,7 +54,7 @@ class _$RoundInfoCopyWithImpl<$Res> implements $RoundInfoCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? _service = freezed,
+    Object? service = freezed,
     Object? code = freezed,
     Object? playerName = freezed,
     Object? lobby = freezed,
@@ -61,9 +62,9 @@ class _$RoundInfoCopyWithImpl<$Res> implements $RoundInfoCopyWith<$Res> {
     Object? error = freezed,
   }) {
     return _then(_value.copyWith(
-      _service: _service == freezed
-          ? _value._service
-          : _service // ignore: cast_nullable_to_non_nullable
+      service: service == freezed
+          ? _value.service
+          : service // ignore: cast_nullable_to_non_nullable
               as RoundService?,
       code: code == freezed
           ? _value.code
@@ -107,7 +108,7 @@ abstract class _$$_RoundInfoCopyWith<$Res> implements $RoundInfoCopyWith<$Res> {
       __$$_RoundInfoCopyWithImpl<$Res>;
   @override
   $Res call(
-      {RoundService? _service,
+      {@protected RoundService? service,
       String code,
       String playerName,
       GameInfo? lobby,
@@ -130,7 +131,7 @@ class __$$_RoundInfoCopyWithImpl<$Res> extends _$RoundInfoCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? _service = freezed,
+    Object? service = freezed,
     Object? code = freezed,
     Object? playerName = freezed,
     Object? lobby = freezed,
@@ -138,9 +139,9 @@ class __$$_RoundInfoCopyWithImpl<$Res> extends _$RoundInfoCopyWithImpl<$Res>
     Object? error = freezed,
   }) {
     return _then(_$_RoundInfo(
-      _service == freezed
-          ? _value._service
-          : _service // ignore: cast_nullable_to_non_nullable
+      service == freezed
+          ? _value.service
+          : service // ignore: cast_nullable_to_non_nullable
               as RoundService?,
       code: code == freezed
           ? _value.code
@@ -169,7 +170,7 @@ class __$$_RoundInfoCopyWithImpl<$Res> extends _$RoundInfoCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_RoundInfo extends _RoundInfo {
-  const _$_RoundInfo(this._service,
+  const _$_RoundInfo(@protected this.service,
       {required this.code,
       required this.playerName,
       this.lobby,
@@ -178,7 +179,8 @@ class _$_RoundInfo extends _RoundInfo {
       : super._();
 
   @override
-  final RoundService? _service;
+  @protected
+  final RoundService? service;
   @override
   final String code;
   @override
@@ -192,7 +194,7 @@ class _$_RoundInfo extends _RoundInfo {
 
   @override
   String toString() {
-    return 'RoundInfo(_service: $_service, code: $code, playerName: $playerName, lobby: $lobby, game: $game, error: $error)';
+    return 'RoundInfo(service: $service, code: $code, playerName: $playerName, lobby: $lobby, game: $game, error: $error)';
   }
 
   @override
@@ -200,7 +202,7 @@ class _$_RoundInfo extends _RoundInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_RoundInfo &&
-            const DeepCollectionEquality().equals(other._service, _service) &&
+            const DeepCollectionEquality().equals(other.service, service) &&
             const DeepCollectionEquality().equals(other.code, code) &&
             const DeepCollectionEquality()
                 .equals(other.playerName, playerName) &&
@@ -212,7 +214,7 @@ class _$_RoundInfo extends _RoundInfo {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(_service),
+      const DeepCollectionEquality().hash(service),
       const DeepCollectionEquality().hash(code),
       const DeepCollectionEquality().hash(playerName),
       const DeepCollectionEquality().hash(lobby),
@@ -226,7 +228,7 @@ class _$_RoundInfo extends _RoundInfo {
 }
 
 abstract class _RoundInfo extends RoundInfo {
-  const factory _RoundInfo(final RoundService? _service,
+  const factory _RoundInfo(@protected final RoundService? service,
       {required final String code,
       required final String playerName,
       final GameInfo? lobby,
@@ -235,7 +237,8 @@ abstract class _RoundInfo extends RoundInfo {
   const _RoundInfo._() : super._();
 
   @override
-  RoundService? get _service;
+  @protected
+  RoundService? get service;
   @override
   String get code;
   @override

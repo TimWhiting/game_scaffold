@@ -31,7 +31,8 @@ class MultiplayerRoundClient extends _$MultiplayerRoundClient {
   @override
   RoundInfo build(PlayerID multiplayerID) {
     final gameInfo = ref.read(multiplayerGameClientProvider(multiplayerID));
-    connect();
+    final service = ref.watch(roundService);
+    connect(service);
     return RoundInfo(
       null,
       code: gameInfo.code!,
@@ -39,11 +40,10 @@ class MultiplayerRoundClient extends _$MultiplayerRoundClient {
     );
   }
 
-  void connect() {
-    final service = ref.read(roundService);
+  void connect(RoundService service) {
     service.connect().map((conn) {
       if (conn) {
-        state = state.copyWith(_service: service);
+        state = state.copyWith(service: service);
         StreamSubscription<GameError>? error;
         StreamSubscription<GameState>? round;
         final lobby = service.gameLobby(multiplayerID, state.code).listen((e) {
@@ -67,13 +67,13 @@ class MultiplayerRoundClient extends _$MultiplayerRoundClient {
           round?.cancel();
         });
       } else {
-        state = state.copyWith(_service: null);
+        state = state.copyWith(service: null);
       }
-    });
+    }).toList();
   }
 
   T service<T>(T Function(RoundService) service) => state.connected
-      ? service(state._service!)
+      ? service(state.service!)
       : throw Exception('Not connected');
 
   void clearError() {
@@ -90,7 +90,7 @@ class MultiplayerRoundClient extends _$MultiplayerRoundClient {
 @freezed
 class RoundInfo with _$RoundInfo {
   const factory RoundInfo(
-    RoundService? _service, {
+    @protected RoundService? service, {
     required String code,
     required PlayerName playerName,
     GameInfo? lobby,
@@ -98,7 +98,7 @@ class RoundInfo with _$RoundInfo {
     String? error,
   }) = _RoundInfo;
   const RoundInfo._();
-  bool get connected => _service != null;
+  bool get connected => service != null;
   bool get isStarted => game != null;
   bool get hasError => error != null;
   bool get inLobby => lobby != null && !isStarted;

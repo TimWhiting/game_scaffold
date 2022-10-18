@@ -27,12 +27,13 @@ final gameClientProvider = Provider.autoDispose<MultiplayerGameClient>(
 class MultiplayerGameClient extends _$MultiplayerGameClient {
   @override
   GameClientInfo build(PlayerID multiplayerID) {
-    connect();
+    final service = ref.watch(gameService);
+
+    connect(service);
     return const GameClientInfo(null);
   }
 
-  void connect() {
-    final service = ref.read(gameService);
+  void connect(GameService service) {
     service.connect().map((conn) {
       if (conn) {
         state = GameClientInfo(
@@ -48,13 +49,13 @@ class MultiplayerGameClient extends _$MultiplayerGameClient {
         });
         ref.onDispose(service.disconnect);
       } else {
-        state = state.copyWith(_service: null);
+        state = state.copyWith(service: null);
       }
-    });
+    }).toList();
   }
 
   T service<T>(T Function(GameService) service) => state.connected
-      ? service(state._service!)
+      ? service(state.service!)
       : throw Exception('Not connected');
 
   void setGameCode(GameCode code) => state = state.copyWith(code: code);
@@ -89,14 +90,14 @@ class MultiplayerGameClient extends _$MultiplayerGameClient {
 @freezed
 class GameClientInfo with _$GameClientInfo {
   const factory GameClientInfo(
-    GameService? _service, {
+    @protected GameService? service, {
     String? code,
     PlayerName? playerName,
     GameConfig? config,
     IList<GameInfo>? games,
   }) = _GameClientInfo;
   const GameClientInfo._();
-  bool get connected => _service != null;
+  bool get connected => service != null;
   bool get canCreateGame => connected && config != null;
   bool get canJoinGame => connected && code != null;
 }

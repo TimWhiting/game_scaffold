@@ -30,6 +30,7 @@ Future<void> main(List<String> arguments) async {
   final p2Client = p2Ref.listen(gameClientProvider, (_, __) {});
 
   p1Client.read().setGameConfig(config);
+  await Future.delayed(const Duration(seconds: 1));
   final code = await p1Client.read().createGame();
   p1Client.read().setPlayerName('Player 1');
   p2Client.read()

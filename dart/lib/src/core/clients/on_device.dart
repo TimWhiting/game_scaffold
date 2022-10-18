@@ -47,11 +47,6 @@ class OnDeviceRoundService extends RoundService {
   }
 
   @override
-  void dispose() {
-    logger.info('Disposing game client');
-  }
-
-  @override
   Stream<GameError> errorStream(PlayerID playerID, GameCode code) async* {
     final ss = StreamController<GameError>();
 
@@ -136,9 +131,6 @@ class OnDeviceGameService extends GameService {
     }
     return false;
   }
-
-  @override
-  void dispose() {}
 
   @override
   Future<String?> joinGame(
