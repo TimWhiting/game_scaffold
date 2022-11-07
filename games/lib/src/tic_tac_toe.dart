@@ -4,29 +4,6 @@ import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 part 'tic_tac_toe.freezed.dart';
 part 'tic_tac_toe.g.dart';
 
-@freezed
-class TicTacToeGameEvent with _$TicTacToeGameEvent {
-  const factory TicTacToeGameEvent({required int player, required int location}) = _TicTacToeGameEvent;
-  factory TicTacToeGameEvent.fromJson(Map<String, dynamic> map) => _$TicTacToeGameEventFromJson(map);
-}
-
-@freezed
-class TicTacToeGame with _$TicTacToeGame {
-  const factory TicTacToeGame({required  IList<int?> board, required  int currentPlayer}) = _TicTacToeGame;
-  factory TicTacToeGame.fromJson(Map<String, dynamic> map) => _$TicTacToeGameFromJson(map);
-}
-
-final IList<IList<int>> winningLocationCombinations = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6]
-].map((l) => l.lock).toIList();
-
 void registerTicTacToe() {
   Game.register<TicTacToeGame, TicTacToeGameEvent>(tttFunctions);
 }
@@ -42,6 +19,12 @@ final GameFunctions<TicTacToeGame, TicTacToeGameEvent> tttFunctions = GameFuncti
   gameType: 'tictactoe',
   initialState: (config, players) => GameState(game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0),  messages: <GameMessage>[].lock, generic: GenericGame.start(players), rewards: <double>[0, 0]),
 );
+
+@freezed
+class TicTacToeGameEvent with _$TicTacToeGameEvent {
+  const factory TicTacToeGameEvent({required int player, required int location}) = _TicTacToeGameEvent;
+  factory TicTacToeGameEvent.fromJson(Map<String, dynamic> map) => _$TicTacToeGameEventFromJson(map);
+}
 
 enum Winner {
   p1,
@@ -60,8 +43,11 @@ extension TicTacToeStateX on GameState<TicTacToeGame> {
   );
 }
 
-extension TicTacToeGameX on TicTacToeGame {
-  
+@freezed
+class TicTacToeGame with _$TicTacToeGame {
+  const factory TicTacToeGame({required  IList<int?> board, required  int currentPlayer}) = _TicTacToeGame;
+  factory TicTacToeGame.fromJson(Map<String, dynamic> map) => _$TicTacToeGameFromJson(map);
+
   TicTacToeGame next(TicTacToeGameEvent event, GameConfig config) => 
   TicTacToeGame(
     currentPlayer: currentPlayer == 0 ? 1 : 0,
@@ -106,5 +92,15 @@ extension TicTacToeGameX on TicTacToeGame {
   bool isLoser(int player) => isWinner(player == 0 ? 1 : 0);
 
   IList<int> get availableLocations => board.asMap().entries.where((e) => e.value == null).map((e) => e.key).toIList();
+  
+  static IList<IList<int>> winningLocationCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ].map((l) => l.lock).toIList();
 }
-
