@@ -137,7 +137,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
   /// In case of a [GenericEvent] this handles the implementation of handling the event
   // ignore: type_annotate_public_apis
   bool handleEvent(Object event) {
-    // print('${event.toJson()}');
+    print('$event');
     var error = false;
     try {
       final game = gameState;

@@ -1,21 +1,19 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 
-class TicTacToeGameEvent {
-  TicTacToeGameEvent({required this.player, required this.location});
-final int player; final int location;
+part 'tic_tac_toe.freezed.dart';
+part 'tic_tac_toe.g.dart';
+
+@freezed
+class TicTacToeGameEvent with _$TicTacToeGameEvent {
+  const factory TicTacToeGameEvent({required int player, required int location}) = _TicTacToeGameEvent;
+  factory TicTacToeGameEvent.fromJson(Map<String, dynamic> map) => _$TicTacToeGameEventFromJson(map);
 }
 
-class TicTacToeGame {
-  TicTacToeGame({required this.board, required this.currentPlayer});
-
-  final IList<int?> board;
-  final int currentPlayer;
-
-  TicTacToeGame copyWith({IList<int?>? board, int? currentPlayer}) =>
-      TicTacToeGame(
-        board: board ?? this.board,
-        currentPlayer: currentPlayer ?? this.currentPlayer,
-      );
+@freezed
+class TicTacToeGame with _$TicTacToeGame {
+  const factory TicTacToeGame({required  IList<int?> board, required  int currentPlayer}) = _TicTacToeGame;
+  factory TicTacToeGame.fromJson(Map<String, dynamic> map) => _$TicTacToeGameFromJson(map);
 }
 
 final IList<IList<int>> winningLocationCombinations = [
@@ -36,10 +34,10 @@ void registerTicTacToe() {
 final GameFunctions<TicTacToeGame, TicTacToeGameEvent> tttFunctions = GameFunctions(
   game: (game) => GameStateFunctions(next: game.nextState, error: game.error),
   state: (state) => StateFunctions(nextRound: TicTacToeStateX(state).nextRound),
-  toJson: (game) => {'board': game.board.toList(), 'currentPlayer': game.currentPlayer},
-  fromJson: (map) => TicTacToeGame(board: (map['board'] as List).cast<int?>().lock, currentPlayer: map['currentPlayer'] as int),
-  toJsonE: (event) => {'player': event.player, 'location': event.location},
-  fromJsonE: (map) => TicTacToeGameEvent(player: map['player'] as int, location: map['location'] as int),
+  toJson: (game) => game.toJson(),
+  fromJson: TicTacToeGame.fromJson,
+  toJsonE: (event) => event.toJson(),
+  fromJsonE: TicTacToeGameEvent.fromJson,
   gameName: 'Tic Tac Toe',
   gameType: 'tictactoe',
   initialState: (config, players) => GameState(game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0),  messages: <GameMessage>[].lock, generic: GenericGame.start(players), rewards: <double>[0, 0]),
