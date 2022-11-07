@@ -9,14 +9,14 @@ environment:
 
 dependencies:
   characters: ^1.2.1
-  collection: ^1.16.0
+  collection: ^1.17.0
   enum_to_string: ^2.0.1
-  fast_immutable_collections: ^7.4.2
-  freezed_annotation: ^2.1.0
+  fast_immutable_collections: ^8.0.0
+  freezed_annotation: ^2.2.0
   json_annotation: ^4.7.0
-  logging: ^1.0.2
-  riverpod: ^2.0.2
-  riverpod_annotation: ^1.0.4
+  logging: ^1.1.0
+  riverpod: ^2.1.1
+  riverpod_annotation: ^1.0.6
   rxdart: ^0.27.5
   socket_io: ^1.0.1
   socket_io_client: ^1.0.2

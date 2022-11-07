@@ -8,20 +8,21 @@ environment:
   flutter: ">=3.3.0"
 
 dependencies:
-  collection: ^1.16.0
-  firebase_dart: ^1.1.0-dev.2
+  collection: ^1.17.0
+  firebase_dart: ^1.1.0-dev.6
   flutter:
     sdk: flutter
   flutter_hooks: ^0.18.5+1
-  flutter_riverpod: ^2.0.2
+  flutter_riverpod: ^2.1.1
   game_scaffold_dart: ^0.4.1+2
-  hooks_riverpod: ^2.0.2
-  logging: ^1.0.2
-  riverpod: ^2.0.2
+  hooks_riverpod: ^2.1.1
+  logging: ^1.1.0
+  riverpod: ^2.1.1
 
 dev_dependencies:
   dartdoc: ^6.1.2
   flutter_test:
     sdk: flutter
+  game_scaffold_games: ^0.4.1
 
 flutter: null
