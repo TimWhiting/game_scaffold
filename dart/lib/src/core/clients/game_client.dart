@@ -1,9 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../core.dart';
-import 'clients.dart';
+import '../../../game_scaffold_dart.dart';
 part 'game_client.freezed.dart';
-part 'game_client.g.dart';
 
 final gameInfoProvider = Provider<GameClientInfo>(
   (ref) =>
@@ -23,15 +20,25 @@ final gameClientProvider = Provider<MultiplayerGameClient>(
   ],
 );
 
-@Riverpod(keepAlive: true)
-class MultiplayerGameClient extends _$MultiplayerGameClient {
+final multiplayerGameClientProvider = StateNotifierProvider.family<
+    MultiplayerGameClient, GameClientInfo, PlayerID>(
+  MultiplayerGameClient.new,
+  dependencies: [
+    singleConfig,
+    gameService,
+  ],
+);
+
+class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
   @override
-  GameClientInfo build(PlayerID multiplayerID) {
+  MultiplayerGameClient(this.ref, this.multiplayerID)
+      : super(const GameClientInfo(null)) {
     final service = ref.watch(gameService);
 
     connect(service);
-    return const GameClientInfo(null);
   }
+  final PlayerID multiplayerID;
+  final StateNotifierProviderRef ref;
 
   void connect(GameService service) {
     service.connect().map((conn) {

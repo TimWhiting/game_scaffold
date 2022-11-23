@@ -28,3 +28,16 @@ dev_dependencies:
 
 scripts:
   - gen: dart run build_runner build
+
+# dependency_overrides:
+#   analyzer: ^5.2.0
+#   riverpod_analyzer_utils:
+#     git:
+#       url: https://github.com/TimWhiting/riverpod
+#       path: packages/riverpod_analyzer_utils
+#       ref: generate_dependencies
+#   riverpod_generator:
+#     git:
+#       url: https://github.com/TimWhiting/riverpod
+#       path: packages/riverpod_generator
+#       ref: generate_dependencies

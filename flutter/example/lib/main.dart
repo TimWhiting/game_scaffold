@@ -13,8 +13,7 @@ void main() {
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
   runApp(ProviderScope(
     overrides: [
-      serviceType
-          .overrideWithProvider(StateProvider((ref) => OnDeviceService)),
+      serviceType.overrideWith((ref) => OnDeviceService),
     ],
     child: const TicTacToeApp(),
   ));
@@ -87,8 +86,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
               ElevatedButton(
                 key: Key('Create Game Button $playerID'),
                 onPressed: () async {
-                  gameClient.setGameConfig(
-                      const GameConfig(
+                  gameClient.setGameConfig(const GameConfig(
                     adminID: '0',
                     customNames: false,
                     gameType: 'tictactoe',
@@ -177,57 +175,59 @@ class GameWidget extends HookConsumerWidget {
         g as GameState<TicTacToeGameEvent, TicTacToeGame>;
         final player = g.players.indexWhere((p) => p.id == playerID);
         return Scaffold(
-        appBar: AppBar(),
-        body: Center(
-          child: ListView(
-            children: [
-              Text('$gameState'),
-              const SizedBox(height: 20),
-              for (final r in [0, 1, 2])
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (final c in [0, 1, 2])
-                      GestureDetector(
-                        key: Key('$playerID square $r $c'),
-                        onTap: () async {
-                          await ref.refresh(GameProviders.sendEvent(
-                            ((player: player, location: r * 3 + c), ),
-                          ).future);
-                        },
-                        child: ColoredBox(
-                          color: Colors.black,
-                          child: Container(
-                            width: 20,
-                            height: 20,
-                            color: Colors.white,
-                            margin: const EdgeInsets.all(1),
-                            child: Center(
-                              child: Text(
-                                (g as TicTacToeGame)
-                                    .board
-                                    .xOrO(player, r * 3 + c),
+          appBar: AppBar(),
+          body: Center(
+            child: ListView(
+              children: [
+                Text('$gameState'),
+                const SizedBox(height: 20),
+                for (final r in [0, 1, 2])
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (final c in [0, 1, 2])
+                        GestureDetector(
+                          key: Key('$playerID square $r $c'),
+                          onTap: () async {
+                            final _ = await ref.refresh(GameProviders.sendEvent(
+                              TicTacToeGameEvent(
+                                  player: player, location: r * 3 + c),
+                            ).future);
+                          },
+                          child: ColoredBox(
+                            color: Colors.black,
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                              color: Colors.white,
+                              margin: const EdgeInsets.all(1),
+                              child: Center(
+                                child: Text(
+                                  (g as TicTacToeGame)
+                                      .board
+                                      .xOrO(player, r * 3 + c),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                  ],
-                ),
-              if (gameStatus == GameStatus.betweenRounds &&
-                  !g.readyPlayers.contains(playerID)) ...[
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    await ref.refresh(GameProviders.newRound.future);
-                  },
-                  child: const Text('Next Round'),
-                ),
+                    ],
+                  ),
+                if (gameStatus == GameStatus.betweenRounds &&
+                    !g.readyPlayers.contains(playerID)) ...[
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () async {
+                      final _ =
+                          await ref.refresh(GameProviders.newRound.future);
+                    },
+                    child: const Text('Next Round'),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
-        ),
-      );
+        );
       },
     );
   }
