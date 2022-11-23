@@ -57,7 +57,8 @@ Future<void> main(List<String> arguments) async {
       sub.close();
       return;
     }
-    final gameState = value.value! as GameState<TicTacToeGame>;
+    final gameState =
+        value.value! as GameState<TicTacToeGameEvent, TicTacToeGame>;
     print(gameState.status);
     if (gameState.gameOver || gameState.roundOver) {
       print('Round Over');
@@ -89,7 +90,7 @@ Future<void> main(List<String> arguments) async {
 }
 
 Future<void> loop(
-  GameState<TicTacToeGame> state,
+  GameState<TicTacToeGameEvent, TicTacToeGame> state,
   Map<int, ProviderContainer> playerContainers,
 ) async {
   printStateAndAction(state);
@@ -116,7 +117,7 @@ Future<void> loop(
   }
 }
 
-void printStateAndAction(GameState<TicTacToeGame> state) {
+void printStateAndAction(GameState<TicTacToeGameEvent, TicTacToeGame> state) {
   print("Player ${state.game.currentPlayer}'s turn");
   final gameState = state.game;
   String strFor(int index) => gameState.board[index] == 0

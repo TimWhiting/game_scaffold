@@ -32,7 +32,8 @@ mixin _$GameClientInfo {
 abstract class $GameClientInfoCopyWith<$Res> {
   factory $GameClientInfoCopyWith(
           GameClientInfo value, $Res Function(GameClientInfo) then) =
-      _$GameClientInfoCopyWithImpl<$Res>;
+      _$GameClientInfoCopyWithImpl<$Res, GameClientInfo>;
+  @useResult
   $Res call(
       {@protected GameService? service,
       String? code,
@@ -44,14 +45,16 @@ abstract class $GameClientInfoCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$GameClientInfoCopyWithImpl<$Res>
+class _$GameClientInfoCopyWithImpl<$Res, $Val extends GameClientInfo>
     implements $GameClientInfoCopyWith<$Res> {
   _$GameClientInfoCopyWithImpl(this._value, this._then);
 
-  final GameClientInfo _value;
   // ignore: unused_field
-  final $Res Function(GameClientInfo) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? service = freezed,
@@ -61,37 +64,38 @@ class _$GameClientInfoCopyWithImpl<$Res>
     Object? games = freezed,
   }) {
     return _then(_value.copyWith(
-      service: service == freezed
+      service: freezed == service
           ? _value.service
           : service // ignore: cast_nullable_to_non_nullable
               as GameService?,
-      code: code == freezed
+      code: freezed == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as String?,
-      playerName: playerName == freezed
+      playerName: freezed == playerName
           ? _value.playerName
           : playerName // ignore: cast_nullable_to_non_nullable
               as String?,
-      config: config == freezed
+      config: freezed == config
           ? _value.config
           : config // ignore: cast_nullable_to_non_nullable
               as GameConfig?,
-      games: games == freezed
+      games: freezed == games
           ? _value.games
           : games // ignore: cast_nullable_to_non_nullable
               as IList<GameInfo>?,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $GameConfigCopyWith<$Res>? get config {
     if (_value.config == null) {
       return null;
     }
 
     return $GameConfigCopyWith<$Res>(_value.config!, (value) {
-      return _then(_value.copyWith(config: value));
+      return _then(_value.copyWith(config: value) as $Val);
     });
   }
 }
@@ -103,6 +107,7 @@ abstract class _$$_GameClientInfoCopyWith<$Res>
           _$_GameClientInfo value, $Res Function(_$_GameClientInfo) then) =
       __$$_GameClientInfoCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@protected GameService? service,
       String? code,
@@ -116,15 +121,13 @@ abstract class _$$_GameClientInfoCopyWith<$Res>
 
 /// @nodoc
 class __$$_GameClientInfoCopyWithImpl<$Res>
-    extends _$GameClientInfoCopyWithImpl<$Res>
+    extends _$GameClientInfoCopyWithImpl<$Res, _$_GameClientInfo>
     implements _$$_GameClientInfoCopyWith<$Res> {
   __$$_GameClientInfoCopyWithImpl(
       _$_GameClientInfo _value, $Res Function(_$_GameClientInfo) _then)
-      : super(_value, (v) => _then(v as _$_GameClientInfo));
+      : super(_value, _then);
 
-  @override
-  _$_GameClientInfo get _value => super._value as _$_GameClientInfo;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? service = freezed,
@@ -134,23 +137,23 @@ class __$$_GameClientInfoCopyWithImpl<$Res>
     Object? games = freezed,
   }) {
     return _then(_$_GameClientInfo(
-      service == freezed
+      freezed == service
           ? _value.service
           : service // ignore: cast_nullable_to_non_nullable
               as GameService?,
-      code: code == freezed
+      code: freezed == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as String?,
-      playerName: playerName == freezed
+      playerName: freezed == playerName
           ? _value.playerName
           : playerName // ignore: cast_nullable_to_non_nullable
               as String?,
-      config: config == freezed
+      config: freezed == config
           ? _value.config
           : config // ignore: cast_nullable_to_non_nullable
               as GameConfig?,
-      games: games == freezed
+      games: freezed == games
           ? _value.games
           : games // ignore: cast_nullable_to_non_nullable
               as IList<GameInfo>?,
@@ -187,25 +190,21 @@ class _$_GameClientInfo extends _GameClientInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_GameClientInfo &&
-            const DeepCollectionEquality().equals(other.service, service) &&
-            const DeepCollectionEquality().equals(other.code, code) &&
-            const DeepCollectionEquality()
-                .equals(other.playerName, playerName) &&
-            const DeepCollectionEquality().equals(other.config, config) &&
+            (identical(other.service, service) || other.service == service) &&
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.playerName, playerName) ||
+                other.playerName == playerName) &&
+            (identical(other.config, config) || other.config == config) &&
             const DeepCollectionEquality().equals(other.games, games));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(service),
-      const DeepCollectionEquality().hash(code),
-      const DeepCollectionEquality().hash(playerName),
-      const DeepCollectionEquality().hash(config),
-      const DeepCollectionEquality().hash(games));
+  int get hashCode => Object.hash(runtimeType, service, code, playerName,
+      config, const DeepCollectionEquality().hash(games));
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_GameClientInfoCopyWith<_$_GameClientInfo> get copyWith =>
       __$$_GameClientInfoCopyWithImpl<_$_GameClientInfo>(this, _$identity);
 }

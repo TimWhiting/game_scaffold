@@ -174,7 +174,7 @@ class GameWidget extends HookConsumerWidget {
       error: (e, st) => Text('$e, $st'),
       loading: () => const Center(child: CircularProgressIndicator()),
       data: (g) {
-        g as GameState<TicTacToeGame>;
+        g as GameState<TicTacToeGameEvent, TicTacToeGame>;
         final player = g.players.indexWhere((p) => p.id == playerID);
         return Scaffold(
         appBar: AppBar(),

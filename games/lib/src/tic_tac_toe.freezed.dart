@@ -107,8 +107,9 @@ class __$$_TicTacToeGameEventCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_TicTacToeGameEvent implements _TicTacToeGameEvent {
-  const _$_TicTacToeGameEvent({required this.player, required this.location});
+class _$_TicTacToeGameEvent extends _TicTacToeGameEvent {
+  const _$_TicTacToeGameEvent({required this.player, required this.location})
+      : super._();
 
   factory _$_TicTacToeGameEvent.fromJson(Map<String, dynamic> json) =>
       _$$_TicTacToeGameEventFromJson(json);
@@ -152,10 +153,11 @@ class _$_TicTacToeGameEvent implements _TicTacToeGameEvent {
   }
 }
 
-abstract class _TicTacToeGameEvent implements TicTacToeGameEvent {
+abstract class _TicTacToeGameEvent extends TicTacToeGameEvent {
   const factory _TicTacToeGameEvent(
       {required final int player,
       required final int location}) = _$_TicTacToeGameEvent;
+  const _TicTacToeGameEvent._() : super._();
 
   factory _TicTacToeGameEvent.fromJson(Map<String, dynamic> json) =
       _$_TicTacToeGameEvent.fromJson;
@@ -263,8 +265,9 @@ class __$$_TicTacToeGameCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_TicTacToeGame implements _TicTacToeGame {
-  const _$_TicTacToeGame({required this.board, required this.currentPlayer});
+class _$_TicTacToeGame extends _TicTacToeGame {
+  const _$_TicTacToeGame({required this.board, required this.currentPlayer})
+      : super._();
 
   factory _$_TicTacToeGame.fromJson(Map<String, dynamic> json) =>
       _$$_TicTacToeGameFromJson(json);
@@ -308,10 +311,11 @@ class _$_TicTacToeGame implements _TicTacToeGame {
   }
 }
 
-abstract class _TicTacToeGame implements TicTacToeGame {
+abstract class _TicTacToeGame extends TicTacToeGame {
   const factory _TicTacToeGame(
       {required final IList<int?> board,
       required final int currentPlayer}) = _$_TicTacToeGame;
+  const _TicTacToeGame._() : super._();
 
   factory _TicTacToeGame.fromJson(Map<String, dynamic> json) =
       _$_TicTacToeGame.fromJson;

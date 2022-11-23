@@ -36,7 +36,8 @@ mixin _$GenericGame {
 abstract class $GenericGameCopyWith<$Res> {
   factory $GenericGameCopyWith(
           GenericGame value, $Res Function(GenericGame) then) =
-      _$GenericGameCopyWithImpl<$Res>;
+      _$GenericGameCopyWithImpl<$Res, GenericGame>;
+  @useResult
   $Res call(
       {IList<Player> players,
       IList<String> readyPlayers,
@@ -46,43 +47,46 @@ abstract class $GenericGameCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$GenericGameCopyWithImpl<$Res> implements $GenericGameCopyWith<$Res> {
+class _$GenericGameCopyWithImpl<$Res, $Val extends GenericGame>
+    implements $GenericGameCopyWith<$Res> {
   _$GenericGameCopyWithImpl(this._value, this._then);
 
-  final GenericGame _value;
   // ignore: unused_field
-  final $Res Function(GenericGame) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? players = freezed,
-    Object? readyPlayers = freezed,
-    Object? time = freezed,
-    Object? status = freezed,
-    Object? round = freezed,
+    Object? players = null,
+    Object? readyPlayers = null,
+    Object? time = null,
+    Object? status = null,
+    Object? round = null,
   }) {
     return _then(_value.copyWith(
-      players: players == freezed
+      players: null == players
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
               as IList<Player>,
-      readyPlayers: readyPlayers == freezed
+      readyPlayers: null == readyPlayers
           ? _value.readyPlayers
           : readyPlayers // ignore: cast_nullable_to_non_nullable
               as IList<String>,
-      time: time == freezed
+      time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      status: status == freezed
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as GameStatus,
-      round: round == freezed
+      round: null == round
           ? _value.round
           : round // ignore: cast_nullable_to_non_nullable
               as int,
-    ));
+    ) as $Val);
   }
 }
 
@@ -93,6 +97,7 @@ abstract class _$$_GenericGameCopyWith<$Res>
           _$_GenericGame value, $Res Function(_$_GenericGame) then) =
       __$$_GenericGameCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {IList<Player> players,
       IList<String> readyPlayers,
@@ -102,41 +107,40 @@ abstract class _$$_GenericGameCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_GenericGameCopyWithImpl<$Res> extends _$GenericGameCopyWithImpl<$Res>
+class __$$_GenericGameCopyWithImpl<$Res>
+    extends _$GenericGameCopyWithImpl<$Res, _$_GenericGame>
     implements _$$_GenericGameCopyWith<$Res> {
   __$$_GenericGameCopyWithImpl(
       _$_GenericGame _value, $Res Function(_$_GenericGame) _then)
-      : super(_value, (v) => _then(v as _$_GenericGame));
+      : super(_value, _then);
 
-  @override
-  _$_GenericGame get _value => super._value as _$_GenericGame;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? players = freezed,
-    Object? readyPlayers = freezed,
-    Object? time = freezed,
-    Object? status = freezed,
-    Object? round = freezed,
+    Object? players = null,
+    Object? readyPlayers = null,
+    Object? time = null,
+    Object? status = null,
+    Object? round = null,
   }) {
     return _then(_$_GenericGame(
-      players == freezed
+      null == players
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
               as IList<Player>,
-      readyPlayers == freezed
+      null == readyPlayers
           ? _value.readyPlayers
           : readyPlayers // ignore: cast_nullable_to_non_nullable
               as IList<String>,
-      time == freezed
+      null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      status == freezed
+      null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as GameStatus,
-      round == freezed
+      null == round
           ? _value.round
           : round // ignore: cast_nullable_to_non_nullable
               as int,
@@ -178,9 +182,9 @@ class _$_GenericGame extends _GenericGame {
             const DeepCollectionEquality().equals(other.players, players) &&
             const DeepCollectionEquality()
                 .equals(other.readyPlayers, readyPlayers) &&
-            const DeepCollectionEquality().equals(other.time, time) &&
-            const DeepCollectionEquality().equals(other.status, status) &&
-            const DeepCollectionEquality().equals(other.round, round));
+            (identical(other.time, time) || other.time == time) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.round, round) || other.round == round));
   }
 
   @JsonKey(ignore: true)
@@ -189,12 +193,13 @@ class _$_GenericGame extends _GenericGame {
       runtimeType,
       const DeepCollectionEquality().hash(players),
       const DeepCollectionEquality().hash(readyPlayers),
-      const DeepCollectionEquality().hash(time),
-      const DeepCollectionEquality().hash(status),
-      const DeepCollectionEquality().hash(round));
+      time,
+      status,
+      round);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_GenericGameCopyWith<_$_GenericGame> get copyWith =>
       __$$_GenericGameCopyWithImpl<_$_GenericGame>(this, _$identity);
 
@@ -260,9 +265,9 @@ mixin _$GenericEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? undo,
-    TResult Function(String player)? readyNextRound,
-    TResult Function(String message, String from, String? to)? message,
+    TResult? Function()? undo,
+    TResult? Function(String player)? readyNextRound,
+    TResult? Function(String message, String from, String? to)? message,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -282,9 +287,9 @@ mixin _$GenericEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(GenericEventUndo value)? undo,
-    TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
-    TResult Function(GameMessage value)? message,
+    TResult? Function(GenericEventUndo value)? undo,
+    TResult? Function(_GenericReadyNextRoundEvent value)? readyNextRound,
+    TResult? Function(GameMessage value)? message,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -302,16 +307,18 @@ mixin _$GenericEvent {
 abstract class $GenericEventCopyWith<$Res> {
   factory $GenericEventCopyWith(
           GenericEvent value, $Res Function(GenericEvent) then) =
-      _$GenericEventCopyWithImpl<$Res>;
+      _$GenericEventCopyWithImpl<$Res, GenericEvent>;
 }
 
 /// @nodoc
-class _$GenericEventCopyWithImpl<$Res> implements $GenericEventCopyWith<$Res> {
+class _$GenericEventCopyWithImpl<$Res, $Val extends GenericEvent>
+    implements $GenericEventCopyWith<$Res> {
   _$GenericEventCopyWithImpl(this._value, this._then);
 
-  final GenericEvent _value;
   // ignore: unused_field
-  final $Res Function(GenericEvent) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -323,14 +330,11 @@ abstract class _$$GenericEventUndoCopyWith<$Res> {
 
 /// @nodoc
 class __$$GenericEventUndoCopyWithImpl<$Res>
-    extends _$GenericEventCopyWithImpl<$Res>
+    extends _$GenericEventCopyWithImpl<$Res, _$GenericEventUndo>
     implements _$$GenericEventUndoCopyWith<$Res> {
   __$$GenericEventUndoCopyWithImpl(
       _$GenericEventUndo _value, $Res Function(_$GenericEventUndo) _then)
-      : super(_value, (v) => _then(v as _$GenericEventUndo));
-
-  @override
-  _$GenericEventUndo get _value => super._value as _$GenericEventUndo;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -374,9 +378,9 @@ class _$GenericEventUndo extends GenericEventUndo {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? undo,
-    TResult Function(String player)? readyNextRound,
-    TResult Function(String message, String from, String? to)? message,
+    TResult? Function()? undo,
+    TResult? Function(String player)? readyNextRound,
+    TResult? Function(String message, String from, String? to)? message,
   }) {
     return undo?.call();
   }
@@ -408,9 +412,9 @@ class _$GenericEventUndo extends GenericEventUndo {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(GenericEventUndo value)? undo,
-    TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
-    TResult Function(GameMessage value)? message,
+    TResult? Function(GenericEventUndo value)? undo,
+    TResult? Function(_GenericReadyNextRoundEvent value)? readyNextRound,
+    TResult? Function(GameMessage value)? message,
   }) {
     return undo?.call(this);
   }
@@ -451,28 +455,26 @@ abstract class _$$_GenericReadyNextRoundEventCopyWith<$Res> {
           _$_GenericReadyNextRoundEvent value,
           $Res Function(_$_GenericReadyNextRoundEvent) then) =
       __$$_GenericReadyNextRoundEventCopyWithImpl<$Res>;
+  @useResult
   $Res call({String player});
 }
 
 /// @nodoc
 class __$$_GenericReadyNextRoundEventCopyWithImpl<$Res>
-    extends _$GenericEventCopyWithImpl<$Res>
+    extends _$GenericEventCopyWithImpl<$Res, _$_GenericReadyNextRoundEvent>
     implements _$$_GenericReadyNextRoundEventCopyWith<$Res> {
   __$$_GenericReadyNextRoundEventCopyWithImpl(
       _$_GenericReadyNextRoundEvent _value,
       $Res Function(_$_GenericReadyNextRoundEvent) _then)
-      : super(_value, (v) => _then(v as _$_GenericReadyNextRoundEvent));
+      : super(_value, _then);
 
-  @override
-  _$_GenericReadyNextRoundEvent get _value =>
-      super._value as _$_GenericReadyNextRoundEvent;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? player = freezed,
+    Object? player = null,
   }) {
     return _then(_$_GenericReadyNextRoundEvent(
-      player == freezed
+      null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as String,
@@ -506,16 +508,16 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_GenericReadyNextRoundEvent &&
-            const DeepCollectionEquality().equals(other.player, player));
+            (identical(other.player, player) || other.player == player));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(player));
+  int get hashCode => Object.hash(runtimeType, player);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_GenericReadyNextRoundEventCopyWith<_$_GenericReadyNextRoundEvent>
       get copyWith => __$$_GenericReadyNextRoundEventCopyWithImpl<
           _$_GenericReadyNextRoundEvent>(this, _$identity);
@@ -533,9 +535,9 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? undo,
-    TResult Function(String player)? readyNextRound,
-    TResult Function(String message, String from, String? to)? message,
+    TResult? Function()? undo,
+    TResult? Function(String player)? readyNextRound,
+    TResult? Function(String message, String from, String? to)? message,
   }) {
     return readyNextRound?.call(player);
   }
@@ -567,9 +569,9 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(GenericEventUndo value)? undo,
-    TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
-    TResult Function(GameMessage value)? message,
+    TResult? Function(GenericEventUndo value)? undo,
+    TResult? Function(_GenericReadyNextRoundEvent value)? readyNextRound,
+    TResult? Function(GameMessage value)? message,
   }) {
     return readyNextRound?.call(this);
   }
@@ -615,35 +617,35 @@ abstract class _$$GameMessageCopyWith<$Res> {
   factory _$$GameMessageCopyWith(
           _$GameMessage value, $Res Function(_$GameMessage) then) =
       __$$GameMessageCopyWithImpl<$Res>;
+  @useResult
   $Res call({String message, String from, String? to});
 }
 
 /// @nodoc
-class __$$GameMessageCopyWithImpl<$Res> extends _$GenericEventCopyWithImpl<$Res>
+class __$$GameMessageCopyWithImpl<$Res>
+    extends _$GenericEventCopyWithImpl<$Res, _$GameMessage>
     implements _$$GameMessageCopyWith<$Res> {
   __$$GameMessageCopyWithImpl(
       _$GameMessage _value, $Res Function(_$GameMessage) _then)
-      : super(_value, (v) => _then(v as _$GameMessage));
+      : super(_value, _then);
 
-  @override
-  _$GameMessage get _value => super._value as _$GameMessage;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = freezed,
-    Object? from = freezed,
+    Object? message = null,
+    Object? from = null,
     Object? to = freezed,
   }) {
     return _then(_$GameMessage(
-      message == freezed
+      null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      from: from == freezed
+      from: null == from
           ? _value.from
           : from // ignore: cast_nullable_to_non_nullable
               as String,
-      to: to == freezed
+      to: freezed == to
           ? _value.to
           : to // ignore: cast_nullable_to_non_nullable
               as String?,
@@ -682,21 +684,18 @@ class _$GameMessage extends GameMessage {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$GameMessage &&
-            const DeepCollectionEquality().equals(other.message, message) &&
-            const DeepCollectionEquality().equals(other.from, from) &&
-            const DeepCollectionEquality().equals(other.to, to));
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.from, from) || other.from == from) &&
+            (identical(other.to, to) || other.to == to));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(message),
-      const DeepCollectionEquality().hash(from),
-      const DeepCollectionEquality().hash(to));
+  int get hashCode => Object.hash(runtimeType, message, from, to);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$GameMessageCopyWith<_$GameMessage> get copyWith =>
       __$$GameMessageCopyWithImpl<_$GameMessage>(this, _$identity);
 
@@ -713,9 +712,9 @@ class _$GameMessage extends GameMessage {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? undo,
-    TResult Function(String player)? readyNextRound,
-    TResult Function(String message, String from, String? to)? message,
+    TResult? Function()? undo,
+    TResult? Function(String player)? readyNextRound,
+    TResult? Function(String message, String from, String? to)? message,
   }) {
     return message?.call(this.message, from, to);
   }
@@ -747,9 +746,9 @@ class _$GameMessage extends GameMessage {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(GenericEventUndo value)? undo,
-    TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
-    TResult Function(GameMessage value)? message,
+    TResult? Function(GenericEventUndo value)? undo,
+    TResult? Function(_GenericReadyNextRoundEvent value)? readyNextRound,
+    TResult? Function(GameMessage value)? message,
   }) {
     return message?.call(this);
   }
@@ -817,7 +816,8 @@ mixin _$GameConfig {
 abstract class $GameConfigCopyWith<$Res> {
   factory $GameConfigCopyWith(
           GameConfig value, $Res Function(GameConfig) then) =
-      _$GameConfigCopyWithImpl<$Res>;
+      _$GameConfigCopyWithImpl<$Res, GameConfig>;
+  @useResult
   $Res call(
       {String gameType,
       String? adminID,
@@ -830,58 +830,61 @@ abstract class $GameConfigCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$GameConfigCopyWithImpl<$Res> implements $GameConfigCopyWith<$Res> {
+class _$GameConfigCopyWithImpl<$Res, $Val extends GameConfig>
+    implements $GameConfigCopyWith<$Res> {
   _$GameConfigCopyWithImpl(this._value, this._then);
 
-  final GameConfig _value;
   // ignore: unused_field
-  final $Res Function(GameConfig) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? gameType = freezed,
+    Object? gameType = null,
     Object? adminID = freezed,
-    Object? nameSet = freezed,
-    Object? customNames = freezed,
-    Object? rounds = freezed,
-    Object? minPlayers = freezed,
-    Object? maxPlayers = freezed,
-    Object? autoStart = freezed,
+    Object? nameSet = null,
+    Object? customNames = null,
+    Object? rounds = null,
+    Object? minPlayers = null,
+    Object? maxPlayers = null,
+    Object? autoStart = null,
   }) {
     return _then(_value.copyWith(
-      gameType: gameType == freezed
+      gameType: null == gameType
           ? _value.gameType
           : gameType // ignore: cast_nullable_to_non_nullable
               as String,
-      adminID: adminID == freezed
+      adminID: freezed == adminID
           ? _value.adminID
           : adminID // ignore: cast_nullable_to_non_nullable
               as String?,
-      nameSet: nameSet == freezed
+      nameSet: null == nameSet
           ? _value.nameSet
           : nameSet // ignore: cast_nullable_to_non_nullable
               as NameSet,
-      customNames: customNames == freezed
+      customNames: null == customNames
           ? _value.customNames
           : customNames // ignore: cast_nullable_to_non_nullable
               as bool,
-      rounds: rounds == freezed
+      rounds: null == rounds
           ? _value.rounds
           : rounds // ignore: cast_nullable_to_non_nullable
               as int,
-      minPlayers: minPlayers == freezed
+      minPlayers: null == minPlayers
           ? _value.minPlayers
           : minPlayers // ignore: cast_nullable_to_non_nullable
               as int,
-      maxPlayers: maxPlayers == freezed
+      maxPlayers: null == maxPlayers
           ? _value.maxPlayers
           : maxPlayers // ignore: cast_nullable_to_non_nullable
               as int,
-      autoStart: autoStart == freezed
+      autoStart: null == autoStart
           ? _value.autoStart
           : autoStart // ignore: cast_nullable_to_non_nullable
               as bool,
-    ));
+    ) as $Val);
   }
 }
 
@@ -892,6 +895,7 @@ abstract class _$$_GameConfigCopyWith<$Res>
           _$_GameConfig value, $Res Function(_$_GameConfig) then) =
       __$$_GameConfigCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String gameType,
       String? adminID,
@@ -904,56 +908,55 @@ abstract class _$$_GameConfigCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_GameConfigCopyWithImpl<$Res> extends _$GameConfigCopyWithImpl<$Res>
+class __$$_GameConfigCopyWithImpl<$Res>
+    extends _$GameConfigCopyWithImpl<$Res, _$_GameConfig>
     implements _$$_GameConfigCopyWith<$Res> {
   __$$_GameConfigCopyWithImpl(
       _$_GameConfig _value, $Res Function(_$_GameConfig) _then)
-      : super(_value, (v) => _then(v as _$_GameConfig));
+      : super(_value, _then);
 
-  @override
-  _$_GameConfig get _value => super._value as _$_GameConfig;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? gameType = freezed,
+    Object? gameType = null,
     Object? adminID = freezed,
-    Object? nameSet = freezed,
-    Object? customNames = freezed,
-    Object? rounds = freezed,
-    Object? minPlayers = freezed,
-    Object? maxPlayers = freezed,
-    Object? autoStart = freezed,
+    Object? nameSet = null,
+    Object? customNames = null,
+    Object? rounds = null,
+    Object? minPlayers = null,
+    Object? maxPlayers = null,
+    Object? autoStart = null,
   }) {
     return _then(_$_GameConfig(
-      gameType: gameType == freezed
+      gameType: null == gameType
           ? _value.gameType
           : gameType // ignore: cast_nullable_to_non_nullable
               as String,
-      adminID: adminID == freezed
+      adminID: freezed == adminID
           ? _value.adminID
           : adminID // ignore: cast_nullable_to_non_nullable
               as String?,
-      nameSet: nameSet == freezed
+      nameSet: null == nameSet
           ? _value.nameSet
           : nameSet // ignore: cast_nullable_to_non_nullable
               as NameSet,
-      customNames: customNames == freezed
+      customNames: null == customNames
           ? _value.customNames
           : customNames // ignore: cast_nullable_to_non_nullable
               as bool,
-      rounds: rounds == freezed
+      rounds: null == rounds
           ? _value.rounds
           : rounds // ignore: cast_nullable_to_non_nullable
               as int,
-      minPlayers: minPlayers == freezed
+      minPlayers: null == minPlayers
           ? _value.minPlayers
           : minPlayers // ignore: cast_nullable_to_non_nullable
               as int,
-      maxPlayers: maxPlayers == freezed
+      maxPlayers: null == maxPlayers
           ? _value.maxPlayers
           : maxPlayers // ignore: cast_nullable_to_non_nullable
               as int,
-      autoStart: autoStart == freezed
+      autoStart: null == autoStart
           ? _value.autoStart
           : autoStart // ignore: cast_nullable_to_non_nullable
               as bool,
@@ -1011,34 +1014,29 @@ class _$_GameConfig extends _GameConfig {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_GameConfig &&
-            const DeepCollectionEquality().equals(other.gameType, gameType) &&
-            const DeepCollectionEquality().equals(other.adminID, adminID) &&
-            const DeepCollectionEquality().equals(other.nameSet, nameSet) &&
-            const DeepCollectionEquality()
-                .equals(other.customNames, customNames) &&
-            const DeepCollectionEquality().equals(other.rounds, rounds) &&
-            const DeepCollectionEquality()
-                .equals(other.minPlayers, minPlayers) &&
-            const DeepCollectionEquality()
-                .equals(other.maxPlayers, maxPlayers) &&
-            const DeepCollectionEquality().equals(other.autoStart, autoStart));
+            (identical(other.gameType, gameType) ||
+                other.gameType == gameType) &&
+            (identical(other.adminID, adminID) || other.adminID == adminID) &&
+            (identical(other.nameSet, nameSet) || other.nameSet == nameSet) &&
+            (identical(other.customNames, customNames) ||
+                other.customNames == customNames) &&
+            (identical(other.rounds, rounds) || other.rounds == rounds) &&
+            (identical(other.minPlayers, minPlayers) ||
+                other.minPlayers == minPlayers) &&
+            (identical(other.maxPlayers, maxPlayers) ||
+                other.maxPlayers == maxPlayers) &&
+            (identical(other.autoStart, autoStart) ||
+                other.autoStart == autoStart));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(gameType),
-      const DeepCollectionEquality().hash(adminID),
-      const DeepCollectionEquality().hash(nameSet),
-      const DeepCollectionEquality().hash(customNames),
-      const DeepCollectionEquality().hash(rounds),
-      const DeepCollectionEquality().hash(minPlayers),
-      const DeepCollectionEquality().hash(maxPlayers),
-      const DeepCollectionEquality().hash(autoStart));
+  int get hashCode => Object.hash(runtimeType, gameType, adminID, nameSet,
+      customNames, rounds, minPlayers, maxPlayers, autoStart);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_GameConfigCopyWith<_$_GameConfig> get copyWith =>
       __$$_GameConfigCopyWithImpl<_$_GameConfig>(this, _$identity);
 
@@ -1110,7 +1108,8 @@ mixin _$GameInfo {
 /// @nodoc
 abstract class $GameInfoCopyWith<$Res> {
   factory $GameInfoCopyWith(GameInfo value, $Res Function(GameInfo) then) =
-      _$GameInfoCopyWithImpl<$Res>;
+      _$GameInfoCopyWithImpl<$Res, GameInfo>;
+  @useResult
   $Res call(
       {String gameID,
       IList<String> players,
@@ -1124,59 +1123,63 @@ abstract class $GameInfoCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$GameInfoCopyWithImpl<$Res> implements $GameInfoCopyWith<$Res> {
+class _$GameInfoCopyWithImpl<$Res, $Val extends GameInfo>
+    implements $GameInfoCopyWith<$Res> {
   _$GameInfoCopyWithImpl(this._value, this._then);
 
-  final GameInfo _value;
   // ignore: unused_field
-  final $Res Function(GameInfo) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? gameID = freezed,
-    Object? players = freezed,
-    Object? player = freezed,
-    Object? creator = freezed,
-    Object? config = freezed,
-    Object? gameType = freezed,
-    Object? status = freezed,
+    Object? gameID = null,
+    Object? players = null,
+    Object? player = null,
+    Object? creator = null,
+    Object? config = null,
+    Object? gameType = null,
+    Object? status = null,
   }) {
     return _then(_value.copyWith(
-      gameID: gameID == freezed
+      gameID: null == gameID
           ? _value.gameID
           : gameID // ignore: cast_nullable_to_non_nullable
               as String,
-      players: players == freezed
+      players: null == players
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
               as IList<String>,
-      player: player == freezed
+      player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as String,
-      creator: creator == freezed
+      creator: null == creator
           ? _value.creator
           : creator // ignore: cast_nullable_to_non_nullable
               as bool,
-      config: config == freezed
+      config: null == config
           ? _value.config
           : config // ignore: cast_nullable_to_non_nullable
               as GameConfig,
-      gameType: gameType == freezed
+      gameType: null == gameType
           ? _value.gameType
           : gameType // ignore: cast_nullable_to_non_nullable
               as String,
-      status: status == freezed
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as GameStatus,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $GameConfigCopyWith<$Res> get config {
     return $GameConfigCopyWith<$Res>(_value.config, (value) {
-      return _then(_value.copyWith(config: value));
+      return _then(_value.copyWith(config: value) as $Val);
     });
   }
 }
@@ -1187,6 +1190,7 @@ abstract class _$$_GameInfoCopyWith<$Res> implements $GameInfoCopyWith<$Res> {
           _$_GameInfo value, $Res Function(_$_GameInfo) then) =
       __$$_GameInfoCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String gameID,
       IList<String> players,
@@ -1201,51 +1205,50 @@ abstract class _$$_GameInfoCopyWith<$Res> implements $GameInfoCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_GameInfoCopyWithImpl<$Res> extends _$GameInfoCopyWithImpl<$Res>
+class __$$_GameInfoCopyWithImpl<$Res>
+    extends _$GameInfoCopyWithImpl<$Res, _$_GameInfo>
     implements _$$_GameInfoCopyWith<$Res> {
   __$$_GameInfoCopyWithImpl(
       _$_GameInfo _value, $Res Function(_$_GameInfo) _then)
-      : super(_value, (v) => _then(v as _$_GameInfo));
+      : super(_value, _then);
 
-  @override
-  _$_GameInfo get _value => super._value as _$_GameInfo;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? gameID = freezed,
-    Object? players = freezed,
-    Object? player = freezed,
-    Object? creator = freezed,
-    Object? config = freezed,
-    Object? gameType = freezed,
-    Object? status = freezed,
+    Object? gameID = null,
+    Object? players = null,
+    Object? player = null,
+    Object? creator = null,
+    Object? config = null,
+    Object? gameType = null,
+    Object? status = null,
   }) {
     return _then(_$_GameInfo(
-      gameID: gameID == freezed
+      gameID: null == gameID
           ? _value.gameID
           : gameID // ignore: cast_nullable_to_non_nullable
               as String,
-      players: players == freezed
+      players: null == players
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
               as IList<String>,
-      player: player == freezed
+      player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as String,
-      creator: creator == freezed
+      creator: null == creator
           ? _value.creator
           : creator // ignore: cast_nullable_to_non_nullable
               as bool,
-      config: config == freezed
+      config: null == config
           ? _value.config
           : config // ignore: cast_nullable_to_non_nullable
               as GameConfig,
-      gameType: gameType == freezed
+      gameType: null == gameType
           ? _value.gameType
           : gameType // ignore: cast_nullable_to_non_nullable
               as String,
-      status: status == freezed
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as GameStatus,
@@ -1293,29 +1296,31 @@ class _$_GameInfo implements _GameInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_GameInfo &&
-            const DeepCollectionEquality().equals(other.gameID, gameID) &&
+            (identical(other.gameID, gameID) || other.gameID == gameID) &&
             const DeepCollectionEquality().equals(other.players, players) &&
-            const DeepCollectionEquality().equals(other.player, player) &&
-            const DeepCollectionEquality().equals(other.creator, creator) &&
-            const DeepCollectionEquality().equals(other.config, config) &&
-            const DeepCollectionEquality().equals(other.gameType, gameType) &&
-            const DeepCollectionEquality().equals(other.status, status));
+            (identical(other.player, player) || other.player == player) &&
+            (identical(other.creator, creator) || other.creator == creator) &&
+            (identical(other.config, config) || other.config == config) &&
+            (identical(other.gameType, gameType) ||
+                other.gameType == gameType) &&
+            (identical(other.status, status) || other.status == status));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(gameID),
+      gameID,
       const DeepCollectionEquality().hash(players),
-      const DeepCollectionEquality().hash(player),
-      const DeepCollectionEquality().hash(creator),
-      const DeepCollectionEquality().hash(config),
-      const DeepCollectionEquality().hash(gameType),
-      const DeepCollectionEquality().hash(status));
+      player,
+      creator,
+      config,
+      gameType,
+      status);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_GameInfoCopyWith<_$_GameInfo> get copyWith =>
       __$$_GameInfoCopyWithImpl<_$_GameInfo>(this, _$identity);
 
@@ -1378,7 +1383,8 @@ mixin _$Lobby {
 /// @nodoc
 abstract class $LobbyCopyWith<$Res> {
   factory $LobbyCopyWith(Lobby value, $Res Function(Lobby) then) =
-      _$LobbyCopyWithImpl<$Res>;
+      _$LobbyCopyWithImpl<$Res, Lobby>;
+  @useResult
   $Res call(
       {String code,
       ISet<Player> players,
@@ -1389,44 +1395,48 @@ abstract class $LobbyCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$LobbyCopyWithImpl<$Res> implements $LobbyCopyWith<$Res> {
+class _$LobbyCopyWithImpl<$Res, $Val extends Lobby>
+    implements $LobbyCopyWith<$Res> {
   _$LobbyCopyWithImpl(this._value, this._then);
 
-  final Lobby _value;
   // ignore: unused_field
-  final $Res Function(Lobby) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? code = freezed,
-    Object? players = freezed,
-    Object? config = freezed,
-    Object? gameStatus = freezed,
+    Object? code = null,
+    Object? players = null,
+    Object? config = null,
+    Object? gameStatus = null,
   }) {
     return _then(_value.copyWith(
-      code: code == freezed
+      code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as String,
-      players: players == freezed
+      players: null == players
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
               as ISet<Player>,
-      config: config == freezed
+      config: null == config
           ? _value.config
           : config // ignore: cast_nullable_to_non_nullable
               as GameConfig,
-      gameStatus: gameStatus == freezed
+      gameStatus: null == gameStatus
           ? _value.gameStatus
           : gameStatus // ignore: cast_nullable_to_non_nullable
               as GameStatus,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $GameConfigCopyWith<$Res> get config {
     return $GameConfigCopyWith<$Res>(_value.config, (value) {
-      return _then(_value.copyWith(config: value));
+      return _then(_value.copyWith(config: value) as $Val);
     });
   }
 }
@@ -1436,6 +1446,7 @@ abstract class _$$_LobbyCopyWith<$Res> implements $LobbyCopyWith<$Res> {
   factory _$$_LobbyCopyWith(_$_Lobby value, $Res Function(_$_Lobby) then) =
       __$$_LobbyCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String code,
       ISet<Player> players,
@@ -1447,35 +1458,33 @@ abstract class _$$_LobbyCopyWith<$Res> implements $LobbyCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_LobbyCopyWithImpl<$Res> extends _$LobbyCopyWithImpl<$Res>
+class __$$_LobbyCopyWithImpl<$Res> extends _$LobbyCopyWithImpl<$Res, _$_Lobby>
     implements _$$_LobbyCopyWith<$Res> {
   __$$_LobbyCopyWithImpl(_$_Lobby _value, $Res Function(_$_Lobby) _then)
-      : super(_value, (v) => _then(v as _$_Lobby));
+      : super(_value, _then);
 
-  @override
-  _$_Lobby get _value => super._value as _$_Lobby;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? code = freezed,
-    Object? players = freezed,
-    Object? config = freezed,
-    Object? gameStatus = freezed,
+    Object? code = null,
+    Object? players = null,
+    Object? config = null,
+    Object? gameStatus = null,
   }) {
     return _then(_$_Lobby(
-      code: code == freezed
+      code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as String,
-      players: players == freezed
+      players: null == players
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
               as ISet<Player>,
-      config: config == freezed
+      config: null == config
           ? _value.config
           : config // ignore: cast_nullable_to_non_nullable
               as GameConfig,
-      gameStatus: gameStatus == freezed
+      gameStatus: null == gameStatus
           ? _value.gameStatus
           : gameStatus // ignore: cast_nullable_to_non_nullable
               as GameStatus,
@@ -1514,24 +1523,21 @@ class _$_Lobby implements _Lobby {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Lobby &&
-            const DeepCollectionEquality().equals(other.code, code) &&
+            (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality().equals(other.players, players) &&
-            const DeepCollectionEquality().equals(other.config, config) &&
-            const DeepCollectionEquality()
-                .equals(other.gameStatus, gameStatus));
+            (identical(other.config, config) || other.config == config) &&
+            (identical(other.gameStatus, gameStatus) ||
+                other.gameStatus == gameStatus));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(code),
-      const DeepCollectionEquality().hash(players),
-      const DeepCollectionEquality().hash(config),
-      const DeepCollectionEquality().hash(gameStatus));
+  int get hashCode => Object.hash(runtimeType, code,
+      const DeepCollectionEquality().hash(players), config, gameStatus);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_LobbyCopyWith<_$_Lobby> get copyWith =>
       __$$_LobbyCopyWithImpl<_$_Lobby>(this, _$identity);
 

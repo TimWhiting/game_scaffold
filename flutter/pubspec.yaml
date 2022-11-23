@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   collection: ^1.17.0
-  firebase_dart: ^1.1.0-dev.6
+  firebase_dart: ^1.1.0-dev.7
   flutter:
     sdk: flutter
   flutter_hooks: ^0.18.5+1

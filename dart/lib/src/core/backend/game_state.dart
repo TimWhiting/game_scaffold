@@ -36,7 +36,7 @@ class BackendProviders {
   );
 
   static final playerLobby =
-      StreamProvider.autoDispose.family<GameInfo, PlayerID>(
+      StreamProvider.family<GameInfo, PlayerID>(
     (ref, player) async* {
       final l = ref.watch(lobby);
       final pls = l.players;
@@ -61,11 +61,10 @@ class BackendProviders {
       StateNotifierProvider<GameStateNotifier, GameState>(
     (ref) {
       final l = ref.watch(lobby);
-      print('new lobby $l');
       return GameStateNotifier(
         l.config,
         l.code,
-        Game.initialState(l.config.gameType, l.config, l.players.toIList()),
+        GameRegistry.initialState(l.config.gameType, l.config, l.players.toIList()),
         ref.read(error.notifier),
       );
     },
@@ -89,7 +88,6 @@ class LobbyNotifier extends StateNotifier<Lobby> {
   }
 
   void setConfig(GameConfig config) {
-    print('Setting config $config ${state.code}');
     state = state.copyWith(config: config);
   }
 
@@ -136,10 +134,10 @@ class GameStateNotifier extends StateNotifier<GameState> {
   ///
   /// In case of a [GenericEvent] this handles the implementation of handling the event
   // ignore: type_annotate_public_apis
-  bool handleEvent(Object event) {
-    print('$event');
+  bool handleEvent(Event event) {
     var error = false;
     try {
+      print(event);
       final game = gameState;
       if (event is GenericEvent){
         state = event.maybeWhen(undo: () {
@@ -169,7 +167,9 @@ class GameStateNotifier extends StateNotifier<GameState> {
             return game;
           });
       }else {
+        print(event);
          final next = game.next(event, gameConfig);
+         print(next);
           if (next.error != null) {
             errorNotifier.state = next.error;
             error = true;
@@ -184,6 +184,8 @@ class GameStateNotifier extends StateNotifier<GameState> {
       return true;
       // ignore: avoid_catches_without_on_clauses
     } catch (error, st) {
+      print(error);
+      print(st);
       _gameStateLogger.severe('$error $st');
     }
     return false;

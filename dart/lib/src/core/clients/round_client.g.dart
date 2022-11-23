@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $MultiplayerRoundClientHash() =>
-    r'a16dd5c4ac3fa4448a11d014cbe5a0231bd8f216';
+    r'2b494e0901b3baf216404b0e6f75f9754a723e65';
 
 /// See also [MultiplayerRoundClient].
 class MultiplayerRoundClientProvider

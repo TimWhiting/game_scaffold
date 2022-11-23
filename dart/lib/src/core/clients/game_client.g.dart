@@ -30,11 +30,11 @@ class _SystemHash {
 }
 
 String $MultiplayerGameClientHash() =>
-    r'ff7d6f85faa543edfdae78c8217ec15582a51087';
+    r'a3779a392abe891d704b8785e2467519b685bc41';
 
 /// See also [MultiplayerGameClient].
-class MultiplayerGameClientProvider extends AutoDisposeNotifierProviderImpl<
-    MultiplayerGameClient, GameClientInfo> {
+class MultiplayerGameClientProvider
+    extends NotifierProviderImpl<MultiplayerGameClient, GameClientInfo> {
   MultiplayerGameClientProvider(
     this.multiplayerID,
   ) : super(
@@ -73,8 +73,7 @@ class MultiplayerGameClientProvider extends AutoDisposeNotifierProviderImpl<
   }
 }
 
-typedef MultiplayerGameClientRef
-    = AutoDisposeNotifierProviderRef<GameClientInfo>;
+typedef MultiplayerGameClientRef = NotifierProviderRef<GameClientInfo>;
 
 /// See also [MultiplayerGameClient].
 final multiplayerGameClientProvider = MultiplayerGameClientFamily();
@@ -91,7 +90,7 @@ class MultiplayerGameClientFamily extends Family<GameClientInfo> {
   }
 
   @override
-  AutoDisposeNotifierProviderImpl<MultiplayerGameClient, GameClientInfo>
+  NotifierProviderImpl<MultiplayerGameClient, GameClientInfo>
       getProviderOverride(
     covariant MultiplayerGameClientProvider provider,
   ) {
@@ -111,7 +110,7 @@ class MultiplayerGameClientFamily extends Family<GameClientInfo> {
 }
 
 abstract class _$MultiplayerGameClient
-    extends BuildlessAutoDisposeNotifier<GameClientInfo> {
+    extends BuildlessNotifier<GameClientInfo> {
   late final String multiplayerID;
 
   GameClientInfo build(

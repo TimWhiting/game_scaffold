@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import '../../../server.dart';
+import '../../../game_scaffold_dart.dart';
 
 /// Location that corresponds to running the game on-device
 // ignore: constant_identifier_names
@@ -15,16 +15,15 @@ class OnDeviceRoundService extends RoundService {
   Future<bool> exitGame(PlayerID playerID, GameCode code) async => true;
 
   @override
-  Stream<GameState<T>> gameStream<T extends Object>(
-      PlayerID playerID, GameCode code) async* {
+  Stream<GameState> gameStream(PlayerID playerID, GameCode code) async* {
     logger.info('Watching backend');
-    final ss = StreamController<GameState<T>>();
+    final ss = StreamController<GameState>();
     final backendReader = OnDeviceGameService.games[code]?.container;
     backendReader?.listen<GameState>(
       fireImmediately: true,
       BackendProviders.state,
       (prev, curr) async {
-        ss.add(curr as GameState<T>);
+        ss.add(curr);
       },
     );
 
@@ -33,9 +32,9 @@ class OnDeviceRoundService extends RoundService {
   }
 
   @override
-  Future<bool> sendEvent<E extends Object>(
+  Future<bool> sendEvent<E extends Event>(
       PlayerID playerID, GameCode code, E event) async {
-    final js = Game.toEventJson(event);
+    final js = GameRegistry.toEventJson(event);
     logger.info('Sending event $js');
     final backendReader = OnDeviceGameService.games[code]!.container;
     // If the gameClient is initializing

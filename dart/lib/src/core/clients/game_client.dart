@@ -5,7 +5,7 @@ import 'clients.dart';
 part 'game_client.freezed.dart';
 part 'game_client.g.dart';
 
-final gameInfoProvider = Provider.autoDispose<GameClientInfo>(
+final gameInfoProvider = Provider<GameClientInfo>(
   (ref) =>
       ref.watch(multiplayerGameClientProvider(ref.watch(playerIDProvider))),
   dependencies: [
@@ -14,7 +14,7 @@ final gameInfoProvider = Provider.autoDispose<GameClientInfo>(
   ],
 );
 
-final gameClientProvider = Provider.autoDispose<MultiplayerGameClient>(
+final gameClientProvider = Provider<MultiplayerGameClient>(
   (ref) => ref.watch(
       multiplayerGameClientProvider(ref.watch(playerIDProvider)).notifier),
   dependencies: [
@@ -23,7 +23,7 @@ final gameClientProvider = Provider.autoDispose<MultiplayerGameClient>(
   ],
 );
 
-@riverpod
+@Riverpod(keepAlive: true)
 class MultiplayerGameClient extends _$MultiplayerGameClient {
   @override
   GameClientInfo build(PlayerID multiplayerID) {

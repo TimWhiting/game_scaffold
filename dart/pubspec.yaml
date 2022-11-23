@@ -17,17 +17,14 @@ dependencies:
   logging: ^1.1.0
   riverpod: ^2.1.1
   riverpod_annotation: ^1.0.6
-  rxdart: ^0.27.5
-  socket_io: ^1.0.1
-  socket_io_client: ^1.0.2
-  stream: ^3.0.3
+  rxdart: ^0.27.7
 
 dev_dependencies:
-  build_runner: ^2.2.1
-  freezed: ^2.1.1
-  json_serializable: ^6.4.1
-  riverpod_generator: ^1.0.4
-  test: ^1.21.6
+  build_runner: ^2.3.2
+  freezed: ^2.2.1
+  json_serializable: ^6.5.4
+  riverpod_generator: ^1.0.6
+  test: ^1.22.0
 
 scripts:
   - gen: dart run build_runner build

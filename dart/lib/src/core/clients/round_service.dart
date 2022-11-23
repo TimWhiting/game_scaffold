@@ -14,7 +14,7 @@ abstract class RoundService {
   Future<bool> exitGame(PlayerID playerID, GameCode code);
 
   /// Sends [event] to the game server
-  Future<bool> sendEvent<E extends Object>(
+  Future<bool> sendEvent<E extends Event>(
       PlayerID playerID, GameCode code, E event);
 
   /// Sends an undo event to the game server
@@ -39,8 +39,7 @@ abstract class RoundService {
         GenericEvent.message(message, from: playerID, to: null),
       );
 
-  Stream<GameState<T>> gameStream<T extends Object>(
-      PlayerID playerID, GameCode code);
+  Stream<GameState> gameStream(PlayerID playerID, GameCode code);
   Stream<GameError> errorStream(PlayerID playerID, GameCode code);
   Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code);
 

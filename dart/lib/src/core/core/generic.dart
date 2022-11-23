@@ -76,10 +76,11 @@ class GenericGame with _$GenericGame {
 /// A [GenericEvent] that is handled by the Generic server implementation
 /// rather than handling it differently in each game implementation
 @freezed
-class GenericEvent with _$GenericEvent {
+class GenericEvent extends Event with _$GenericEvent {
   const GenericEvent._();
 
   /// Undo's the effects of the last event
+
   const factory GenericEvent.undo() = GenericEventUndo;
 
   /// Signals that [player] is ready for the next round
@@ -95,6 +96,9 @@ class GenericEvent with _$GenericEvent {
 
   factory GenericEvent.fromJson(Map<String, dynamic> map) =>
       _$GenericEventFromJson(map);
+
+  @override
+  String get type => 'generic';
 }
 
 /// Represents the current status of the game as seen by the client

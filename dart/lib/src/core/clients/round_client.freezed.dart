@@ -21,7 +21,8 @@ mixin _$RoundInfo {
   String get code => throw _privateConstructorUsedError;
   String get playerName => throw _privateConstructorUsedError;
   GameInfo? get lobby => throw _privateConstructorUsedError;
-  GameState<Object>? get game => throw _privateConstructorUsedError;
+  GameState<Event, Game<Event, dynamic>>? get game =>
+      throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -32,71 +33,76 @@ mixin _$RoundInfo {
 /// @nodoc
 abstract class $RoundInfoCopyWith<$Res> {
   factory $RoundInfoCopyWith(RoundInfo value, $Res Function(RoundInfo) then) =
-      _$RoundInfoCopyWithImpl<$Res>;
+      _$RoundInfoCopyWithImpl<$Res, RoundInfo>;
+  @useResult
   $Res call(
       {@protected RoundService? service,
       String code,
       String playerName,
       GameInfo? lobby,
-      GameState<Object>? game,
+      GameState<Event, Game<Event, dynamic>>? game,
       String? error});
 
   $GameInfoCopyWith<$Res>? get lobby;
 }
 
 /// @nodoc
-class _$RoundInfoCopyWithImpl<$Res> implements $RoundInfoCopyWith<$Res> {
+class _$RoundInfoCopyWithImpl<$Res, $Val extends RoundInfo>
+    implements $RoundInfoCopyWith<$Res> {
   _$RoundInfoCopyWithImpl(this._value, this._then);
 
-  final RoundInfo _value;
   // ignore: unused_field
-  final $Res Function(RoundInfo) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? service = freezed,
-    Object? code = freezed,
-    Object? playerName = freezed,
+    Object? code = null,
+    Object? playerName = null,
     Object? lobby = freezed,
     Object? game = freezed,
     Object? error = freezed,
   }) {
     return _then(_value.copyWith(
-      service: service == freezed
+      service: freezed == service
           ? _value.service
           : service // ignore: cast_nullable_to_non_nullable
               as RoundService?,
-      code: code == freezed
+      code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as String,
-      playerName: playerName == freezed
+      playerName: null == playerName
           ? _value.playerName
           : playerName // ignore: cast_nullable_to_non_nullable
               as String,
-      lobby: lobby == freezed
+      lobby: freezed == lobby
           ? _value.lobby
           : lobby // ignore: cast_nullable_to_non_nullable
               as GameInfo?,
-      game: game == freezed
+      game: freezed == game
           ? _value.game
           : game // ignore: cast_nullable_to_non_nullable
-              as GameState<Object>?,
-      error: error == freezed
+              as GameState<Event, Game<Event, dynamic>>?,
+      error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $GameInfoCopyWith<$Res>? get lobby {
     if (_value.lobby == null) {
       return null;
     }
 
     return $GameInfoCopyWith<$Res>(_value.lobby!, (value) {
-      return _then(_value.copyWith(lobby: value));
+      return _then(_value.copyWith(lobby: value) as $Val);
     });
   }
 }
@@ -107,12 +113,13 @@ abstract class _$$_RoundInfoCopyWith<$Res> implements $RoundInfoCopyWith<$Res> {
           _$_RoundInfo value, $Res Function(_$_RoundInfo) then) =
       __$$_RoundInfoCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {@protected RoundService? service,
       String code,
       String playerName,
       GameInfo? lobby,
-      GameState<Object>? game,
+      GameState<Event, Game<Event, dynamic>>? game,
       String? error});
 
   @override
@@ -120,46 +127,45 @@ abstract class _$$_RoundInfoCopyWith<$Res> implements $RoundInfoCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_RoundInfoCopyWithImpl<$Res> extends _$RoundInfoCopyWithImpl<$Res>
+class __$$_RoundInfoCopyWithImpl<$Res>
+    extends _$RoundInfoCopyWithImpl<$Res, _$_RoundInfo>
     implements _$$_RoundInfoCopyWith<$Res> {
   __$$_RoundInfoCopyWithImpl(
       _$_RoundInfo _value, $Res Function(_$_RoundInfo) _then)
-      : super(_value, (v) => _then(v as _$_RoundInfo));
+      : super(_value, _then);
 
-  @override
-  _$_RoundInfo get _value => super._value as _$_RoundInfo;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? service = freezed,
-    Object? code = freezed,
-    Object? playerName = freezed,
+    Object? code = null,
+    Object? playerName = null,
     Object? lobby = freezed,
     Object? game = freezed,
     Object? error = freezed,
   }) {
     return _then(_$_RoundInfo(
-      service == freezed
+      freezed == service
           ? _value.service
           : service // ignore: cast_nullable_to_non_nullable
               as RoundService?,
-      code: code == freezed
+      code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as String,
-      playerName: playerName == freezed
+      playerName: null == playerName
           ? _value.playerName
           : playerName // ignore: cast_nullable_to_non_nullable
               as String,
-      lobby: lobby == freezed
+      lobby: freezed == lobby
           ? _value.lobby
           : lobby // ignore: cast_nullable_to_non_nullable
               as GameInfo?,
-      game: game == freezed
+      game: freezed == game
           ? _value.game
           : game // ignore: cast_nullable_to_non_nullable
-              as GameState<Object>?,
-      error: error == freezed
+              as GameState<Event, Game<Event, dynamic>>?,
+      error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
@@ -188,7 +194,7 @@ class _$_RoundInfo extends _RoundInfo {
   @override
   final GameInfo? lobby;
   @override
-  final GameState<Object>? game;
+  final GameState<Event, Game<Event, dynamic>>? game;
   @override
   final String? error;
 
@@ -202,27 +208,22 @@ class _$_RoundInfo extends _RoundInfo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_RoundInfo &&
-            const DeepCollectionEquality().equals(other.service, service) &&
-            const DeepCollectionEquality().equals(other.code, code) &&
-            const DeepCollectionEquality()
-                .equals(other.playerName, playerName) &&
-            const DeepCollectionEquality().equals(other.lobby, lobby) &&
-            const DeepCollectionEquality().equals(other.game, game) &&
-            const DeepCollectionEquality().equals(other.error, error));
+            (identical(other.service, service) || other.service == service) &&
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.playerName, playerName) ||
+                other.playerName == playerName) &&
+            (identical(other.lobby, lobby) || other.lobby == lobby) &&
+            (identical(other.game, game) || other.game == game) &&
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(service),
-      const DeepCollectionEquality().hash(code),
-      const DeepCollectionEquality().hash(playerName),
-      const DeepCollectionEquality().hash(lobby),
-      const DeepCollectionEquality().hash(game),
-      const DeepCollectionEquality().hash(error));
+  int get hashCode =>
+      Object.hash(runtimeType, service, code, playerName, lobby, game, error);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_RoundInfoCopyWith<_$_RoundInfo> get copyWith =>
       __$$_RoundInfoCopyWithImpl<_$_RoundInfo>(this, _$identity);
 }
@@ -232,7 +233,7 @@ abstract class _RoundInfo extends RoundInfo {
       {required final String code,
       required final String playerName,
       final GameInfo? lobby,
-      final GameState<Object>? game,
+      final GameState<Event, Game<Event, dynamic>>? game,
       final String? error}) = _$_RoundInfo;
   const _RoundInfo._() : super._();
 
@@ -246,7 +247,7 @@ abstract class _RoundInfo extends RoundInfo {
   @override
   GameInfo? get lobby;
   @override
-  GameState<Object>? get game;
+  GameState<Event, Game<Event, dynamic>>? get game;
   @override
   String? get error;
   @override

@@ -4,4 +4,3 @@ export 'on_device.dart';
 export 'providers.dart';
 export 'round_client.dart';
 export 'round_service.dart';
-export 'socket_io.dart';

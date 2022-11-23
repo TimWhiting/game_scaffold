@@ -137,28 +137,6 @@ class MultiPlayerWidget extends HookConsumerWidget {
                                 ref.read(serviceType.notifier).state = v!,
                           ),
                           const SizedBox(width: 20),
-                          if (ref.watch(serviceType) == IOService) ...[
-                            const SizedBox(width: 20),
-                            SizedBox(
-                              width: 200,
-                              child: TextField(
-                                cursorColor: Colors.white,
-                                controller: ipAddress,
-                                decoration: const InputDecoration(
-                                  hintText: 'IP Address',
-                                ),
-                                onChanged: (value) {
-                                  // TODO: Use a formatter to limit what someone can type in the field
-                                  final uri = Uri.tryParse(value);
-                                  if (uri != null) {
-                                    ref.read(remoteUriProvider.notifier).state =
-                                        uri;
-                                  }
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 20),
-                          ],
                           if (additionalOptions != null) ...[
                             additionalOptions!,
                             const SizedBox(width: 20),
