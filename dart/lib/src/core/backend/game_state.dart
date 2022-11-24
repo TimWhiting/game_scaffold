@@ -36,12 +36,12 @@ class BackendProviders {
   );
 
   static final playerLobby =
-      StreamProvider.family<GameInfo, PlayerID>(
-    (ref, player) async* {
+      Provider.family<GameInfo?, PlayerID>(
+    (ref, player) {
       final l = ref.watch(lobby);
       final pls = l.players;
       if (pls.any((p) => p.id == player)) {
-        yield GameInfo(
+        return GameInfo(
           config: l.config,
           gameID: l.code,
           status: l.gameStatus,
@@ -51,6 +51,7 @@ class BackendProviders {
           gameType: l.config.gameType,
         );
       }
+      return null;
     },
     name: 'BackendPlayerLobby',
     dependencies: [lobby],

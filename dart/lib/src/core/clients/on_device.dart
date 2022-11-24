@@ -16,7 +16,7 @@ class OnDeviceRoundService extends RoundService {
 
   @override
   Stream<GameState> gameStream(PlayerID playerID, GameCode code) async* {
-    logger.info('Watching backend');
+    logger.info('Watching backend $playerID $code');
     final ss = StreamController<GameState>();
     final backendReader = OnDeviceGameService.games[code]?.container;
     if (backendReader == null) {
@@ -24,7 +24,7 @@ class OnDeviceRoundService extends RoundService {
     }
     backendReader.listen<GameState>(
       BackendProviders.state,
-      (prev, curr) async => ss.add(curr),
+      (prev, curr) => ss.add(curr),
     );
     yield backendReader.read(BackendProviders.state);
     yield* ss.stream;
@@ -81,16 +81,19 @@ class OnDeviceRoundService extends RoundService {
       return;
     }
 
-    backend.listen<Stream<GameInfo>>(
-      BackendProviders.playerLobby(playerID).stream,
+    backend.listen<GameInfo?>(
+      BackendProviders.playerLobby(playerID),
       (prev, curr) async {
         // ignore: prefer_foreach
-        await for (final e in curr) {
-          ss.add(e);
+        if (curr != null) {
+          ss.add(curr);
         }
       },
     );
-    yield await backend.read(BackendProviders.playerLobby(playerID).future);
+    final curr = backend.read(BackendProviders.playerLobby(playerID));
+    if (curr != null) {
+      yield curr;
+    }
     yield* ss.stream;
     await ss.close();
   }

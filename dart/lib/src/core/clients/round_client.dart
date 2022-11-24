@@ -42,7 +42,7 @@ extension on GameClientInfo {
 class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
   @override
   MultiplayerRoundClient(this.ref, this.multiplayerID)
-      : super(ref.read(multiplayerGameClientProvider(multiplayerID)).initial) {
+      : super(ref.watch(multiplayerGameClientProvider(multiplayerID)).initial) {
     final service = ref.watch(roundService);
 
     connect(service);
@@ -57,6 +57,7 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
         StreamSubscription<GameError>? error;
         StreamSubscription<GameState>? round;
         final lobby = service.gameLobby(multiplayerID, state.code).listen((e) {
+          print('lobby $multiplayerID $e');
           if (e.status == GameStatus.started &&
               error == null &&
               round == null) {
@@ -77,7 +78,9 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
           round?.cancel();
         });
       } else {
-        state = state.copyWith(service: null);
+        if (mounted) {
+          state = state.copyWith(service: null);
+        }
       }
     }).toList();
   }
