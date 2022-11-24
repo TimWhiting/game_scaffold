@@ -40,8 +40,6 @@ class MultiPlayerWidget extends HookConsumerWidget {
     final lock = useState(false);
     final currentApp = useState(0);
     final sideBySide = useState(isDesktop);
-    final ipAddress =
-        useTextEditingController(text: '${ref.watch(remoteUriProvider)}');
     if (multiplayerTest) {
       return Scaffold(
         body: Column(
@@ -192,9 +190,9 @@ class GameNavigator extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerID = ref.watch(playerIDProvider);
     final conn = ref.watch(gameInfoProvider.select((r) => r.connected));
     final gameStatus = ref.watch(GameProviders.status);
+    print('Game Status: $gameStatus');
 
     final pages = {'disconnected': disconnected};
     navigationLogger.info(
@@ -230,6 +228,7 @@ class GameNavigator extends HookConsumerWidget {
         navigationLogger.info('Popping route ${route.settings.arguments}');
         final status = route.settings.arguments as String?;
         if (status == 'lobby' || status == 'started') {
+          // ignore: unused_result
           ref.refresh(GameProviders.exitGame);
           ref.read(GameProviders.exitGame.future);
           ref.read(gameClientProvider).fetchOldGames();

@@ -5,7 +5,7 @@ import '../../../game_scaffold_dart.dart';
 
 part 'round_client.freezed.dart';
 
-final roundInfoProvider = Provider.autoDispose<RoundInfo>(
+final roundInfoProvider = Provider<RoundInfo>(
   (ref) =>
       ref.watch(multiplayerRoundClientProvider(ref.watch(playerIDProvider))),
   dependencies: [
@@ -14,7 +14,7 @@ final roundInfoProvider = Provider.autoDispose<RoundInfo>(
   ],
 );
 
-final roundClientProvider = Provider.autoDispose<MultiplayerRoundClient>(
+final roundClientProvider = Provider<MultiplayerRoundClient>(
   (ref) => ref.watch(
       multiplayerRoundClientProvider(ref.watch(playerIDProvider)).notifier),
   dependencies: [
@@ -28,13 +28,15 @@ final multiplayerRoundClientProvider =
   MultiplayerRoundClient.new,
   dependencies: [
     singleConfig,
-    gameService,
+    multiplayerGameClientProvider,
+    roundService,
   ],
+  name: 'MultiplayerRoundClient',
 );
 
 extension on GameClientInfo {
   RoundInfo get initial =>
-      RoundInfo(null, code: code!, playerName: playerName!);
+      RoundInfo(null, code: code ?? '', playerName: playerName ?? '');
 }
 
 class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
@@ -93,6 +95,15 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
       await service(
         (c) => c.startGame(multiplayerID, state.code),
       );
+
+  Future<bool> sendEvent(Event e) =>
+      service((c) => c.sendEvent(multiplayerID, state.code, e));
+
+  Future<bool> newRound() =>
+      service((c) => c.newRound(multiplayerID, state.code));
+
+  Future<bool> exitGame() =>
+      service((c) => c.exitGame(multiplayerID, state.code));
 }
 
 @freezed
@@ -110,4 +121,6 @@ class RoundInfo with _$RoundInfo {
   bool get isStarted => game != null;
   bool get hasError => error != null;
   bool get inLobby => lobby != null && !isStarted;
+  GameStatus? get status => inLobby ? GameStatus.lobby : game?.status;
+  String? get gameType => game?.game.type;
 }

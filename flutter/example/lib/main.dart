@@ -3,8 +3,18 @@ import 'package:game_scaffold/game_scaffold.dart';
 import 'package:game_scaffold_games/games.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
+import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
 void main() {
+  FlutterError.demangleStackTrace = (stack) {
+    if (stack is stack_trace.Trace) {
+      return stack.vmTrace;
+    }
+    if (stack is stack_trace.Chain) {
+      return stack.toTrace().vmTrace;
+    }
+    return stack;
+  };
   registerTicTacToe();
   Logger.root.clearListeners();
   Logger.root.level = Level.FINE;
@@ -144,6 +154,11 @@ class LobbyWidget extends HookConsumerWidget {
           const SizedBox(height: 40),
           const Text('Lobby'),
           Text('${lobby.value}'),
+          if (lobby.valueOrNull?.creator ?? false)
+            ElevatedButton(
+              onPressed: () => ref.read(roundClientProvider).startGame(),
+              child: const Text('Start Game'),
+            ),
         ]),
       ),
     );

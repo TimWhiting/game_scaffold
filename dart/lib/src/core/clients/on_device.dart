@@ -19,14 +19,14 @@ class OnDeviceRoundService extends RoundService {
     logger.info('Watching backend');
     final ss = StreamController<GameState>();
     final backendReader = OnDeviceGameService.games[code]?.container;
-    backendReader?.listen<GameState>(
-      fireImmediately: true,
+    if (backendReader == null) {
+      return;
+    }
+    backendReader.listen<GameState>(
       BackendProviders.state,
-      (prev, curr) async {
-        ss.add(curr);
-      },
+      (prev, curr) async => ss.add(curr),
     );
-
+    yield backendReader.read(BackendProviders.state);
     yield* ss.stream;
     await ss.close();
   }
@@ -82,7 +82,6 @@ class OnDeviceRoundService extends RoundService {
     }
 
     backend.listen<Stream<GameInfo>>(
-      fireImmediately: true,
       BackendProviders.playerLobby(playerID).stream,
       (prev, curr) async {
         // ignore: prefer_foreach
@@ -91,6 +90,7 @@ class OnDeviceRoundService extends RoundService {
         }
       },
     );
+    yield await backend.read(BackendProviders.playerLobby(playerID).future);
     yield* ss.stream;
     await ss.close();
   }
@@ -106,12 +106,13 @@ final onDeviceRoundService = Provider<RoundService>((ref) {
 ///
 /// Warning implementation not complete or tested yet
 class OnDeviceGameService extends GameService {
-  OnDeviceGameService() : super();
+  OnDeviceGameService(this.ref) : super();
+  final ProviderRef ref;
   static final games = <GameCode, LocalGame>{};
   @override
   Future<String> createGame(PlayerID playerID, GameConfig config) async {
     final gameCode = generateGameID([]);
-    final backendRead = ProviderContainer(overrides: []);
+    final backendRead = ProviderContainer(parent: ref.container, overrides: []);
     final lobby = backendRead.read(BackendProviders.lobby.notifier);
     // await Future.delayed(const Duration(microseconds: 1));
     lobby.setCode(gameCode);
@@ -184,7 +185,7 @@ class OnDeviceGameService extends GameService {
 
 final onDeviceGameService = Provider<GameService>(
   (ref) {
-    final client = OnDeviceGameService();
+    final client = OnDeviceGameService(ref);
     ref.onDispose(client.dispose);
     return client;
   },

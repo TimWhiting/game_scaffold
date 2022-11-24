@@ -27,6 +27,7 @@ final multiplayerGameClientProvider = StateNotifierProvider.family<
     singleConfig,
     gameService,
   ],
+  name: 'MultiplayerGameClient',
 );
 
 class MultiplayerGameClient extends StateNotifier<GameClientInfo> {

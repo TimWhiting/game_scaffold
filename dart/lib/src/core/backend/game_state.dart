@@ -137,7 +137,6 @@ class GameStateNotifier extends StateNotifier<GameState> {
   bool handleEvent(Event event) {
     var error = false;
     try {
-      print(event);
       final game = gameState;
       if (event is GenericEvent){
         state = event.maybeWhen(undo: () {

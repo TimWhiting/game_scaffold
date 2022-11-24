@@ -38,8 +38,6 @@ Future<void> main(List<String> arguments) async {
     ..setPlayerName('Player 2');
   final r = await p1Client.read().joinGame();
   final r1 = await p2Client.read().joinGame();
-  p1Ref.listen(GameProviders.lobby, (_, __) {});
-  p2Ref.listen(GameProviders.lobby, (_, __) {});
   // final r2 = await p1Client.read().startGame();
 
   print(r);
@@ -47,18 +45,19 @@ Future<void> main(List<String> arguments) async {
   // print(r2);
 
   late ProviderSubscription sub;
-  sub = p1Ref.listen<AsyncValue<GameState>>(
-      fireImmediately: true, GameProviders.game, (last, value) async {
+  p2Ref.listen<RoundInfo>(fireImmediately: true, roundInfoProvider, (_, __) {});
+  sub = p1Ref.listen<RoundInfo>(fireImmediately: true, roundInfoProvider,
+      (last, value) async {
     print(value);
-    if (value.value == null) {
+    if (value.game == null) {
       return;
     }
-    if (value.asData?.value.gameOver ?? false) {
+    if (value.status == GameStatus.finished) {
       sub.close();
       return;
     }
     final gameState =
-        value.value! as GameState<TicTacToeGameEvent, TicTacToeGame>;
+        value.game! as GameState<TicTacToeGameEvent, TicTacToeGame>;
     print(gameState.status);
     if (gameState.gameOver || gameState.roundOver) {
       print('Round Over');
@@ -71,10 +70,8 @@ Future<void> main(List<String> arguments) async {
       }
       print('');
       if (gameState.roundOver) {
-        p1Ref.refresh(GameProviders.newRound);
-        await p1Ref.read(GameProviders.newRound.future);
-        p2Ref.refresh(GameProviders.newRound);
-        await p2Ref.read(GameProviders.newRound.future);
+        await p1Ref.read(roundClientProvider).newRound();
+        await p2Ref.read(roundClientProvider).newRound();
       } else {
         print('Finished');
         // print('Player 0: ${gameState.totalScores[P1]}');
@@ -103,15 +100,14 @@ Future<void> loop(
 
   final event = TicTacToeGameEvent(
       player: player, location: location[0]! * 3 + location[1]!);
-  playerContainers[player]!.invalidate(GameProviders.sendEvent(event));
-  await playerContainers[player]!.read(GameProviders.sendEvent(event).future);
+  await playerContainers[player]!.read(roundClientProvider).sendEvent(event);
 
   await Future.delayed(const Duration(milliseconds: 100));
-  final error = playerContainers[player]!.read(GameProviders.error);
-  if (error.value != null) {
+  final error = playerContainers[player]!.read(roundInfoProvider);
+  if (error.hasError) {
     print('');
     print('!!!!!!!!!!!');
-    print(error.value);
+    print(error.error);
     print('!!!!!!!!!!!');
     print('');
   }
