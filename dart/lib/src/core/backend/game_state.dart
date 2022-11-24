@@ -106,7 +106,6 @@ class GameStateNotifier extends StateNotifier<GameState> {
   GameStateNotifier(
       this.gameConfig, this.code, GameState initialState, this.errorNotifier)
       : _gameStateLogger = Logger('GameStateNotifier $code'),
-        _previousStates = [initialState],
         super(initialState);
 
   final StateController<GameError?> errorNotifier;
@@ -119,15 +118,12 @@ class GameStateNotifier extends StateNotifier<GameState> {
   /// The [GameConfig] that was used to create this [GameStateNotifier]
   final GameConfig gameConfig;
 
-  /// A list of previous states
-  final List<GameState> _previousStates;
-
   /// Returns the [state] of the game
   ///
   /// Remember to watch / listen to the state of the [GameStateNotifier]
   /// rather than just watching changes in the notifier itself, otherwise changes
   /// in the [gameState] will not trigger updates of the ui
-  GameState get gameState => _previousStates.last;
+  GameState get gameState => state;
 
   /// Handles a [GameEvent] and updates the state accordingly
   ///
@@ -135,21 +131,14 @@ class GameStateNotifier extends StateNotifier<GameState> {
   ///
   /// In case of a [GenericEvent] this handles the implementation of handling the event
   // ignore: type_annotate_public_apis
-  bool handleEvent(Event event) {
+  bool handleEvent(PlayerEvent event) {
     var error = false;
     try {
       final game = gameState;
-      if (event is GenericEvent){
-        state = event.maybeWhen(undo: () {
-            // Remove the current state
-            _previousStates.removeLast();
-            final lastState = _previousStates.removeLast();
-            return lastState;
-          },
+      final e = event.event;
+      if (e is GenericEvent){
+        state = e.maybeWhen(
           readyNextRound: (e) {
-            if (game.readyPlayers.length > 1) {
-              _previousStates.remove(game);
-            }
             final newState = game.updateGeneric((g) => g.addReadyPlayer(e));
             if (newState.readyPlayers.length == game.players.length) {
               return game
@@ -159,17 +148,12 @@ class GameStateNotifier extends StateNotifier<GameState> {
             }
             return newState;
           },
-          message: (_, __, ___) => game
-              .updateMessages((m) => m.add(event as GameMessage))
-              .updateGeneric((g) => g.updateTime()),
           orElse: () {
             errorNotifier.state = (message: 'General Event not implemented yet $event', player: 'Player');
             return game;
           });
       }else {
-        print(event);
          final next = game.next(event, gameConfig);
-         print(next);
           if (next.error != null) {
             errorNotifier.state = next.error;
             error = true;
@@ -180,12 +164,9 @@ class GameStateNotifier extends StateNotifier<GameState> {
       if (error) {
         return false;
       }
-      _previousStates.add(state);
       return true;
       // ignore: avoid_catches_without_on_clauses
     } catch (error, st) {
-      print(error);
-      print(st);
       _gameStateLogger.severe('$error $st');
     }
     return false;

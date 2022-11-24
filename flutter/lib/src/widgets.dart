@@ -201,7 +201,6 @@ class GameNavigator extends HookConsumerWidget {
 
     navigationLogger.info(
         'PlayerID: ${ref.read(playerIDProvider)} gameStatus: $gameStatus');
-    print(ref.watch(gameInfoProvider));
 
     if (conn) {
       pages['connected'] = connected;

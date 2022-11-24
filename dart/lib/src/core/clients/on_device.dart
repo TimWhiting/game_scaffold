@@ -40,8 +40,9 @@ class OnDeviceRoundService extends RoundService {
     // If the gameClient is initializing
     // we cannot edit the backend provider synchronously
     await Future.delayed(const Duration(microseconds: 1));
-    final result =
-        backendReader.read(BackendProviders.state.notifier).handleEvent(event);
+    final result = backendReader
+        .read(BackendProviders.state.notifier)
+        .handleEvent((playerId: playerID, event: event));
     return result;
   }
 
@@ -55,7 +56,7 @@ class OnDeviceRoundService extends RoundService {
       fireImmediately: true,
       BackendProviders.error,
       (prev, curr) async {
-        if (curr != null) {
+        if (curr != null && curr.player == playerID) {
           ss.add(curr);
         }
       },

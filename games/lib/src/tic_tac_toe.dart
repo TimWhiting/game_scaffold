@@ -15,7 +15,7 @@ final GameFunctions<TicTacToeGameEvent, TicTacToeGame> tttFunctions = GameFuncti
   fromJsonE: TicTacToeGameEvent.fromJson,
   gameName: 'Tic Tac Toe',
   gameType: 'tictactoe',
-  initialState: (config, players) => GameState(game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0),  messages: <GameMessage>[].lock, generic: GenericGame.start(players), rewards: <double>[0, 0]),
+  initialState: (config, players) => GameState(game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0), generic: GenericGame.start(players), rewards: <double>[0, 0]),
 );
 
 @freezed
@@ -54,7 +54,8 @@ class TicTacToeGame extends Game<TicTacToeGameEvent, TicTacToeGame> with _$TicTa
     final n = _next(event, config);
     final winner = n.winner;
     if (winner != null){
-      return (n, [winner.p1Points, winner.p2Points], GameStatus.betweenRounds);
+      // ignore: unused_result
+      return (n.copyWith(currentPlayer: currentPlayer), [winner.p1Points, winner.p2Points], GameStatus.betweenRounds);
     }
     return (n, null, GameStatus.started);
   }
@@ -63,7 +64,6 @@ class TicTacToeGame extends Game<TicTacToeGameEvent, TicTacToeGame> with _$TicTa
   GameState<TicTacToeGameEvent,TicTacToeGame> nextRound(GameState<TicTacToeGameEvent,TicTacToeGame> state,  GameConfig config) => GameState<TicTacToeGameEvent,TicTacToeGame>(
     game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: state.game.currentPlayer == 0 ? 1 : 0),    
     generic: state.generic.finishRound(),
-    messages: state.messages,
     rewards: state.rewards,
   );
 

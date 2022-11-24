@@ -36,44 +36,16 @@ const _$GameStatusEnumMap = {
   GameStatus.finished: 'finished',
 };
 
-_$GenericEventUndo _$$GenericEventUndoFromJson(Map<String, dynamic> json) =>
-    _$GenericEventUndo(
-      $type: json['runtimeType'] as String?,
-    );
-
-Map<String, dynamic> _$$GenericEventUndoToJson(_$GenericEventUndo instance) =>
-    <String, dynamic>{
-      'runtimeType': instance.$type,
-    };
-
 _$_GenericReadyNextRoundEvent _$$_GenericReadyNextRoundEventFromJson(
         Map<String, dynamic> json) =>
     _$_GenericReadyNextRoundEvent(
       json['player'] as String,
-      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$_GenericReadyNextRoundEventToJson(
         _$_GenericReadyNextRoundEvent instance) =>
     <String, dynamic>{
       'player': instance.player,
-      'runtimeType': instance.$type,
-    };
-
-_$GameMessage _$$GameMessageFromJson(Map<String, dynamic> json) =>
-    _$GameMessage(
-      json['message'] as String,
-      from: json['from'] as String,
-      to: json['to'] as String?,
-      $type: json['runtimeType'] as String?,
-    );
-
-Map<String, dynamic> _$$GameMessageToJson(_$GameMessage instance) =>
-    <String, dynamic>{
-      'message': instance.message,
-      'from': instance.from,
-      'to': instance.to,
-      'runtimeType': instance.$type,
     };
 
 _$_GameConfig _$$_GameConfigFromJson(Map<String, dynamic> json) =>

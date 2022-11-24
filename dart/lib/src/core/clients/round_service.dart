@@ -17,26 +17,11 @@ abstract class RoundService {
   Future<bool> sendEvent<E extends Event>(
       PlayerID playerID, GameCode code, E event);
 
-  /// Sends an undo event to the game server
-  Future<bool> undo(PlayerID playerID, GameCode code) => sendEvent(
-        playerID,
-        code,
-        const GenericEvent.undo(),
-      );
-
   /// Sends a new round event to the game server
   Future<bool> newRound(PlayerID playerID, GameCode code) => sendEvent(
         playerID,
         code,
         GenericEvent.readyNextRound(playerID),
-      );
-
-  /// Sends a message event to the game server
-  Future<bool> sendMessage(PlayerID playerID, GameCode code, String message) =>
-      sendEvent(
-        playerID,
-        code,
-        GenericEvent.message(message, from: playerID, to: null),
       );
 
   Stream<GameState> gameStream(PlayerID playerID, GameCode code);

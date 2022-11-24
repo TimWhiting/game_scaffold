@@ -81,20 +81,19 @@ typedef Rewards = List<double>;
 typedef NextStateOrError<E extends Event, T extends Game<E, T>> = ({GameState<E, T> state, GameError? error});
 typedef NextState<E extends Event, T extends Game<E, T>> = (T, Rewards?, GameStatus);
 typedef GameName = String;
+typedef PlayerEvent<E extends Event> = ({String playerId, E event});
 
 class GameState<E extends Event, T extends Game<E, T>> {
-  GameState({required this.game,required this.rewards, required this.generic,required this.messages});
+  GameState({required this.game,required this.rewards, required this.generic});
 
   final T game;
   final Rewards rewards;
   final GenericGame generic;
-  final IList<GameMessage> messages;
 
    JsonMap toJson() => {
       'game': GameRegistry.toGameJson(game),
       'rewards': rewards,
       'generic': generic.toJson(),
-      'messages': [for (final message in messages) message.toJson()],
     };
 
   GameState<E,T> updateReward(List<double> rewards) => copyWith(rewards: rewards);
@@ -102,8 +101,6 @@ class GameState<E extends Event, T extends Game<E, T>> {
   GameState<E,T> updateGame(T game) => copyWith(game: game);
 
   GameState<E,T> updateGeneric(GenericGame Function(GenericGame) update) => copyWith(generic: update(generic), rewards: rewards);
-
-  GameState<E,T> updateMessages(IList<GameMessage> Function(IList<GameMessage>) update) => copyWith(messages: update(messages));
 
   /// Gets an unmodifiable list of players that are a part of this game
   IList<Player> get players => generic.players;
@@ -129,12 +126,12 @@ class GameState<E extends Event, T extends Game<E, T>> {
   /// Gets the players who are ready for the next round
   IList<PlayerID> get readyPlayers => generic.readyPlayers;
 
-  NextStateOrError<E,T> next(E event, GameConfig config) {
-    final error = game.error.call(event, config);
+  NextStateOrError<E,T> next(PlayerEvent<E> event, GameConfig config) {
+    final error = game.error(event.event, config);
     if (error != null){
-       return (state: this, error: (message: error, player: ''));
+       return (state: this, error: (message: error, player: event.playerId));
     }
-    final next = game.next.call(event, config);
+    final next = game.next(event.event, config);
     return (state: copyWith( game: next.$0 as T, rewards: next.$1 == null  ? rewards : next.$1! + rewards, generic: generic.updateStatus(next.$2).updateTime()), error: null);
   }
 
@@ -147,12 +144,10 @@ class GameState<E extends Event, T extends Game<E, T>> {
     T? game,
     Rewards? rewards,
     GenericGame? generic,
-    IList<GameMessage>? messages,
   }) => GameState<E,T>(
       game: game ?? this.game,
       rewards: rewards ?? this.rewards,
       generic: generic ?? this.generic,
-      messages: messages ?? this.messages,
     );
 }
 
@@ -178,6 +173,5 @@ GameState<E,T> GameStateFromJson<E extends Event, T extends Game<E, T>>(Map<Stri
     game: GameRegistry.gameFromJson<E,T>(json), 
     rewards: (json['rewards'] as List).cast<double>(), 
     generic: GenericGame.fromJson(json['generic'] as JsonMap), 
-    messages: (json['messages'] as List).map((e) => GameMessage.fromJson(e as JsonMap)).toIList(),
   );
 
