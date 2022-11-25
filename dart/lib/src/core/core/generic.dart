@@ -122,7 +122,7 @@ class GameConfig with _$GameConfig {
     @Default(1) int minPlayers,
     @Default(10) int maxPlayers,
     @Default(true) bool autoStart,
-    // T? options,
+    @Default({}) Map<String, Object?> options,
   }) = _GameConfig;
   const GameConfig._();
   factory GameConfig.fromJson(Map<String, Object?> map) =>

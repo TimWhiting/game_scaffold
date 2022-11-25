@@ -481,6 +481,7 @@ mixin _$GameConfig {
   int get minPlayers => throw _privateConstructorUsedError;
   int get maxPlayers => throw _privateConstructorUsedError;
   bool get autoStart => throw _privateConstructorUsedError;
+  Map<String, Object?> get options => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -502,7 +503,8 @@ abstract class $GameConfigCopyWith<$Res> {
       int rounds,
       int minPlayers,
       int maxPlayers,
-      bool autoStart});
+      bool autoStart,
+      Map<String, Object?> options});
 }
 
 /// @nodoc
@@ -526,6 +528,7 @@ class _$GameConfigCopyWithImpl<$Res, $Val extends GameConfig>
     Object? minPlayers = null,
     Object? maxPlayers = null,
     Object? autoStart = null,
+    Object? options = null,
   }) {
     return _then(_value.copyWith(
       gameType: null == gameType
@@ -560,6 +563,10 @@ class _$GameConfigCopyWithImpl<$Res, $Val extends GameConfig>
           ? _value.autoStart
           : autoStart // ignore: cast_nullable_to_non_nullable
               as bool,
+      options: null == options
+          ? _value.options
+          : options // ignore: cast_nullable_to_non_nullable
+              as Map<String, Object?>,
     ) as $Val);
   }
 }
@@ -580,7 +587,8 @@ abstract class _$$_GameConfigCopyWith<$Res>
       int rounds,
       int minPlayers,
       int maxPlayers,
-      bool autoStart});
+      bool autoStart,
+      Map<String, Object?> options});
 }
 
 /// @nodoc
@@ -602,6 +610,7 @@ class __$$_GameConfigCopyWithImpl<$Res>
     Object? minPlayers = null,
     Object? maxPlayers = null,
     Object? autoStart = null,
+    Object? options = null,
   }) {
     return _then(_$_GameConfig(
       gameType: null == gameType
@@ -636,6 +645,10 @@ class __$$_GameConfigCopyWithImpl<$Res>
           ? _value.autoStart
           : autoStart // ignore: cast_nullable_to_non_nullable
               as bool,
+      options: null == options
+          ? _value._options
+          : options // ignore: cast_nullable_to_non_nullable
+              as Map<String, Object?>,
     ));
   }
 }
@@ -651,8 +664,10 @@ class _$_GameConfig extends _GameConfig {
       this.rounds = 15,
       this.minPlayers = 1,
       this.maxPlayers = 10,
-      this.autoStart = true})
-      : super._();
+      this.autoStart = true,
+      final Map<String, Object?> options = const {}})
+      : _options = options,
+        super._();
 
   factory _$_GameConfig.fromJson(Map<String, dynamic> json) =>
       _$$_GameConfigFromJson(json);
@@ -679,10 +694,17 @@ class _$_GameConfig extends _GameConfig {
   @override
   @JsonKey()
   final bool autoStart;
+  final Map<String, Object?> _options;
+  @override
+  @JsonKey()
+  Map<String, Object?> get options {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_options);
+  }
 
   @override
   String toString() {
-    return 'GameConfig(gameType: $gameType, adminID: $adminID, nameSet: $nameSet, customNames: $customNames, rounds: $rounds, minPlayers: $minPlayers, maxPlayers: $maxPlayers, autoStart: $autoStart)';
+    return 'GameConfig(gameType: $gameType, adminID: $adminID, nameSet: $nameSet, customNames: $customNames, rounds: $rounds, minPlayers: $minPlayers, maxPlayers: $maxPlayers, autoStart: $autoStart, options: $options)';
   }
 
   @override
@@ -702,13 +724,23 @@ class _$_GameConfig extends _GameConfig {
             (identical(other.maxPlayers, maxPlayers) ||
                 other.maxPlayers == maxPlayers) &&
             (identical(other.autoStart, autoStart) ||
-                other.autoStart == autoStart));
+                other.autoStart == autoStart) &&
+            const DeepCollectionEquality().equals(other._options, _options));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, gameType, adminID, nameSet,
-      customNames, rounds, minPlayers, maxPlayers, autoStart);
+  int get hashCode => Object.hash(
+      runtimeType,
+      gameType,
+      adminID,
+      nameSet,
+      customNames,
+      rounds,
+      minPlayers,
+      maxPlayers,
+      autoStart,
+      const DeepCollectionEquality().hash(_options));
 
   @JsonKey(ignore: true)
   @override
@@ -733,7 +765,8 @@ abstract class _GameConfig extends GameConfig {
       final int rounds,
       final int minPlayers,
       final int maxPlayers,
-      final bool autoStart}) = _$_GameConfig;
+      final bool autoStart,
+      final Map<String, Object?> options}) = _$_GameConfig;
   const _GameConfig._() : super._();
 
   factory _GameConfig.fromJson(Map<String, dynamic> json) =
@@ -755,6 +788,8 @@ abstract class _GameConfig extends GameConfig {
   int get maxPlayers;
   @override
   bool get autoStart;
+  @override
+  Map<String, Object?> get options;
   @override
   @JsonKey(ignore: true)
   _$$_GameConfigCopyWith<_$_GameConfig> get copyWith =>

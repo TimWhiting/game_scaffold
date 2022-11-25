@@ -59,6 +59,7 @@ _$_GameConfig _$$_GameConfigFromJson(Map<String, dynamic> json) =>
       minPlayers: json['minPlayers'] as int? ?? 1,
       maxPlayers: json['maxPlayers'] as int? ?? 10,
       autoStart: json['autoStart'] as bool? ?? true,
+      options: json['options'] as Map<String, dynamic>? ?? const {},
     );
 
 Map<String, dynamic> _$$_GameConfigToJson(_$_GameConfig instance) =>
@@ -71,6 +72,7 @@ Map<String, dynamic> _$$_GameConfigToJson(_$_GameConfig instance) =>
       'minPlayers': instance.minPlayers,
       'maxPlayers': instance.maxPlayers,
       'autoStart': instance.autoStart,
+      'options': instance.options,
     };
 
 const _$NameSetEnumMap = {
