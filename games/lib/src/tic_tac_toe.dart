@@ -51,13 +51,19 @@ class TicTacToeGame extends Game<TicTacToeGameEvent, TicTacToeGame> with _$TicTa
 
   @override
   NextState<TicTacToeGameEvent, TicTacToeGame> next(TicTacToeGameEvent event, GameConfig config){
+      if (event.player != currentPlayer){
+      return error('Not your turn');
+    }
+    if (!canMove(event.player, event.location)){
+      return error('Invalid move');
+    }
     final n = _next(event, config);
     final winner = n.winner;
     if (winner != null){
       // ignore: unused_result
-      return (n.copyWith(currentPlayer: currentPlayer), [winner.p1Points, winner.p2Points], GameStatus.betweenRounds);
+      return (n.copyWith(currentPlayer: currentPlayer), [winner.p1Points, winner.p2Points], GameStatus.betweenRounds).value;
     }
-    return (n, null, GameStatus.started);
+    return (n, null, GameStatus.started).value;
   }
 
   @override
@@ -70,16 +76,6 @@ class TicTacToeGame extends Game<TicTacToeGameEvent, TicTacToeGame> with _$TicTa
   bool canMove(int player, int location) =>
       location >= 0 && location < 9 && board[location] == null;
 
-  @override
-  String? error(TicTacToeGameEvent event, GameConfig config){
-     if (event.player != currentPlayer){
-      return 'Not your turn';
-    }
-    if (!canMove(event.player, event.location)){
-      return 'Invalid move';
-    }
-    return null;
-  }
 
   Winner? get winner => 
     isWinner(0)  ? Winner.p1 : 

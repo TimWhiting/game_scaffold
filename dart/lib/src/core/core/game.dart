@@ -6,12 +6,35 @@ import 'core.dart';
 
 typedef GameCode = String;
 typedef GameType = String;
+typedef PlayerIndex = int;
+typedef Rewards = List<double>;
+typedef NextStateOrError<E extends Event, T extends Game<E, T>> = ({GameState<E, T> state, GameError? error});
+typedef NextState<E extends Event, T extends Game<E, T>> = MaybeError<(T, Rewards?, GameStatus)>;
+typedef GameName = String;
+typedef PlayerEvent<E extends Event> = ({String playerId, E event});
+
+typedef MaybeError<T> = (T? value, String? error);
+extension E<T> on MaybeError<T> {
+  T get value => $0!;
+  String get error => $1!;
+  bool get hasError => $1 != null;
+  bool get hasValue => $0 != null;
+  X when<X>(X Function(T) value, X Function(T) error) => hasError ? error($0 as T) : value($0 as T);
+}
+
+extension V<T> on T {
+  MaybeError<T> errorValue(String err) => (this, err);
+  MaybeError<T> get value => (this, null);
+}
+
+extension VX<E extends Event, T extends Game<E, T>> on T {
+  NextState<E,T> error(String err) => (null, err);
+}
 
 abstract class Game<E extends Event, T extends Game<E,T>> {
   const Game();
   GameType get type;
   NextState<E,T> next(E event, GameConfig config);
-  String? error(E event, GameConfig config);
   Map<String, Object?> toJson();
   GameState<E,T> nextRound(GameState<E,T> state, GameConfig config);
 }
@@ -21,7 +44,6 @@ abstract class Event {
   GameType get type;
   Map<String, Object?> toJson();
 }
-
 
 // ignore: avoid_classes_with_only_static_members
 abstract class GameRegistry {
@@ -76,13 +98,6 @@ class GameErrorNotifier extends StateNotifier<GameError?> {
   }
 }
 
-typedef PlayerIndex = int;
-typedef Rewards = List<double>;
-typedef NextStateOrError<E extends Event, T extends Game<E, T>> = ({GameState<E, T> state, GameError? error});
-typedef NextState<E extends Event, T extends Game<E, T>> = (T, Rewards?, GameStatus);
-typedef GameName = String;
-typedef PlayerEvent<E extends Event> = ({String playerId, E event});
-
 class GameState<E extends Event, T extends Game<E, T>> {
   GameState({required this.game,required this.rewards, required this.generic});
 
@@ -127,12 +142,11 @@ class GameState<E extends Event, T extends Game<E, T>> {
   IList<PlayerID> get readyPlayers => generic.readyPlayers;
 
   NextStateOrError<E,T> next(PlayerEvent<E> event, GameConfig config) {
-    final error = game.error(event.event, config);
-    if (error != null){
-       return (state: this, error: (message: error, player: event.playerId));
-    }
     final next = game.next(event.event, config);
-    return (state: copyWith( game: next.$0 as T, rewards: next.$1 == null  ? rewards : next.$1! + rewards, generic: generic.updateStatus(next.$2).updateTime()), error: null);
+    if (next.hasError){
+     return (state: this, error: (message: next.error, player: event.playerId));
+    }
+    return (state: copyWith( game: next.value.$0 as T, rewards: next.value.$1 == null  ? rewards : next.value.$1! + rewards, generic: generic.updateStatus(next.value.$2).updateTime()), error: null);
   }
 
   NextStateOrError<E,T> nextRound(GameConfig config) {
