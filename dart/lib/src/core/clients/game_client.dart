@@ -57,7 +57,9 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
         });
         ref.onDispose(service.disconnect);
       } else {
-        state = state.copyWith(service: null);
+        if (mounted) {
+          state = state.copyWith(service: null);
+        }
       }
     }).toList();
   }

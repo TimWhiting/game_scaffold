@@ -12,11 +12,11 @@ import 'package:test/test.dart' as darttest;
 /// Uses the OnDevice clients
 /// TODO: Maybe try to use only Backend Providers as long as nothing need to be async (which it shouldn't since the game method are all non-async)?
 @isTest
-void testGame<T extends Object, E extends Object>(
+void testGame<E extends Event, T extends Game<E,T> >(
   String testName, {
   required GameConfig config,
   required List<Player> players,
-  required Future<void> Function(GameTester<T, E>) test,
+  required Future<void> Function(GameTester<E, T>) test,
 }) {
   darttest.test(testName, () async {
     final root = ProviderContainer();
@@ -32,6 +32,7 @@ void testGame<T extends Object, E extends Object>(
       g[p.id] = ref[p.id]!.listen(gameClientProvider, (previous, next) {});
     }
     g[players.first.id]!.read().setGameConfig(config);
+    await Future.delayed(Duration.zero);
     final code = await g[players.first.id]!.read().createGame();
     for (final p in players) {
       g[p.id]!.read().setGameCode(code);
@@ -39,11 +40,11 @@ void testGame<T extends Object, E extends Object>(
       r[p.id] = ref[p.id]!.listen(roundClientProvider, (previous, next) {});
     }
 
-    if (ref[players.first.id]!.read(GameProviders.status) !=
+    if (ref[players.first.id]!.read(roundInfoProvider).status !=
         GameStatus.started) {
       await r[players.first.id]!.read().startGame();
     }
-    final tester = GameTester<T, E>(ref, players, code);
+    final tester = GameTester<E,T>(ref, players, code);
     await test(tester);
 
     for (final s in g.keys) {
@@ -59,11 +60,9 @@ void testGame<T extends Object, E extends Object>(
 ///
 /// Just call [event] with your event, and a function that receives a game and error
 /// and check the properties you want
-class GameTester<T extends Object, E extends Object> {
+class GameTester<E extends Event, T extends Game<E,T>> {
   GameTester(this.readers, this._players, this.code) {
-    sub = backendContainer.listen(BackendProviders.lobby, (previous, next) {
-      print('Next: $next');
-    });
+    sub = backendContainer.listen(BackendProviders.lobby, (previous, next) {});
   }
 
   final List<Player> _players;
@@ -83,7 +82,7 @@ class GameTester<T extends Object, E extends Object> {
   ///   expect(game.players.size, 2);
   /// });
   /// ```
-  void event(E event, Function(GameState<T>, GameError?) outcome) {
+  void event(PlayerEvent<E> event, Function(GameState<E, T>, GameError?) outcome) {
     backendContainer.read(BackendProviders.state.notifier).handleEvent(event);
 
     final g = game;
@@ -103,9 +102,8 @@ class GameTester<T extends Object, E extends Object> {
   /// Returns the current game state
   ///
   /// If testing the outcome of an event prefer using [event]
-  GameState<T> get game =>
-      backendContainer.read(BackendProviders.state.notifier).gameState
-          as GameState<T>;
+  GameState<E, T> get game =>
+      backendContainer.read(BackendProviders.state.notifier).gameState as GameState<E,T>;
 
   /// Returns the current error state
   ///
@@ -114,11 +112,11 @@ class GameTester<T extends Object, E extends Object> {
 
   /// Advances to the next round, and checks the [expectation] of the game after
   /// the round has advanced
-  void nextRound(Function(GameState<T>) expectation) {
+  void nextRound(Function(GameState<E, T>) expectation) {
     for (final p in _players) {
       backendContainer
           .read(BackendProviders.state.notifier)
-          .handleEvent(GenericEvent.readyNextRound(p.id));
+          .handleEvent((event: GenericEvent.readyNextRound(p.id), playerId: p.id));
     }
 
     expectation(game);

@@ -57,7 +57,6 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
         StreamSubscription<GameError>? error;
         StreamSubscription<GameState>? round;
         final lobby = service.gameLobby(multiplayerID, state.code).listen((e) {
-          print('lobby $multiplayerID $e');
           if (e.status == GameStatus.started &&
               error == null &&
               round == null) {
