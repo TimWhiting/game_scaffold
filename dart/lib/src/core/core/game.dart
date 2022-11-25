@@ -19,7 +19,9 @@ extension E<T> on MaybeError<T> {
   String get error => $1!;
   bool get hasError => $1 != null;
   bool get hasValue => $0 != null;
-  X when<X>(X Function(T) value, X Function(T) error) => hasError ? error($0 as T) : value($0 as T);
+  X when<X>({required X Function(T) value, required X Function(T) error}) => hasError ? error($0 as T) : value($0 as T);
+  MaybeError<X> map<X>(X Function(T) v) => $0 != null ? (v($0 as T), $1) : this as MaybeError<X>;
+  MaybeError<T> mapError(String Function(String) e) =>  $1 != null ? ($0, e($1!)) : this;
 }
 
 extension V<T> on T {
