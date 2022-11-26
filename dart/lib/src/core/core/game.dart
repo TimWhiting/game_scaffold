@@ -31,12 +31,14 @@ extension V<T> on T {
 
 extension VX<E extends Event, T extends Game<E, T>> on T {
   NextState<E,T> error(String err) => (null, err);
+  NextState<E,T> get value => (this, null, GameStatus.started).value;
+  NextState<E,T> nextRound(List<double> rewards) => (this, null, GameStatus.betweenRounds).value;
 }
 
 abstract class Game<E extends Event, T extends Game<E,T>> {
   const Game();
   GameType get type;
-  NextState<E,T> next(E event, GameConfig config);
+  NextState<E,T> next(E event, GenericGame generic, GameConfig config);
   Map<String, Object?> toJson();
   GameState<E,T> nextRound(GameState<E,T> state, GameConfig config);
 }
@@ -144,7 +146,7 @@ class GameState<E extends Event, T extends Game<E, T>> {
   IList<PlayerID> get readyPlayers => generic.readyPlayers;
 
   NextStateOrError<E,T> next(PlayerEvent<E> event, GameConfig config) {
-    final next = game.next(event.event, config);
+    final next = game.next(event.event, generic, config);
     if (next.hasError){
      return (state: this, error: (message: next.error, player: event.playerId));
     }
