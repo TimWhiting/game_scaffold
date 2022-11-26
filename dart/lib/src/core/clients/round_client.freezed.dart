@@ -21,8 +21,7 @@ mixin _$RoundInfo {
   String get code => throw _privateConstructorUsedError;
   String get playerName => throw _privateConstructorUsedError;
   GameInfo? get lobby => throw _privateConstructorUsedError;
-  GameState<Event, Game<Event, dynamic>>? get game =>
-      throw _privateConstructorUsedError;
+  GameState<Event, Game>? get game => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -40,7 +39,7 @@ abstract class $RoundInfoCopyWith<$Res> {
       String code,
       String playerName,
       GameInfo? lobby,
-      GameState<Event, Game<Event, dynamic>>? game,
+      GameState<Event, Game>? game,
       String? error});
 
   $GameInfoCopyWith<$Res>? get lobby;
@@ -86,7 +85,7 @@ class _$RoundInfoCopyWithImpl<$Res, $Val extends RoundInfo>
       game: freezed == game
           ? _value.game
           : game // ignore: cast_nullable_to_non_nullable
-              as GameState<Event, Game<Event, dynamic>>?,
+              as GameState<Event, Game>?,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -119,7 +118,7 @@ abstract class _$$_RoundInfoCopyWith<$Res> implements $RoundInfoCopyWith<$Res> {
       String code,
       String playerName,
       GameInfo? lobby,
-      GameState<Event, Game<Event, dynamic>>? game,
+      GameState<Event, Game>? game,
       String? error});
 
   @override
@@ -164,7 +163,7 @@ class __$$_RoundInfoCopyWithImpl<$Res>
       game: freezed == game
           ? _value.game
           : game // ignore: cast_nullable_to_non_nullable
-              as GameState<Event, Game<Event, dynamic>>?,
+              as GameState<Event, Game>?,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -194,7 +193,7 @@ class _$_RoundInfo extends _RoundInfo {
   @override
   final GameInfo? lobby;
   @override
-  final GameState<Event, Game<Event, dynamic>>? game;
+  final GameState<Event, Game>? game;
   @override
   final String? error;
 
@@ -233,7 +232,7 @@ abstract class _RoundInfo extends RoundInfo {
       {required final String code,
       required final String playerName,
       final GameInfo? lobby,
-      final GameState<Event, Game<Event, dynamic>>? game,
+      final GameState<Event, Game>? game,
       final String? error}) = _$_RoundInfo;
   const _RoundInfo._() : super._();
 
@@ -247,7 +246,7 @@ abstract class _RoundInfo extends RoundInfo {
   @override
   GameInfo? get lobby;
   @override
-  GameState<Event, Game<Event, dynamic>>? get game;
+  GameState<Event, Game>? get game;
   @override
   String? get error;
   @override

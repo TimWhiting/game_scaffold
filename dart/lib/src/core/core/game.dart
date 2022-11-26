@@ -6,11 +6,11 @@ import 'core.dart';
 
 typedef GameCode = String;
 typedef GameType = String;
+typedef GameName = String;
 typedef PlayerIndex = int;
 typedef Rewards = List<double>;
-typedef NextStateOrError<E extends Event, T extends Game<E, T>> = ({GameState<E, T> state, GameError? error});
-typedef NextState<E extends Event, T extends Game<E, T>> = MaybeError<(T, Rewards?, GameStatus)>;
-typedef GameName = String;
+typedef NextStateOrError<E extends Event, T extends Game> = ({GameState<E, T> state, GameError? error});
+typedef NextState<E extends Event, T extends Game> = MaybeError<GameState<E,T>>;
 typedef PlayerEvent<E extends Event> = ({String playerId, E event});
 
 typedef MaybeError<T> = (T? value, String? error);
@@ -25,22 +25,16 @@ extension E<T> on MaybeError<T> {
 }
 
 extension V<T> on T {
-  MaybeError<T> errorValue(String err) => (this, err);
+  MaybeError<T> error(String err) => (this, err);
   MaybeError<T> get value => (this, null);
 }
 
-extension VX<E extends Event, T extends Game<E, T>> on T {
-  NextState<E,T> error(String err) => (null, err);
-  NextState<E,T> get value => (this, null, GameStatus.started).value;
-  NextState<E,T> nextRound(List<double> rewards) => (this, null, GameStatus.betweenRounds).value;
-}
-
-abstract class Game<E extends Event, T extends Game<E,T>> {
+abstract class Game {
   const Game();
   GameType get type;
-  NextState<E,T> next(E event, GenericGame generic, GameConfig config);
+  bool get roundOver;
+  bool gameOver(GenericGame g);
   Map<String, Object?> toJson();
-  GameState<E,T> nextRound(GameState<E,T> state, GameConfig config);
 }
 
 abstract class Event {
@@ -54,18 +48,20 @@ abstract class GameRegistry {
   static final Map<GameType, GameFunctions> _functions = {};
   static GameFunctions _fromType(GameType type) => _functions[type]!;
 
-  static void register<E extends Event, T extends Game<E, T>>(GameFunctions<E,T> functions) {
+  static void register<E extends Event, T extends Game>(GameFunctions<E,T> functions) {
     final type = functions.gameType;
     _functions[type] = functions;
   }
 
-  static T gameFromJson<E extends Event, T extends Game<E, T>>(JsonMap json) {
+  static T gameFromJson<E extends Event, T extends Game>(JsonMap json) {
       final type = (json['game'] as JsonMap)['type']! as String;
       return _fromType(type).fromJson(json) as T;
-    
   }
+
+  static GameFunctions<E,T> functions<E extends Event, T extends Game>(GameType gameType) => _fromType(gameType) as GameFunctions<E,T>;
+
   static E eventFromJson<E>(JsonMap json) {
-      final type = (json['game'] as JsonMap)['type']! as String;
+      final type = (json['event'] as JsonMap)['type']! as String;
       return _fromType(type).fromJsonE(json) as E;
   }
 
@@ -73,7 +69,7 @@ abstract class GameRegistry {
       'type': event.type,
       'data': event.toJson(),
     };
-  static JsonMap toGameJson<E extends Event, T extends Game<E, T>>(T game) => {
+  static JsonMap toGameJson<E extends Event, T extends Game>(T game) => {
       'type': game.type,
       'data': game.toJson(),
     };
@@ -102,8 +98,8 @@ class GameErrorNotifier extends StateNotifier<GameError?> {
   }
 }
 
-class GameState<E extends Event, T extends Game<E, T>> {
-  GameState({required this.game,required this.rewards, required this.generic});
+class GameState<E extends Event, T extends Game> {
+  GameState({required this.game, required this.rewards, required this.generic});
 
   final T game;
   final Rewards rewards;
@@ -115,12 +111,15 @@ class GameState<E extends Event, T extends Game<E, T>> {
       'generic': generic.toJson(),
     };
 
-  GameState<E,T> updateReward(List<double> rewards) => copyWith(rewards: rewards);
+  GameState<E,T> updateReward(List<double> Function(List<double>) update) => copyWith(rewards: update(rewards));
 
-  GameState<E,T> updateGame(T game) => copyWith(game: game);
+  GameState<E,T> updateGame(T update) => copyWith(game: game);
 
   GameState<E,T> updateGeneric(GenericGame Function(GenericGame) update) => copyWith(generic: update(generic), rewards: rewards);
 
+  GameState<E,T> addReward(List<double> rewards) => copyWith(rewards: rewards + this.rewards);
+
+  GameState<E,T> updateStatus() => updateGeneric((g) => g.copyWith(status: game.roundOver ? GameStatus.betweenRounds : game.gameOver(g) ? GameStatus.finished : g.status));
   /// Gets an unmodifiable list of players that are a part of this game
   IList<Player> get players => generic.players;
 
@@ -146,15 +145,15 @@ class GameState<E extends Event, T extends Game<E, T>> {
   IList<PlayerID> get readyPlayers => generic.readyPlayers;
 
   NextStateOrError<E,T> next(PlayerEvent<E> event, GameConfig config) {
-    final next = game.next(event.event, generic, config);
+    final next = GameRegistry.functions<E,T>(config.gameType).next(this, config, event.event);
     if (next.hasError){
      return (state: this, error: (message: next.error, player: event.playerId));
     }
-    return (state: copyWith( game: next.value.$0 as T, rewards: next.value.$1 == null  ? rewards : next.value.$1! + rewards, generic: generic.updateStatus(next.value.$2).updateTime()), error: null);
+    return (state: copyWith(game: next.value.game).updateStatus().updateGeneric((g) => g.copyWith(time: DateTime.now())), error: null);
   }
 
   NextStateOrError<E,T> nextRound(GameConfig config) {
-    final next = game.nextRound(this, config);
+    final next = GameRegistry.functions<E,T>(config.gameType).nextRound(this, config);
     return (state: next.copyWith(generic: next.generic.updateStatus(GameStatus.started).updateTime()) as GameState<E,T>, error: null);
   }
 
@@ -169,24 +168,22 @@ class GameState<E extends Event, T extends Game<E, T>> {
     );
 }
 
-class GameFunctions<E extends Event, T extends Game<E, T>> {
-  GameFunctions({required this.initialState, required this.toJson, required this.fromJson, required this.toJsonE,required this.fromJsonE,required this.gameType, required this.gameName});
+class GameFunctions<E extends Event, T extends Game> {
+  GameFunctions({required this.initialState, required this.toJson, required this.fromJson, required this.toJsonE,required this.fromJsonE,required this.gameType, required this.gameName, required this.next, required this.nextRound,});
   final GameState<E,T> Function(GameConfig config, IList<Player> players) initialState;
+  final NextState<E,T> Function(GameState<E,T> state, GameConfig config, E event) next;
+  final GameState<E,T> Function(GameState<E,T> state, GameConfig config) nextRound;
   final JsonMap Function(T) toJson;
   final T Function(JsonMap) fromJson;
   final JsonMap Function(E) toJsonE;
   final E Function(JsonMap) fromJsonE;
   final GameType gameType;
   final GameName gameName;
-
-  JsonMap toJsonEvent(covariant E event)=> toJsonE(event);
-
-  JsonMap toJsonGame(covariant T event)=> toJson(event);
 }
 
 
 // ignore: non_constant_identifier_names
-GameState<E,T> GameStateFromJson<E extends Event, T extends Game<E, T>>(Map<String, dynamic> json) => 
+GameState<E,T> GameStateFromJson<E extends Event, T extends Game>(Map<String, dynamic> json) => 
   GameState(
     game: GameRegistry.gameFromJson<E,T>(json), 
     rewards: (json['rewards'] as List).cast<double>(), 

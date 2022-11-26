@@ -12,7 +12,7 @@ import 'package:test/test.dart' as darttest;
 /// Uses the OnDevice clients
 /// TODO: Maybe try to use only Backend Providers as long as nothing need to be async (which it shouldn't since the game method are all non-async)?
 @isTest
-void testGame<E extends Event, T extends Game<E,T> >(
+void testGame<E extends Event, T extends Game >(
   String testName, {
   required GameConfig config,
   required List<Player> players,
@@ -60,7 +60,7 @@ void testGame<E extends Event, T extends Game<E,T> >(
 ///
 /// Just call [event] with your event, and a function that receives a game and error
 /// and check the properties you want
-class GameTester<E extends Event, T extends Game<E,T>> {
+class GameTester<E extends Event, T extends Game> {
   GameTester(this.readers, this._players, this.code) {
     sub = backendContainer.listen(BackendProviders.lobby, (previous, next) {});
   }
