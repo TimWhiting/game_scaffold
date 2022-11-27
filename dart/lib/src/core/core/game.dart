@@ -178,6 +178,7 @@ class GameState<E extends Event, T extends Game> {
       rewards: rewards ?? this.rewards,
       generic: generic ?? this.generic,
     );
+
 }
 
 class GameFunctions<E extends Event, T extends Game> {
