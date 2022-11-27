@@ -10,8 +10,10 @@ typedef GameName = String;
 typedef PlayerIndex = int;
 typedef Rewards = List<double>;
 typedef NextStateOrError<E extends Event, T extends Game> = ({GameState<E, T> state, GameError? error});
+/// An event sent from a particular player (or playerId == game otherwise)
+typedef PlayerEvent<E extends Event> = ({PlayerID playerId, E event});
+typedef IndexedEvent<E extends Event> = ({int index, E event});
 typedef NextState<E extends Event, T extends Game> = MaybeError<GameState<E,T>>;
-typedef PlayerEvent<E extends Event> = ({String playerId, E event});
 
 typedef MaybeError<T> = (T? value, String? error);
 extension E<T> on MaybeError<T> {
@@ -28,6 +30,10 @@ extension E<T> on MaybeError<T> {
 extension V<T> on T {
   MaybeError<T> error(String err) => (this, err);
   MaybeError<T> get success => (this, null);
+}
+
+extension PlayerX<E extends Event> on E {
+  PlayerEvent<E> player(PlayerID playerId) => (playerId: playerId, event: this);
 }
 
 abstract class Game {
@@ -121,6 +127,7 @@ class GameState<E extends Event, T extends Game> {
   GameState<E,T> addReward(List<double> rewards) => copyWith(rewards: rewards + this.rewards);
 
   GameState<E,T> updateStatus() => updateGeneric((g) => g.copyWith(status: game.roundOver ? GameStatus.betweenRounds : game.gameOver(g) ? GameStatus.finished : g.status));
+  
   /// Gets an unmodifiable list of players that are a part of this game
   IList<Player> get players => generic.players;
 
@@ -146,7 +153,7 @@ class GameState<E extends Event, T extends Game> {
   IList<PlayerID> get readyPlayers => generic.readyPlayers;
 
   NextStateOrError<E,T> next(PlayerEvent<E> event, GameConfig config) {
-    final next = GameRegistry.functions<E,T>(config.gameType).next(this, config, event.event);
+    final next = GameRegistry.functions<E,T>(config.gameType).next(this, config, event);
     if (next.hasError){
      return (state: this, error: (message: next.error, player: event.playerId));
     }
@@ -176,7 +183,7 @@ class GameState<E extends Event, T extends Game> {
 class GameFunctions<E extends Event, T extends Game> {
   GameFunctions({required this.initialState,required this.fromJson,required this.fromJsonE,required this.gameType, required this.gameName, required this.next, required this.nextRound,});
   final GameState<E,T> Function(GameConfig config, IList<Player> players) initialState;
-  final NextState<E,T> Function(GameState<E,T> state, GameConfig config, E event) next;
+  final NextState<E,T> Function(GameState<E,T> state, GameConfig config, PlayerEvent<E> event) next;
   final GameState<E,T> Function(GameState<E,T> state, GameConfig config) nextRound;
   final T Function(JsonMap) fromJson;
   final E Function(JsonMap) fromJsonE;

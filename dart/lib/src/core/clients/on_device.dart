@@ -42,7 +42,7 @@ class OnDeviceRoundService extends RoundService {
     await Future.delayed(const Duration(microseconds: 1));
     final result = backendReader
         .read(BackendProviders.state.notifier)
-        .handleEvent((playerId: playerID, event: event));
+        .handleEvent(event.player(playerID));
     return result;
   }
 

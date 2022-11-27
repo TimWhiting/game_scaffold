@@ -82,16 +82,16 @@ class TicTacToeGame extends Game with _$TicTacToeGame {
   static NextState<TicTacToeGameEvent, TicTacToeGame> next(
     TTTGameState state,
     GameConfig config,
-    TicTacToeGameEvent event,
+    PlayerEvent<TicTacToeGameEvent> event,
   ) {
     final game = state.game;
-    if (event.player != game.currentPlayer) {
+    if (event.event.player != game.currentPlayer) {
       return state.error('Not your turn');
     }
-    if (!game.canMove(event.player, event.location)) {
+    if (!game.canMove(event.event.player, event.event.location)) {
       return state.error('Invalid move');
     }
-    final n = game._next(event, config);
+    final n = game._next(event.event, config);
     final winner = n.winner;
     if (winner != null) {
       return state
