@@ -157,6 +157,10 @@ class GameState<E extends Event, T extends Game> {
     return (state: next.copyWith(generic: next.generic.finishRound().updateTime()) as GameState<E,T>, error: null);
   }
 
+  int nextPlayerIndex(int currentPlayer) => (currentPlayer + 1) % generic.players.length;
+  Player playerFromIndex(int currentPlayer) => generic.players[currentPlayer];
+  Player player(PlayerID id) => players.firstWhere((p) => p.id == id);
+
   GameState<E,T> copyWith({
     T? game,
     Rewards? rewards,
