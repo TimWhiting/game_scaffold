@@ -10,9 +10,7 @@ void registerTicTacToe() {
 
 final GameFunctions<TicTacToeGameEvent, TicTacToeGame> tttFunctions =
     GameFunctions(
-  toJson: (game) => game.toJson(),
   fromJson: TicTacToeGame.fromJson,
-  toJsonE: (event) => event.toJson(),
   fromJsonE: TicTacToeGameEvent.fromJson,
   gameName: 'Tic Tac Toe',
   gameType: 'tictactoe',
@@ -28,8 +26,10 @@ final GameFunctions<TicTacToeGameEvent, TicTacToeGame> tttFunctions =
 
 @freezed
 class TicTacToeGameEvent extends Event with _$TicTacToeGameEvent {
-  const factory TicTacToeGameEvent(
-      {required int player, required int location}) = _TicTacToeGameEvent;
+  const factory TicTacToeGameEvent({
+    required int player,
+    required int location,
+  }) = _TicTacToeGameEvent;
   const TicTacToeGameEvent._();
   factory TicTacToeGameEvent.fromJson(Map<String, dynamic> map) =>
       _$TicTacToeGameEventFromJson(map);
@@ -53,6 +53,8 @@ enum Winner {
           ? 0.0
           : 0.5;
 }
+
+typedef TTTGameState = GameState<TicTacToeGameEvent, TicTacToeGame>;
 
 @freezed
 class TicTacToeGame extends Game with _$TicTacToeGame {
@@ -78,9 +80,10 @@ class TicTacToeGame extends Game with _$TicTacToeGame {
   bool gameOver(GenericGame g) => g.round == 10;
 
   static NextState<TicTacToeGameEvent, TicTacToeGame> next(
-      GameState<TicTacToeGameEvent, TicTacToeGame> state,
-      GameConfig config,
-      TicTacToeGameEvent event) {
+    TTTGameState state,
+    GameConfig config,
+    TicTacToeGameEvent event,
+  ) {
     final game = state.game;
     if (event.player != game.currentPlayer) {
       return state.error('Not your turn');
@@ -93,21 +96,16 @@ class TicTacToeGame extends Game with _$TicTacToeGame {
     if (winner != null) {
       return state
           .updateGame(n.copyWith(currentPlayer: game.currentPlayer))
-          .addReward([winner.p1Points, winner.p2Points]).value;
+          .addReward([winner.p1Points, winner.p2Points]).success;
     }
-    return state.updateGame(n).value;
+    return state.updateGame(n).success;
   }
 
-  static GameState<TicTacToeGameEvent, TicTacToeGame> nextRound(
-          GameState<TicTacToeGameEvent, TicTacToeGame> state,
-          GameConfig config) =>
-      GameState<TicTacToeGameEvent, TicTacToeGame>(
-        game: TicTacToeGame(
-            board: <int?>[for (var i = 0; i < 9; i++) null].lock,
-            currentPlayer: state.game.currentPlayer == 0 ? 1 : 0),
-        generic: state.generic.finishRound(),
-        rewards: state.rewards,
-      );
+  static TTTGameState nextRound(TTTGameState state, GameConfig config) =>
+      state.updateGame(TicTacToeGame(
+        board: <int?>[for (var i = 0; i < 9; i++) null].lock,
+        currentPlayer: state.game.currentPlayer == 0 ? 1 : 0,
+      ));
 
   bool canMove(int player, int location) =>
       location >= 0 && location < 9 && board[location] == null;

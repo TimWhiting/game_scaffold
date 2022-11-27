@@ -26,7 +26,7 @@ extension E<T> on MaybeError<T> {
 
 extension V<T> on T {
   MaybeError<T> error(String err) => (this, err);
-  MaybeError<T> get value => (this, null);
+  MaybeError<T> get success => (this, null);
 }
 
 abstract class Game {
@@ -113,7 +113,7 @@ class GameState<E extends Event, T extends Game> {
 
   GameState<E,T> updateReward(List<double> Function(List<double>) update) => copyWith(rewards: update(rewards));
 
-  GameState<E,T> updateGame(T update) => copyWith(game: game);
+  GameState<E,T> updateGame(T g) => copyWith(game: g);
 
   GameState<E,T> updateGeneric(GenericGame Function(GenericGame) update) => copyWith(generic: update(generic), rewards: rewards);
 
@@ -154,7 +154,7 @@ class GameState<E extends Event, T extends Game> {
 
   NextStateOrError<E,T> nextRound(GameConfig config) {
     final next = GameRegistry.functions<E,T>(config.gameType).nextRound(this, config);
-    return (state: next.copyWith(generic: next.generic.updateStatus(GameStatus.started).updateTime()) as GameState<E,T>, error: null);
+    return (state: next.copyWith(generic: next.generic.finishRound().updateTime()) as GameState<E,T>, error: null);
   }
 
   GameState<E,T> copyWith({
@@ -169,13 +169,11 @@ class GameState<E extends Event, T extends Game> {
 }
 
 class GameFunctions<E extends Event, T extends Game> {
-  GameFunctions({required this.initialState, required this.toJson, required this.fromJson, required this.toJsonE,required this.fromJsonE,required this.gameType, required this.gameName, required this.next, required this.nextRound,});
+  GameFunctions({required this.initialState,required this.fromJson,required this.fromJsonE,required this.gameType, required this.gameName, required this.next, required this.nextRound,});
   final GameState<E,T> Function(GameConfig config, IList<Player> players) initialState;
   final NextState<E,T> Function(GameState<E,T> state, GameConfig config, E event) next;
   final GameState<E,T> Function(GameState<E,T> state, GameConfig config) nextRound;
-  final JsonMap Function(T) toJson;
   final T Function(JsonMap) fromJson;
-  final JsonMap Function(E) toJsonE;
   final E Function(JsonMap) fromJsonE;
   final GameType gameType;
   final GameName gameName;

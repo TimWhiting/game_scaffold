@@ -152,7 +152,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
             errorNotifier.state = (message: 'General Event not implemented yet $event', player: 'Player');
             return game;
           });
-      }else {
+      } else {
          final next = game.next(event, gameConfig);
           if (next.error != null) {
             errorNotifier.state = next.error;
@@ -166,8 +166,8 @@ class GameStateNotifier extends StateNotifier<GameState> {
       }
       return true;
       // ignore: avoid_catches_without_on_clauses
-    } catch (error, st) {
-      _gameStateLogger.severe('$error $st');
+    } catch (err, st) {
+      _gameStateLogger.severe('$err $st');
     }
     return false;
   }
