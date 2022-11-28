@@ -152,6 +152,12 @@ class GameState<E extends Event, T extends Game> {
   /// Gets the players who are ready for the next round
   IList<PlayerID> get readyPlayers => generic.readyPlayers;
 
+  PlayerIndex nextPlayerIndex(PlayerIndex currentPlayer) => (currentPlayer + 1) % generic.players.length;
+  Player playerFromIndex(PlayerIndex currentPlayer) => generic.players[currentPlayer];
+  Player player(PlayerID id) => players.firstWhere((p) => p.id == id);
+  PlayerName playerName(String playerID) => player(playerID).name;
+  PlayerIndex playerIndex(String playerID) => players.indexWhere((p) => p.id == playerID);
+
   NextStateOrError<E,T> next(PlayerEvent<E> event, GameConfig config) {
     final next = GameRegistry.functions<E,T>(config.gameType).next(this, config, event);
     if (next.hasError){
@@ -165,10 +171,6 @@ class GameState<E extends Event, T extends Game> {
     return (state: next.copyWith(generic: next.generic.finishRound().updateTime()) as GameState<E,T>, error: null);
   }
 
-  int nextPlayerIndex(int currentPlayer) => (currentPlayer + 1) % generic.players.length;
-  Player playerFromIndex(int currentPlayer) => generic.players[currentPlayer];
-  Player player(PlayerID id) => players.firstWhere((p) => p.id == id);
-
   GameState<E,T> copyWith({
     T? game,
     Rewards? rewards,
@@ -178,6 +180,7 @@ class GameState<E extends Event, T extends Game> {
       rewards: rewards ?? this.rewards,
       generic: generic ?? this.generic,
     );
+
 
 }
 
