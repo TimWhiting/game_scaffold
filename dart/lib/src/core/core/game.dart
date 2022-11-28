@@ -126,7 +126,7 @@ class GameState<E extends Event, T extends Game> {
 
   GameState<E,T> addReward(List<double> rewards) => copyWith(rewards: rewards + this.rewards);
 
-  GameState<E,T> updateStatus() => updateGeneric((g) => g.copyWith(status: game.roundOver ? GameStatus.betweenRounds : game.gameOver(g) ? GameStatus.finished : g.status));
+  GameState<E,T> updateStatus() => updateGeneric((g) => g.copyWith(status: game.gameOver(g) ? GameStatus.finished : game.roundOver ? GameStatus.betweenRounds : g.status));
   
   /// Gets an unmodifiable list of players that are a part of this game
   IList<Player> get players => generic.players;
