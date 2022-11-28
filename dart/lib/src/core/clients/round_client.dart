@@ -52,7 +52,7 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
 
   void connect(RoundService service) {
     service.connect().map((conn) {
-      if (conn) {
+      if (conn && mounted) {
         state = state.copyWith(service: service);
         StreamSubscription<GameError>? error;
         StreamSubscription<GameState>? round;
