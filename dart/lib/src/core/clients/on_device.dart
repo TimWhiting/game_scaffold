@@ -17,11 +17,13 @@ class OnDeviceRoundService extends RoundService {
   @override
   Stream<GameState> gameStream(PlayerID playerID, GameCode code) async* {
     logger.info('Watching backend $playerID $code');
-    final ss = StreamController<GameState>();
     final backendReader = OnDeviceGameService.games[code]?.container;
-    if (backendReader == null) {
+    if (backendReader == null ||
+        backendReader.read(BackendProviders.lobby).gameStatus ==
+            GameStatus.lobby) {
       return;
     }
+    final ss = StreamController<GameState>();
     backendReader.listen<GameState>(
       BackendProviders.state,
       (prev, curr) => ss.add(curr),
