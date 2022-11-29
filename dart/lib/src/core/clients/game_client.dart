@@ -41,6 +41,11 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
   final PlayerID multiplayerID;
   final StateNotifierProviderRef ref;
 
+  void exitGame() {
+    state = state.copyWith(config: null, code: null);
+    fetchOldGames();
+  }
+
   void connect(GameService service) {
     service.connect().map((conn) {
       if (conn) {

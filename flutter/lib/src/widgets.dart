@@ -234,7 +234,6 @@ class GameNavigator extends HookConsumerWidget {
         if (status == 'lobby' || status == 'started') {
           // ignore: unused_result
           ref.read(roundClientProvider).exitGame();
-          ref.read(gameClientProvider).fetchOldGames();
           route.didPop(null);
           return true;
         } else if (status == 'connected') {
