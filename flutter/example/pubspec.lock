@@ -125,10 +125,10 @@ packages:
     dependency: transitive
     description:
       name: fast_immutable_collections
-      sha256: a41177793e19623b3addc3fc9c14e2ac552fa237e7e81a0d48da4734bc942e90
+      sha256: "31eb5cd18259cf85ef9794d7b414a6e3166d831e1b06d5fb3a2c48f7a72ae8f4"
       url: "https://pub.dev"
     source: hosted
-    version: "8.0.0"
+    version: "8.1.0"
   file:
     dependency: transitive
     description:

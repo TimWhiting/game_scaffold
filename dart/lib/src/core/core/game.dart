@@ -131,9 +131,6 @@ class GameState<E extends Event, T extends Game> {
   /// Gets an unmodifiable list of players that are a part of this game
   IList<Player> get players => generic.players;
 
-  /// Gets the players that are a part of this game
-  IList<PlayerID> get playerIDs => generic.players.map((p) => p.id).toIList();
-
   /// Gets the `DateTime` that this state was updated
   DateTime get time => generic.time;
 
@@ -155,8 +152,8 @@ class GameState<E extends Event, T extends Game> {
   PlayerIndex nextPlayerIndex(PlayerIndex currentPlayer) => (currentPlayer + 1) % generic.players.length;
   Player playerFromIndex(PlayerIndex currentPlayer) => generic.players[currentPlayer];
   Player player(PlayerID id) => players.firstWhere((p) => p.id == id);
-  PlayerName playerName(String playerID) => player(playerID).name;
-  PlayerIndex playerIndex(String playerID) => players.indexWhere((p) => p.id == playerID);
+  PlayerName playerName(PlayerID playerID) => player(playerID).name;
+  PlayerIndex playerIndex(PlayerID playerID) => players.indexWhere((p) => p.id == playerID);
 
   NextStateOrError<E,T> next(PlayerEvent<E> event, GameConfig config) {
     final next = GameRegistry.functions<E,T>(config.gameType).next(this, config, event);
