@@ -98,7 +98,7 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
         (c) => c.startGame(multiplayerID, state.code),
       );
 
-  Future<bool> sendEvent(Event e) =>
+  Future<bool> sendEvent<E extends Event>(E e) =>
       service((c) => c.sendEvent(multiplayerID, state.code, e));
 
   Future<bool> newRound() =>
