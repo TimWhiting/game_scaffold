@@ -17,9 +17,6 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
-  enable-experiment:
-    - records
-    - patterns
 #   exclude:
 #     - path/to/excluded/files/**
 

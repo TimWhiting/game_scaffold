@@ -5,10 +5,10 @@ import 'package:game_scaffold_test/game_scaffold_test.dart';
 import 'package:test/test.dart';
 
 extension PlayerX on TicTacToeGameEvent {
-  PlayerEvent<TicTacToeGameEvent> get p => (
-      playerId: '$player',
-      event: this,
-    );
+  PlayerEvent<TicTacToeGameEvent> get p => PlayerEvent(
+        playerId: '$player',
+        event: this,
+      );
 }
 
 void main() {
@@ -27,32 +27,39 @@ void main() {
       expect(initialState.players.length, 2);
       expect(initialState.game.board.every((s) => s == null), true);
 
-      tester.event(const TicTacToeGameEvent(player: 0, location: 0).p, (state, error) {
+      tester.event(const TicTacToeGameEvent(player: 0, location: 0).p,
+          (state, error) {
         expect(error, isNull);
         expect(state.game.board.every((s) => s == null), false);
         expect(state.game.board[0], 0);
       });
-      tester.event( const TicTacToeGameEvent(player: 1, location: 0).p, (state, error) {
+      tester.event(const TicTacToeGameEvent(player: 1, location: 0).p,
+          (state, error) {
         expect(error, isNotNull);
         expect(state.game.board[0], 0);
       });
-      tester.event( const TicTacToeGameEvent(player: 1, location: 1).p, (state, error) {
+      tester.event(const TicTacToeGameEvent(player: 1, location: 1).p,
+          (state, error) {
         expect(error, isNull);
         expect(state.game.board[1], 1);
       });
-      tester.event( const TicTacToeGameEvent(player: 1, location: 2).p, (state, error) {
+      tester.event(const TicTacToeGameEvent(player: 1, location: 2).p,
+          (state, error) {
         expect(error, isNotNull);
         expect(state.game.board[2], null);
       });
-      tester.event( const TicTacToeGameEvent(player: 0, location: 3).p, (state, error) {
+      tester.event(const TicTacToeGameEvent(player: 0, location: 3).p,
+          (state, error) {
         expect(error, isNull);
         expect(state.game.board[3], 0);
       });
-      tester.event( const TicTacToeGameEvent(player: 1, location: 2).p, (state, error) {
+      tester.event(const TicTacToeGameEvent(player: 1, location: 2).p,
+          (state, error) {
         expect(error, isNull);
         expect(state.game.board[2], 1);
       });
-      tester.event( const TicTacToeGameEvent(player: 0, location: 6).p, (state, error) {
+      tester.event(const TicTacToeGameEvent(player: 0, location: 6).p,
+          (state, error) {
         expect(error, isNull);
         expect(state.game.board[6], 0);
         expect(state.game.isWinner(0), true);

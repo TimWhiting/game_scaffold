@@ -35,8 +35,7 @@ class BackendProviders {
     name: 'BackendLobby',
   );
 
-  static final playerLobby =
-      Provider.family<GameInfo?, PlayerID>(
+  static final playerLobby = Provider.family<GameInfo?, PlayerID>(
     (ref, player) {
       final l = ref.watch(lobby);
       final pls = l.players;
@@ -58,14 +57,14 @@ class BackendProviders {
   );
 
   /// Provides the [GameStateNotifier] based on the [GameConfig] from [lobby]'s config
-  static final state =
-      StateNotifierProvider<GameStateNotifier, GameState>(
+  static final state = StateNotifierProvider<GameStateNotifier, GameState>(
     (ref) {
       final l = ref.watch(lobby);
       return GameStateNotifier(
         l.config,
         l.code,
-        GameRegistry.initialState(l.config.gameType, l.config, l.players.toIList()),
+        GameRegistry.initialState(
+            l.config.gameType, l.config, l.players.toIList()),
         ref.read(error.notifier),
       );
     },
@@ -136,31 +135,32 @@ class GameStateNotifier extends StateNotifier<GameState> {
     try {
       final game = gameState;
       final e = event.event;
-      if (e is GenericEvent){
-        state = e.maybeWhen(
-          readyNextRound: (e) {
-            final newState = game.updateGeneric((g) => g.addReadyPlayer(e));
-            if (newState.readyPlayers.length == game.players.length) {
-              return game
-                  .nextRound(gameConfig)
-                  .state
-                  .updateGeneric((g) => g.clearReadyPlayers());
-            }
-            return newState;
-          },
-          orElse: () {
-            errorNotifier.state = (message: 'General Event not implemented yet $event', player: 'Player');
-            return game;
-          });
-      } else {
-         final next = game.next(event, gameConfig);
-          if (next.error != null) {
-            errorNotifier.state = next.error;
-            error = true;
+      if (e is GenericEvent) {
+        state = e.maybeWhen(readyNextRound: (e) {
+          final newState = game.updateGeneric((g) => g.addReadyPlayer(e));
+          if (newState.readyPlayers.length == game.players.length) {
+            return game
+                .nextRound(gameConfig)
+                .state
+                .updateGeneric((g) => g.clearReadyPlayers());
           }
-          state =  next.state;
+          return newState;
+        }, orElse: () {
+          errorNotifier.state = GameError(
+            message: 'General Event not implemented yet $event',
+            player: 'Player',
+          );
+          return game;
+        });
+      } else {
+        final next = game.next(event, gameConfig);
+        if (next.error != null) {
+          errorNotifier.state = next.error;
+          error = true;
+        }
+        state = next.state;
       }
-      
+
       if (error) {
         return false;
       }

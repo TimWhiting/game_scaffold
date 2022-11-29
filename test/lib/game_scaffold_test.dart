@@ -12,7 +12,7 @@ import 'package:test/test.dart' as darttest;
 /// Uses the OnDevice clients
 /// TODO: Maybe try to use only Backend Providers as long as nothing need to be async (which it shouldn't since the game method are all non-async)?
 @isTest
-void testGame<E extends Event, T extends Game >(
+void testGame<E extends Event, T extends Game>(
   String testName, {
   required GameConfig config,
   required List<Player> players,
@@ -44,7 +44,7 @@ void testGame<E extends Event, T extends Game >(
         GameStatus.started) {
       await r[players.first.id]!.read().startGame();
     }
-    final tester = GameTester<E,T>(ref, players, code);
+    final tester = GameTester<E, T>(ref, players, code);
     await test(tester);
 
     for (final s in g.keys) {
@@ -82,7 +82,8 @@ class GameTester<E extends Event, T extends Game> {
   ///   expect(game.players.size, 2);
   /// });
   /// ```
-  void event(PlayerEvent<E> event, Function(GameState<E, T>, GameError?) outcome) {
+  void event(
+      PlayerEvent<E> event, Function(GameState<E, T>, GameError?) outcome) {
     backendContainer.read(BackendProviders.state.notifier).handleEvent(event);
 
     final g = game;
@@ -103,7 +104,8 @@ class GameTester<E extends Event, T extends Game> {
   ///
   /// If testing the outcome of an event prefer using [event]
   GameState<E, T> get game =>
-      backendContainer.read(BackendProviders.state.notifier).gameState as GameState<E,T>;
+      backendContainer.read(BackendProviders.state.notifier).gameState
+          as GameState<E, T>;
 
   /// Returns the current error state
   ///
@@ -114,9 +116,9 @@ class GameTester<E extends Event, T extends Game> {
   /// the round has advanced
   void nextRound(Function(GameState<E, T>) expectation) {
     for (final p in _players) {
-      backendContainer
-          .read(BackendProviders.state.notifier)
-          .handleEvent((event: GenericEvent.readyNextRound(p.id), playerId: p.id));
+      backendContainer.read(BackendProviders.state.notifier).handleEvent(
+          PlayerEvent(
+              event: GenericEvent.readyNextRound(p.id), playerId: p.id));
     }
 
     expectation(game);
