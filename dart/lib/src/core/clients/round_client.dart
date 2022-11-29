@@ -105,8 +105,9 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
       service((c) => c.newRound(multiplayerID, state.code));
 
   Future<bool> exitGame() {
+    final result = service((c) => c.exitGame(multiplayerID, state.code));
     ref.read(multiplayerGameClientProvider(multiplayerID).notifier).exitGame();
-    return service((c) => c.exitGame(multiplayerID, state.code));
+    return result;
   }
 }
 
