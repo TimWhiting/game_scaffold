@@ -64,7 +64,10 @@ class BackendProviders {
         l.config,
         l.code,
         GameRegistry.initialState(
-            l.config.gameType, l.config, l.players.toIList()),
+          l.config.gameType,
+          l.config,
+          l.players.toIList(),
+        ),
         ref.read(error.notifier),
       );
     },

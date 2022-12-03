@@ -28,7 +28,7 @@ abstract class RoundService {
   Stream<GameError> errorStream(PlayerID playerID, GameCode code);
   Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code);
 
-  /// Sends a start event to the game server
+  /// Sends a start request to the game server
   Future<bool> startGame(PlayerID playerID, GameCode code);
 
   /// Disposes of the [RoundService] (i.e. disconnects from the server)
