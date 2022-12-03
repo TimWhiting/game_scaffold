@@ -145,7 +145,6 @@ class GameInfo with _$GameInfo {
     required PlayerName player,
     required bool creator,
     required GameConfig config,
-    required GameType gameType,
     required GameStatus status,
   }) = _GameInfo;
   factory GameInfo.fromJson(Map<String, dynamic> map) =>

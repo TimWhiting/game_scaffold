@@ -807,7 +807,6 @@ mixin _$GameInfo {
   String get player => throw _privateConstructorUsedError;
   bool get creator => throw _privateConstructorUsedError;
   GameConfig get config => throw _privateConstructorUsedError;
-  String get gameType => throw _privateConstructorUsedError;
   GameStatus get status => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -827,7 +826,6 @@ abstract class $GameInfoCopyWith<$Res> {
       String player,
       bool creator,
       GameConfig config,
-      String gameType,
       GameStatus status});
 
   $GameConfigCopyWith<$Res> get config;
@@ -851,7 +849,6 @@ class _$GameInfoCopyWithImpl<$Res, $Val extends GameInfo>
     Object? player = null,
     Object? creator = null,
     Object? config = null,
-    Object? gameType = null,
     Object? status = null,
   }) {
     return _then(_value.copyWith(
@@ -875,10 +872,6 @@ class _$GameInfoCopyWithImpl<$Res, $Val extends GameInfo>
           ? _value.config
           : config // ignore: cast_nullable_to_non_nullable
               as GameConfig,
-      gameType: null == gameType
-          ? _value.gameType
-          : gameType // ignore: cast_nullable_to_non_nullable
-              as String,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -908,7 +901,6 @@ abstract class _$$_GameInfoCopyWith<$Res> implements $GameInfoCopyWith<$Res> {
       String player,
       bool creator,
       GameConfig config,
-      String gameType,
       GameStatus status});
 
   @override
@@ -931,7 +923,6 @@ class __$$_GameInfoCopyWithImpl<$Res>
     Object? player = null,
     Object? creator = null,
     Object? config = null,
-    Object? gameType = null,
     Object? status = null,
   }) {
     return _then(_$_GameInfo(
@@ -955,10 +946,6 @@ class __$$_GameInfoCopyWithImpl<$Res>
           ? _value.config
           : config // ignore: cast_nullable_to_non_nullable
               as GameConfig,
-      gameType: null == gameType
-          ? _value.gameType
-          : gameType // ignore: cast_nullable_to_non_nullable
-              as String,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -976,7 +963,6 @@ class _$_GameInfo implements _GameInfo {
       required this.player,
       required this.creator,
       required this.config,
-      required this.gameType,
       required this.status});
 
   factory _$_GameInfo.fromJson(Map<String, dynamic> json) =>
@@ -993,13 +979,11 @@ class _$_GameInfo implements _GameInfo {
   @override
   final GameConfig config;
   @override
-  final String gameType;
-  @override
   final GameStatus status;
 
   @override
   String toString() {
-    return 'GameInfo(gameID: $gameID, players: $players, player: $player, creator: $creator, config: $config, gameType: $gameType, status: $status)';
+    return 'GameInfo(gameID: $gameID, players: $players, player: $player, creator: $creator, config: $config, status: $status)';
   }
 
   @override
@@ -1012,8 +996,6 @@ class _$_GameInfo implements _GameInfo {
             (identical(other.player, player) || other.player == player) &&
             (identical(other.creator, creator) || other.creator == creator) &&
             (identical(other.config, config) || other.config == config) &&
-            (identical(other.gameType, gameType) ||
-                other.gameType == gameType) &&
             (identical(other.status, status) || other.status == status));
   }
 
@@ -1026,7 +1008,6 @@ class _$_GameInfo implements _GameInfo {
       player,
       creator,
       config,
-      gameType,
       status);
 
   @JsonKey(ignore: true)
@@ -1050,7 +1031,6 @@ abstract class _GameInfo implements GameInfo {
       required final String player,
       required final bool creator,
       required final GameConfig config,
-      required final String gameType,
       required final GameStatus status}) = _$_GameInfo;
 
   factory _GameInfo.fromJson(Map<String, dynamic> json) = _$_GameInfo.fromJson;
@@ -1065,8 +1045,6 @@ abstract class _GameInfo implements GameInfo {
   bool get creator;
   @override
   GameConfig get config;
-  @override
-  String get gameType;
   @override
   GameStatus get status;
   @override
