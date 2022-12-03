@@ -108,15 +108,17 @@ abstract class GameRegistry {
   static String typeName(GameState state) =>
       GameRegistry._functions[state.game.type]!.gameType;
 
-  static GameState initialState(
-          String gameType, GameConfig config, IList<Player> iList) =>
-      _fromType(gameType).initialState(config, iList);
+  static GameState initialState(GameConfig config, IList<Player> iList) =>
+      _fromType(config.gameType).initialState(config, iList);
 }
 
 class GameError {
   final String message;
   final PlayerID player;
   const GameError({required this.message, required this.player});
+  JsonMap toJson() => {'message': message, 'player': player};
+  factory GameError.fromJson(JsonMap json) => GameError(
+      message: json['message'] as String, player: json['player'] as PlayerID);
 }
 
 /// A error notifier that lets the client clear the error
@@ -149,6 +151,12 @@ class GameState<E extends Event, T extends Game> {
         'rewards': rewards,
         'generic': generic.toJson(),
       };
+
+  factory GameState.fromJson(JsonMap json) => GameState(
+        game: GameRegistry.gameFromJson(json['game'] as JsonMap),
+        rewards: json['rewards'] as List<double>,
+        generic: GenericGame.fromJson(json['generic'] as JsonMap),
+      );
 
   GameState<E, T> updateReward(List<double> Function(List<double>) update) =>
       copyWith(rewards: update(rewards));

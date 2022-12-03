@@ -47,7 +47,6 @@ class BackendProviders {
           player: pls.firstWhere((p) => p.id == player).name,
           creator: player == l.config.adminID,
           players: pls.map((p) => p.name).toIList(),
-          gameType: l.config.gameType,
         );
       }
       return null;
@@ -64,7 +63,6 @@ class BackendProviders {
         l.config,
         l.code,
         GameRegistry.initialState(
-          l.config.gameType,
           l.config,
           l.players.toIList(),
         ),

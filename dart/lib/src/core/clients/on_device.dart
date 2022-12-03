@@ -182,7 +182,6 @@ class OnDeviceGameService extends GameService {
               .players
               .map((p) => p.name)
               .toIList(),
-          gameType: g.container.read(BackendProviders.lobby).config.gameType,
           creator: g.creator == playerID,
         )
     ].lock;
