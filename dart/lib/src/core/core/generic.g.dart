@@ -19,7 +19,7 @@ _$_GenericGame _$$_GenericGameFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_GenericGameToJson(_$_GenericGame instance) =>
     <String, dynamic>{
       'players': instance.players.toJson(
-        (value) => value,
+        (value) => value.toJson(),
       ),
       'readyPlayers': instance.readyPlayers.toJson(
         (value) => value,
@@ -97,7 +97,7 @@ Map<String, dynamic> _$$_GameInfoToJson(_$_GameInfo instance) =>
       ),
       'player': instance.player,
       'creator': instance.creator,
-      'config': instance.config,
+      'config': instance.config.toJson(),
       'status': _$GameStatusEnumMap[instance.status]!,
     };
 
@@ -112,8 +112,8 @@ _$_Lobby _$$_LobbyFromJson(Map<String, dynamic> json) => _$_Lobby(
 Map<String, dynamic> _$$_LobbyToJson(_$_Lobby instance) => <String, dynamic>{
       'code': instance.code,
       'players': instance.players.toJson(
-        (value) => value,
+        (value) => value.toJson(),
       ),
-      'config': instance.config,
+      'config': instance.config.toJson(),
       'gameStatus': _$GameStatusEnumMap[instance.gameStatus]!,
     };
