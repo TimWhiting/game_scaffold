@@ -47,8 +47,6 @@ abstract class RoundService {
   StreamController<bool> sc = StreamController<bool>.broadcast();
 
   /// Disconnect from the backend
-  ///
-  /// Default implementation does nothing
   Future<void> disconnect() async {
     sc.add(false);
   }

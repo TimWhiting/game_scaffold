@@ -30,6 +30,7 @@ final multiplayerRoundClientProvider =
     singleConfig,
     multiplayerGameClientProvider,
     roundService,
+    playerIDProvider,
   ],
   name: 'MultiplayerRoundClient',
 );
@@ -44,8 +45,9 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
   MultiplayerRoundClient(this.ref, this.multiplayerID)
       : super(ref.watch(multiplayerGameClientProvider(multiplayerID)).initial) {
     final service = ref.watch(roundService);
-
-    connect(service);
+    if (state.code.isNotEmpty && state.code.length == 4) {
+      connect(service);
+    }
   }
   final PlayerID multiplayerID;
   final StateNotifierProviderRef ref;

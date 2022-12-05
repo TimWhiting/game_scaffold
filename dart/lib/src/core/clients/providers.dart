@@ -76,7 +76,7 @@ final roundServiceFamily = Provider.family<RoundService, ServiceType>(
 final roundService = Provider<RoundService>(
   (ref) => ref.watch(roundServiceFamily(ref.watch(serviceType))),
   name: 'RoundService',
-  dependencies: [serviceType, roundServiceFamily],
+  dependencies: [serviceType, roundServiceFamily, playerIDProvider],
 );
 
 class GameProviders {
