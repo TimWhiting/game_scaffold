@@ -15,13 +15,13 @@ part 'generic.g.dart';
 /// * The current [round]
 @freezed
 class GenericGame with _$GenericGame {
-  const factory GenericGame(
-    IList<Player> players,
-    IList<PlayerID> readyPlayers,
-    DateTime time,
-    GameStatus status,
-    int round,
-  ) = _GenericGame;
+  const factory GenericGame({
+    required DateTime time,
+    required GameStatus status,
+    required int round,
+    @Default(IListConst([])) IList<Player> players,
+    @Default(IListConst([])) IList<PlayerID> readyPlayers,
+  }) = _GenericGame;
   const GenericGame._();
 
   factory GenericGame.fromJson(Map<String, dynamic> map) =>
@@ -29,20 +29,20 @@ class GenericGame with _$GenericGame {
 
   /// Creates a default initialized game with [players]
   factory GenericGame.start(IList<Player> players) => GenericGame(
-        players.toIList(),
-        <PlayerID>[].lock,
-        DateTime.now(),
-        GameStatus.started,
-        0,
+        players: players.toIList(),
+        readyPlayers: <PlayerID>[].lock,
+        time: DateTime.now(),
+        status: GameStatus.started,
+        round: 0,
       );
 
   /// Creates a default initialized game where the first player is chosen at random
   factory GenericGame.startRandom(IList<Player> players) => GenericGame(
-        players,
-        <PlayerID>[].lock,
-        DateTime.now(),
-        GameStatus.started,
-        0,
+        players: players,
+        readyPlayers: <PlayerID>[].lock,
+        time: DateTime.now(),
+        status: GameStatus.started,
+        round: 0,
       );
 
   /// Gets whether the game is over
@@ -155,7 +155,7 @@ class GameInfo with _$GameInfo {
 class Lobby with _$Lobby {
   const factory Lobby({
     required GameCode code,
-    required ISet<Player> players,
+    @Default(ISetConst({})) ISet<Player> players,
     required GameConfig config,
     required GameStatus gameStatus,
   }) = _Lobby;

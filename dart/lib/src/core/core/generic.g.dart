@@ -8,25 +8,30 @@ part of 'generic.dart';
 
 _$_GenericGame _$$_GenericGameFromJson(Map<String, dynamic> json) =>
     _$_GenericGame(
-      IList<Player>.fromJson(json['players'],
-          (value) => Player.fromJson(value as Map<String, dynamic>)),
-      IList<String>.fromJson(json['readyPlayers'], (value) => value as String),
-      DateTime.parse(json['time'] as String),
-      $enumDecode(_$GameStatusEnumMap, json['status']),
-      json['round'] as int,
+      time: DateTime.parse(json['time'] as String),
+      status: $enumDecode(_$GameStatusEnumMap, json['status']),
+      round: json['round'] as int,
+      players: json['players'] == null
+          ? const IListConst([])
+          : IList<Player>.fromJson(json['players'],
+              (value) => Player.fromJson(value as Map<String, dynamic>)),
+      readyPlayers: json['readyPlayers'] == null
+          ? const IListConst([])
+          : IList<String>.fromJson(
+              json['readyPlayers'], (value) => value as String),
     );
 
 Map<String, dynamic> _$$_GenericGameToJson(_$_GenericGame instance) =>
     <String, dynamic>{
+      'time': instance.time.toIso8601String(),
+      'status': _$GameStatusEnumMap[instance.status]!,
+      'round': instance.round,
       'players': instance.players.toJson(
         (value) => value.toJson(),
       ),
       'readyPlayers': instance.readyPlayers.toJson(
         (value) => value,
       ),
-      'time': instance.time.toIso8601String(),
-      'status': _$GameStatusEnumMap[instance.status]!,
-      'round': instance.round,
     };
 
 const _$GameStatusEnumMap = {
@@ -103,8 +108,10 @@ Map<String, dynamic> _$$_GameInfoToJson(_$_GameInfo instance) =>
 
 _$_Lobby _$$_LobbyFromJson(Map<String, dynamic> json) => _$_Lobby(
       code: json['code'] as String,
-      players: ISet<Player>.fromJson(json['players'],
-          (value) => Player.fromJson(value as Map<String, dynamic>)),
+      players: json['players'] == null
+          ? const ISetConst({})
+          : ISet<Player>.fromJson(json['players'],
+              (value) => Player.fromJson(value as Map<String, dynamic>)),
       config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
       gameStatus: $enumDecode(_$GameStatusEnumMap, json['gameStatus']),
     );

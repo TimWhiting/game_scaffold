@@ -92,14 +92,11 @@ abstract class GameRegistry {
       _fromType(gameType) as GameFunctions<E, T>;
 
   static E eventFromJson<E>(JsonMap json) {
-    final type = (json['event'] as JsonMap)['type']! as String;
+    final type = json['type']! as String;
     return _fromType(type).fromJsonE(json) as E;
   }
 
-  static JsonMap toEventJson<E extends Event>(E event) => {
-        'type': event.type,
-        'data': event.toJson(),
-      };
+  // static JsonMap toEventJson<E extends Event>(E event) => event.toJson();
   static JsonMap toGameJson<E extends Event, T extends Game>(T game) =>
       game.toJson();
 
@@ -152,7 +149,7 @@ class GameState<E extends Event, T extends Game> {
 
   factory GameState.fromJson(JsonMap json) => GameState(
         game: GameRegistry.gameFromJson(json['game'] as JsonMap),
-        rewards: json['rewards'] as List<double>,
+        rewards: json['rewards'] as List<double>? ?? [],
         generic: GenericGame.fromJson(json['generic'] as JsonMap),
       );
 
@@ -261,12 +258,3 @@ class GameFunctions<E extends Event, T extends Game> {
   final GameType gameType;
   final GameName gameName;
 }
-
-// ignore: non_constant_identifier_names
-GameState<E, T> GameStateFromJson<E extends Event, T extends Game>(
-        Map<String, dynamic> json) =>
-    GameState(
-      game: GameRegistry.gameFromJson<E, T>(json),
-      rewards: (json['rewards'] as List).cast<double>(),
-      generic: GenericGame.fromJson(json['generic'] as JsonMap),
-    );

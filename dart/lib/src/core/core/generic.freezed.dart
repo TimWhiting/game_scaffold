@@ -20,11 +20,11 @@ GenericGame _$GenericGameFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$GenericGame {
-  IList<Player> get players => throw _privateConstructorUsedError;
-  IList<String> get readyPlayers => throw _privateConstructorUsedError;
   DateTime get time => throw _privateConstructorUsedError;
   GameStatus get status => throw _privateConstructorUsedError;
   int get round => throw _privateConstructorUsedError;
+  IList<Player> get players => throw _privateConstructorUsedError;
+  IList<String> get readyPlayers => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,11 +39,11 @@ abstract class $GenericGameCopyWith<$Res> {
       _$GenericGameCopyWithImpl<$Res, GenericGame>;
   @useResult
   $Res call(
-      {IList<Player> players,
-      IList<String> readyPlayers,
-      DateTime time,
+      {DateTime time,
       GameStatus status,
-      int round});
+      int round,
+      IList<Player> players,
+      IList<String> readyPlayers});
 }
 
 /// @nodoc
@@ -59,21 +59,13 @@ class _$GenericGameCopyWithImpl<$Res, $Val extends GenericGame>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? players = null,
-    Object? readyPlayers = null,
     Object? time = null,
     Object? status = null,
     Object? round = null,
+    Object? players = null,
+    Object? readyPlayers = null,
   }) {
     return _then(_value.copyWith(
-      players: null == players
-          ? _value.players
-          : players // ignore: cast_nullable_to_non_nullable
-              as IList<Player>,
-      readyPlayers: null == readyPlayers
-          ? _value.readyPlayers
-          : readyPlayers // ignore: cast_nullable_to_non_nullable
-              as IList<String>,
       time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
@@ -86,6 +78,14 @@ class _$GenericGameCopyWithImpl<$Res, $Val extends GenericGame>
           ? _value.round
           : round // ignore: cast_nullable_to_non_nullable
               as int,
+      players: null == players
+          ? _value.players
+          : players // ignore: cast_nullable_to_non_nullable
+              as IList<Player>,
+      readyPlayers: null == readyPlayers
+          ? _value.readyPlayers
+          : readyPlayers // ignore: cast_nullable_to_non_nullable
+              as IList<String>,
     ) as $Val);
   }
 }
@@ -99,11 +99,11 @@ abstract class _$$_GenericGameCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {IList<Player> players,
-      IList<String> readyPlayers,
-      DateTime time,
+      {DateTime time,
       GameStatus status,
-      int round});
+      int round,
+      IList<Player> players,
+      IList<String> readyPlayers});
 }
 
 /// @nodoc
@@ -117,33 +117,33 @@ class __$$_GenericGameCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? players = null,
-    Object? readyPlayers = null,
     Object? time = null,
     Object? status = null,
     Object? round = null,
+    Object? players = null,
+    Object? readyPlayers = null,
   }) {
     return _then(_$_GenericGame(
-      null == players
-          ? _value.players
-          : players // ignore: cast_nullable_to_non_nullable
-              as IList<Player>,
-      null == readyPlayers
-          ? _value.readyPlayers
-          : readyPlayers // ignore: cast_nullable_to_non_nullable
-              as IList<String>,
-      null == time
+      time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      null == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as GameStatus,
-      null == round
+      round: null == round
           ? _value.round
           : round // ignore: cast_nullable_to_non_nullable
               as int,
+      players: null == players
+          ? _value.players
+          : players // ignore: cast_nullable_to_non_nullable
+              as IList<Player>,
+      readyPlayers: null == readyPlayers
+          ? _value.readyPlayers
+          : readyPlayers // ignore: cast_nullable_to_non_nullable
+              as IList<String>,
     ));
   }
 }
@@ -152,26 +152,32 @@ class __$$_GenericGameCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_GenericGame extends _GenericGame {
   const _$_GenericGame(
-      this.players, this.readyPlayers, this.time, this.status, this.round)
+      {required this.time,
+      required this.status,
+      required this.round,
+      this.players = const IListConst([]),
+      this.readyPlayers = const IListConst([])})
       : super._();
 
   factory _$_GenericGame.fromJson(Map<String, dynamic> json) =>
       _$$_GenericGameFromJson(json);
 
   @override
-  final IList<Player> players;
-  @override
-  final IList<String> readyPlayers;
-  @override
   final DateTime time;
   @override
   final GameStatus status;
   @override
   final int round;
+  @override
+  @JsonKey()
+  final IList<Player> players;
+  @override
+  @JsonKey()
+  final IList<String> readyPlayers;
 
   @override
   String toString() {
-    return 'GenericGame(players: $players, readyPlayers: $readyPlayers, time: $time, status: $status, round: $round)';
+    return 'GenericGame(time: $time, status: $status, round: $round, players: $players, readyPlayers: $readyPlayers)';
   }
 
   @override
@@ -179,23 +185,23 @@ class _$_GenericGame extends _GenericGame {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_GenericGame &&
-            const DeepCollectionEquality().equals(other.players, players) &&
-            const DeepCollectionEquality()
-                .equals(other.readyPlayers, readyPlayers) &&
             (identical(other.time, time) || other.time == time) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.round, round) || other.round == round));
+            (identical(other.round, round) || other.round == round) &&
+            const DeepCollectionEquality().equals(other.players, players) &&
+            const DeepCollectionEquality()
+                .equals(other.readyPlayers, readyPlayers));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(players),
-      const DeepCollectionEquality().hash(readyPlayers),
       time,
       status,
-      round);
+      round,
+      const DeepCollectionEquality().hash(players),
+      const DeepCollectionEquality().hash(readyPlayers));
 
   @JsonKey(ignore: true)
   @override
@@ -213,26 +219,26 @@ class _$_GenericGame extends _GenericGame {
 
 abstract class _GenericGame extends GenericGame {
   const factory _GenericGame(
+      {required final DateTime time,
+      required final GameStatus status,
+      required final int round,
       final IList<Player> players,
-      final IList<String> readyPlayers,
-      final DateTime time,
-      final GameStatus status,
-      final int round) = _$_GenericGame;
+      final IList<String> readyPlayers}) = _$_GenericGame;
   const _GenericGame._() : super._();
 
   factory _GenericGame.fromJson(Map<String, dynamic> json) =
       _$_GenericGame.fromJson;
 
   @override
-  IList<Player> get players;
-  @override
-  IList<String> get readyPlayers;
-  @override
   DateTime get time;
   @override
   GameStatus get status;
   @override
   int get round;
+  @override
+  IList<Player> get players;
+  @override
+  IList<String> get readyPlayers;
   @override
   @JsonKey(ignore: true)
   _$$_GenericGameCopyWith<_$_GenericGame> get copyWith =>
@@ -1186,7 +1192,7 @@ class __$$_LobbyCopyWithImpl<$Res> extends _$LobbyCopyWithImpl<$Res, _$_Lobby>
 class _$_Lobby implements _Lobby {
   const _$_Lobby(
       {required this.code,
-      required this.players,
+      this.players = const ISetConst({}),
       required this.config,
       required this.gameStatus});
 
@@ -1196,6 +1202,7 @@ class _$_Lobby implements _Lobby {
   @override
   final String code;
   @override
+  @JsonKey()
   final ISet<Player> players;
   @override
   final GameConfig config;
@@ -1241,7 +1248,7 @@ class _$_Lobby implements _Lobby {
 abstract class _Lobby implements Lobby {
   const factory _Lobby(
       {required final String code,
-      required final ISet<Player> players,
+      final ISet<Player> players,
       required final GameConfig config,
       required final GameStatus gameStatus}) = _$_Lobby;
 

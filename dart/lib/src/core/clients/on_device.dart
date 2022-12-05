@@ -36,8 +36,6 @@ class OnDeviceRoundService extends RoundService {
   @override
   Future<bool> sendEvent<E extends Event>(
       PlayerID playerID, GameCode code, E event) async {
-    final js = GameRegistry.toEventJson(event);
-    logger.info('Sending event $js');
     final backendReader = OnDeviceGameService.games[code]!.container;
     // If the gameClient is initializing
     // we cannot edit the backend provider synchronously
