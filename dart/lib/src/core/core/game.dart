@@ -83,7 +83,7 @@ abstract class GameRegistry {
   }
 
   static T gameFromJson<E extends Event, T extends Game>(JsonMap json) {
-    final type = (json['game'] as JsonMap)['type']! as String;
+    final type = json['type']! as String;
     return _fromType(type).fromJson(json) as T;
   }
 
@@ -100,10 +100,8 @@ abstract class GameRegistry {
         'type': event.type,
         'data': event.toJson(),
       };
-  static JsonMap toGameJson<E extends Event, T extends Game>(T game) => {
-        'type': game.type,
-        'data': game.toJson(),
-      };
+  static JsonMap toGameJson<E extends Event, T extends Game>(T game) =>
+      game.toJson();
 
   static String typeName(GameState state) =>
       GameRegistry._functions[state.game.type]!.gameType;
