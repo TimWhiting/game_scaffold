@@ -137,6 +137,9 @@ class GameErrorNotifier extends StateNotifier<GameError?> {
 class GameState<E extends Event, T extends Game> {
   GameState({required this.game, required this.rewards, required this.generic});
 
+  GameState<E1, T1> cast<E1 extends Event, T1 extends Game>() =>
+      GameState<E1, T1>(game: game as T1, rewards: rewards, generic: generic);
+
   final T game;
   final Rewards rewards;
   final GenericGame generic;
