@@ -6,7 +6,7 @@ publish_to: none
 homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:
-  sdk: ">=2.19.0-0 <3.0.0"
+  sdk: ">=2.18.5 <4.0.0"
 
 dependencies:
   game_scaffold_dart:
