@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'tic_tac_toe.dart';
 
@@ -180,6 +180,7 @@ TicTacToeGame _$TicTacToeGameFromJson(Map<String, dynamic> json) {
 mixin _$TicTacToeGame {
   IList<int?> get board => throw _privateConstructorUsedError;
   int get currentPlayer => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -193,7 +194,7 @@ abstract class $TicTacToeGameCopyWith<$Res> {
           TicTacToeGame value, $Res Function(TicTacToeGame) then) =
       _$TicTacToeGameCopyWithImpl<$Res, TicTacToeGame>;
   @useResult
-  $Res call({IList<int?> board, int currentPlayer});
+  $Res call({IList<int?> board, int currentPlayer, String type});
 }
 
 /// @nodoc
@@ -211,6 +212,7 @@ class _$TicTacToeGameCopyWithImpl<$Res, $Val extends TicTacToeGame>
   $Res call({
     Object? board = null,
     Object? currentPlayer = null,
+    Object? type = null,
   }) {
     return _then(_value.copyWith(
       board: null == board
@@ -221,6 +223,10 @@ class _$TicTacToeGameCopyWithImpl<$Res, $Val extends TicTacToeGame>
           ? _value.currentPlayer
           : currentPlayer // ignore: cast_nullable_to_non_nullable
               as int,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -233,7 +239,7 @@ abstract class _$$_TicTacToeGameCopyWith<$Res>
       __$$_TicTacToeGameCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({IList<int?> board, int currentPlayer});
+  $Res call({IList<int?> board, int currentPlayer, String type});
 }
 
 /// @nodoc
@@ -249,6 +255,7 @@ class __$$_TicTacToeGameCopyWithImpl<$Res>
   $Res call({
     Object? board = null,
     Object? currentPlayer = null,
+    Object? type = null,
   }) {
     return _then(_$_TicTacToeGame(
       board: null == board
@@ -259,6 +266,10 @@ class __$$_TicTacToeGameCopyWithImpl<$Res>
           ? _value.currentPlayer
           : currentPlayer // ignore: cast_nullable_to_non_nullable
               as int,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -266,7 +277,10 @@ class __$$_TicTacToeGameCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_TicTacToeGame extends _TicTacToeGame {
-  const _$_TicTacToeGame({required this.board, required this.currentPlayer})
+  const _$_TicTacToeGame(
+      {required this.board,
+      required this.currentPlayer,
+      this.type = 'tictactoe'})
       : super._();
 
   factory _$_TicTacToeGame.fromJson(Map<String, dynamic> json) =>
@@ -276,10 +290,13 @@ class _$_TicTacToeGame extends _TicTacToeGame {
   final IList<int?> board;
   @override
   final int currentPlayer;
+  @override
+  @JsonKey()
+  final String type;
 
   @override
   String toString() {
-    return 'TicTacToeGame(board: $board, currentPlayer: $currentPlayer)';
+    return 'TicTacToeGame(board: $board, currentPlayer: $currentPlayer, type: $type)';
   }
 
   @override
@@ -289,13 +306,14 @@ class _$_TicTacToeGame extends _TicTacToeGame {
             other is _$_TicTacToeGame &&
             const DeepCollectionEquality().equals(other.board, board) &&
             (identical(other.currentPlayer, currentPlayer) ||
-                other.currentPlayer == currentPlayer));
+                other.currentPlayer == currentPlayer) &&
+            (identical(other.type, type) || other.type == type));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(board), currentPlayer);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(board), currentPlayer, type);
 
   @JsonKey(ignore: true)
   @override
@@ -314,7 +332,8 @@ class _$_TicTacToeGame extends _TicTacToeGame {
 abstract class _TicTacToeGame extends TicTacToeGame {
   const factory _TicTacToeGame(
       {required final IList<int?> board,
-      required final int currentPlayer}) = _$_TicTacToeGame;
+      required final int currentPlayer,
+      final String type}) = _$_TicTacToeGame;
   const _TicTacToeGame._() : super._();
 
   factory _TicTacToeGame.fromJson(Map<String, dynamic> json) =
@@ -324,6 +343,8 @@ abstract class _TicTacToeGame extends TicTacToeGame {
   IList<int?> get board;
   @override
   int get currentPlayer;
+  @override
+  String get type;
   @override
   @JsonKey(ignore: true)
   _$$_TicTacToeGameCopyWith<_$_TicTacToeGame> get copyWith =>

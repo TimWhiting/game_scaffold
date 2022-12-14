@@ -188,7 +188,7 @@ class GameWidget extends HookConsumerWidget {
       return const CircularProgressIndicator();
     }
 
-    final g = gameState.game as GameState<TicTacToeGameEvent, TicTacToeGame>;
+    final g = gameState.game!.cast<TicTacToeGameEvent, TicTacToeGame>();
 
     final player = g.players.indexWhere((p) => p.id == playerID);
     return Scaffold(

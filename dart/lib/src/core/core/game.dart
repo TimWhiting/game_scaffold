@@ -23,6 +23,9 @@ class PlayerEvent<E extends Event> {
   PlayerEvent({required this.playerId, required this.event});
   final String playerId;
   final E event;
+
+  PlayerEvent<X> cast<X extends Event>() =>
+      PlayerEvent(playerId: playerId, event: event as X);
 }
 
 class MaybeError<T> {
@@ -96,10 +99,6 @@ abstract class GameRegistry {
     return _fromType(type).fromJsonE(json) as E;
   }
 
-  // static JsonMap toEventJson<E extends Event>(E event) => event.toJson();
-  static JsonMap toGameJson<E extends Event, T extends Game>(T game) =>
-      game.toJson();
-
   static String typeName(GameState state) =>
       GameRegistry._functions[state.game.type]!.gameType;
 
@@ -145,7 +144,7 @@ class GameState<E extends Event, T extends Game> {
   final GenericGame generic;
 
   JsonMap toJson() => {
-        'game': GameRegistry.toGameJson(game),
+        'game': game.toJson(),
         'rewards': rewards,
         'generic': generic.toJson(),
       };
@@ -204,27 +203,27 @@ class GameState<E extends Event, T extends Game> {
   PlayerIndex playerIndex(PlayerID playerID) =>
       players.indexWhere((p) => p.id == playerID);
 
-  NextStateOrError<E, T> next(PlayerEvent<E> event, GameConfig config) {
+  NextStateOrError next(PlayerEvent event, GameConfig config) {
     final next =
-        GameRegistry.functions<E, T>(config.gameType).next(this, config, event);
+        GameRegistry.functions(config.gameType).next(this, config, event);
     if (next.hasError) {
       return NextStateOrError(
           state: this,
           error: GameError(message: next.error, player: event.playerId));
     }
     return NextStateOrError(
-        state: copyWith(game: next.value.game)
+        state: copyWith(game: next.value.game as T?)
             .updateStatus()
             .updateGeneric((g) => g.copyWith(time: DateTime.now())),
         error: null);
   }
 
-  NextStateOrError<E, T> nextRound(GameConfig config) {
+  NextStateOrError nextRound(GameConfig config) {
     final next =
-        GameRegistry.functions<E, T>(config.gameType).nextRound(this, config);
+        GameRegistry.functions(config.gameType).nextRound(this, config);
     return NextStateOrError(
         state: next.copyWith(generic: next.generic.finishRound().updateTime())
-            as GameState<E, T>,
+            as GameState,
         error: null);
   }
 
@@ -240,24 +239,14 @@ class GameState<E extends Event, T extends Game> {
       );
 }
 
-class GameFunctions<E extends Event, T extends Game> {
-  GameFunctions({
-    required this.initialState,
-    required this.fromJson,
-    required this.fromJsonE,
-    required this.gameType,
-    required this.gameName,
-    required this.next,
-    required this.nextRound,
-  });
-  final GameState<E, T> Function(GameConfig config, IList<Player> players)
-      initialState;
-  final NextState<E, T> Function(
-      GameState<E, T> state, GameConfig config, PlayerEvent<E> event) next;
-  final GameState<E, T> Function(GameState<E, T> state, GameConfig config)
-      nextRound;
-  final T Function(JsonMap) fromJson;
-  final E Function(JsonMap) fromJsonE;
-  final GameType gameType;
-  final GameName gameName;
+abstract class GameFunctions<E extends Event, T extends Game> {
+  GameFunctions();
+  GameState<E, T> initialState(GameConfig config, IList<Player> players);
+  NextState<E, T> next(covariant GameState<E, T> state, GameConfig config,
+      covariant PlayerEvent<E> event);
+  GameState<E, T> nextRound(covariant GameState<E, T> state, GameConfig config);
+  T fromJson(JsonMap json);
+  E fromJsonE(JsonMap json);
+  GameType get gameType;
+  GameName get gameName;
 }

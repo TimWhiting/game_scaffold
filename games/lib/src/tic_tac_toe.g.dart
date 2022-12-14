@@ -24,6 +24,7 @@ _$_TicTacToeGame _$$_TicTacToeGameFromJson(Map<String, dynamic> json) =>
     _$_TicTacToeGame(
       board: IList<int?>.fromJson(json['board'], (value) => value as int?),
       currentPlayer: json['currentPlayer'] as int,
+      type: json['type'] as String? ?? 'tictactoe',
     );
 
 Map<String, dynamic> _$$_TicTacToeGameToJson(_$_TicTacToeGame instance) =>
@@ -32,4 +33,5 @@ Map<String, dynamic> _$$_TicTacToeGameToJson(_$_TicTacToeGame instance) =>
         (value) => value,
       ),
       'currentPlayer': instance.currentPlayer,
+      'type': instance.type,
     };
