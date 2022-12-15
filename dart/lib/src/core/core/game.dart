@@ -242,9 +242,9 @@ class GameState<E extends Event, T extends Game> {
 abstract class GameFunctions<E extends Event, T extends Game> {
   GameFunctions();
   GameState<E, T> initialState(GameConfig config, IList<Player> players);
-  NextState<E, T> next(covariant GameState<E, T> state, GameConfig config,
-      covariant PlayerEvent<E> event);
-  GameState<E, T> nextRound(covariant GameState<E, T> state, GameConfig config);
+  NextState<E, T> next(covariant GameState state, GameConfig config,
+      covariant PlayerEvent event);
+  GameState<E, T> nextRound(covariant GameState state, GameConfig config);
   T fromJson(JsonMap json);
   E fromJsonE(JsonMap json);
   GameType get gameType;
