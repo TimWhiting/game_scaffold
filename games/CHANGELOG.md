@@ -1,3 +1,6 @@
+## 0.5.0-dev
+- Revamp architecture
+
 ## 0.4.1
 
 - The initial list for games is now a list rather than a set 

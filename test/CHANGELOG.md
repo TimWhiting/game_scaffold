@@ -1,3 +1,7 @@
+## 0.5.0-dev
+
+- Revamp architecture
+
 ## 0.4.0
 
 - Major refactor for riverpod 1.0.0

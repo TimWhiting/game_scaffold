@@ -1,8 +1,7 @@
-# melos_managed_dependency_overrides: collection,game_scaffold,game_scaffold_dart,game_scaffold_games
+# melos_managed_dependency_overrides: game_scaffold,game_scaffold_dart,game_scaffold_games
 dependency_overrides:
-  collection: ^1.17.0
   game_scaffold:
-    path: ../
+    path: ..
   game_scaffold_dart:
     path: ../../dart
   game_scaffold_games:

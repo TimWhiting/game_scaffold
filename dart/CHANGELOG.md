@@ -1,3 +1,7 @@
+## 0.5.0-dev
+
+- Revamp architecture
+
 ## 0.4.1+2
 
 - Fix local server issues

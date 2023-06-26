@@ -1,14 +1,7 @@
 name: game_scaffold_monorepo
 
-command:
-  bootstrap:
-    usePubspecOverrides: true
-
 packages:
-  - dart/**
-  - flutter/**
-  - test/**
-  - games/**
+  - ./**
 
 scripts:
   analyze: melos exec -- exec dart pub global run tuneup check

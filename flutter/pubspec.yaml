@@ -1,28 +1,28 @@
 name: game_scaffold
-description: A new Flutter package project.
-version: 0.4.1
+description: Flutter support for a turn based game framework.
+version: 0.5.0-dev
 homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:
-  sdk: ">=2.18.5 <4.0.0"
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=3.3.0"
 
 dependencies:
-  collection: ^1.17.0
-  firebase_dart: ^1.1.0-dev.7
+  collection: ^1.17.2
+  firebase_dart: ^1.1.0-dev.10
   flutter:
     sdk: flutter
-  flutter_hooks: ^0.18.5+1
-  flutter_riverpod: ^2.1.1
-  game_scaffold_dart: ^0.4.1+2
-  hooks_riverpod: ^2.1.1
-  logging: ^1.1.0
-  riverpod: ^2.1.1
+  flutter_hooks: ^0.18.6
+  flutter_riverpod: ^2.3.6
+  game_scaffold_dart: ^0.5.0-dev
+  hooks_riverpod: ^2.3.6
+  logging: ^1.2.0
+  riverpod: ^2.3.6
 
 dev_dependencies:
-  dartdoc: ^6.1.2
+  dartdoc: ^6.3.0
   flutter_test:
     sdk: flutter
-  game_scaffold_games: ^0.4.1
+  game_scaffold_games: ^0.5.0-dev
 
 flutter: null

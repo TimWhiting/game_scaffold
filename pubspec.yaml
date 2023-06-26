@@ -1,0 +1,9 @@
+name: game_scaffold_melos
+homepage: https://www.github.com/TimWhiting/game_scaffold
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dev_dependencies:
+  melos: ^3.1.0
