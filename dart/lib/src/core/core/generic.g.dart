@@ -45,12 +45,14 @@ _$_GenericReadyNextRoundEvent _$$_GenericReadyNextRoundEventFromJson(
         Map<String, dynamic> json) =>
     _$_GenericReadyNextRoundEvent(
       json['player'] as String,
+      type: json['type'] as String? ?? 'generic',
     );
 
 Map<String, dynamic> _$$_GenericReadyNextRoundEventToJson(
         _$_GenericReadyNextRoundEvent instance) =>
     <String, dynamic>{
       'player': instance.player,
+      'type': instance.type,
     };
 
 _$_GameConfig _$$_GameConfigFromJson(Map<String, dynamic> json) =>

@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'generic.dart';
 
@@ -252,19 +252,20 @@ GenericEvent _$GenericEventFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$GenericEvent {
   String get player => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String player) readyNextRound,
+    required TResult Function(String player, String type) readyNextRound,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String player)? readyNextRound,
+    TResult? Function(String player, String type)? readyNextRound,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String player)? readyNextRound,
+    TResult Function(String player, String type)? readyNextRound,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -296,7 +297,7 @@ abstract class $GenericEventCopyWith<$Res> {
           GenericEvent value, $Res Function(GenericEvent) then) =
       _$GenericEventCopyWithImpl<$Res, GenericEvent>;
   @useResult
-  $Res call({String player});
+  $Res call({String player, String type});
 }
 
 /// @nodoc
@@ -313,11 +314,16 @@ class _$GenericEventCopyWithImpl<$Res, $Val extends GenericEvent>
   @override
   $Res call({
     Object? player = null,
+    Object? type = null,
   }) {
     return _then(_value.copyWith(
       player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
+              as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -332,7 +338,7 @@ abstract class _$$_GenericReadyNextRoundEventCopyWith<$Res>
       __$$_GenericReadyNextRoundEventCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String player});
+  $Res call({String player, String type});
 }
 
 /// @nodoc
@@ -348,11 +354,16 @@ class __$$_GenericReadyNextRoundEventCopyWithImpl<$Res>
   @override
   $Res call({
     Object? player = null,
+    Object? type = null,
   }) {
     return _then(_$_GenericReadyNextRoundEvent(
       null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
+              as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -361,17 +372,21 @@ class __$$_GenericReadyNextRoundEventCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
-  const _$_GenericReadyNextRoundEvent(this.player) : super._();
+  const _$_GenericReadyNextRoundEvent(this.player, {this.type = 'generic'})
+      : super._();
 
   factory _$_GenericReadyNextRoundEvent.fromJson(Map<String, dynamic> json) =>
       _$$_GenericReadyNextRoundEventFromJson(json);
 
   @override
   final String player;
+  @override
+  @JsonKey()
+  final String type;
 
   @override
   String toString() {
-    return 'GenericEvent.readyNextRound(player: $player)';
+    return 'GenericEvent.readyNextRound(player: $player, type: $type)';
   }
 
   @override
@@ -379,12 +394,13 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_GenericReadyNextRoundEvent &&
-            (identical(other.player, player) || other.player == player));
+            (identical(other.player, player) || other.player == player) &&
+            (identical(other.type, type) || other.type == type));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, player);
+  int get hashCode => Object.hash(runtimeType, player, type);
 
   @JsonKey(ignore: true)
   @override
@@ -396,27 +412,27 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String player) readyNextRound,
+    required TResult Function(String player, String type) readyNextRound,
   }) {
-    return readyNextRound(player);
+    return readyNextRound(player, type);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String player)? readyNextRound,
+    TResult? Function(String player, String type)? readyNextRound,
   }) {
-    return readyNextRound?.call(player);
+    return readyNextRound?.call(player, type);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String player)? readyNextRound,
+    TResult Function(String player, String type)? readyNextRound,
     required TResult orElse(),
   }) {
     if (readyNextRound != null) {
-      return readyNextRound(player);
+      return readyNextRound(player, type);
     }
     return orElse();
   }
@@ -458,8 +474,8 @@ class _$_GenericReadyNextRoundEvent extends _GenericReadyNextRoundEvent {
 }
 
 abstract class _GenericReadyNextRoundEvent extends GenericEvent {
-  const factory _GenericReadyNextRoundEvent(final String player) =
-      _$_GenericReadyNextRoundEvent;
+  const factory _GenericReadyNextRoundEvent(final String player,
+      {final String type}) = _$_GenericReadyNextRoundEvent;
   const _GenericReadyNextRoundEvent._() : super._();
 
   factory _GenericReadyNextRoundEvent.fromJson(Map<String, dynamic> json) =
@@ -467,6 +483,8 @@ abstract class _GenericReadyNextRoundEvent extends GenericEvent {
 
   @override
   String get player;
+  @override
+  String get type;
   @override
   @JsonKey(ignore: true)
   _$$_GenericReadyNextRoundEventCopyWith<_$_GenericReadyNextRoundEvent>
@@ -704,6 +722,7 @@ class _$_GameConfig extends _GameConfig {
   @override
   @JsonKey()
   Map<String, Object?> get options {
+    if (_options is EqualUnmodifiableMapView) return _options;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableMapView(_options);
   }

@@ -80,14 +80,39 @@ class GenericEvent extends Event with _$GenericEvent {
   const GenericEvent._();
 
   /// Signals that [player] is ready for the next round
-  const factory GenericEvent.readyNextRound(String player) =
+  const factory GenericEvent.readyNextRound(String player, {@Default('generic') String type}) =
       _GenericReadyNextRoundEvent;
 
   factory GenericEvent.fromJson(Map<String, dynamic> map) =>
       _$GenericEventFromJson(map);
+  
+  static void register(){
+    GameRegistry.register(GameFunctionsGeneric());
+  }
+}
+
+class GameFunctionsGeneric extends GameFunctions {
+  @override
+  Game fromJson(JsonMap json) => throw UnimplementedError();
 
   @override
-  String get type => 'generic';
+  Event fromJsonE(JsonMap json)  => GenericEvent.fromJson(json);
+
+  @override
+  GameName get gameName => 'Generic';
+
+  @override
+  GameType get gameType => 'generic';
+
+  @override
+  GameState<Event, Game> initialState(GameConfig config, IList<Player> players) => throw UnimplementedError();
+
+  @override
+  NextState<Event, Game> next(covariant GameState<Event, Game> state, GameConfig config, covariant PlayerEvent<Event> event) => throw UnimplementedError();
+
+  @override
+  GameState<Event, Game> nextRound(covariant GameState<Event, Game> state, GameConfig config) => throw UnimplementedError();
+
 }
 
 /// Represents the current status of the game as seen by the client

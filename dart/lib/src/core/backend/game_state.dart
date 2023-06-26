@@ -137,7 +137,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       final game = gameState;
       final e = event.event;
       if (e is GenericEvent) {
-        state = e.maybeWhen(readyNextRound: (e) {
+        state = e.maybeWhen(readyNextRound: (e,_) {
           final newState = game.updateGeneric((g) => g.addReadyPlayer(e));
           if (newState.readyPlayers.length == game.players.length) {
             return game
