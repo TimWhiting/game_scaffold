@@ -7,13 +7,6 @@
 #   rules:
 #     - camel_case_types
 analyzer:
-  # Strong mode is required. Applies to the current project.
-  strong-mode:
-    # When compiling to JS, both implicit options apply to the current 
-    # project and all dependencies. They are useful to find possible 
-    # Type fixes or areas for explicit typing.
-    implicit-casts: false
-    implicit-dynamic: true
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
@@ -132,7 +125,6 @@ linter:
     - prefer_constructors_over_static_methods
     - prefer_contains
     # - prefer_double_quotes
-    - prefer_equal_for_default_values
     - prefer_expression_function_bodies
     - prefer_final_fields
     - prefer_final_in_for_each
