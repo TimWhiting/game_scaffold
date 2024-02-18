@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:logging/logging.dart';
 
 import '../../core.dart';
-import '../core.dart';
 
 typedef ServiceType = String;
 
@@ -16,10 +15,8 @@ typedef GameAddress = Uri;
 /// * Delete
 /// * Get Game Info
 /// * Get List of Games
-abstract class GameService {
-  GameService() : logger = Logger('GameClient');
-
-  final Logger logger;
+mixin GameService {
+  final Logger logger = Logger('GameClient');
 
   /// Creates a game on the server
   Future<GameCode> createGame(PlayerID playerID, GameConfig config);

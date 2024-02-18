@@ -10,6 +10,11 @@ typedef GameName = String;
 typedef PlayerIndex = int;
 typedef Rewards = List<double>;
 
+extension on Rewards {
+  Rewards operator +(Rewards other) =>
+      [for (var i = 0; i < length; i++) this[i] + other[i]];
+}
+
 class NextStateOrError<E extends Event, T extends Game> {
   const NextStateOrError({required this.state, required this.error});
   final GameState<E, T> state;
@@ -86,7 +91,7 @@ abstract class GameRegistry {
   }
 
   static T gameFromJson<E extends Event, T extends Game>(JsonMap json) {
-    final type = json['type']! as String;
+    final type = json['type']! as GameType;
     return _fromType(type).fromJson(json) as T;
   }
 
@@ -95,7 +100,7 @@ abstract class GameRegistry {
       _fromType(gameType) as GameFunctions<E, T>;
 
   static E eventFromJson<E>(JsonMap json) {
-    final type = json['type']! as String;
+    final type = json['type']! as GameType;
     return _fromType(type).fromJsonE(json) as E;
   }
 
@@ -155,7 +160,7 @@ class GameState<E extends Event, T extends Game> {
         generic: GenericGame.fromJson(json['generic'] as JsonMap),
       );
 
-  GameState<E, T> updateReward(List<double> Function(List<double>) update) =>
+  GameState<E, T> updateReward(Rewards Function(Rewards) update) =>
       copyWith(rewards: update(rewards));
 
   GameState<E, T> updateGame(T g) => copyWith(game: g);
@@ -163,7 +168,7 @@ class GameState<E extends Event, T extends Game> {
   GameState<E, T> updateGeneric(GenericGame Function(GenericGame) update) =>
       copyWith(generic: update(generic), rewards: rewards);
 
-  GameState<E, T> addReward(List<double> rewards) =>
+  GameState<E, T> addReward(Rewards rewards) =>
       copyWith(rewards: rewards + this.rewards);
 
   GameState<E, T> updateStatus() => updateGeneric((g) => g.copyWith(

@@ -12,7 +12,7 @@ part of 'player.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 Player _$PlayerFromJson(Map<String, dynamic> json) {
   return _Player.fromJson(json);
@@ -66,19 +66,21 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
 }
 
 /// @nodoc
-abstract class _$$_PlayerCopyWith<$Res> implements $PlayerCopyWith<$Res> {
-  factory _$$_PlayerCopyWith(_$_Player value, $Res Function(_$_Player) then) =
-      __$$_PlayerCopyWithImpl<$Res>;
+abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
+  factory _$$PlayerImplCopyWith(
+          _$PlayerImpl value, $Res Function(_$PlayerImpl) then) =
+      __$$PlayerImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String id, String name});
 }
 
 /// @nodoc
-class __$$_PlayerCopyWithImpl<$Res>
-    extends _$PlayerCopyWithImpl<$Res, _$_Player>
-    implements _$$_PlayerCopyWith<$Res> {
-  __$$_PlayerCopyWithImpl(_$_Player _value, $Res Function(_$_Player) _then)
+class __$$PlayerImplCopyWithImpl<$Res>
+    extends _$PlayerCopyWithImpl<$Res, _$PlayerImpl>
+    implements _$$PlayerImplCopyWith<$Res> {
+  __$$PlayerImplCopyWithImpl(
+      _$PlayerImpl _value, $Res Function(_$PlayerImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -87,7 +89,7 @@ class __$$_PlayerCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
   }) {
-    return _then(_$_Player(
+    return _then(_$PlayerImpl(
       null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -102,11 +104,11 @@ class __$$_PlayerCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Player implements _Player {
-  const _$_Player(this.id, {this.name = ''});
+class _$PlayerImpl implements _Player {
+  const _$PlayerImpl(this.id, {this.name = ''});
 
-  factory _$_Player.fromJson(Map<String, dynamic> json) =>
-      _$$_PlayerFromJson(json);
+  factory _$PlayerImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PlayerImplFromJson(json);
 
   @override
   final String id;
@@ -120,10 +122,10 @@ class _$_Player implements _Player {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Player &&
+            other is _$PlayerImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name));
   }
@@ -135,21 +137,21 @@ class _$_Player implements _Player {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_PlayerCopyWith<_$_Player> get copyWith =>
-      __$$_PlayerCopyWithImpl<_$_Player>(this, _$identity);
+  _$$PlayerImplCopyWith<_$PlayerImpl> get copyWith =>
+      __$$PlayerImplCopyWithImpl<_$PlayerImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_PlayerToJson(
+    return _$$PlayerImplToJson(
       this,
     );
   }
 }
 
 abstract class _Player implements Player {
-  const factory _Player(final String id, {final String name}) = _$_Player;
+  const factory _Player(final String id, {final String name}) = _$PlayerImpl;
 
-  factory _Player.fromJson(Map<String, dynamic> json) = _$_Player.fromJson;
+  factory _Player.fromJson(Map<String, dynamic> json) = _$PlayerImpl.fromJson;
 
   @override
   String get id;
@@ -157,6 +159,6 @@ abstract class _Player implements Player {
   String get name;
   @override
   @JsonKey(ignore: true)
-  _$$_PlayerCopyWith<_$_Player> get copyWith =>
+  _$$PlayerImplCopyWith<_$PlayerImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

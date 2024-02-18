@@ -8,9 +8,8 @@ environment:
 
 dependencies:
   game_scaffold_dart: ^0.5.0-dev
-  meta: ^1.9.1
-  test: ^1.24.3
+  meta: ^1.12.0
+  test: ^1.25.2
 
 dev_dependencies:
   game_scaffold_games: ^0.5.0-dev
-

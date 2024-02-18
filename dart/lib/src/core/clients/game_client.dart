@@ -1,45 +1,32 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import '../../../game_scaffold_dart.dart';
+
 part 'game_client.freezed.dart';
+part 'game_client.g.dart';
 
-final gameInfoProvider = Provider<GameClientInfo>(
-  (ref) =>
-      ref.watch(multiplayerGameClientProvider(ref.watch(playerIDProvider))),
-  dependencies: [
-    multiplayerGameClientProvider,
-    playerIDProvider,
-  ],
-);
+@Riverpod(dependencies: [MultiplayerGameClient, CurrentPlayerID])
+GameClientInfo gameInfo(GameInfoRef ref) => ref
+    .watch(multiplayerGameClientProvider(ref.watch(currentPlayerIDProvider)));
 
-final gameClientProvider = Provider<MultiplayerGameClient>(
-  (ref) => ref.watch(
-      multiplayerGameClientProvider(ref.watch(playerIDProvider)).notifier),
-  dependencies: [
-    multiplayerGameClientProvider,
-    playerIDProvider,
-  ],
-);
+@Riverpod(dependencies: [MultiplayerGameClient, CurrentPlayerID])
+MultiplayerGameClient gameInfoClient(GameInfoRef ref) => ref.watch(
+    multiplayerGameClientProvider(ref.watch(currentPlayerIDProvider)).notifier);
 
-final multiplayerGameClientProvider = StateNotifierProvider.family<
-    MultiplayerGameClient, GameClientInfo, PlayerID>(
-  MultiplayerGameClient.new,
-  dependencies: [
-    singleConfig,
-    gameService,
-  ],
-  name: 'MultiplayerGameClient',
-);
-
-class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
+@Riverpod(dependencies: [SingleConfig, gameService])
+class MultiplayerGameClient extends _$MultiplayerGameClient {
   @override
-  MultiplayerGameClient(this.ref, this.multiplayerID)
-      : super(const GameClientInfo(null)) {
-    final service = ref.watch(gameService);
+  GameClientInfo build(PlayerID multiplayerID) {
+    this.multiplayerID = multiplayerID;
+    final service = ref.watch(gameServiceProvider);
 
     connect(service);
+    return const GameClientInfo(null);
   }
-  final PlayerID multiplayerID;
-  final StateNotifierProviderRef ref;
+
+  @override
+  late PlayerID multiplayerID;
 
   void exitGame() {
     state = state.copyWith(config: null, code: null);
@@ -57,14 +44,12 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
           code: state.code,
         );
         fetchOldGames();
-        ref.listen(singleConfig, (_, value) {
+        ref.listen(singleConfigProvider, (_, value) {
           setGameConfig(value);
         });
         ref.onDispose(service.disconnect);
       } else {
-        if (mounted) {
-          state = state.copyWith(service: null);
-        }
+        state = state.copyWith(service: null);
       }
     }).toList();
   }
@@ -113,6 +98,6 @@ class GameClientInfo with _$GameClientInfo {
   }) = _GameClientInfo;
   const GameClientInfo._();
   bool get connected => service != null;
-  bool get canCreateGame => connected && config != null;
-  bool get canJoinGame => connected && code != null;
+  bool get canCreateGame => connected;
+  bool get canJoinGame => connected;
 }

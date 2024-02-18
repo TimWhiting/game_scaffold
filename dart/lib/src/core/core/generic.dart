@@ -5,6 +5,8 @@ import 'core.dart';
 part 'generic.freezed.dart';
 part 'generic.g.dart';
 
+const ilistempty = IListConst([]);
+
 /// Represents a generic game, with common fields that can be manipulated by
 /// common [GenericEvent]s
 ///
@@ -19,8 +21,8 @@ class GenericGame with _$GenericGame {
     required DateTime time,
     required GameStatus status,
     required int round,
-    @Default(IListConst([])) IList<Player> players,
-    @Default(IListConst([])) IList<PlayerID> readyPlayers,
+    @Default(ilistempty) IList<Player> players,
+    @Default(ilistempty) IList<PlayerID> readyPlayers,
   }) = _GenericGame;
   const GenericGame._();
 
@@ -80,13 +82,13 @@ class GenericEvent extends Event with _$GenericEvent {
   const GenericEvent._();
 
   /// Signals that [player] is ready for the next round
-  const factory GenericEvent.readyNextRound(String player, {@Default('generic') String type}) =
-      _GenericReadyNextRoundEvent;
+  const factory GenericEvent.readyNextRound(String player,
+      {@Default('generic') String type}) = _GenericReadyNextRoundEvent;
 
   factory GenericEvent.fromJson(Map<String, dynamic> map) =>
       _$GenericEventFromJson(map);
-  
-  static void register(){
+
+  static void register() {
     GameRegistry.register(GameFunctionsGeneric());
   }
 }
@@ -96,7 +98,7 @@ class GameFunctionsGeneric extends GameFunctions {
   Game fromJson(JsonMap json) => throw UnimplementedError();
 
   @override
-  Event fromJsonE(JsonMap json)  => GenericEvent.fromJson(json);
+  Event fromJsonE(JsonMap json) => GenericEvent.fromJson(json);
 
   @override
   GameName get gameName => 'Generic';
@@ -105,14 +107,19 @@ class GameFunctionsGeneric extends GameFunctions {
   GameType get gameType => 'generic';
 
   @override
-  GameState<Event, Game> initialState(GameConfig config, IList<Player> players) => throw UnimplementedError();
+  GameState<Event, Game> initialState(
+          GameConfig config, IList<Player> players) =>
+      throw UnimplementedError();
 
   @override
-  NextState<Event, Game> next(covariant GameState<Event, Game> state, GameConfig config, covariant PlayerEvent<Event> event) => throw UnimplementedError();
+  NextState<Event, Game> next(covariant GameState<Event, Game> state,
+          GameConfig config, covariant PlayerEvent<Event> event) =>
+      throw UnimplementedError();
 
   @override
-  GameState<Event, Game> nextRound(covariant GameState<Event, Game> state, GameConfig config) => throw UnimplementedError();
-
+  GameState<Event, Game> nextRound(
+          covariant GameState<Event, Game> state, GameConfig config) =>
+      throw UnimplementedError();
 }
 
 /// Represents the current status of the game as seen by the client
@@ -158,7 +165,7 @@ class GameConfig with _$GameConfig {
 ///
 /// Includes
 /// * The game's [gameID] on the server
-/// * The game's [gameType]
+/// * The game's [config]
 /// * A list of [players] who are part of the game
 /// * The [player]'s id in the game
 /// * Whether the player is the [creator] of the game
@@ -176,13 +183,15 @@ class GameInfo with _$GameInfo {
       _$GameInfoFromJson(map);
 }
 
+const isetempty = ISetConst({});
+
 @freezed
 class Lobby with _$Lobby {
   const factory Lobby({
     required GameCode code,
-    @Default(ISetConst({})) ISet<Player> players,
     required GameConfig config,
     required GameStatus gameStatus,
+    @Default(isetempty) ISet<Player> players,
   }) = _Lobby;
   factory Lobby.fromJson(Map<String, dynamic> map) => _$LobbyFromJson(map);
 }

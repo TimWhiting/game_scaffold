@@ -12,10 +12,4 @@ extension GameMapExtensions<K, V> on IMap<K, V> {
       });
 }
 
-extension AddRewards on List<double> {
-  // ignore: unused_element
-  List<double> operator +(List<double> other) =>
-      [for (var i = 0; i < length; i++) this[i] + other[i]];
-}
-
 typedef JsonMap = Map<String, Object?>;

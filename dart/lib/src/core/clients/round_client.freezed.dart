@@ -12,7 +12,7 @@ part of 'round_client.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$RoundInfo {
@@ -107,10 +107,11 @@ class _$RoundInfoCopyWithImpl<$Res, $Val extends RoundInfo>
 }
 
 /// @nodoc
-abstract class _$$_RoundInfoCopyWith<$Res> implements $RoundInfoCopyWith<$Res> {
-  factory _$$_RoundInfoCopyWith(
-          _$_RoundInfo value, $Res Function(_$_RoundInfo) then) =
-      __$$_RoundInfoCopyWithImpl<$Res>;
+abstract class _$$RoundInfoImplCopyWith<$Res>
+    implements $RoundInfoCopyWith<$Res> {
+  factory _$$RoundInfoImplCopyWith(
+          _$RoundInfoImpl value, $Res Function(_$RoundInfoImpl) then) =
+      __$$RoundInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -126,11 +127,11 @@ abstract class _$$_RoundInfoCopyWith<$Res> implements $RoundInfoCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_RoundInfoCopyWithImpl<$Res>
-    extends _$RoundInfoCopyWithImpl<$Res, _$_RoundInfo>
-    implements _$$_RoundInfoCopyWith<$Res> {
-  __$$_RoundInfoCopyWithImpl(
-      _$_RoundInfo _value, $Res Function(_$_RoundInfo) _then)
+class __$$RoundInfoImplCopyWithImpl<$Res>
+    extends _$RoundInfoCopyWithImpl<$Res, _$RoundInfoImpl>
+    implements _$$RoundInfoImplCopyWith<$Res> {
+  __$$RoundInfoImplCopyWithImpl(
+      _$RoundInfoImpl _value, $Res Function(_$RoundInfoImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -143,7 +144,7 @@ class __$$_RoundInfoCopyWithImpl<$Res>
     Object? game = freezed,
     Object? error = freezed,
   }) {
-    return _then(_$_RoundInfo(
+    return _then(_$RoundInfoImpl(
       freezed == service
           ? _value.service
           : service // ignore: cast_nullable_to_non_nullable
@@ -174,8 +175,8 @@ class __$$_RoundInfoCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_RoundInfo extends _RoundInfo {
-  const _$_RoundInfo(@protected this.service,
+class _$RoundInfoImpl extends _RoundInfo {
+  const _$RoundInfoImpl(@protected this.service,
       {required this.code,
       required this.playerName,
       this.lobby,
@@ -203,10 +204,10 @@ class _$_RoundInfo extends _RoundInfo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_RoundInfo &&
+            other is _$RoundInfoImpl &&
             (identical(other.service, service) || other.service == service) &&
             (identical(other.code, code) || other.code == code) &&
             (identical(other.playerName, playerName) ||
@@ -223,8 +224,8 @@ class _$_RoundInfo extends _RoundInfo {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_RoundInfoCopyWith<_$_RoundInfo> get copyWith =>
-      __$$_RoundInfoCopyWithImpl<_$_RoundInfo>(this, _$identity);
+  _$$RoundInfoImplCopyWith<_$RoundInfoImpl> get copyWith =>
+      __$$RoundInfoImplCopyWithImpl<_$RoundInfoImpl>(this, _$identity);
 }
 
 abstract class _RoundInfo extends RoundInfo {
@@ -233,7 +234,7 @@ abstract class _RoundInfo extends RoundInfo {
       required final String playerName,
       final GameInfo? lobby,
       final GameState<Event, Game>? game,
-      final String? error}) = _$_RoundInfo;
+      final String? error}) = _$RoundInfoImpl;
   const _RoundInfo._() : super._();
 
   @override
@@ -251,6 +252,6 @@ abstract class _RoundInfo extends RoundInfo {
   String? get error;
   @override
   @JsonKey(ignore: true)
-  _$$_RoundInfoCopyWith<_$_RoundInfo> get copyWith =>
+  _$$RoundInfoImplCopyWith<_$RoundInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

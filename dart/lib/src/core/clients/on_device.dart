@@ -1,6 +1,10 @@
 import 'dart:async';
 
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import '../../../game_scaffold_dart.dart';
+
+part 'on_device.g.dart';
 
 /// Location that corresponds to running the game on-device
 // ignore: constant_identifier_names
@@ -9,8 +13,10 @@ const OnDeviceService = 'on-device';
 /// An implementation of a [RoundService] for a local game on device with no server connection
 ///
 /// Warning implementation not complete or tested yet
+@Riverpod(dependencies: [CurrentPlayerID])
 class OnDeviceRoundService extends RoundService {
-  OnDeviceRoundService();
+  @override
+  void build() {}
   @override
   Future<bool> exitGame(PlayerID playerID, GameCode code) async => true;
 
@@ -100,18 +106,13 @@ class OnDeviceRoundService extends RoundService {
   }
 }
 
-final onDeviceRoundService = Provider<RoundService>((ref) {
-  final client = OnDeviceRoundService();
-  ref.onDispose(client.dispose);
-  return client;
-}, dependencies: [playerIDProvider]);
-
 /// An on device implementation of [GameService]
 ///
 /// Warning implementation not complete or tested yet
-class OnDeviceGameService extends GameService {
-  OnDeviceGameService(this.ref) : super();
-  final ProviderRef ref;
+@riverpod
+class OnDeviceGameService extends _$OnDeviceGameService with GameService {
+  @override
+  void build() {}
   static final games = <GameCode, LocalGame>{};
   @override
   Future<String> createGame(PlayerID playerID, GameConfig config) async {
@@ -185,16 +186,6 @@ class OnDeviceGameService extends GameService {
     ].lock;
   }
 }
-
-final onDeviceGameService = Provider<GameService>(
-  (ref) {
-    final client = OnDeviceGameService(ref);
-    ref.onDispose(client.dispose);
-    return client;
-  },
-  name: 'onDeviceGameServerClient',
-  dependencies: const [],
-);
 
 /// Keeps track of some metadata about a game for an [OnDeviceService] game
 class LocalGame {

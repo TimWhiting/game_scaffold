@@ -1,60 +1,50 @@
 import 'dart:async';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import '../../../game_scaffold_dart.dart';
 
 part 'round_client.freezed.dart';
+part 'round_client.g.dart';
 
-final roundInfoProvider = Provider<RoundInfo>(
-  (ref) =>
-      ref.watch(multiplayerRoundClientProvider(ref.watch(playerIDProvider))),
-  dependencies: [
-    multiplayerRoundClientProvider,
-    playerIDProvider,
-  ],
-);
+@Riverpod(dependencies: [MultiplayerRoundClient, CurrentPlayerID])
+RoundInfo roundInfo(RoundInfoRef ref) => ref
+    .watch(multiplayerRoundClientProvider(ref.watch(currentPlayerIDProvider)));
 
-final roundClientProvider = Provider<MultiplayerRoundClient>(
-  (ref) => ref.watch(
-      multiplayerRoundClientProvider(ref.watch(playerIDProvider)).notifier),
-  dependencies: [
-    multiplayerRoundClientProvider,
-    playerIDProvider,
-  ],
-);
-
-final multiplayerRoundClientProvider =
-    StateNotifierProvider.family<MultiplayerRoundClient, RoundInfo, PlayerID>(
-  MultiplayerRoundClient.new,
-  dependencies: [
-    singleConfig,
-    multiplayerGameClientProvider,
-    roundService,
-    playerIDProvider,
-  ],
-  name: 'MultiplayerRoundClient',
-);
+@Riverpod(dependencies: [MultiplayerRoundClient, CurrentPlayerID])
+MultiplayerRoundClient roundClient(RoundInfoRef ref) =>
+    ref.watch(multiplayerRoundClientProvider(ref.watch(currentPlayerIDProvider))
+        .notifier);
 
 extension on GameClientInfo {
   RoundInfo get initial =>
-      RoundInfo(null, code: code ?? '', playerName: playerName ?? '');
+      RoundInfo(null, code: this.code ?? '', playerName: this.playerName ?? '');
 }
 
-class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
+@Riverpod(dependencies: [
+  SingleConfig,
+  MultiplayerGameClient,
+  roundService,
+  CurrentPlayerID,
+])
+class MultiplayerRoundClient extends _$MultiplayerRoundClient {
   @override
-  MultiplayerRoundClient(this.ref, this.multiplayerID)
-      : super(ref.watch(multiplayerGameClientProvider(multiplayerID)).initial) {
-    final service = ref.watch(roundService);
+  RoundInfo build(PlayerID multiplayerID) {
+    this.multiplayerID = multiplayerID;
+    final service = ref.watch(roundServiceProvider);
     if (state.code.isNotEmpty && state.code.length == 4) {
       connect(service);
     }
+    return ref.watch(multiplayerGameClientProvider(multiplayerID)).initial;
   }
-  final PlayerID multiplayerID;
-  final StateNotifierProviderRef ref;
+
+  @override
+  late PlayerID multiplayerID;
 
   void connect(RoundService service) {
     service.connect().map((conn) {
-      if (conn && mounted) {
+      if (conn) {
         state = state.copyWith(service: service);
         StreamSubscription<GameError>? error;
         StreamSubscription<GameState>? round;
@@ -79,9 +69,7 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
           round?.cancel();
         });
       } else {
-        if (mounted) {
-          state = state.copyWith(service: null);
-        }
+        state = state.copyWith(service: null);
       }
     }).toList();
   }

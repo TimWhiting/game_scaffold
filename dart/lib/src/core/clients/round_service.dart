@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
+
 import '../../../game_scaffold_dart.dart';
-import '../core.dart';
 
 /// A client for a particular game
-abstract class RoundService {
+abstract class RoundService extends Notifier {
   RoundService() : logger = Logger('RoundClient');
 
   final Logger logger;

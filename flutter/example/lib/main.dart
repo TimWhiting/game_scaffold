@@ -98,7 +98,6 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                 onPressed: () async {
                   gameClient.setGameConfig(const GameConfig(
                     adminID: '0',
-                    customNames: false,
                     gameType: 'tictactoe',
                     rounds: 2,
                     maxPlayers: 2,
