@@ -5,8 +5,11 @@ import 'dart:io';
 import 'package:characters/characters.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../core.dart';
+
+part 'game_state.g.dart';
 
 /// Gets the home path based on the operating system, should only be used in server contexts
 String get homeDir {
@@ -20,69 +23,39 @@ String get homeDir {
   return Platform.environment['HOME']!;
 }
 
-class BackendProviders {
-  BackendProviders._();
+@Riverpod(dependencies: [LobbyNotifier])
+GameInfo? playerLobby(PlayerLobbyRef ref, PlayerID player) {
+  final l = ref.watch(lobbyNotifierProvider);
+  final pls = l.players;
+  if (pls.any((p) => p.id == player)) {
+    return GameInfo(
+      config: l.config,
+      gameID: l.code,
+      status: l.gameStatus,
+      player: pls.firstWhere((p) => p.id == player).name,
+      creator: player == l.config.adminID,
+      players: pls.map((p) => p.name).toIList(),
+    );
+  }
+  return null;
+}
 
-  static final lobby = StateNotifierProvider<LobbyNotifier, Lobby>(
-    (ref) => LobbyNotifier(
-      Lobby(
+/// Provides the [GameErrorNotifier] to keep track of errors of a game
+@Riverpod(keepAlive: true)
+class ErrorNotifier extends _$ErrorNotifier with GameErrorNotifier {
+  @override
+  GameError? build() => null;
+}
+
+@Riverpod(keepAlive: true)
+class LobbyNotifier extends _$LobbyNotifier {
+  @override
+  Lobby build() => Lobby(
         gameStatus: GameStatus.lobby,
         code: '',
         players: <Player>{}.lock,
         config: const GameConfig(gameType: ''),
-      ),
-    ),
-    name: 'BackendLobby',
-  );
-
-  static final playerLobby = Provider.family<GameInfo?, PlayerID>(
-    (ref, player) {
-      final l = ref.watch(lobby);
-      final pls = l.players;
-      if (pls.any((p) => p.id == player)) {
-        return GameInfo(
-          config: l.config,
-          gameID: l.code,
-          status: l.gameStatus,
-          player: pls.firstWhere((p) => p.id == player).name,
-          creator: player == l.config.adminID,
-          players: pls.map((p) => p.name).toIList(),
-        );
-      }
-      return null;
-    },
-    name: 'BackendPlayerLobby',
-    dependencies: [lobby],
-  );
-
-  /// Provides the [GameStateNotifier] based on the [GameConfig] from [lobby]'s config
-  static final state = StateNotifierProvider<GameStateNotifier, GameState>(
-    (ref) {
-      final l = ref.watch(lobby);
-      return GameStateNotifier(
-        l.config,
-        l.code,
-        GameRegistry.initialState(
-          l.config,
-          l.players.toIList(),
-        ),
-        ref.read(error.notifier),
       );
-    },
-    name: 'BackendGameNotifier',
-    dependencies: [lobby, error],
-  );
-
-  /// Provides the [GameErrorNotifier] to keep track of errors of a game
-  static final error = StateProvider<GameError?>(
-    (ref) => null,
-    name: 'BackendGameError',
-    dependencies: const [],
-  );
-}
-
-class LobbyNotifier extends StateNotifier<Lobby> {
-  LobbyNotifier(Lobby lobby) : super(lobby);
 
   void addPlayer(Player player) {
     state = state.copyWith(players: state.players.add(player));
@@ -101,22 +74,25 @@ class LobbyNotifier extends StateNotifier<Lobby> {
   }
 }
 
-/// A [StateNotifier] that handles events for a particular game, delegating to the game's implementation for non generic events
-class GameStateNotifier extends StateNotifier<GameState> {
-  GameStateNotifier(
-      this.gameConfig, this.code, GameState initialState, this.errorNotifier)
-      : _gameStateLogger = Logger('GameStateNotifier $code'),
-        super(initialState);
+/// Provides the [GameStateNotifier] based on the [GameConfig] from [lobby]'s config
+/// A [Notifier] that handles events for a particular game, delegating to the game's implementation for non generic events
+@Riverpod(keepAlive: true, dependencies: [LobbyNotifier, ErrorNotifier])
+class GameStateNotifier extends _$GameStateNotifier {
+  @override
+  GameState build() {
+    final l = ref.watch(lobbyNotifierProvider);
+    code = l.code;
+    gameConfig = l.config;
+    return GameRegistry.initialState(l.config, l.players.toIList());
+  }
 
-  final StateController<GameError?> errorNotifier;
-
-  final Logger _gameStateLogger;
+  late final Logger _gameStateLogger = Logger('GameStateNotifier $code');
 
   /// The [code] of this game
-  final GameCode code;
+  late GameCode code;
 
   /// The [GameConfig] that was used to create this [GameStateNotifier]
-  final GameConfig gameConfig;
+  late GameConfig gameConfig;
 
   /// Returns the [state] of the game
   ///
@@ -137,7 +113,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       final game = gameState;
       final e = event.event;
       if (e is GenericEvent) {
-        state = e.maybeWhen(readyNextRound: (e,_) {
+        state = e.maybeWhen(readyNextRound: (e, _) {
           final newState = game.updateGeneric((g) => g.addReadyPlayer(e));
           if (newState.readyPlayers.length == game.players.length) {
             return game
@@ -147,7 +123,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
           }
           return newState;
         }, orElse: () {
-          errorNotifier.state = GameError(
+          ref.read(errorNotifierProvider.notifier).error = GameError(
             message: 'General Event not implemented yet $event',
             player: 'Player',
           );
@@ -156,7 +132,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
       } else {
         final next = game.next(event, gameConfig);
         if (next.error != null) {
-          errorNotifier.state = next.error;
+          ref.read(errorNotifierProvider.notifier).error = next.error;
           error = true;
         }
         state = next.state;

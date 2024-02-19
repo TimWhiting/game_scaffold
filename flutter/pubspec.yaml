@@ -25,4 +25,16 @@ dev_dependencies:
     sdk: flutter
   game_scaffold_games: ^0.5.0-dev
 
+dependency_overrides:
+  riverpod_analyzer_utils:
+    git:
+      url: https://github.com/rrousselgit/riverpod
+      path: packages/riverpod_analyzer_utils #^3.0.0-dev.11
+      ref: dev
+  riverpod:
+    git:
+      url: https://github.com/rrousselgit/riverpod
+      path: packages/riverpod #^3.0.0-dev.11
+      ref: dev
+
 flutter: null

@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_cast, avoid_annotating_with_dynamic
 
+import 'package:fpdart/fpdart.dart';
 import 'package:riverpod/riverpod.dart';
 
 import 'core.dart';
@@ -33,31 +34,16 @@ class PlayerEvent<E extends Event> {
       PlayerEvent(playerId: playerId, event: event as X);
 }
 
-class MaybeError<T> {
-  MaybeError(this.$0, this.$1);
-  final T? $0;
-  final String? $1;
+typedef MaybeError<T> = Either<String, T>;
+
+extension ToMaybeError<T> on T {
+  MaybeError<T> error(String err) => Left(err);
+  MaybeError<T> get success => Right(this);
 }
 
 extension MaybeErrorX<T> on MaybeError<T> {
-  T get value => $0!;
-  String get error => $1!;
-  bool get hasError => $1 != null;
-  bool get hasValue => $0 != null;
-  X when<X>(
-          {required X Function(T) value, required X Function(String) error}) =>
-      hasError ? error($1!) : value($0 as T);
-  MaybeError<X> map<X>(X Function(T) v) =>
-      $0 != null ? MaybeError(v($0 as T), $1) : this as MaybeError<X>;
-  MaybeError<T> mapError(String Function(String) e) =>
-      $1 != null ? MaybeError($0, e($1!)) : this;
-  MaybeError<X> flatMap<X>(MaybeError<X> Function(T) map) =>
-      hasError ? this as MaybeError<X> : map(value);
-}
-
-extension ToMaybeError<T> on T {
-  MaybeError<T> error(String err) => MaybeError(this, err);
-  MaybeError<T> get success => MaybeError(this, null);
+  bool get hasError => isLeft();
+  bool get hasValue => isRight();
 }
 
 extension PlayerX<E extends Event> on E {
@@ -121,9 +107,7 @@ class GameError {
 }
 
 /// A error notifier that lets the client clear the error
-class GameErrorNotifier extends StateNotifier<GameError?> {
-  GameErrorNotifier() : super(null);
-
+mixin GameErrorNotifier on $Notifier<GameError?> {
   /// Sets the error [state]
   set error(GameError? err) {
     state = err;
@@ -211,16 +195,15 @@ class GameState<E extends Event, T extends Game> {
   NextStateOrError next(PlayerEvent event, GameConfig config) {
     final next =
         GameRegistry.functions(config.gameType).next(this, config, event);
-    if (next.hasError) {
-      return NextStateOrError(
-          state: this,
-          error: GameError(message: next.error, player: event.playerId));
-    }
-    return NextStateOrError(
-        state: copyWith(game: next.value.game as T?)
-            .updateStatus()
-            .updateGeneric((g) => g.copyWith(time: DateTime.now())),
-        error: null);
+    return next.match(
+      (err) => NextStateOrError(
+          state: this, error: GameError(message: err, player: event.playerId)),
+      (val) => NextStateOrError(
+          state: copyWith(game: val.game as T?)
+              .updateStatus()
+              .updateGeneric((g) => g.copyWith(time: DateTime.now())),
+          error: null),
+    );
   }
 
   NextStateOrError nextRound(GameConfig config) {

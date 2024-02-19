@@ -19,6 +19,16 @@ dev_dependencies:
   test: ^1.25.2
 
 dependency_overrides:
+  riverpod_analyzer_utils:
+    git:
+      url: https://github.com/rrousselgit/riverpod
+      path: packages/riverpod_analyzer_utils #^3.0.0-dev.11
+      ref: dev
+  riverpod:
+    git:
+      url: https://github.com/rrousselgit/riverpod
+      path: packages/riverpod #^3.0.0-dev.11
+      ref: dev
   game_scaffold_dart:
     path: ../
   game_scaffold_games:

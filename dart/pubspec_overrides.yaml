@@ -1,0 +1,12 @@
+# melos_managed_dependency_overrides: riverpod_analyzer_utils,riverpod
+dependency_overrides:
+  riverpod_analyzer_utils:
+    git:
+      url: https://github.com/rrousselgit/riverpod
+      ref: dev
+      path: packages/riverpod_analyzer_utils
+  riverpod:
+    git:
+      url: https://github.com/rrousselgit/riverpod
+      ref: dev
+      path: packages/riverpod
