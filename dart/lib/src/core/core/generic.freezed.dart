@@ -155,8 +155,8 @@ class _$GenericGameImpl extends _GenericGame {
       {required this.time,
       required this.status,
       required this.round,
-      this.players = ilistempty,
-      this.readyPlayers = ilistempty})
+      this.players = const IListConst([]),
+      this.readyPlayers = const IListConst([])})
       : super._();
 
   factory _$GenericGameImpl.fromJson(Map<String, dynamic> json) =>
@@ -1219,7 +1219,7 @@ class _$LobbyImpl implements _Lobby {
       {required this.code,
       required this.config,
       required this.gameStatus,
-      this.players = isetempty});
+      this.players = const ISetConst({})});
 
   factory _$LobbyImpl.fromJson(Map<String, dynamic> json) =>
       _$$LobbyImplFromJson(json);

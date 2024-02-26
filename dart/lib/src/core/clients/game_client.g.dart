@@ -176,7 +176,7 @@ final class GameInfoClientProvider extends $FunctionalProvider<
   }
 }
 
-String _$gameInfoClientHash() => r'37c0cb92f007c171b38ff6eeffdf5620f2e66068';
+String _$gameInfoClientHash() => r'cf72ff10524b0b0dbc22a90db3f07d3683ebeaf2';
 
 @ProviderFor(MultiplayerGameClient)
 const multiplayerGameClientProvider = MultiplayerGameClientFamily._();
@@ -363,6 +363,5 @@ abstract class _$MultiplayerGameClient extends $Notifier<GameClientInfo> {
       );
 }
 
-const $kDebugMode = bool.fromEnvironment('dart.vm.product');
 // ignore_for_file: type=lint
 // ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main

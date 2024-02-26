@@ -11,23 +11,22 @@ Future<void> main(List<String> arguments) async {
   final rootProvider = ProviderContainer();
   final p1Ref = ProviderContainer(
     parent: rootProvider,
-    overrides: [playerIDProvider.overrideWithValue('0')],
+    overrides: [currentPlayerIDProvider.overrideWithValue('0')],
   );
   final p2Ref = ProviderContainer(
     parent: rootProvider,
-    overrides: [playerIDProvider.overrideWithValue('1')],
+    overrides: [currentPlayerIDProvider.overrideWithValue('1')],
   );
-  rootProvider.read(serviceType.notifier).state = OnDeviceService;
+  rootProvider.read(serviceType.notifier).type = OnDeviceService;
   const config = GameConfig(
     adminID: '0',
-    customNames: false,
     gameType: 'tictactoe',
     rounds: 2,
     maxPlayers: 2,
   );
 
-  final p1Client = p1Ref.listen(gameClientProvider, (_, __) {});
-  final p2Client = p2Ref.listen(gameClientProvider, (_, __) {});
+  final p1Client = p1Ref.listen(gameInfoClientProvider, (_, __) {});
+  final p2Client = p2Ref.listen(gameInfoClientProvider, (_, __) {});
 
   p1Client.read().setGameConfig(config);
   await Future.delayed(const Duration(seconds: 1));

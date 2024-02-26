@@ -8,5 +8,5 @@ library game_core;
 export 'package:riverpod/riverpod.dart';
 
 export 'core/backend.dart';
-export 'core/client.dart';
+export 'core/client.dart' hide $kDebugMode;
 export 'core/core.dart';

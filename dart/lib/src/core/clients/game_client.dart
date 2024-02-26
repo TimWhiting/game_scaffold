@@ -11,7 +11,7 @@ GameClientInfo gameInfo(GameInfoRef ref) => ref
     .watch(multiplayerGameClientProvider(ref.watch(currentPlayerIDProvider)));
 
 @Riverpod(dependencies: [MultiplayerGameClient, CurrentPlayerID])
-MultiplayerGameClient gameInfoClient(GameInfoRef ref) => ref.watch(
+MultiplayerGameClient gameInfoClient(GameInfoClientRef ref) => ref.watch(
     multiplayerGameClientProvider(ref.watch(currentPlayerIDProvider)).notifier);
 
 @Riverpod(dependencies: [SingleConfig, gameService])

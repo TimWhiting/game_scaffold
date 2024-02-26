@@ -5,5 +5,6 @@
   ],
   "dart.vmAdditionalArgs": [
     "--enable-experiment=records"
-  ]
+  ],
+  "dart.flutterSdkPath": "~/fvm/versions/stable"
 }

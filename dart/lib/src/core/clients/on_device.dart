@@ -25,16 +25,16 @@ class OnDeviceRoundService extends RoundService {
     logger.info('Watching backend $playerID $code');
     final backendReader = OnDeviceGameService.games[code]?.container;
     if (backendReader == null ||
-        backendReader.read(BackendProviders.lobby).gameStatus ==
+        backendReader.read(lobbyNotifierProvider).gameStatus ==
             GameStatus.lobby) {
       return;
     }
     final ss = StreamController<GameState>();
     backendReader.listen<GameState>(
-      BackendProviders.state,
+      gameStateNotifierProvider,
       (prev, curr) => ss.add(curr),
     );
-    yield backendReader.read(BackendProviders.state);
+    yield backendReader.read(gameStateNotifierProvider);
     yield* ss.stream;
     await ss.close();
   }
@@ -47,7 +47,7 @@ class OnDeviceRoundService extends RoundService {
     // we cannot edit the backend provider synchronously
     await Future.delayed(const Duration(microseconds: 1));
     final result = backendReader
-        .read(BackendProviders.state.notifier)
+        .read(gameStateNotifierProvider.notifier)
         .handleEvent(event.player(playerID));
     return result;
   }
@@ -60,7 +60,7 @@ class OnDeviceRoundService extends RoundService {
 
     backendReader?.listen<GameError?>(
       fireImmediately: true,
-      BackendProviders.error,
+      errorNotifierProvider,
       (prev, curr) async {
         if (curr != null && curr.player == playerID) {
           ss.add(curr);
@@ -109,7 +109,7 @@ class OnDeviceRoundService extends RoundService {
 /// An on device implementation of [GameService]
 ///
 /// Warning implementation not complete or tested yet
-@riverpod
+@Riverpod(dependencies: [])
 class OnDeviceGameService extends _$OnDeviceGameService with GameService {
   @override
   void build() {}

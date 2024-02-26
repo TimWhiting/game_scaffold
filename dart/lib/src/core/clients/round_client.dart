@@ -13,7 +13,7 @@ RoundInfo roundInfo(RoundInfoRef ref) => ref
     .watch(multiplayerRoundClientProvider(ref.watch(currentPlayerIDProvider)));
 
 @Riverpod(dependencies: [MultiplayerRoundClient, CurrentPlayerID])
-MultiplayerRoundClient roundClient(RoundInfoRef ref) =>
+MultiplayerRoundClient roundClient(RoundClientRef ref) =>
     ref.watch(multiplayerRoundClientProvider(ref.watch(currentPlayerIDProvider))
         .notifier);
 
@@ -32,11 +32,12 @@ class MultiplayerRoundClient extends _$MultiplayerRoundClient {
   @override
   RoundInfo build(PlayerID multiplayerID) {
     this.multiplayerID = multiplayerID;
-    final service = ref.watch(roundServiceProvider);
+    final service = ref.watch(roundServiceProvider(multiplayerID));
+    state = ref.watch(multiplayerGameClientProvider(multiplayerID)).initial;
     if (state.code.isNotEmpty && state.code.length == 4) {
       connect(service);
     }
-    return ref.watch(multiplayerGameClientProvider(multiplayerID)).initial;
+    return state;
   }
 
   @override

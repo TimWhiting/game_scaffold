@@ -12,11 +12,11 @@ _$GenericGameImpl _$$GenericGameImplFromJson(Map<String, dynamic> json) =>
       status: $enumDecode(_$GameStatusEnumMap, json['status']),
       round: json['round'] as int,
       players: json['players'] == null
-          ? ilistempty
+          ? const IListConst([])
           : IList<Player>.fromJson(json['players'],
               (value) => Player.fromJson(value as Map<String, dynamic>)),
       readyPlayers: json['readyPlayers'] == null
-          ? ilistempty
+          ? const IListConst([])
           : IList<String>.fromJson(
               json['readyPlayers'], (value) => value as String),
     );
@@ -114,7 +114,7 @@ _$LobbyImpl _$$LobbyImplFromJson(Map<String, dynamic> json) => _$LobbyImpl(
       config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
       gameStatus: $enumDecode(_$GameStatusEnumMap, json['gameStatus']),
       players: json['players'] == null
-          ? isetempty
+          ? const ISetConst({})
           : ISet<Player>.fromJson(json['players'],
               (value) => Player.fromJson(value as Map<String, dynamic>)),
     );

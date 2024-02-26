@@ -39,7 +39,6 @@ final class RoundInfoProvider
             RoundInfoProvider.$allTransitiveDependencies7,
             RoundInfoProvider.$allTransitiveDependencies8,
             RoundInfoProvider.$allTransitiveDependencies9,
-            RoundInfoProvider.$allTransitiveDependencies10,
           },
         );
 
@@ -62,8 +61,6 @@ final class RoundInfoProvider
       MultiplayerRoundClientProvider.$allTransitiveDependencies7;
   static const $allTransitiveDependencies9 =
       MultiplayerRoundClientProvider.$allTransitiveDependencies8;
-  static const $allTransitiveDependencies10 =
-      MultiplayerRoundClientProvider.$allTransitiveDependencies9;
 
   final RoundInfo Function(
     RoundInfoRef ref,
@@ -137,7 +134,6 @@ final class RoundClientProvider extends $FunctionalProvider<
             RoundClientProvider.$allTransitiveDependencies7,
             RoundClientProvider.$allTransitiveDependencies8,
             RoundClientProvider.$allTransitiveDependencies9,
-            RoundClientProvider.$allTransitiveDependencies10,
           },
         );
 
@@ -160,8 +156,6 @@ final class RoundClientProvider extends $FunctionalProvider<
       MultiplayerRoundClientProvider.$allTransitiveDependencies7;
   static const $allTransitiveDependencies9 =
       MultiplayerRoundClientProvider.$allTransitiveDependencies8;
-  static const $allTransitiveDependencies10 =
-      MultiplayerRoundClientProvider.$allTransitiveDependencies9;
 
   final MultiplayerRoundClient Function(
     RoundClientRef ref,
@@ -200,7 +194,7 @@ final class RoundClientProvider extends $FunctionalProvider<
   }
 }
 
-String _$roundClientHash() => r'2a72de5b4f9441a416d72fa2a6400a825d2b31d1';
+String _$roundClientHash() => r'92ecb73c57292fff15129f482f45624f5e7dcb30';
 
 @ProviderFor(MultiplayerRoundClient)
 const multiplayerRoundClientProvider = MultiplayerRoundClientFamily._();
@@ -234,9 +228,7 @@ final class MultiplayerRoundClientProvider
       MultiplayerGameClientProvider.$allTransitiveDependencies5;
   static const $allTransitiveDependencies7 = roundServiceProvider;
   static const $allTransitiveDependencies8 =
-      RoundServiceProvider.$allTransitiveDependencies1;
-  static const $allTransitiveDependencies9 =
-      RoundServiceProvider.$allTransitiveDependencies2;
+      RoundServiceProvider.$allTransitiveDependencies0;
 
   final MultiplayerRoundClient Function()? _createCb;
 
@@ -307,7 +299,7 @@ final class MultiplayerRoundClientProvider
 }
 
 String _$multiplayerRoundClientHash() =>
-    r'7d7c24df3cb09fb25856350fa20c5dee63c9645f';
+    r'15e5a836df8b34b755a213806dd7b3431add69b3';
 
 final class MultiplayerRoundClientFamily extends Family {
   const MultiplayerRoundClientFamily._()
@@ -329,7 +321,6 @@ final class MultiplayerRoundClientFamily extends Family {
             MultiplayerRoundClientProvider.$allTransitiveDependencies6,
             MultiplayerRoundClientProvider.$allTransitiveDependencies7,
             MultiplayerRoundClientProvider.$allTransitiveDependencies8,
-            MultiplayerRoundClientProvider.$allTransitiveDependencies9,
           },
           isAutoDispose: true,
         );
@@ -401,6 +392,5 @@ abstract class _$MultiplayerRoundClient extends $Notifier<RoundInfo> {
       );
 }
 
-const $kDebugMode = bool.fromEnvironment('dart.vm.product');
 // ignore_for_file: type=lint
 // ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main

@@ -5,8 +5,6 @@ import 'core.dart';
 part 'generic.freezed.dart';
 part 'generic.g.dart';
 
-const ilistempty = IListConst([]);
-
 /// Represents a generic game, with common fields that can be manipulated by
 /// common [GenericEvent]s
 ///
@@ -21,8 +19,8 @@ class GenericGame with _$GenericGame {
     required DateTime time,
     required GameStatus status,
     required int round,
-    @Default(ilistempty) IList<Player> players,
-    @Default(ilistempty) IList<PlayerID> readyPlayers,
+    @Default(IListConst([])) IList<Player> players,
+    @Default(IListConst([])) IList<PlayerID> readyPlayers,
   }) = _GenericGame;
   const GenericGame._();
 
@@ -183,15 +181,13 @@ class GameInfo with _$GameInfo {
       _$GameInfoFromJson(map);
 }
 
-const isetempty = ISetConst({});
-
 @freezed
 class Lobby with _$Lobby {
   const factory Lobby({
     required GameCode code,
     required GameConfig config,
     required GameStatus gameStatus,
-    @Default(isetempty) ISet<Player> players,
+    @Default(ISetConst({})) ISet<Player> players,
   }) = _Lobby;
   factory Lobby.fromJson(Map<String, dynamic> map) => _$LobbyFromJson(map);
 }

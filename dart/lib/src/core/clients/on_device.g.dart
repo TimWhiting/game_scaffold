@@ -80,7 +80,7 @@ final class OnDeviceRoundServiceProvider
 }
 
 String _$onDeviceRoundServiceHash() =>
-    r'4653f4b1cbaec1fc1f562b999c914fdc23b5e458';
+    r'3bc292969ba93b3de021492207064890584f3315';
 
 abstract class _$OnDeviceRoundService extends $Notifier<void> {
   void build();
@@ -111,8 +111,8 @@ final class OnDeviceGameServiceProvider
           argument: null,
           name: r'onDeviceGameServiceProvider',
           isAutoDispose: true,
-          dependencies: null,
-          allTransitiveDependencies: null,
+          dependencies: const <ProviderOrFamily>[],
+          allTransitiveDependencies: const <ProviderOrFamily>[],
         );
 
   final OnDeviceGameService Function()? _createCb;
@@ -159,7 +159,7 @@ final class OnDeviceGameServiceProvider
 }
 
 String _$onDeviceGameServiceHash() =>
-    r'e997b64c05d966da6d55fdf104efcf4d736fe1b5';
+    r'dd70df380ccef45c147b74a663e57ecc2e063f81';
 
 abstract class _$OnDeviceGameService extends $Notifier<void> {
   void build();
@@ -168,6 +168,5 @@ abstract class _$OnDeviceGameService extends $Notifier<void> {
   void runBuild() => build();
 }
 
-const $kDebugMode = bool.fromEnvironment('dart.vm.product');
 // ignore_for_file: type=lint
 // ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main

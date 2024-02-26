@@ -47,6 +47,13 @@ class ErrorNotifier extends _$ErrorNotifier with GameErrorNotifier {
   GameError? build() => null;
 }
 
+class BackendProviders {
+  static LobbyNotifierProvider lobby = lobbyNotifierProvider;
+  static ErrorNotifierProvider error = errorNotifierProvider;
+  static GameStateNotifierProvider state = gameStateNotifierProvider;
+  static PlayerLobbyProvider playerLobby(PlayerID p) => playerLobbyProvider(p);
+}
+
 @Riverpod(keepAlive: true)
 class LobbyNotifier extends _$LobbyNotifier {
   @override

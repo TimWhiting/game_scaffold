@@ -1,12 +1,33 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../game_scaffold_dart.dart';
+
+part 'round_service.g.dart';
+
+@Riverpod(dependencies: [OnDeviceRoundService])
+T roundService<T extends RoundService>(
+  RoundServiceRef ref,
+  PlayerID multiplayerID,
+) {
+  switch (ref.watch(serviceType)) {
+    case OnDeviceService:
+      return ref.watch(
+          onDeviceRoundServiceProvider.notifier as ProviderListenable<T>);
+    default:
+      throw UnsupportedError('Unsupported service type');
+  }
+}
 
 /// A client for a particular game
 abstract class RoundService extends Notifier {
   RoundService() : logger = Logger('RoundClient');
+  final services = <Type, RoundService>{};
+  void registerService<T extends RoundService>(T service) {
+    services[T] = service;
+  }
 
   final Logger logger;
 

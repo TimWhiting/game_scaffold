@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:riverpod/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../core.dart';
@@ -17,8 +16,8 @@ final defaultAddress = Uri.parse('http://localhost:0');
 /// Provides the player id for a particular section of the widget tree
 ///
 /// This is so that a multiplayer game within the same app can be played
-@riverpod
-class CurrentPlayerID extends Notifier {
+@Riverpod(dependencies: [])
+class CurrentPlayerID extends _$CurrentPlayerID {
   @override
   PlayerID build() => '';
   set currentPlayer(PlayerID id) {
@@ -55,10 +54,15 @@ class ServiceTypeNotifier extends _$ServiceTypeNotifier {
   ServiceType get type => state;
 }
 
+const serviceType = serviceTypeNotifierProvider;
+
 @riverpod
 class AllServiceTypes extends _$AllServiceTypes {
   @override
   List<ServiceType> build() => [OnDeviceService];
+  void addServiceType(String type) {
+    state = [...state, type];
+  }
 }
 
 /// Provides the [GameService] for each service id
@@ -79,22 +83,12 @@ GameService gameService(GameServiceRef ref) => ref
     .watch(gameServiceFamilyProvider(ref.watch(serviceTypeNotifierProvider)));
 
 /// Provides a [RoundService] for the service with the specified id
-@Riverpod(dependencies: [OnDeviceRoundService, CurrentPlayerID])
-RoundService roundServiceFamily(
-    RoundServiceFamilyRef ref, ServiceType serviceType) {
-  switch (serviceType) {
-    case OnDeviceService:
-      return ref.watch(onDeviceRoundServiceProvider.notifier);
-    default:
-      throw UnsupportedError('Unsupported service type');
-  }
-}
 
-@Riverpod(
-  dependencies: [ServiceTypeNotifier, roundServiceFamily, CurrentPlayerID],
-)
-RoundService roundService(RoundServiceRef ref) => ref
-    .watch(roundServiceFamilyProvider(ref.watch(serviceTypeNotifierProvider)));
+// @Riverpod(
+//   dependencies: [ServiceTypeNotifier, CurrentPlayerID],
+// )
+// RoundService roundService(RoundServiceRef ref) => ref
+//     .watch(roundServiceFamilyProvider(ref.watch(serviceTypeNotifierProvider)));
 
 /// Provides the player's name
 @Riverpod(dependencies: [gameInfo])
