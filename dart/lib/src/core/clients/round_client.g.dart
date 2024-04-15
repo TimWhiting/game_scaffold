@@ -11,8 +11,7 @@ typedef RoundInfoRef = Ref<RoundInfo>;
 @ProviderFor(roundInfo)
 const roundInfoProvider = RoundInfoProvider._();
 
-final class RoundInfoProvider
-    extends $FunctionalProvider<RoundInfo, RoundInfo, RoundInfoRef>
+final class RoundInfoProvider extends $FunctionalProvider<RoundInfo, RoundInfo>
     with $Provider<RoundInfo, RoundInfoRef> {
   const RoundInfoProvider._(
       {RoundInfo Function(
@@ -79,8 +78,8 @@ final class RoundInfoProvider
 
   @$internal
   @override
-  $ProviderElement<RoundInfo> $createElement(ProviderContainer container) =>
-      $ProviderElement(this, container);
+  $ProviderElement<RoundInfo> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(this, pointer);
 
   @override
   RoundInfoProvider $copyWithCreate(
@@ -105,10 +104,9 @@ typedef RoundClientRef = Ref<MultiplayerRoundClient>;
 @ProviderFor(roundClient)
 const roundClientProvider = RoundClientProvider._();
 
-final class RoundClientProvider extends $FunctionalProvider<
-    MultiplayerRoundClient,
-    MultiplayerRoundClient,
-    RoundClientRef> with $Provider<MultiplayerRoundClient, RoundClientRef> {
+final class RoundClientProvider
+    extends $FunctionalProvider<MultiplayerRoundClient, MultiplayerRoundClient>
+    with $Provider<MultiplayerRoundClient, RoundClientRef> {
   const RoundClientProvider._(
       {MultiplayerRoundClient Function(
         RoundClientRef ref,
@@ -175,8 +173,8 @@ final class RoundClientProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<MultiplayerRoundClient> $createElement(
-          ProviderContainer container) =>
-      $ProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $ProviderElement(this, pointer);
 
   @override
   RoundClientProvider $copyWithCreate(
@@ -283,8 +281,8 @@ final class MultiplayerRoundClientProvider
   @$internal
   @override
   $NotifierProviderElement<MultiplayerRoundClient, RoundInfo> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 
   @override
   bool operator ==(Object other) {
@@ -344,14 +342,14 @@ final class MultiplayerRoundClientFamily extends Family {
   ) {
     return $FamilyOverride(
       from: this,
-      createElement: (container, provider) {
-        provider as MultiplayerRoundClientProvider;
+      createElement: (pointer) {
+        final provider = pointer.origin as MultiplayerRoundClientProvider;
 
         final argument = provider.argument as PlayerID;
 
         return provider
             .$copyWithCreate(() => create(argument))
-            .$createElement(container);
+            .$createElement(pointer);
       },
     );
   }
@@ -364,22 +362,21 @@ final class MultiplayerRoundClientFamily extends Family {
   ) {
     return $FamilyOverride(
       from: this,
-      createElement: (container, provider) {
-        provider as MultiplayerRoundClientProvider;
+      createElement: (pointer) {
+        final provider = pointer.origin as MultiplayerRoundClientProvider;
 
         final argument = provider.argument as PlayerID;
 
         return provider
             .$copyWithBuild((ref, notifier) => build(ref, notifier, argument))
-            .$createElement(container);
+            .$createElement(pointer);
       },
     );
   }
 }
 
 abstract class _$MultiplayerRoundClient extends $Notifier<RoundInfo> {
-  late final _$args =
-      (ref as $NotifierProviderElement).origin.argument as PlayerID;
+  late final _$args = ref.$arg as PlayerID;
   PlayerID get multiplayerID => _$args;
 
   RoundInfo build(
@@ -393,4 +390,4 @@ abstract class _$MultiplayerRoundClient extends $Notifier<RoundInfo> {
 }
 
 // ignore_for_file: type=lint
-// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main
+// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main, invalid_use_of_internal_member

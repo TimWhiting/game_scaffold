@@ -12,7 +12,7 @@ typedef GameInfoRef = Ref<GameClientInfo>;
 const gameInfoProvider = GameInfoProvider._();
 
 final class GameInfoProvider
-    extends $FunctionalProvider<GameClientInfo, GameClientInfo, GameInfoRef>
+    extends $FunctionalProvider<GameClientInfo, GameClientInfo>
     with $Provider<GameClientInfo, GameInfoRef> {
   const GameInfoProvider._(
       {GameClientInfo Function(
@@ -70,9 +70,8 @@ final class GameInfoProvider
 
   @$internal
   @override
-  $ProviderElement<GameClientInfo> $createElement(
-          ProviderContainer container) =>
-      $ProviderElement(this, container);
+  $ProviderElement<GameClientInfo> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(this, pointer);
 
   @override
   GameInfoProvider $copyWithCreate(
@@ -97,8 +96,8 @@ typedef GameInfoClientRef = Ref<MultiplayerGameClient>;
 @ProviderFor(gameInfoClient)
 const gameInfoClientProvider = GameInfoClientProvider._();
 
-final class GameInfoClientProvider extends $FunctionalProvider<
-        MultiplayerGameClient, MultiplayerGameClient, GameInfoClientRef>
+final class GameInfoClientProvider
+    extends $FunctionalProvider<MultiplayerGameClient, MultiplayerGameClient>
     with $Provider<MultiplayerGameClient, GameInfoClientRef> {
   const GameInfoClientProvider._(
       {MultiplayerGameClient Function(
@@ -157,8 +156,8 @@ final class GameInfoClientProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<MultiplayerGameClient> $createElement(
-          ProviderContainer container) =>
-      $ProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $ProviderElement(this, pointer);
 
   @override
   GameInfoClientProvider $copyWithCreate(
@@ -260,8 +259,8 @@ final class MultiplayerGameClientProvider
   @$internal
   @override
   $NotifierProviderElement<MultiplayerGameClient, GameClientInfo>
-      $createElement(ProviderContainer container) =>
-          $NotifierProviderElement(this, container);
+      $createElement($ProviderPointer pointer) =>
+          $NotifierProviderElement(this, pointer);
 
   @override
   bool operator ==(Object other) {
@@ -315,14 +314,14 @@ final class MultiplayerGameClientFamily extends Family {
   ) {
     return $FamilyOverride(
       from: this,
-      createElement: (container, provider) {
-        provider as MultiplayerGameClientProvider;
+      createElement: (pointer) {
+        final provider = pointer.origin as MultiplayerGameClientProvider;
 
         final argument = provider.argument as PlayerID;
 
         return provider
             .$copyWithCreate(() => create(argument))
-            .$createElement(container);
+            .$createElement(pointer);
       },
     );
   }
@@ -335,22 +334,21 @@ final class MultiplayerGameClientFamily extends Family {
   ) {
     return $FamilyOverride(
       from: this,
-      createElement: (container, provider) {
-        provider as MultiplayerGameClientProvider;
+      createElement: (pointer) {
+        final provider = pointer.origin as MultiplayerGameClientProvider;
 
         final argument = provider.argument as PlayerID;
 
         return provider
             .$copyWithBuild((ref, notifier) => build(ref, notifier, argument))
-            .$createElement(container);
+            .$createElement(pointer);
       },
     );
   }
 }
 
 abstract class _$MultiplayerGameClient extends $Notifier<GameClientInfo> {
-  late final _$args =
-      (ref as $NotifierProviderElement).origin.argument as PlayerID;
+  late final _$args = ref.$arg as PlayerID;
   PlayerID get multiplayerID => _$args;
 
   GameClientInfo build(
@@ -364,4 +362,4 @@ abstract class _$MultiplayerGameClient extends $Notifier<GameClientInfo> {
 }
 
 // ignore_for_file: type=lint
-// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main
+// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main, invalid_use_of_internal_member

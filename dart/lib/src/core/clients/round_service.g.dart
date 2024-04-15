@@ -12,8 +12,7 @@ typedef RoundServiceRef<T extends RoundService> = Ref<T>;
 const roundServiceProvider = RoundServiceFamily._();
 
 final class RoundServiceProvider<T extends RoundService>
-    extends $FunctionalProvider<T, T, RoundServiceRef<T>>
-    with $Provider<T, RoundServiceRef<T>> {
+    extends $FunctionalProvider<T, T> with $Provider<T, RoundServiceRef<T>> {
   const RoundServiceProvider._(
       {required RoundServiceFamily super.from,
       required PlayerID super.argument,
@@ -70,8 +69,8 @@ final class RoundServiceProvider<T extends RoundService>
 
   @$internal
   @override
-  $ProviderElement<T> $createElement(ProviderContainer container) =>
-      $ProviderElement(this, container);
+  $ProviderElement<T> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(this, pointer);
 
   @override
   RoundServiceProvider<T> $copyWithCreate(
@@ -146,18 +145,18 @@ final class RoundServiceFamily extends Family {
   ) {
     return $FamilyOverride(
       from: this,
-      createElement: (container, provider) {
-        provider as RoundServiceProvider;
+      createElement: (pointer) {
+        final provider = pointer.origin as RoundServiceProvider;
 
         return provider._copyWithCreate(<T extends RoundService>(
           ref,
           PlayerID multiplayerID,
         ) {
           return create(ref, multiplayerID);
-        }).$createElement(container);
+        }).$createElement(pointer);
       },
     );
   }
 }
 // ignore_for_file: type=lint
-// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main
+// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main, invalid_use_of_internal_member

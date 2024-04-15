@@ -71,8 +71,8 @@ final class CurrentPlayerIDProvider
   @$internal
   @override
   $NotifierProviderElement<CurrentPlayerID, PlayerID> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$currentPlayerIDHash() => r'597f7300b4d7a61d54b9402f89197fe13815ea06';
@@ -143,8 +143,8 @@ final class SingleConfigProvider
   @$internal
   @override
   $NotifierProviderElement<SingleConfig, GameConfig> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$singleConfigHash() => r'fffebbee33fbe905bb94346006f0b985b60938f3';
@@ -214,8 +214,8 @@ final class RemoteUriProvider extends $NotifierProvider<RemoteUri, Uri> {
   @$internal
   @override
   $NotifierProviderElement<RemoteUri, Uri> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$remoteUriHash() => r'951e5d8f0aaefcc3517e18fbf6f765b7edd41cef';
@@ -245,7 +245,7 @@ final class ServiceTypeNotifierProvider
           from: null,
           argument: null,
           name: r'serviceTypeNotifierProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           allTransitiveDependencies: null,
         );
@@ -289,12 +289,12 @@ final class ServiceTypeNotifierProvider
   @$internal
   @override
   $NotifierProviderElement<ServiceTypeNotifier, ServiceType> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$serviceTypeNotifierHash() =>
-    r'619c868c0e433c23476f107ea0f83d0d35073185';
+    r'a8dfc68364ec98cc75f7e8cbf75c677c137f655a';
 
 abstract class _$ServiceTypeNotifier extends $Notifier<ServiceType> {
   ServiceType build();
@@ -359,8 +359,8 @@ final class AllServiceTypesProvider
   @$internal
   @override
   $NotifierProviderElement<AllServiceTypes, List<ServiceType>> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$allServiceTypesHash() => r'4ddecf25240c31a26585b40d17686f379d2aefd7';
@@ -381,7 +381,7 @@ const gameServiceFamilyProvider = GameServiceFamilyFamily._();
 
 /// Provides the [GameService] for each service id
 final class GameServiceFamilyProvider
-    extends $FunctionalProvider<GameService, GameService, GameServiceFamilyRef>
+    extends $FunctionalProvider<GameService, GameService>
     with $Provider<GameService, GameServiceFamilyRef> {
   /// Provides the [GameService] for each service id
   const GameServiceFamilyProvider._(
@@ -427,8 +427,8 @@ final class GameServiceFamilyProvider
 
   @$internal
   @override
-  $ProviderElement<GameService> $createElement(ProviderContainer container) =>
-      $ProviderElement(this, container);
+  $ProviderElement<GameService> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(this, pointer);
 
   @override
   GameServiceFamilyProvider $copyWithCreate(
@@ -506,14 +506,14 @@ final class GameServiceFamilyFamily extends Family {
   ) {
     return $FamilyOverride(
       from: this,
-      createElement: (container, provider) {
-        provider as GameServiceFamilyProvider;
+      createElement: (pointer) {
+        final provider = pointer.origin as GameServiceFamilyProvider;
 
         final argument = provider.argument as ServiceType;
 
         return provider
             .$copyWithCreate((ref) => create(ref, argument))
-            .$createElement(container);
+            .$createElement(pointer);
       },
     );
   }
@@ -525,7 +525,7 @@ typedef GameServiceRef = Ref<GameService>;
 const gameServiceProvider = GameServiceProvider._();
 
 final class GameServiceProvider
-    extends $FunctionalProvider<GameService, GameService, GameServiceRef>
+    extends $FunctionalProvider<GameService, GameService>
     with $Provider<GameService, GameServiceRef> {
   const GameServiceProvider._(
       {GameService Function(
@@ -573,8 +573,8 @@ final class GameServiceProvider
 
   @$internal
   @override
-  $ProviderElement<GameService> $createElement(ProviderContainer container) =>
-      $ProviderElement(this, container);
+  $ProviderElement<GameService> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(this, pointer);
 
   @override
   GameServiceProvider $copyWithCreate(
@@ -621,7 +621,7 @@ const playerNameProvider = PlayerNameProvider._();
 //     .watch(roundServiceFamilyProvider(ref.watch(serviceTypeNotifierProvider)));
 /// Provides the player's name
 final class PlayerNameProvider
-    extends $FunctionalProvider<PlayerName, PlayerName, PlayerNameRef>
+    extends $FunctionalProvider<PlayerName, PlayerName>
     with $Provider<PlayerName, PlayerNameRef> {
   /// Provides a [RoundService] for the service with the specified id
 // @Riverpod(
@@ -686,8 +686,8 @@ final class PlayerNameProvider
 
   @$internal
   @override
-  $ProviderElement<PlayerName> $createElement(ProviderContainer container) =>
-      $ProviderElement(this, container);
+  $ProviderElement<PlayerName> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(this, pointer);
 
   @override
   PlayerNameProvider $copyWithCreate(
@@ -715,8 +715,7 @@ typedef CodeRef = Ref<GameCode>;
 const codeProvider = CodeProvider._();
 
 /// Provides the game code for each client id
-final class CodeProvider
-    extends $FunctionalProvider<GameCode, GameCode, CodeRef>
+final class CodeProvider extends $FunctionalProvider<GameCode, GameCode>
     with $Provider<GameCode, CodeRef> {
   /// Provides the game code for each client id
   const CodeProvider._(
@@ -775,8 +774,8 @@ final class CodeProvider
 
   @$internal
   @override
-  $ProviderElement<GameCode> $createElement(ProviderContainer container) =>
-      $ProviderElement(this, container);
+  $ProviderElement<GameCode> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(this, pointer);
 
   @override
   CodeProvider $copyWithCreate(
@@ -807,8 +806,7 @@ const configProvider = ConfigProvider._();
 
 /// Provides the way to configure the game for starting
 //  dependencies: [gameInfoProvider],
-final class ConfigProvider
-    extends $FunctionalProvider<GameConfig, GameConfig, ConfigRef>
+final class ConfigProvider extends $FunctionalProvider<GameConfig, GameConfig>
     with $Provider<GameConfig, ConfigRef> {
   /// Provides the way to configure the game for starting
 //  dependencies: [gameInfoProvider],
@@ -868,8 +866,8 @@ final class ConfigProvider
 
   @$internal
   @override
-  $ProviderElement<GameConfig> $createElement(ProviderContainer container) =>
-      $ProviderElement(this, container);
+  $ProviderElement<GameConfig> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(this, pointer);
 
   @override
   ConfigProvider $copyWithCreate(
@@ -890,4 +888,4 @@ final class ConfigProvider
 String _$configHash() => r'f39a9896a974b0076dddb457df6d8c34fb4092bd';
 
 // ignore_for_file: type=lint
-// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main
+// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main, invalid_use_of_internal_member

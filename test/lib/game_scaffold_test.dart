@@ -53,7 +53,7 @@ void testGame<E extends Event, T extends Game>(
       ref[s]!.dispose();
     }
     tester.dispose();
-    await root.read(gameService).deleteGame(players.first.id, code);
+    await root.read(gameServiceProvider).deleteGame(players.first.id, code);
   });
 }
 

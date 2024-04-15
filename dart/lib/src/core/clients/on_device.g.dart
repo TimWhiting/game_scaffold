@@ -75,8 +75,8 @@ final class OnDeviceRoundServiceProvider
   @$internal
   @override
   $NotifierProviderElement<OnDeviceRoundService, void> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$onDeviceRoundServiceHash() =>
@@ -154,8 +154,8 @@ final class OnDeviceGameServiceProvider
   @$internal
   @override
   $NotifierProviderElement<OnDeviceGameService, void> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$onDeviceGameServiceHash() =>
@@ -169,4 +169,4 @@ abstract class _$OnDeviceGameService extends $Notifier<void> {
 }
 
 // ignore_for_file: type=lint
-// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main
+// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main, invalid_use_of_internal_member

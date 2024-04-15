@@ -12,7 +12,7 @@ typedef PlayerLobbyRef = Ref<GameInfo?>;
 const playerLobbyProvider = PlayerLobbyFamily._();
 
 final class PlayerLobbyProvider
-    extends $FunctionalProvider<GameInfo?, GameInfo?, PlayerLobbyRef>
+    extends $FunctionalProvider<GameInfo?, GameInfo?>
     with $Provider<GameInfo?, PlayerLobbyRef> {
   const PlayerLobbyProvider._(
       {required PlayerLobbyFamily super.from,
@@ -56,8 +56,8 @@ final class PlayerLobbyProvider
 
   @$internal
   @override
-  $ProviderElement<GameInfo?> $createElement(ProviderContainer container) =>
-      $ProviderElement(this, container);
+  $ProviderElement<GameInfo?> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(this, pointer);
 
   @override
   PlayerLobbyProvider $copyWithCreate(
@@ -129,14 +129,14 @@ final class PlayerLobbyFamily extends Family {
   ) {
     return $FamilyOverride(
       from: this,
-      createElement: (container, provider) {
-        provider as PlayerLobbyProvider;
+      createElement: (pointer) {
+        final provider = pointer.origin as PlayerLobbyProvider;
 
         final argument = provider.argument as PlayerID;
 
         return provider
             .$copyWithCreate((ref) => create(ref, argument))
-            .$createElement(container);
+            .$createElement(pointer);
       },
     );
   }
@@ -201,8 +201,8 @@ final class ErrorNotifierProvider
   @$internal
   @override
   $NotifierProviderElement<ErrorNotifier, GameError?> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$errorNotifierHash() => r'aef8368d4e53c48941e3f0507733379596eca531';
@@ -270,8 +270,8 @@ final class LobbyNotifierProvider
   @$internal
   @override
   $NotifierProviderElement<LobbyNotifier, Lobby> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$lobbyNotifierHash() => r'4815ef4cad20824ed0dbbb6a941f778cdfa53bee';
@@ -354,8 +354,8 @@ final class GameStateNotifierProvider
   @$internal
   @override
   $NotifierProviderElement<GameStateNotifier, GameState> $createElement(
-          ProviderContainer container) =>
-      $NotifierProviderElement(this, container);
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
 }
 
 String _$gameStateNotifierHash() => r'e38831345a42338812befafaac8a139e6107b7a8';
@@ -368,4 +368,4 @@ abstract class _$GameStateNotifier extends $Notifier<GameState> {
 }
 
 // ignore_for_file: type=lint
-// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main
+// ignore_for_file: deprecated_member_use_from_same_package, unreachable_from_main, invalid_use_of_internal_member
