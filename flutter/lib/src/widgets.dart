@@ -125,14 +125,14 @@ class MultiPlayerWidget extends HookConsumerWidget {
                             value: ref.watch(serviceType),
                             items: [
                               for (final backendType
-                                  in ref.watch(allServiceTypes))
+                                  in ref.watch(allServiceTypesProvider))
                                 DropdownMenuItem<ServiceType>(
                                   value: backendType,
                                   child: Text(backendType),
                                 ),
                             ],
                             onChanged: (v) =>
-                                ref.read(serviceType.notifier).state = v!,
+                                ref.read(serviceType.notifier).type = v!,
                           ),
                           const SizedBox(width: 20),
                           if (additionalOptions != null) ...[
@@ -200,7 +200,7 @@ class GameNavigator extends HookConsumerWidget {
     final pages = {'disconnected': disconnected};
 
     navigationLogger.info(
-        'PlayerID: ${ref.read(playerIDProvider)} gameStatus: $gameStatus');
+        'PlayerID: ${ref.read(currentPlayerIDProvider)} gameStatus: $gameStatus');
 
     if (conn) {
       pages['connected'] = connected;
@@ -237,7 +237,7 @@ class GameNavigator extends HookConsumerWidget {
           route.didPop(null);
           return true;
         } else if (status == 'connected') {
-          ref.read(gameService).disconnect();
+          ref.read(gameServiceProvider).disconnect();
           return true;
         }
         return false;

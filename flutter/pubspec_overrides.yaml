@@ -1,4 +1,4 @@
-# melos_managed_dependency_overrides: game_scaffold_dart,game_scaffold_games,riverpod_analyzer_utils,riverpod
+# melos_managed_dependency_overrides: game_scaffold_dart,game_scaffold_games,riverpod_analyzer_utils,riverpod,riverpod_annotation,riverpod_generator
 dependency_overrides:
   game_scaffold_dart:
     path: ../dart
@@ -14,3 +14,13 @@ dependency_overrides:
       url: https://github.com/rrousselgit/riverpod
       ref: dev
       path: packages/riverpod_analyzer_utils
+  riverpod_annotation:
+    git:
+      url: https://github.com/rrousselgit/riverpod
+      ref: dev
+      path: packages/riverpod_annotation
+  riverpod_generator:
+    git:
+      url: https://github.com/rrousselgit/riverpod
+      ref: dev
+      path: packages/riverpod_generator

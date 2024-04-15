@@ -23,7 +23,7 @@ void main() {
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
   runApp(ProviderScope(
     overrides: [
-      serviceType.overrideWith((ref) => OnDeviceService),
+      serviceType.overrideWith(ServiceTypeNotifier.new),
     ],
     child: const TicTacToeApp(),
   ));
@@ -49,14 +49,20 @@ class TicTacToeWidget extends StatelessWidget {
         body: Row(children: [
           Expanded(
             child: ProviderScope(
-              overrides: [playerIDProvider.overrideWithValue('0')],
+              overrides: [
+                currentPlayerIDProvider
+                    .overrideWithBuild((ref, notifier) => '0')
+              ],
               child: const Player(),
             ),
           ),
           Container(width: 10, color: Colors.black),
           Expanded(
             child: ProviderScope(
-              overrides: [playerIDProvider.overrideWithValue('1')],
+              overrides: [
+                currentPlayerIDProvider
+                    .overrideWithBuild((ref, notifier) => '1')
+              ],
               child: const Player(),
             ),
           ),
@@ -80,10 +86,10 @@ class CreateOrJoinWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final playerID = ref.watch(playerIDProvider);
+    final playerID = ref.watch(currentPlayerIDProvider);
     // This is needed to make sure that the gameClient provider is connected prior to creating the game, otherwise
     final allGames = ref.watch(gameInfoProvider).games;
-    final gameClient = ref.watch(gameClientProvider);
+    final gameClient = ref.watch(gameInfoClientProvider);
 
     return Scaffold(
       body: Center(
@@ -170,7 +176,7 @@ class GameWidget extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(roundInfoProvider);
     final gameStatus = gameState.status;
-    final playerID = ref.watch(playerIDProvider);
+    final playerID = ref.watch(currentPlayerIDProvider);
     ref.listen<String?>(roundInfoProvider.select((i) => i.error),
         (prevError, error) {
       if (error != prevError && error != null && error.isNotEmpty) {

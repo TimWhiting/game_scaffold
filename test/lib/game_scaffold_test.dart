@@ -24,12 +24,13 @@ void testGame<E extends Event, T extends Game>(
     final g = <PlayerID, ProviderSubscription<MultiplayerGameClient>>{};
     final r = <PlayerID, ProviderSubscription<MultiplayerRoundClient>>{};
 
-    root.read(serviceType.notifier).state = OnDeviceService;
+    root.read(serviceTypeNotifierProvider.notifier).type = OnDeviceService;
 
     for (final p in players) {
       ref[p.id] = ProviderContainer(
-          parent: root, overrides: [playerIDProvider.overrideWithValue(p.id)]);
-      g[p.id] = ref[p.id]!.listen(gameClientProvider, (previous, next) {});
+          parent: root,
+          overrides: [currentPlayerIDProvider.overrideWithValue(p.id)]);
+      g[p.id] = ref[p.id]!.listen(gameInfoClientProvider, (previous, next) {});
     }
     g[players.first.id]!.read().setGameConfig(config);
     await Future.delayed(Duration.zero);

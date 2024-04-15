@@ -65,6 +65,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  build:
+    dependency: transitive
+    description:
+      name: build
+      sha256: "80184af8b6cb3e5c1c4ec6d8544d27711700bc3e6d2efad04238c7b5290889f0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.1"
+  build_config:
+    dependency: transitive
+    description:
+      name: build_config
+      sha256: bf80fcfb46a29945b423bd9aad884590fb1dc69b330a4d4700cac476af1708d1
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   characters:
     dependency: transitive
     description:
@@ -580,13 +596,23 @@ packages:
     source: git
     version: "1.0.0-dev.1"
   riverpod_annotation:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: riverpod_annotation
-      sha256: "79452c7ba2e8f48c7309c73be5aaa101eec5fe7948dfd26659b883fb276858b4"
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/riverpod_annotation"
+      ref: dev
+      resolved-ref: "36f3e20689a9531f9724564fbedf42068d92c271"
+      url: "https://github.com/rrousselgit/riverpod"
+    source: git
     version: "3.0.0-dev.3"
+  riverpod_generator:
+    dependency: "direct overridden"
+    description:
+      path: "packages/riverpod_generator"
+      ref: dev
+      resolved-ref: "36f3e20689a9531f9724564fbedf42068d92c271"
+      url: "https://github.com/rrousselgit/riverpod"
+    source: git
+    version: "3.0.0-dev.11"
   rxdart:
     dependency: transitive
     description:
@@ -640,6 +666,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.3"
+  source_gen:
+    dependency: transitive
+    description:
+      name: source_gen
+      sha256: "14658ba5f669685cd3d63701d01b31ea748310f7ab854e471962670abcf57832"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0"
   source_map_stack_trace:
     dependency: transitive
     description:

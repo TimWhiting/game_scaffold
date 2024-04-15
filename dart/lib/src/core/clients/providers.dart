@@ -43,10 +43,13 @@ class RemoteUri extends _$RemoteUri {
 
 /// The provider that controls the [RoundService] and [GameService]
 /// implementation to use
-@riverpod
+@Riverpod(keepAlive: true)
 class ServiceTypeNotifier extends _$ServiceTypeNotifier {
+  ServiceTypeNotifier({this.defaultType = OnDeviceService});
+  final ServiceType defaultType;
+
   @override
-  ServiceType build() => OnDeviceService;
+  ServiceType build() => defaultType;
   set type(ServiceType t) {
     state = t;
   }

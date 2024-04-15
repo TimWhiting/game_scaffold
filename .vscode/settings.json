@@ -1,5 +1,5 @@
 {
-  "dart.runPubGetOnPubspecChanges": false,
+  "dart.runPubGetOnPubspecChanges": "prompt",
   "dart.buildRunnerAdditionalArgs": [
     "--enable-experiments=records"
   ],
