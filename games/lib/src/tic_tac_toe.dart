@@ -1,3 +1,5 @@
+// ignore: unnecessary_import
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
 
@@ -8,7 +10,8 @@ void registerTicTacToe() {
   GameRegistry.register(TTTFunctions());
 }
 
-class TTTFunctions extends GameFunctions<TicTacToeGameEvent, TicTacToeGame> {
+final class TTTFunctions
+    extends GameFunctions<TicTacToeGameEvent, TicTacToeGame> {
   @override
   TicTacToeGame fromJson(JsonMap json) => TicTacToeGame.fromJson(json);
   @override
@@ -29,34 +32,34 @@ class TTTFunctions extends GameFunctions<TicTacToeGameEvent, TicTacToeGame> {
         rewards: <double>[0, 0],
       );
   @override
-  NextState<TicTacToeGameEvent, TicTacToeGame> next(GameState state,
-      GameConfig config, PlayerEvent<TicTacToeGameEvent> event) {
-    final st = state.cast<TicTacToeGameEvent, TicTacToeGame>();
-    final game = st.game;
+  NextState<TicTacToeGameEvent, TicTacToeGame> next(
+      GameState<TicTacToeGameEvent, TicTacToeGame> state,
+      GameConfig config,
+      PlayerEvent<TicTacToeGameEvent> event) {
+    final game = state.game;
     if (event.event.player != game.currentPlayer) {
-      return st.error('Not your turn');
+      return state.error('Not your turn');
     }
     if (!game.canMove(event.event.player, event.event.location)) {
-      return st.error('Invalid move');
+      return state.error('Invalid move');
     }
     final n = game._next(event.event, config);
     final winner = n.winner;
     if (winner != null) {
-      return st
+      return state
           .updateGame(n.copyWith(currentPlayer: game.currentPlayer))
           .addReward([winner.p1Points, winner.p2Points]).success;
     }
-    return st.updateGame(n).success;
+    return state.updateGame(n).success;
   }
 
   @override
-  TTTGameState nextRound(GameState state, GameConfig config) {
-    final st = state.cast<TicTacToeGameEvent, TicTacToeGame>();
-    return st.updateGame(TicTacToeGame(
-      board: <int?>[for (var i = 0; i < 9; i++) null].lock,
-      currentPlayer: st.game.currentPlayer == 0 ? 1 : 0,
-    ));
-  }
+  TTTGameState nextRound(GameState<TicTacToeGameEvent, TicTacToeGame> state,
+          GameConfig config) =>
+      state.updateGame(TicTacToeGame(
+        board: <int?>[for (var i = 0; i < 9; i++) null].lock,
+        currentPlayer: state.game.currentPlayer == 0 ? 1 : 0,
+      ));
 }
 
 @freezed

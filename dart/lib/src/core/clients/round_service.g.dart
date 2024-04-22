@@ -111,7 +111,7 @@ final class RoundServiceProvider<T extends RoundService>
   }
 }
 
-String _$roundServiceHash() => r'76934f2048c020118a55e7de5c3ff50bdd6f8680';
+String _$roundServiceHash() => r'1703436a0acb445b90bcb259d6776960d1eb0389';
 
 final class RoundServiceFamily extends Family {
   const RoundServiceFamily._()

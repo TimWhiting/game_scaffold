@@ -80,7 +80,7 @@ final class OnDeviceRoundServiceProvider
 }
 
 String _$onDeviceRoundServiceHash() =>
-    r'3bc292969ba93b3de021492207064890584f3315';
+    r'f6bd75331bfa5d57057864c01f34355f532d7b79';
 
 abstract class _$OnDeviceRoundService extends $Notifier<void> {
   void build();
@@ -159,7 +159,7 @@ final class OnDeviceGameServiceProvider
 }
 
 String _$onDeviceGameServiceHash() =>
-    r'dd70df380ccef45c147b74a663e57ecc2e063f81';
+    r'a6fc21c27580cfe7f502432bd207d07e7ffbc4ee';
 
 abstract class _$OnDeviceGameService extends $Notifier<void> {
   void build();

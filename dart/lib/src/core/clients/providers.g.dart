@@ -75,7 +75,7 @@ final class CurrentPlayerIDProvider
       $NotifierProviderElement(this, pointer);
 }
 
-String _$currentPlayerIDHash() => r'597f7300b4d7a61d54b9402f89197fe13815ea06';
+String _$currentPlayerIDHash() => r'd977507c603c4117051676002e56f246ed09f3f5';
 
 abstract class _$CurrentPlayerID extends $Notifier<PlayerID> {
   PlayerID build();
@@ -147,7 +147,7 @@ final class SingleConfigProvider
       $NotifierProviderElement(this, pointer);
 }
 
-String _$singleConfigHash() => r'fffebbee33fbe905bb94346006f0b985b60938f3';
+String _$singleConfigHash() => r'c928ce28814bfdda25da8d5072f1ce172a72be01';
 
 abstract class _$SingleConfig extends $Notifier<GameConfig> {
   GameConfig build();
@@ -218,7 +218,7 @@ final class RemoteUriProvider extends $NotifierProvider<RemoteUri, Uri> {
       $NotifierProviderElement(this, pointer);
 }
 
-String _$remoteUriHash() => r'951e5d8f0aaefcc3517e18fbf6f765b7edd41cef';
+String _$remoteUriHash() => r'33d317b482e01ef30959abffb56ab83b8ccc6841';
 
 abstract class _$RemoteUri extends $Notifier<Uri> {
   Uri build();
@@ -294,7 +294,7 @@ final class ServiceTypeNotifierProvider
 }
 
 String _$serviceTypeNotifierHash() =>
-    r'a8dfc68364ec98cc75f7e8cbf75c677c137f655a';
+    r'655c27910408e3625510874386eba4336f478c19';
 
 abstract class _$ServiceTypeNotifier extends $Notifier<ServiceType> {
   ServiceType build();
@@ -363,7 +363,7 @@ final class AllServiceTypesProvider
       $NotifierProviderElement(this, pointer);
 }
 
-String _$allServiceTypesHash() => r'4ddecf25240c31a26585b40d17686f379d2aefd7';
+String _$allServiceTypesHash() => r'9082e93329a5ddf95d53c764da3967f8a11e2e6f';
 
 abstract class _$AllServiceTypes extends $Notifier<List<ServiceType>> {
   List<ServiceType> build();

@@ -122,7 +122,7 @@ class MultiPlayerWidget extends HookConsumerWidget {
                         children: [
                           const SizedBox(width: 20),
                           DropdownButton<ServiceType>(
-                            value: ref.watch(serviceType),
+                            value: ref.watch(serviceTypeProvider),
                             items: [
                               for (final backendType
                                   in ref.watch(allServiceTypesProvider))
@@ -131,8 +131,9 @@ class MultiPlayerWidget extends HookConsumerWidget {
                                   child: Text(backendType),
                                 ),
                             ],
-                            onChanged: (v) =>
-                                ref.read(serviceType.notifier).type = v!,
+                            onChanged: (v) => ref
+                                .read(serviceTypeProvider.notifier)
+                                .type = v!,
                           ),
                           const SizedBox(width: 20),
                           if (additionalOptions != null) ...[

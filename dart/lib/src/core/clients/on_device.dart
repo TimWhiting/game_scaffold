@@ -14,7 +14,7 @@ const OnDeviceService = 'on-device';
 ///
 /// Warning implementation not complete or tested yet
 @Riverpod(dependencies: [CurrentPlayerID])
-class OnDeviceRoundService extends RoundService {
+final class OnDeviceRoundService extends RoundService {
   @override
   void build() {}
   @override
@@ -23,18 +23,19 @@ class OnDeviceRoundService extends RoundService {
   @override
   Stream<GameState> gameStream(PlayerID playerID, GameCode code) async* {
     logger.info('Watching backend $playerID $code');
-    final backendReader = OnDeviceGameService.games[code]?.container;
-    if (backendReader == null ||
-        backendReader.read(lobbyNotifierProvider).gameStatus ==
-            GameStatus.lobby) {
+    final reader = backendReader(code);
+    if (reader == null ||
+        reader.read(BackendProviders.lobby).gameStatus == GameStatus.lobby) {
+      // The first read of the gameStateNotifier initializes with the currently connected players
+      // so we need to wait while we are still in the lobby
       return;
     }
     final ss = StreamController<GameState>();
-    backendReader.listen<GameState>(
-      gameStateNotifierProvider,
+    reader.listen<GameState>(
+      BackendProviders.state,
       (prev, curr) => ss.add(curr),
     );
-    yield backendReader.read(gameStateNotifierProvider);
+    yield reader.read(BackendProviders.state);
     yield* ss.stream;
     await ss.close();
   }
@@ -42,25 +43,30 @@ class OnDeviceRoundService extends RoundService {
   @override
   Future<bool> sendEvent<E extends Event>(
       PlayerID playerID, GameCode code, E event) async {
-    final backendReader = OnDeviceGameService.games[code]!.container;
+    final reader = backendReader(code);
+    if (reader == null) {
+      return false;
+    }
     // If the gameClient is initializing
     // we cannot edit the backend provider synchronously
     await Future.delayed(const Duration(microseconds: 1));
-    final result = backendReader
-        .read(gameStateNotifierProvider.notifier)
+    final result = reader
+        .read(BackendProviders.engine.notifier)
         .handleEvent(event.player(playerID));
     return result;
   }
 
   @override
   Stream<GameError> errorStream(PlayerID playerID, GameCode code) async* {
+    final reader = backendReader(code);
+    if (reader == null) {
+      return;
+    }
+
     final ss = StreamController<GameError>();
-
-    final backendReader = OnDeviceGameService.games[code]?.container;
-
-    backendReader?.listen<GameError?>(
+    reader.listen<GameError?>(
       fireImmediately: true,
-      errorNotifierProvider,
+      BackendProviders.error,
       (prev, curr) async {
         if (curr != null && curr.player == playerID) {
           ss.add(curr);
@@ -73,8 +79,11 @@ class OnDeviceRoundService extends RoundService {
 
   @override
   Future<bool> startGame(PlayerID playerID, GameCode code) async {
-    final backendReader = OnDeviceGameService.games[code]!.container.read;
-    final notifier = backendReader(BackendProviders.lobby.notifier);
+    final reader = backendReader(code);
+    if (reader == null) {
+      return false;
+    }
+    final notifier = reader.read(BackendProviders.lobby.notifier);
     await Future.delayed(const Duration(microseconds: 1));
     notifier.start();
     return true;
@@ -82,13 +91,13 @@ class OnDeviceRoundService extends RoundService {
 
   @override
   Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code) async* {
-    final backend = OnDeviceGameService.games[code]?.container;
-    final ss = StreamController<GameInfo>();
-    if (backend == null) {
+    final reader = backendReader(code);
+    if (reader == null) {
       return;
     }
+    final ss = StreamController<GameInfo>();
 
-    backend.listen<GameInfo?>(
+    reader.listen<GameInfo?>(
       BackendProviders.playerLobby(playerID),
       (prev, curr) async {
         // ignore: prefer_foreach
@@ -97,7 +106,7 @@ class OnDeviceRoundService extends RoundService {
         }
       },
     );
-    final curr = backend.read(BackendProviders.playerLobby(playerID));
+    final curr = reader.read(BackendProviders.playerLobby(playerID));
     if (curr != null) {
       yield curr;
     }
@@ -106,11 +115,14 @@ class OnDeviceRoundService extends RoundService {
   }
 }
 
+ProviderContainer? backendReader(GameCode code) =>
+    OnDeviceGameService.games[code]?.container;
+
 /// An on device implementation of [GameService]
 ///
 /// Warning implementation not complete or tested yet
 @Riverpod(dependencies: [])
-class OnDeviceGameService extends _$OnDeviceGameService with GameService {
+final class OnDeviceGameService extends _$OnDeviceGameService with GameService {
   @override
   void build() {}
   static final games = <GameCode, LocalGame>{};
@@ -119,11 +131,9 @@ class OnDeviceGameService extends _$OnDeviceGameService with GameService {
     final gameCode = generateGameID([]);
     final backendRead = ProviderContainer(parent: ref.container, overrides: []);
     final lobby = backendRead.read(BackendProviders.lobby.notifier);
-    // await Future.delayed(const Duration(microseconds: 1));
     lobby.setCode(gameCode);
     lobby.setConfig(config);
     games[gameCode] = LocalGame(gameCode, playerID, backendRead);
-
     return gameCode;
   }
 
@@ -140,14 +150,18 @@ class OnDeviceGameService extends _$OnDeviceGameService with GameService {
   @override
   Future<String?> joinGame(
       PlayerID playerID, GameCode code, PlayerName name) async {
-    final backendReader = OnDeviceGameService.games[code]!.container.read;
+    final reader = backendReader(code);
+    if (reader == null) {
+      return null;
+    }
 
-    final notifier = backendReader(BackendProviders.lobby.notifier);
+    final notifier = reader.read(BackendProviders.lobby.notifier);
+    // Await to ensure that the lobby is initialized
     await Future.delayed(const Duration(microseconds: 1));
     notifier.addPlayer(Player(playerID, name: name));
     await Future.delayed(const Duration(microseconds: 1));
 
-    final lobby = backendReader(BackendProviders.lobby);
+    final lobby = reader.read(BackendProviders.lobby);
     final config = lobby.config;
     final players = lobby.players;
     if (players.length == config.maxPlayers && config.autoStart) {
@@ -159,36 +173,25 @@ class OnDeviceGameService extends _$OnDeviceGameService with GameService {
 
   @override
   Future<IList<GameInfo>> getGames(PlayerID playerID) async {
-    final gms = games.values.where(
-      (g) => g.container
-          .read(BackendProviders.lobby)
-          .players
-          .any((p) => p.id == playerID),
-    );
+    final gms = games.values
+        .map((g) => (g.creator, g.container.read(BackendProviders.lobby)));
     return [
-      for (final g in gms)
-        GameInfo(
-          config: g.container.read(BackendProviders.lobby).config,
-          status: g.container.read(BackendProviders.lobby).gameStatus,
-          gameID: g.gameCode,
-          player: g.container
-              .read(BackendProviders.lobby)
-              .players
-              .firstWhere((p) => p.id == playerID)
-              .name,
-          players: g.container
-              .read(BackendProviders.lobby)
-              .players
-              .map((p) => p.name)
-              .toIList(),
-          creator: g.creator == playerID,
-        )
+      for (final (creatorId, g) in gms)
+        if (g.players.any((p) => p.id == playerID))
+          GameInfo(
+            config: g.config,
+            status: g.gameStatus,
+            gameID: g.code,
+            player: g.players.firstWhere((p) => p.id == playerID).name,
+            players: g.players.map((p) => p.name).toIList(),
+            creator: creatorId == playerID,
+          )
     ].lock;
   }
 }
 
 /// Keeps track of some metadata about a game for an [OnDeviceService] game
-class LocalGame {
+final class LocalGame {
   LocalGame(this.gameCode, this.creator, this.container);
   final GameCode gameCode;
   final PlayerID creator;

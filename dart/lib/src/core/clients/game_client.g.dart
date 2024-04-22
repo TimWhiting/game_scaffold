@@ -274,7 +274,7 @@ final class MultiplayerGameClientProvider
 }
 
 String _$multiplayerGameClientHash() =>
-    r'9fb62acb941531559353ffc2ec9e26df94f9f47c';
+    r'6071edc13daccb30f87990213727d6b46922f69a';
 
 final class MultiplayerGameClientFamily extends Family {
   const MultiplayerGameClientFamily._()

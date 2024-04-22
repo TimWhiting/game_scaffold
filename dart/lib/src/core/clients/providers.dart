@@ -17,7 +17,7 @@ final defaultAddress = Uri.parse('http://localhost:0');
 ///
 /// This is so that a multiplayer game within the same app can be played
 @Riverpod(dependencies: [])
-class CurrentPlayerID extends _$CurrentPlayerID {
+final class CurrentPlayerID extends _$CurrentPlayerID {
   @override
   PlayerID build() => '';
   set currentPlayer(PlayerID id) {
@@ -29,14 +29,14 @@ class CurrentPlayerID extends _$CurrentPlayerID {
 
 /// Allows one config to write all players' configs
 @riverpod
-class SingleConfig extends _$SingleConfig {
+final class SingleConfig extends _$SingleConfig {
   @override
   GameConfig build() => const GameConfig(gameType: '');
 }
 
 /// The provider that controls which game server address to connect to
 @riverpod
-class RemoteUri extends _$RemoteUri {
+final class RemoteUri extends _$RemoteUri {
   @override
   Uri build() => defaultAddress;
 }
@@ -44,7 +44,7 @@ class RemoteUri extends _$RemoteUri {
 /// The provider that controls the [RoundService] and [GameService]
 /// implementation to use
 @Riverpod(keepAlive: true)
-class ServiceTypeNotifier extends _$ServiceTypeNotifier {
+final class ServiceTypeNotifier extends _$ServiceTypeNotifier {
   ServiceTypeNotifier({this.defaultType = OnDeviceService});
   final ServiceType defaultType;
 
@@ -57,10 +57,10 @@ class ServiceTypeNotifier extends _$ServiceTypeNotifier {
   ServiceType get type => state;
 }
 
-const serviceType = serviceTypeNotifierProvider;
+const serviceTypeProvider = serviceTypeNotifierProvider;
 
 @riverpod
-class AllServiceTypes extends _$AllServiceTypes {
+final class AllServiceTypes extends _$AllServiceTypes {
   @override
   List<ServiceType> build() => [OnDeviceService];
   void addServiceType(String type) {

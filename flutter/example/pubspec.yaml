@@ -24,12 +24,13 @@ dev_dependencies:
   integration_test:
     sdk: flutter
 
-
 dependency_overrides:
   game_scaffold_dart:
     path: ../../dart
   game_scaffold_games:
     path: ../../games
+  game_scaffold:
+    path: ../
   riverpod_analyzer_utils:
     git:
       url: https://github.com/rrousselgit/riverpod
@@ -39,6 +40,16 @@ dependency_overrides:
     git:
       url: https://github.com/rrousselgit/riverpod
       path: packages/riverpod #^3.0.0-dev.11
+      ref: dev
+  flutter_riverpod:
+    git:
+      url: https://github.com/rrousselgit/riverpod
+      path: packages/flutter_riverpod #^3.0.0-dev.11
+      ref: dev
+  hooks_riverpod:
+    git:
+      url: https://github.com/rrousselgit/riverpod
+      path: packages/hooks_riverpod #^3.0.0-dev.11
       ref: dev
   riverpod_annotation:
     git:
@@ -50,7 +61,6 @@ dependency_overrides:
       url: https://github.com/rrousselgit/riverpod
       path: packages/riverpod_generator #^3.0.0-dev.11
       ref: dev
-
 
 flutter:
   uses-material-design: true

@@ -28,7 +28,7 @@ extension on GameClientInfo {
   roundService,
   CurrentPlayerID,
 ])
-class MultiplayerRoundClient extends _$MultiplayerRoundClient {
+final class MultiplayerRoundClient extends _$MultiplayerRoundClient {
   @override
   RoundInfo build(PlayerID multiplayerID) {
     this.multiplayerID = multiplayerID;
@@ -89,14 +89,21 @@ class MultiplayerRoundClient extends _$MultiplayerRoundClient {
         (c) => c.startGame(multiplayerID, state.code),
       );
 
-  Future<bool> sendEvent<E extends Event>(E e) =>
-      service((c) => c.sendEvent(multiplayerID, state.code, e));
+  Future<bool> sendEvent<E extends Event>(E e) {
+    clearError();
+    return service((c) => c.sendEvent(multiplayerID, state.code, e));
+  }
 
-  Future<bool> newRound() =>
-      service((c) => c.newRound(multiplayerID, state.code));
+  Future<bool> readyNextRound() {
+    clearError();
+    return service((c) => c.readyNextRound(multiplayerID, state.code));
+  }
 
   Future<bool> exitGame() {
+    clearError();
+    // Exit the round
     final result = service((c) => c.exitGame(multiplayerID, state.code));
+    // Ensure the game client also knows about the exit
     ref.read(multiplayerGameClientProvider(multiplayerID).notifier).exitGame();
     return result;
   }

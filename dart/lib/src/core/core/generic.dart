@@ -29,15 +29,6 @@ class GenericGame with _$GenericGame {
 
   /// Creates a default initialized game with [players]
   factory GenericGame.start(IList<Player> players) => GenericGame(
-        players: players.toIList(),
-        readyPlayers: <PlayerID>[].lock,
-        time: DateTime.now(),
-        status: GameStatus.started,
-        round: 0,
-      );
-
-  /// Creates a default initialized game where the first player is chosen at random
-  factory GenericGame.startRandom(IList<Player> players) => GenericGame(
         players: players,
         readyPlayers: <PlayerID>[].lock,
         time: DateTime.now(),
@@ -62,7 +53,7 @@ class GenericGame with _$GenericGame {
   /// Returns a copy of the [GenericGame] with the [status] updated to [status]
   GenericGame updateStatus(GameStatus status) => copyWith(status: status);
 
-  /// Shuffles the player list, and resets the [currentPlayerIndex] to the first
+  /// Shuffles the player list
   GenericGame shufflePlayers() => copyWith(players: players.shuffle());
 
   /// Clears the list of ready players
@@ -91,7 +82,7 @@ class GenericEvent extends Event with _$GenericEvent {
   }
 }
 
-class GameFunctionsGeneric extends GameFunctions {
+final class GameFunctionsGeneric extends GameFunctions {
   @override
   Game fromJson(JsonMap json) => throw UnimplementedError();
 
@@ -177,6 +168,7 @@ class GameInfo with _$GameInfo {
     required GameConfig config,
     required GameStatus status,
   }) = _GameInfo;
+
   factory GameInfo.fromJson(Map<String, dynamic> map) =>
       _$GameInfoFromJson(map);
 }

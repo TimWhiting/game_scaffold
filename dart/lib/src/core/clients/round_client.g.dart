@@ -297,7 +297,7 @@ final class MultiplayerRoundClientProvider
 }
 
 String _$multiplayerRoundClientHash() =>
-    r'15e5a836df8b34b755a213806dd7b3431add69b3';
+    r'86c28fcbe5dfd798d7ddbce06cdb612725529ff9';
 
 final class MultiplayerRoundClientFamily extends Family {
   const MultiplayerRoundClientFamily._()

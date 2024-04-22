@@ -12,7 +12,7 @@ part of 'tic_tac_toe.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 TicTacToeGameEvent _$TicTacToeGameEventFromJson(Map<String, dynamic> json) {
   return _TicTacToeGameEvent.fromJson(json);
@@ -68,22 +68,22 @@ class _$TicTacToeGameEventCopyWithImpl<$Res, $Val extends TicTacToeGameEvent>
 }
 
 /// @nodoc
-abstract class _$$_TicTacToeGameEventCopyWith<$Res>
+abstract class _$$TicTacToeGameEventImplCopyWith<$Res>
     implements $TicTacToeGameEventCopyWith<$Res> {
-  factory _$$_TicTacToeGameEventCopyWith(_$_TicTacToeGameEvent value,
-          $Res Function(_$_TicTacToeGameEvent) then) =
-      __$$_TicTacToeGameEventCopyWithImpl<$Res>;
+  factory _$$TicTacToeGameEventImplCopyWith(_$TicTacToeGameEventImpl value,
+          $Res Function(_$TicTacToeGameEventImpl) then) =
+      __$$TicTacToeGameEventImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int player, int location});
 }
 
 /// @nodoc
-class __$$_TicTacToeGameEventCopyWithImpl<$Res>
-    extends _$TicTacToeGameEventCopyWithImpl<$Res, _$_TicTacToeGameEvent>
-    implements _$$_TicTacToeGameEventCopyWith<$Res> {
-  __$$_TicTacToeGameEventCopyWithImpl(
-      _$_TicTacToeGameEvent _value, $Res Function(_$_TicTacToeGameEvent) _then)
+class __$$TicTacToeGameEventImplCopyWithImpl<$Res>
+    extends _$TicTacToeGameEventCopyWithImpl<$Res, _$TicTacToeGameEventImpl>
+    implements _$$TicTacToeGameEventImplCopyWith<$Res> {
+  __$$TicTacToeGameEventImplCopyWithImpl(_$TicTacToeGameEventImpl _value,
+      $Res Function(_$TicTacToeGameEventImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -92,7 +92,7 @@ class __$$_TicTacToeGameEventCopyWithImpl<$Res>
     Object? player = null,
     Object? location = null,
   }) {
-    return _then(_$_TicTacToeGameEvent(
+    return _then(_$TicTacToeGameEventImpl(
       player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
@@ -107,12 +107,12 @@ class __$$_TicTacToeGameEventCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_TicTacToeGameEvent extends _TicTacToeGameEvent {
-  const _$_TicTacToeGameEvent({required this.player, required this.location})
+class _$TicTacToeGameEventImpl extends _TicTacToeGameEvent {
+  const _$TicTacToeGameEventImpl({required this.player, required this.location})
       : super._();
 
-  factory _$_TicTacToeGameEvent.fromJson(Map<String, dynamic> json) =>
-      _$$_TicTacToeGameEventFromJson(json);
+  factory _$TicTacToeGameEventImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TicTacToeGameEventImplFromJson(json);
 
   @override
   final int player;
@@ -125,10 +125,10 @@ class _$_TicTacToeGameEvent extends _TicTacToeGameEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_TicTacToeGameEvent &&
+            other is _$TicTacToeGameEventImpl &&
             (identical(other.player, player) || other.player == player) &&
             (identical(other.location, location) ||
                 other.location == location));
@@ -141,13 +141,13 @@ class _$_TicTacToeGameEvent extends _TicTacToeGameEvent {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TicTacToeGameEventCopyWith<_$_TicTacToeGameEvent> get copyWith =>
-      __$$_TicTacToeGameEventCopyWithImpl<_$_TicTacToeGameEvent>(
+  _$$TicTacToeGameEventImplCopyWith<_$TicTacToeGameEventImpl> get copyWith =>
+      __$$TicTacToeGameEventImplCopyWithImpl<_$TicTacToeGameEventImpl>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_TicTacToeGameEventToJson(
+    return _$$TicTacToeGameEventImplToJson(
       this,
     );
   }
@@ -156,11 +156,11 @@ class _$_TicTacToeGameEvent extends _TicTacToeGameEvent {
 abstract class _TicTacToeGameEvent extends TicTacToeGameEvent {
   const factory _TicTacToeGameEvent(
       {required final int player,
-      required final int location}) = _$_TicTacToeGameEvent;
+      required final int location}) = _$TicTacToeGameEventImpl;
   const _TicTacToeGameEvent._() : super._();
 
   factory _TicTacToeGameEvent.fromJson(Map<String, dynamic> json) =
-      _$_TicTacToeGameEvent.fromJson;
+      _$TicTacToeGameEventImpl.fromJson;
 
   @override
   int get player;
@@ -168,7 +168,7 @@ abstract class _TicTacToeGameEvent extends TicTacToeGameEvent {
   int get location;
   @override
   @JsonKey(ignore: true)
-  _$$_TicTacToeGameEventCopyWith<_$_TicTacToeGameEvent> get copyWith =>
+  _$$TicTacToeGameEventImplCopyWith<_$TicTacToeGameEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -232,22 +232,22 @@ class _$TicTacToeGameCopyWithImpl<$Res, $Val extends TicTacToeGame>
 }
 
 /// @nodoc
-abstract class _$$_TicTacToeGameCopyWith<$Res>
+abstract class _$$TicTacToeGameImplCopyWith<$Res>
     implements $TicTacToeGameCopyWith<$Res> {
-  factory _$$_TicTacToeGameCopyWith(
-          _$_TicTacToeGame value, $Res Function(_$_TicTacToeGame) then) =
-      __$$_TicTacToeGameCopyWithImpl<$Res>;
+  factory _$$TicTacToeGameImplCopyWith(
+          _$TicTacToeGameImpl value, $Res Function(_$TicTacToeGameImpl) then) =
+      __$$TicTacToeGameImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({IList<int?> board, int currentPlayer, String type});
 }
 
 /// @nodoc
-class __$$_TicTacToeGameCopyWithImpl<$Res>
-    extends _$TicTacToeGameCopyWithImpl<$Res, _$_TicTacToeGame>
-    implements _$$_TicTacToeGameCopyWith<$Res> {
-  __$$_TicTacToeGameCopyWithImpl(
-      _$_TicTacToeGame _value, $Res Function(_$_TicTacToeGame) _then)
+class __$$TicTacToeGameImplCopyWithImpl<$Res>
+    extends _$TicTacToeGameCopyWithImpl<$Res, _$TicTacToeGameImpl>
+    implements _$$TicTacToeGameImplCopyWith<$Res> {
+  __$$TicTacToeGameImplCopyWithImpl(
+      _$TicTacToeGameImpl _value, $Res Function(_$TicTacToeGameImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -257,7 +257,7 @@ class __$$_TicTacToeGameCopyWithImpl<$Res>
     Object? currentPlayer = null,
     Object? type = null,
   }) {
-    return _then(_$_TicTacToeGame(
+    return _then(_$TicTacToeGameImpl(
       board: null == board
           ? _value.board
           : board // ignore: cast_nullable_to_non_nullable
@@ -276,15 +276,15 @@ class __$$_TicTacToeGameCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_TicTacToeGame extends _TicTacToeGame {
-  const _$_TicTacToeGame(
+class _$TicTacToeGameImpl extends _TicTacToeGame {
+  const _$TicTacToeGameImpl(
       {required this.board,
       required this.currentPlayer,
       this.type = 'tictactoe'})
       : super._();
 
-  factory _$_TicTacToeGame.fromJson(Map<String, dynamic> json) =>
-      _$$_TicTacToeGameFromJson(json);
+  factory _$TicTacToeGameImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TicTacToeGameImplFromJson(json);
 
   @override
   final IList<int?> board;
@@ -300,10 +300,10 @@ class _$_TicTacToeGame extends _TicTacToeGame {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_TicTacToeGame &&
+            other is _$TicTacToeGameImpl &&
             const DeepCollectionEquality().equals(other.board, board) &&
             (identical(other.currentPlayer, currentPlayer) ||
                 other.currentPlayer == currentPlayer) &&
@@ -318,12 +318,12 @@ class _$_TicTacToeGame extends _TicTacToeGame {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TicTacToeGameCopyWith<_$_TicTacToeGame> get copyWith =>
-      __$$_TicTacToeGameCopyWithImpl<_$_TicTacToeGame>(this, _$identity);
+  _$$TicTacToeGameImplCopyWith<_$TicTacToeGameImpl> get copyWith =>
+      __$$TicTacToeGameImplCopyWithImpl<_$TicTacToeGameImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_TicTacToeGameToJson(
+    return _$$TicTacToeGameImplToJson(
       this,
     );
   }
@@ -333,11 +333,11 @@ abstract class _TicTacToeGame extends TicTacToeGame {
   const factory _TicTacToeGame(
       {required final IList<int?> board,
       required final int currentPlayer,
-      final String type}) = _$_TicTacToeGame;
+      final String type}) = _$TicTacToeGameImpl;
   const _TicTacToeGame._() : super._();
 
   factory _TicTacToeGame.fromJson(Map<String, dynamic> json) =
-      _$_TicTacToeGame.fromJson;
+      _$TicTacToeGameImpl.fromJson;
 
   @override
   IList<int?> get board;
@@ -347,6 +347,6 @@ abstract class _TicTacToeGame extends TicTacToeGame {
   String get type;
   @override
   @JsonKey(ignore: true)
-  _$$_TicTacToeGameCopyWith<_$_TicTacToeGame> get copyWith =>
+  _$$TicTacToeGameImplCopyWith<_$TicTacToeGameImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

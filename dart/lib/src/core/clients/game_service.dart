@@ -34,6 +34,8 @@ mixin GameService {
     PlayerName name,
   );
 
+  StreamController<bool> sc = StreamController<bool>.broadcast();
+
   /// Disposes of the [GameService] (i.e. disconnects from the server)
   void dispose() {
     sc.close();
@@ -46,8 +48,6 @@ mixin GameService {
     yield true;
     yield* sc.stream;
   }
-
-  StreamController<bool> sc = StreamController<bool>.broadcast();
 
   /// Disconnect from the backend
   ///

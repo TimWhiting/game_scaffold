@@ -23,9 +23,9 @@ String get homeDir {
   return Platform.environment['HOME']!;
 }
 
-@Riverpod(dependencies: [LobbyNotifier])
-GameInfo? playerLobby(PlayerLobbyRef ref, PlayerID player) {
-  final l = ref.watch(lobbyNotifierProvider);
+@Riverpod(dependencies: [BackendLobby])
+GameInfo? backendPlayerLobby(BackendPlayerLobbyRef ref, PlayerID player) {
+  final l = ref.watch(BackendProviders.lobby);
   final pls = l.players;
   if (pls.any((p) => p.id == player)) {
     return GameInfo(
@@ -40,22 +40,34 @@ GameInfo? playerLobby(PlayerLobbyRef ref, PlayerID player) {
   return null;
 }
 
-/// Provides the [GameErrorNotifier] to keep track of errors of a game
-@Riverpod(keepAlive: true)
-class ErrorNotifier extends _$ErrorNotifier with GameErrorNotifier {
+/// Provides the [GameError] to keep track of errors of a game
+@Riverpod(keepAlive: true, dependencies: [BackendGameEngine])
+final class BackendError extends _$BackendError {
   @override
-  GameError? build() => null;
+  GameError? build() => ref.watch(BackendProviders.engine).error;
+  void clear() {
+    state = null;
+  }
 }
 
-class BackendProviders {
-  static LobbyNotifierProvider lobby = lobbyNotifierProvider;
-  static ErrorNotifierProvider error = errorNotifierProvider;
-  static GameStateNotifierProvider state = gameStateNotifierProvider;
-  static PlayerLobbyProvider playerLobby(PlayerID p) => playerLobbyProvider(p);
+/// Provides the [GameState] to keep track of the state of a game
+@Riverpod(keepAlive: true, dependencies: [BackendGameEngine])
+final class BackendGameState extends _$BackendGameState {
+  @override
+  GameState build() => ref.watch(BackendProviders.engine).state;
+}
+
+abstract final class BackendProviders {
+  static BackendLobbyProvider lobby = backendLobbyProvider;
+  static BackendErrorProvider error = backendErrorProvider;
+  static BackendGameEngineProvider engine = backendGameEngineProvider;
+  static BackendGameStateProvider state = backendGameStateProvider;
+  static BackendPlayerLobbyProvider playerLobby(PlayerID p) =>
+      backendPlayerLobbyProvider(p);
 }
 
 @Riverpod(keepAlive: true)
-class LobbyNotifier extends _$LobbyNotifier {
+final class BackendLobby extends _$BackendLobby {
   @override
   Lobby build() => Lobby(
         gameStatus: GameStatus.lobby,
@@ -81,71 +93,60 @@ class LobbyNotifier extends _$LobbyNotifier {
   }
 }
 
-/// Provides the [GameStateNotifier] based on the [GameConfig] from [lobby]'s config
+/// Provides the [BackendGameEngine] based on the [GameConfig] from [Lobby]'s config
 /// A [Notifier] that handles events for a particular game, delegating to the game's implementation for non generic events
-@Riverpod(keepAlive: true, dependencies: [LobbyNotifier, ErrorNotifier])
-class GameStateNotifier extends _$GameStateNotifier {
+@Riverpod(keepAlive: true, dependencies: [BackendLobby])
+final class BackendGameEngine extends _$BackendGameEngine {
   @override
-  GameState build() {
-    final l = ref.watch(lobbyNotifierProvider);
+  NextStateOrError build() {
+    final l = ref.watch(BackendProviders.lobby);
     code = l.code;
     gameConfig = l.config;
-    return GameRegistry.initialState(l.config, l.players.toIList());
+    return NextStateOrError(
+        state: GameRegistry.initialState(l.config, l.players.toIList()),
+        error: null);
   }
 
-  late final Logger _gameStateLogger = Logger('GameStateNotifier $code');
+  late final Logger _gameStateLogger = Logger('GameState $code');
 
   /// The [code] of this game
   late GameCode code;
 
-  /// The [GameConfig] that was used to create this [GameStateNotifier]
+  /// The [GameConfig] that was used to create this [GameEngine]
   late GameConfig gameConfig;
 
-  /// Returns the [state] of the game
+  /// Handles a [PlayerEvent] and updates the state accordingly
   ///
-  /// Remember to watch / listen to the state of the [GameStateNotifier]
-  /// rather than just watching changes in the notifier itself, otherwise changes
-  /// in the [gameState] will not trigger updates of the ui
-  GameState get gameState => state;
-
-  /// Handles a [GameEvent] and updates the state accordingly
-  ///
-  /// Delegates to the game implementation for a game specific event [E]
+  /// Delegates to the game implementation for a game specific event
   ///
   /// In case of a [GenericEvent] this handles the implementation of handling the event
   // ignore: type_annotate_public_apis
   bool handleEvent(PlayerEvent event) {
-    var error = false;
     try {
-      final game = gameState;
+      final game = state.state;
       final e = event.event;
       if (e is GenericEvent) {
-        state = e.maybeWhen(readyNextRound: (e, _) {
-          final newState = game.updateGeneric((g) => g.addReadyPlayer(e));
-          if (newState.readyPlayers.length == game.players.length) {
-            return game
-                .nextRound(gameConfig)
-                .state
-                .updateGeneric((g) => g.clearReadyPlayers());
-          }
-          return newState;
-        }, orElse: () {
-          ref.read(errorNotifierProvider.notifier).error = GameError(
-            message: 'General Event not implemented yet $event',
-            player: 'Player',
-          );
-          return game;
-        });
+        state = e.maybeWhen(
+            readyNextRound: (e, _) {
+              final newState = game.updateGeneric((g) => g.addReadyPlayer(e));
+              if (newState.readyPlayers.length == game.players.length) {
+                return game
+                    .nextRound(gameConfig)
+                    .map((g) => g.updateGeneric((g) => g.clearReadyPlayers()));
+              }
+              return NextStateOrError(state: newState, error: null);
+            },
+            orElse: () => NextStateOrError(
+                state: game,
+                error: GameError(
+                  message: 'General Event not implemented yet $event',
+                  player: 'Player',
+                )));
       } else {
-        final next = game.next(event, gameConfig);
-        if (next.error != null) {
-          ref.read(errorNotifierProvider.notifier).error = next.error;
-          error = true;
-        }
-        state = next.state;
+        state = game.next(event, gameConfig);
       }
 
-      if (error) {
+      if (state.error != null) {
         return false;
       }
       return true;

@@ -6,42 +6,42 @@ part of 'game_state.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-typedef PlayerLobbyRef = Ref<GameInfo?>;
+typedef BackendPlayerLobbyRef = Ref<GameInfo?>;
 
-@ProviderFor(playerLobby)
-const playerLobbyProvider = PlayerLobbyFamily._();
+@ProviderFor(backendPlayerLobby)
+const backendPlayerLobbyProvider = BackendPlayerLobbyFamily._();
 
-final class PlayerLobbyProvider
+final class BackendPlayerLobbyProvider
     extends $FunctionalProvider<GameInfo?, GameInfo?>
-    with $Provider<GameInfo?, PlayerLobbyRef> {
-  const PlayerLobbyProvider._(
-      {required PlayerLobbyFamily super.from,
+    with $Provider<GameInfo?, BackendPlayerLobbyRef> {
+  const BackendPlayerLobbyProvider._(
+      {required BackendPlayerLobbyFamily super.from,
       required PlayerID super.argument,
       GameInfo? Function(
-        PlayerLobbyRef ref,
+        BackendPlayerLobbyRef ref,
         PlayerID player,
       )? create})
       : _createCb = create,
         super(
-          name: r'playerLobbyProvider',
+          name: r'backendPlayerLobbyProvider',
           isAutoDispose: true,
           dependencies: null,
           allTransitiveDependencies: null,
         );
 
-  static const $allTransitiveDependencies0 = lobbyNotifierProvider;
+  static const $allTransitiveDependencies0 = backendLobbyProvider;
 
   final GameInfo? Function(
-    PlayerLobbyRef ref,
+    BackendPlayerLobbyRef ref,
     PlayerID player,
   )? _createCb;
 
   @override
-  String debugGetCreateSourceHash() => _$playerLobbyHash();
+  String debugGetCreateSourceHash() => _$backendPlayerLobbyHash();
 
   @override
   String toString() {
-    return r'playerLobbyProvider'
+    return r'backendPlayerLobbyProvider'
         ''
         '($argument)';
   }
@@ -60,14 +60,14 @@ final class PlayerLobbyProvider
       $ProviderElement(this, pointer);
 
   @override
-  PlayerLobbyProvider $copyWithCreate(
+  BackendPlayerLobbyProvider $copyWithCreate(
     GameInfo? Function(
-      PlayerLobbyRef ref,
+      BackendPlayerLobbyRef ref,
     ) create,
   ) {
-    return PlayerLobbyProvider._(
+    return BackendPlayerLobbyProvider._(
         argument: argument as PlayerID,
-        from: from! as PlayerLobbyFamily,
+        from: from! as BackendPlayerLobbyFamily,
         create: (
           ref,
           PlayerID player,
@@ -76,8 +76,8 @@ final class PlayerLobbyProvider
   }
 
   @override
-  GameInfo? create(PlayerLobbyRef ref) {
-    final _$cb = _createCb ?? playerLobby;
+  GameInfo? create(BackendPlayerLobbyRef ref) {
+    final _$cb = _createCb ?? backendPlayerLobby;
     final argument = this.argument as PlayerID;
     return _$cb(
       ref,
@@ -87,7 +87,7 @@ final class PlayerLobbyProvider
 
   @override
   bool operator ==(Object other) {
-    return other is PlayerLobbyProvider && other.argument == argument;
+    return other is BackendPlayerLobbyProvider && other.argument == argument;
   }
 
   @override
@@ -96,41 +96,42 @@ final class PlayerLobbyProvider
   }
 }
 
-String _$playerLobbyHash() => r'8db59beeec66fdc3bb5e5060573df2b5cd89c8da';
+String _$backendPlayerLobbyHash() =>
+    r'c39c7d82b271692b46d56eb55d9ed093d4c75f2f';
 
-final class PlayerLobbyFamily extends Family {
-  const PlayerLobbyFamily._()
+final class BackendPlayerLobbyFamily extends Family {
+  const BackendPlayerLobbyFamily._()
       : super(
-          name: r'playerLobbyProvider',
-          dependencies: const <ProviderOrFamily>[lobbyNotifierProvider],
+          name: r'backendPlayerLobbyProvider',
+          dependencies: const <ProviderOrFamily>[backendLobbyProvider],
           allTransitiveDependencies: const <ProviderOrFamily>[
-            PlayerLobbyProvider.$allTransitiveDependencies0,
+            BackendPlayerLobbyProvider.$allTransitiveDependencies0,
           ],
           isAutoDispose: true,
         );
 
-  PlayerLobbyProvider call(
+  BackendPlayerLobbyProvider call(
     PlayerID player,
   ) =>
-      PlayerLobbyProvider._(argument: player, from: this);
+      BackendPlayerLobbyProvider._(argument: player, from: this);
 
   @override
-  String debugGetCreateSourceHash() => _$playerLobbyHash();
+  String debugGetCreateSourceHash() => _$backendPlayerLobbyHash();
 
   @override
-  String toString() => r'playerLobbyProvider';
+  String toString() => r'backendPlayerLobbyProvider';
 
   /// {@macro riverpod.override_with}
   Override overrideWith(
     GameInfo? Function(
-      PlayerLobbyRef ref,
+      BackendPlayerLobbyRef ref,
       PlayerID args,
     ) create,
   ) {
     return $FamilyOverride(
       from: this,
       createElement: (pointer) {
-        final provider = pointer.origin as PlayerLobbyProvider;
+        final provider = pointer.origin as BackendPlayerLobbyProvider;
 
         final argument = provider.argument as PlayerID;
 
@@ -142,30 +143,37 @@ final class PlayerLobbyFamily extends Family {
   }
 }
 
-/// Provides the [GameErrorNotifier] to keep track of errors of a game
-@ProviderFor(ErrorNotifier)
-const errorNotifierProvider = ErrorNotifierProvider._();
+/// Provides the [GameError] to keep track of errors of a game
+@ProviderFor(BackendError)
+const backendErrorProvider = BackendErrorProvider._();
 
-/// Provides the [GameErrorNotifier] to keep track of errors of a game
-final class ErrorNotifierProvider
-    extends $NotifierProvider<ErrorNotifier, GameError?> {
-  /// Provides the [GameErrorNotifier] to keep track of errors of a game
-  const ErrorNotifierProvider._(
-      {super.runNotifierBuildOverride, ErrorNotifier Function()? create})
+/// Provides the [GameError] to keep track of errors of a game
+final class BackendErrorProvider
+    extends $NotifierProvider<BackendError, GameError?> {
+  /// Provides the [GameError] to keep track of errors of a game
+  const BackendErrorProvider._(
+      {super.runNotifierBuildOverride, BackendError Function()? create})
       : _createCb = create,
         super(
           from: null,
           argument: null,
-          name: r'errorNotifierProvider',
+          name: r'backendErrorProvider',
           isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
+          dependencies: const <ProviderOrFamily>[backendGameEngineProvider],
+          allTransitiveDependencies: const <ProviderOrFamily>[
+            BackendErrorProvider.$allTransitiveDependencies0,
+            BackendErrorProvider.$allTransitiveDependencies1,
+          ],
         );
 
-  final ErrorNotifier Function()? _createCb;
+  static const $allTransitiveDependencies0 = backendGameEngineProvider;
+  static const $allTransitiveDependencies1 =
+      BackendGameEngineProvider.$allTransitiveDependencies0;
+
+  final BackendError Function()? _createCb;
 
   @override
-  String debugGetCreateSourceHash() => _$errorNotifierHash();
+  String debugGetCreateSourceHash() => _$backendErrorHash();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(GameError? value) {
@@ -177,148 +185,74 @@ final class ErrorNotifierProvider
 
   @$internal
   @override
-  ErrorNotifier create() => _createCb?.call() ?? ErrorNotifier();
+  BackendError create() => _createCb?.call() ?? BackendError();
 
   @$internal
   @override
-  ErrorNotifierProvider $copyWithCreate(
-    ErrorNotifier Function() create,
+  BackendErrorProvider $copyWithCreate(
+    BackendError Function() create,
   ) {
-    return ErrorNotifierProvider._(create: create);
+    return BackendErrorProvider._(create: create);
   }
 
   @$internal
   @override
-  ErrorNotifierProvider $copyWithBuild(
+  BackendErrorProvider $copyWithBuild(
     GameError? Function(
       Ref<GameError?>,
-      ErrorNotifier,
+      BackendError,
     ) build,
   ) {
-    return ErrorNotifierProvider._(runNotifierBuildOverride: build);
+    return BackendErrorProvider._(runNotifierBuildOverride: build);
   }
 
   @$internal
   @override
-  $NotifierProviderElement<ErrorNotifier, GameError?> $createElement(
+  $NotifierProviderElement<BackendError, GameError?> $createElement(
           $ProviderPointer pointer) =>
       $NotifierProviderElement(this, pointer);
 }
 
-String _$errorNotifierHash() => r'aef8368d4e53c48941e3f0507733379596eca531';
+String _$backendErrorHash() => r'a800a446db9dee9322478a395d0973498cd2aaaa';
 
-abstract class _$ErrorNotifier extends $Notifier<GameError?> {
+abstract class _$BackendError extends $Notifier<GameError?> {
   GameError? build();
   @$internal
   @override
   GameError? runBuild() => build();
 }
 
-@ProviderFor(LobbyNotifier)
-const lobbyNotifierProvider = LobbyNotifierProvider._();
+/// Provides the [GameState] to keep track of the state of a game
+@ProviderFor(BackendGameState)
+const backendGameStateProvider = BackendGameStateProvider._();
 
-final class LobbyNotifierProvider
-    extends $NotifierProvider<LobbyNotifier, Lobby> {
-  const LobbyNotifierProvider._(
-      {super.runNotifierBuildOverride, LobbyNotifier Function()? create})
+/// Provides the [GameState] to keep track of the state of a game
+final class BackendGameStateProvider
+    extends $NotifierProvider<BackendGameState, GameState> {
+  /// Provides the [GameState] to keep track of the state of a game
+  const BackendGameStateProvider._(
+      {super.runNotifierBuildOverride, BackendGameState Function()? create})
       : _createCb = create,
         super(
           from: null,
           argument: null,
-          name: r'lobbyNotifierProvider',
+          name: r'backendGameStateProvider',
           isAutoDispose: false,
-          dependencies: null,
-          allTransitiveDependencies: null,
-        );
-
-  final LobbyNotifier Function()? _createCb;
-
-  @override
-  String debugGetCreateSourceHash() => _$lobbyNotifierHash();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(Lobby value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $ValueProvider<Lobby>(value),
-    );
-  }
-
-  @$internal
-  @override
-  LobbyNotifier create() => _createCb?.call() ?? LobbyNotifier();
-
-  @$internal
-  @override
-  LobbyNotifierProvider $copyWithCreate(
-    LobbyNotifier Function() create,
-  ) {
-    return LobbyNotifierProvider._(create: create);
-  }
-
-  @$internal
-  @override
-  LobbyNotifierProvider $copyWithBuild(
-    Lobby Function(
-      Ref<Lobby>,
-      LobbyNotifier,
-    ) build,
-  ) {
-    return LobbyNotifierProvider._(runNotifierBuildOverride: build);
-  }
-
-  @$internal
-  @override
-  $NotifierProviderElement<LobbyNotifier, Lobby> $createElement(
-          $ProviderPointer pointer) =>
-      $NotifierProviderElement(this, pointer);
-}
-
-String _$lobbyNotifierHash() => r'4815ef4cad20824ed0dbbb6a941f778cdfa53bee';
-
-abstract class _$LobbyNotifier extends $Notifier<Lobby> {
-  Lobby build();
-  @$internal
-  @override
-  Lobby runBuild() => build();
-}
-
-/// Provides the [GameStateNotifier] based on the [GameConfig] from [lobby]'s config
-/// A [Notifier] that handles events for a particular game, delegating to the game's implementation for non generic events
-@ProviderFor(GameStateNotifier)
-const gameStateNotifierProvider = GameStateNotifierProvider._();
-
-/// Provides the [GameStateNotifier] based on the [GameConfig] from [lobby]'s config
-/// A [Notifier] that handles events for a particular game, delegating to the game's implementation for non generic events
-final class GameStateNotifierProvider
-    extends $NotifierProvider<GameStateNotifier, GameState> {
-  /// Provides the [GameStateNotifier] based on the [GameConfig] from [lobby]'s config
-  /// A [Notifier] that handles events for a particular game, delegating to the game's implementation for non generic events
-  const GameStateNotifierProvider._(
-      {super.runNotifierBuildOverride, GameStateNotifier Function()? create})
-      : _createCb = create,
-        super(
-          from: null,
-          argument: null,
-          name: r'gameStateNotifierProvider',
-          isAutoDispose: false,
-          dependencies: const <ProviderOrFamily>[
-            lobbyNotifierProvider,
-            errorNotifierProvider
-          ],
+          dependencies: const <ProviderOrFamily>[backendGameEngineProvider],
           allTransitiveDependencies: const <ProviderOrFamily>[
-            GameStateNotifierProvider.$allTransitiveDependencies0,
-            GameStateNotifierProvider.$allTransitiveDependencies1,
+            BackendGameStateProvider.$allTransitiveDependencies0,
+            BackendGameStateProvider.$allTransitiveDependencies1,
           ],
         );
 
-  static const $allTransitiveDependencies0 = lobbyNotifierProvider;
-  static const $allTransitiveDependencies1 = errorNotifierProvider;
+  static const $allTransitiveDependencies0 = backendGameEngineProvider;
+  static const $allTransitiveDependencies1 =
+      BackendGameEngineProvider.$allTransitiveDependencies0;
 
-  final GameStateNotifier Function()? _createCb;
+  final BackendGameState Function()? _createCb;
 
   @override
-  String debugGetCreateSourceHash() => _$gameStateNotifierHash();
+  String debugGetCreateSourceHash() => _$backendGameStateHash();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(GameState value) {
@@ -330,41 +264,189 @@ final class GameStateNotifierProvider
 
   @$internal
   @override
-  GameStateNotifier create() => _createCb?.call() ?? GameStateNotifier();
+  BackendGameState create() => _createCb?.call() ?? BackendGameState();
 
   @$internal
   @override
-  GameStateNotifierProvider $copyWithCreate(
-    GameStateNotifier Function() create,
+  BackendGameStateProvider $copyWithCreate(
+    BackendGameState Function() create,
   ) {
-    return GameStateNotifierProvider._(create: create);
+    return BackendGameStateProvider._(create: create);
   }
 
   @$internal
   @override
-  GameStateNotifierProvider $copyWithBuild(
+  BackendGameStateProvider $copyWithBuild(
     GameState Function(
       Ref<GameState>,
-      GameStateNotifier,
+      BackendGameState,
     ) build,
   ) {
-    return GameStateNotifierProvider._(runNotifierBuildOverride: build);
+    return BackendGameStateProvider._(runNotifierBuildOverride: build);
   }
 
   @$internal
   @override
-  $NotifierProviderElement<GameStateNotifier, GameState> $createElement(
+  $NotifierProviderElement<BackendGameState, GameState> $createElement(
           $ProviderPointer pointer) =>
       $NotifierProviderElement(this, pointer);
 }
 
-String _$gameStateNotifierHash() => r'e38831345a42338812befafaac8a139e6107b7a8';
+String _$backendGameStateHash() => r'7916ae5e69f8ad6cc8d8b309ee77429d52a045a7';
 
-abstract class _$GameStateNotifier extends $Notifier<GameState> {
+abstract class _$BackendGameState extends $Notifier<GameState> {
   GameState build();
   @$internal
   @override
   GameState runBuild() => build();
+}
+
+@ProviderFor(BackendLobby)
+const backendLobbyProvider = BackendLobbyProvider._();
+
+final class BackendLobbyProvider
+    extends $NotifierProvider<BackendLobby, Lobby> {
+  const BackendLobbyProvider._(
+      {super.runNotifierBuildOverride, BackendLobby Function()? create})
+      : _createCb = create,
+        super(
+          from: null,
+          argument: null,
+          name: r'backendLobbyProvider',
+          isAutoDispose: false,
+          dependencies: null,
+          allTransitiveDependencies: null,
+        );
+
+  final BackendLobby Function()? _createCb;
+
+  @override
+  String debugGetCreateSourceHash() => _$backendLobbyHash();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Lobby value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<Lobby>(value),
+    );
+  }
+
+  @$internal
+  @override
+  BackendLobby create() => _createCb?.call() ?? BackendLobby();
+
+  @$internal
+  @override
+  BackendLobbyProvider $copyWithCreate(
+    BackendLobby Function() create,
+  ) {
+    return BackendLobbyProvider._(create: create);
+  }
+
+  @$internal
+  @override
+  BackendLobbyProvider $copyWithBuild(
+    Lobby Function(
+      Ref<Lobby>,
+      BackendLobby,
+    ) build,
+  ) {
+    return BackendLobbyProvider._(runNotifierBuildOverride: build);
+  }
+
+  @$internal
+  @override
+  $NotifierProviderElement<BackendLobby, Lobby> $createElement(
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
+}
+
+String _$backendLobbyHash() => r'0b5edaa544b662f2f788167a74d678eb596668b6';
+
+abstract class _$BackendLobby extends $Notifier<Lobby> {
+  Lobby build();
+  @$internal
+  @override
+  Lobby runBuild() => build();
+}
+
+/// Provides the [BackendGameEngine] based on the [GameConfig] from [Lobby]'s config
+/// A [Notifier] that handles events for a particular game, delegating to the game's implementation for non generic events
+@ProviderFor(BackendGameEngine)
+const backendGameEngineProvider = BackendGameEngineProvider._();
+
+/// Provides the [BackendGameEngine] based on the [GameConfig] from [Lobby]'s config
+/// A [Notifier] that handles events for a particular game, delegating to the game's implementation for non generic events
+final class BackendGameEngineProvider
+    extends $NotifierProvider<BackendGameEngine, NextStateOrError> {
+  /// Provides the [BackendGameEngine] based on the [GameConfig] from [Lobby]'s config
+  /// A [Notifier] that handles events for a particular game, delegating to the game's implementation for non generic events
+  const BackendGameEngineProvider._(
+      {super.runNotifierBuildOverride, BackendGameEngine Function()? create})
+      : _createCb = create,
+        super(
+          from: null,
+          argument: null,
+          name: r'backendGameEngineProvider',
+          isAutoDispose: false,
+          dependencies: const <ProviderOrFamily>[backendLobbyProvider],
+          allTransitiveDependencies: const <ProviderOrFamily>[
+            BackendGameEngineProvider.$allTransitiveDependencies0,
+          ],
+        );
+
+  static const $allTransitiveDependencies0 = backendLobbyProvider;
+
+  final BackendGameEngine Function()? _createCb;
+
+  @override
+  String debugGetCreateSourceHash() => _$backendGameEngineHash();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(NextStateOrError value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $ValueProvider<NextStateOrError>(value),
+    );
+  }
+
+  @$internal
+  @override
+  BackendGameEngine create() => _createCb?.call() ?? BackendGameEngine();
+
+  @$internal
+  @override
+  BackendGameEngineProvider $copyWithCreate(
+    BackendGameEngine Function() create,
+  ) {
+    return BackendGameEngineProvider._(create: create);
+  }
+
+  @$internal
+  @override
+  BackendGameEngineProvider $copyWithBuild(
+    NextStateOrError Function(
+      Ref<NextStateOrError>,
+      BackendGameEngine,
+    ) build,
+  ) {
+    return BackendGameEngineProvider._(runNotifierBuildOverride: build);
+  }
+
+  @$internal
+  @override
+  $NotifierProviderElement<BackendGameEngine, NextStateOrError> $createElement(
+          $ProviderPointer pointer) =>
+      $NotifierProviderElement(this, pointer);
+}
+
+String _$backendGameEngineHash() => r'd0309c011901c7fbb3553eb8136a7d21d2b2298f';
+
+abstract class _$BackendGameEngine extends $Notifier<NextStateOrError> {
+  NextStateOrError build();
+  @$internal
+  @override
+  NextStateOrError runBuild() => build();
 }
 
 // ignore_for_file: type=lint

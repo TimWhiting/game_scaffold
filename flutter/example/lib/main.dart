@@ -23,7 +23,7 @@ void main() {
       print('[${record.level}] ${record.loggerName}: ${record.message}'));
   runApp(ProviderScope(
     overrides: [
-      serviceType.overrideWith(ServiceTypeNotifier.new),
+      serviceTypeProvider.overrideWith(ServiceTypeNotifier.new),
     ],
     child: const TicTacToeApp(),
   ));
@@ -238,7 +238,8 @@ class GameWidget extends HookConsumerWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                  final _ = await ref.read(roundClientProvider).newRound();
+                  final _ =
+                      await ref.read(roundClientProvider).readyNextRound();
                 },
                 child: const Text('Next Round'),
               ),

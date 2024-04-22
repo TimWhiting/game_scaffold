@@ -16,16 +16,23 @@ extension on Rewards {
       [for (var i = 0; i < length; i++) this[i] + other[i]];
 }
 
-class NextStateOrError<E extends Event, T extends Game> {
+final class NextStateOrError<E extends Event, T extends Game> {
   const NextStateOrError({required this.state, required this.error});
   final GameState<E, T> state;
   final GameError? error;
 }
 
+extension NextStateMap<E extends Event, T extends Game>
+    on NextStateOrError<E, T> {
+  NextStateOrError<E, T> map(
+          GameState<E, T> Function(GameState<E, T> state) f) =>
+      NextStateOrError(state: f(state), error: null);
+}
+
 typedef NextState<E extends Event, T extends Game>
     = MaybeError<GameState<E, T>>;
 
-class PlayerEvent<E extends Event> {
+final class PlayerEvent<E extends Event> {
   PlayerEvent({required this.playerId, required this.event});
   final String playerId;
   final E event;
@@ -91,13 +98,13 @@ abstract class GameRegistry {
   }
 
   static String typeName(GameState state) =>
-      GameRegistry._functions[state.game.type]!.gameType;
+      _fromType(state.game.type).gameType;
 
   static GameState initialState(GameConfig config, IList<Player> iList) =>
       _fromType(config.gameType).initialState(config, iList);
 }
 
-class GameError {
+final class GameError {
   final String message;
   final PlayerID player;
   const GameError({required this.message, required this.player});
@@ -122,7 +129,7 @@ mixin GameErrorNotifier on $Notifier<GameError?> {
   }
 }
 
-class GameState<E extends Event, T extends Game> {
+base class GameState<E extends Event, T extends Game> {
   GameState({required this.game, required this.rewards, required this.generic});
 
   GameState<E1, T1> cast<E1 extends Event, T1 extends Game>() =>
@@ -150,7 +157,7 @@ class GameState<E extends Event, T extends Game> {
   GameState<E, T> updateGame(T g) => copyWith(game: g);
 
   GameState<E, T> updateGeneric(GenericGame Function(GenericGame) update) =>
-      copyWith(generic: update(generic), rewards: rewards);
+      copyWith(generic: update(generic));
 
   GameState<E, T> addReward(Rewards rewards) =>
       copyWith(rewards: rewards + this.rewards);
@@ -201,7 +208,7 @@ class GameState<E extends Event, T extends Game> {
       (val) => NextStateOrError(
           state: copyWith(game: val.game as T?)
               .updateStatus()
-              .updateGeneric((g) => g.copyWith(time: DateTime.now())),
+              .updateGeneric((g) => g.updateTime()),
           error: null),
     );
   }
@@ -227,7 +234,7 @@ class GameState<E extends Event, T extends Game> {
       );
 }
 
-abstract class GameFunctions<E extends Event, T extends Game> {
+abstract base class GameFunctions<E extends Event, T extends Game> {
   GameFunctions();
   GameState<E, T> initialState(GameConfig config, IList<Player> players);
   NextState<E, T> next(covariant GameState state, GameConfig config,

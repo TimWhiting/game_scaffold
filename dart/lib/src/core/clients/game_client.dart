@@ -15,12 +15,11 @@ MultiplayerGameClient gameInfoClient(GameInfoClientRef ref) => ref.watch(
     multiplayerGameClientProvider(ref.watch(currentPlayerIDProvider)).notifier);
 
 @Riverpod(dependencies: [SingleConfig, gameService])
-class MultiplayerGameClient extends _$MultiplayerGameClient {
+final class MultiplayerGameClient extends _$MultiplayerGameClient {
   @override
   GameClientInfo build(PlayerID multiplayerID) {
     this.multiplayerID = multiplayerID;
     final service = ref.watch(gameServiceProvider);
-
     connect(service);
     return const GameClientInfo(null);
   }
@@ -30,19 +29,14 @@ class MultiplayerGameClient extends _$MultiplayerGameClient {
 
   void exitGame() {
     state = state.copyWith(config: null, code: null);
+    // Refetch old games, in case games have been deleted or played on other devices
     fetchOldGames();
   }
 
   void connect(GameService service) {
     service.connect().map((conn) {
       if (conn) {
-        state = GameClientInfo(
-          service,
-          playerName: state.playerName,
-          config: state.config,
-          games: state.games,
-          code: state.code,
-        );
+        state = state.copyWith(service: service);
         fetchOldGames();
         ref.listen(singleConfigProvider, (_, value) {
           setGameConfig(value);
@@ -81,7 +75,9 @@ class MultiplayerGameClient extends _$MultiplayerGameClient {
 
   Future<bool> deleteGame(GameCode code) => service((c) async {
         final result = await c.deleteGame(multiplayerID, code);
-        state = state.copyWith(code: null, games: null);
+        if (result) {
+          state = state.copyWith(code: null, games: null);
+        }
         fetchOldGames();
         return result;
       });

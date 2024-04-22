@@ -17,7 +17,7 @@ Future<void> main(List<String> arguments) async {
     parent: rootProvider,
     overrides: [currentPlayerIDProvider.overrideWithValue('1')],
   );
-  rootProvider.read(serviceType.notifier).type = OnDeviceService;
+  rootProvider.read(serviceTypeProvider.notifier).type = OnDeviceService;
   const config = GameConfig(
     adminID: '0',
     gameType: 'tictactoe',
@@ -68,8 +68,8 @@ Future<void> main(List<String> arguments) async {
       }
       print('');
       if (gameState.roundOver) {
-        await p1Ref.read(roundClientProvider).newRound();
-        await p2Ref.read(roundClientProvider).newRound();
+        await p1Ref.read(roundClientProvider).readyNextRound();
+        await p2Ref.read(roundClientProvider).readyNextRound();
       } else {
         print('Finished');
         // print('Player 0: ${gameState.totalScores[P1]}');
