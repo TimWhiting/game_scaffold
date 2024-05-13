@@ -62,8 +62,7 @@ abstract final class BackendProviders {
   static BackendErrorProvider error = backendErrorProvider;
   static BackendGameEngineProvider engine = backendGameEngineProvider;
   static BackendGameStateProvider state = backendGameStateProvider;
-  static BackendPlayerLobbyProvider playerLobby(PlayerID p) =>
-      backendPlayerLobbyProvider(p);
+  static BackendPlayerLobbyProvider playerLobby(PlayerID p) => backendPlayerLobbyProvider(p);
 }
 
 @Riverpod(keepAlive: true)
@@ -102,9 +101,7 @@ final class BackendGameEngine extends _$BackendGameEngine {
     final l = ref.watch(BackendProviders.lobby);
     code = l.code;
     gameConfig = l.config;
-    return NextStateOrError(
-        state: GameRegistry.initialState(l.config, l.players.toIList()),
-        error: null);
+    return NextStateOrError(state: GameRegistry.initialState(l.config, l.players.toIList()), error: null);
   }
 
   late final Logger _gameStateLogger = Logger('GameState $code');
@@ -124,15 +121,22 @@ final class BackendGameEngine extends _$BackendGameEngine {
   bool handleEvent(PlayerEvent event) {
     try {
       final game = state.state;
+      if (game.generic.gameOver) {
+        state = NextStateOrError(
+            state: game,
+            error: GameError(
+              message: 'Game is Over!\nUI Should prevent sending events!',
+              player: event.playerId,
+            ));
+        return false;
+      }
       final e = event.event;
       if (e is GenericEvent) {
         state = e.maybeWhen(
             readyNextRound: (e, _) {
               final newState = game.updateGeneric((g) => g.addReadyPlayer(e));
               if (newState.readyPlayers.length == game.players.length) {
-                return game
-                    .nextRound(gameConfig)
-                    .map((g) => g.updateGeneric((g) => g.clearReadyPlayers()));
+                return game.nextRound(gameConfig).map((g) => g.updateGeneric((g) => g.clearReadyPlayers()));
               }
               return NextStateOrError(state: newState, error: null);
             },
@@ -140,7 +144,7 @@ final class BackendGameEngine extends _$BackendGameEngine {
                 state: game,
                 error: GameError(
                   message: 'General Event not implemented yet $event',
-                  player: 'Player',
+                  player: event.playerId,
                 )));
       } else {
         state = game.next(event, gameConfig);
@@ -161,9 +165,7 @@ final class BackendGameEngine extends _$BackendGameEngine {
 GameCode generateGameID(List<String> avoidList) {
   var gameID = '';
   while (gameID.length != 4 || avoidList.contains(gameID)) {
-    gameID = ('BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle())
-        .join()
-        .substring(0, 4);
+    gameID = ('BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle()).join().substring(0, 4);
   }
   return gameID;
 }

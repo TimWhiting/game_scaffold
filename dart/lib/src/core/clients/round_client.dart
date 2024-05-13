@@ -9,17 +9,14 @@ part 'round_client.freezed.dart';
 part 'round_client.g.dart';
 
 @Riverpod(dependencies: [MultiplayerRoundClient, CurrentPlayerID])
-RoundInfo roundInfo(RoundInfoRef ref) => ref
-    .watch(multiplayerRoundClientProvider(ref.watch(currentPlayerIDProvider)));
+RoundInfo roundInfo(RoundInfoRef ref) => ref.watch(multiplayerRoundClientProvider(ref.watch(currentPlayerIDProvider)));
 
 @Riverpod(dependencies: [MultiplayerRoundClient, CurrentPlayerID])
 MultiplayerRoundClient roundClient(RoundClientRef ref) =>
-    ref.watch(multiplayerRoundClientProvider(ref.watch(currentPlayerIDProvider))
-        .notifier);
+    ref.watch(multiplayerRoundClientProvider(ref.watch(currentPlayerIDProvider)).notifier);
 
 extension on GameClientInfo {
-  RoundInfo get initial =>
-      RoundInfo(null, code: this.code ?? '', playerName: this.playerName ?? '');
+  RoundInfo get initial => RoundInfo(null, code: this.code ?? '', playerName: this.playerName ?? '');
 }
 
 @Riverpod(dependencies: [
@@ -45,14 +42,15 @@ final class MultiplayerRoundClient extends _$MultiplayerRoundClient {
 
   void connect(RoundService service) {
     service.connect().map((conn) {
+      if (!ref.mounted) {
+        return;
+      }
       if (conn) {
         state = state.copyWith(service: service);
         StreamSubscription<GameError>? error;
         StreamSubscription<GameState>? round;
         final lobby = service.gameLobby(multiplayerID, state.code).listen((e) {
-          if (e.status == GameStatus.started &&
-              error == null &&
-              round == null) {
+          if (e.status == GameStatus.started && error == null && round == null) {
             error = service.errorStream(multiplayerID, state.code).listen((e) {
               state = state.copyWith(error: e.message);
             });
@@ -75,9 +73,8 @@ final class MultiplayerRoundClient extends _$MultiplayerRoundClient {
     }).toList();
   }
 
-  T service<T>(T Function(RoundService) service) => state.connected
-      ? service(state.service!)
-      : throw Exception('Not connected');
+  T service<T>(T Function(RoundService) service) =>
+      state.connected ? service(state.service!) : throw Exception('Not connected');
 
   void clearError() {
     state = state.copyWith(error: null);

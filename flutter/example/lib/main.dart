@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:game_scaffold/game_scaffold.dart';
 import 'package:game_scaffold_games/games.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -49,20 +50,14 @@ class TicTacToeWidget extends StatelessWidget {
         body: Row(children: [
           Expanded(
             child: ProviderScope(
-              overrides: [
-                currentPlayerIDProvider
-                    .overrideWithBuild((ref, notifier) => '0')
-              ],
+              overrides: [currentPlayerIDProvider.overrideWithBuild((ref, notifier) => '0')],
               child: const Player(),
             ),
           ),
           Container(width: 10, color: Colors.black),
           Expanded(
             child: ProviderScope(
-              overrides: [
-                currentPlayerIDProvider
-                    .overrideWithBuild((ref, notifier) => '1')
-              ],
+              overrides: [currentPlayerIDProvider.overrideWithBuild((ref, notifier) => '1')],
               child: const Player(),
             ),
           ),
@@ -78,7 +73,27 @@ class Player extends HookConsumerWidget {
         connected: CreateOrJoinWidget(),
         lobby: LobbyWidget(),
         game: GameWidget(),
+        gameOver: GameOverWidget(),
       );
+}
+
+class GameOverWidget extends HookConsumerWidget {
+  const GameOverWidget({super.key});
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final game = ref.watch(roundInfoProvider).game!;
+    return Scaffold(
+      body: Center(
+        child: Column(
+          children: [
+            const Text('Game Over!'),
+            for (final MapEntry(key: player, value: reward) in game.playerRewards.entries)
+              Text('$player won $reward points!')
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class CreateOrJoinWidget extends HookConsumerWidget {
@@ -119,8 +134,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                 height: 30,
                 child: TextField(
                   textAlignVertical: TextAlignVertical.center,
-                  decoration:
-                      const InputDecoration(hintText: 'Enter Game Code'),
+                  decoration: const InputDecoration(hintText: 'Enter Game Code'),
                   onChanged: gameClient.setGameCode,
                 ),
               ),
@@ -137,8 +151,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                     gameClient.setGameCode(info.gameID);
                     await gameClient.joinGame();
                   },
-                  child: Text(
-                      'Started Game: ${info.gameID}, Players: ${info.players}'),
+                  child: Text('Started Game: ${info.gameID}, Players: ${info.players}'),
                 ),
           ],
         ),
@@ -177,16 +190,15 @@ class GameWidget extends HookConsumerWidget {
     final gameState = ref.watch(roundInfoProvider);
     final gameStatus = gameState.status;
     final playerID = ref.watch(currentPlayerIDProvider);
-    ref.listen<String?>(roundInfoProvider.select((i) => i.error),
-        (prevError, error) {
+    ref.listen<String?>(roundInfoProvider.select((i) => i.error), (prevError, error) {
       if (error != prevError && error != null && error.isNotEmpty) {
-        showDialog(
-          context: context,
-          builder: (c) => Dialog(
-            backgroundColor: Colors.white,
-            child: Text(error.toString()),
-          ),
-        );
+        SchedulerBinding.instance.addPostFrameCallback((_) => showDialog(
+              context: context,
+              builder: (c) => Dialog(
+                backgroundColor: Colors.white,
+                child: Text(error),
+              ),
+            ));
       }
     });
     if (gameState.game == null) {
@@ -212,8 +224,7 @@ class GameWidget extends HookConsumerWidget {
                       key: Key('$playerID square $r $c'),
                       onTap: () async {
                         final _ = await ref.read(roundClientProvider).sendEvent(
-                              TicTacToeGameEvent(
-                                  player: player, location: r * 3 + c),
+                              TicTacToeGameEvent(player: player, location: r * 3 + c),
                             );
                       },
                       child: ColoredBox(
@@ -233,13 +244,11 @@ class GameWidget extends HookConsumerWidget {
                     ),
                 ],
               ),
-            if (gameStatus == GameStatus.betweenRounds &&
-                !g.readyPlayers.contains(playerID)) ...[
+            if (gameStatus == GameStatus.betweenRounds && !g.readyPlayers.contains(playerID)) ...[
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                  final _ =
-                      await ref.read(roundClientProvider).readyNextRound();
+                  final _ = await ref.read(roundClientProvider).readyNextRound();
                 },
                 child: const Text('Next Round'),
               ),

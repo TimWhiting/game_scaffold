@@ -10,32 +10,24 @@ void registerTicTacToe() {
   GameRegistry.register(TTTFunctions());
 }
 
-final class TTTFunctions
-    extends GameFunctions<TicTacToeGameEvent, TicTacToeGame> {
+final class TTTFunctions extends GameFunctions<TicTacToeGameEvent, TicTacToeGame> {
   @override
   TicTacToeGame fromJson(JsonMap json) => TicTacToeGame.fromJson(json);
   @override
-  TicTacToeGameEvent fromJsonE(JsonMap json) =>
-      TicTacToeGameEvent.fromJson(json);
+  TicTacToeGameEvent fromJsonE(JsonMap json) => TicTacToeGameEvent.fromJson(json);
   @override
   String get gameName => 'Tic Tac Toe';
   @override
   String get gameType => 'tictactoe';
   @override
-  GameState<TicTacToeGameEvent, TicTacToeGame> initialState(
-          GameConfig config, IList<Player> players) =>
-      GameState(
-        game: TicTacToeGame(
-            board: <int?>[for (var i = 0; i < 9; i++) null].lock,
-            currentPlayer: 0),
+  GameState<TicTacToeGameEvent, TicTacToeGame> initialState(GameConfig config, IList<Player> players) => GameState(
+        game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0),
         generic: GenericGame.start(players),
         rewards: <double>[0, 0],
       );
   @override
   NextState<TicTacToeGameEvent, TicTacToeGame> next(
-      GameState<TicTacToeGameEvent, TicTacToeGame> state,
-      GameConfig config,
-      PlayerEvent<TicTacToeGameEvent> event) {
+      GameState<TicTacToeGameEvent, TicTacToeGame> state, GameConfig config, PlayerEvent<TicTacToeGameEvent> event) {
     final game = state.game;
     if (event.event.player != game.currentPlayer) {
       return state.error('Not your turn');
@@ -54,8 +46,7 @@ final class TTTFunctions
   }
 
   @override
-  TTTGameState nextRound(GameState<TicTacToeGameEvent, TicTacToeGame> state,
-          GameConfig config) =>
+  TTTGameState nextRound(GameState<TicTacToeGameEvent, TicTacToeGame> state, GameConfig config) =>
       state.updateGame(TicTacToeGame(
         board: <int?>[for (var i = 0; i < 9; i++) null].lock,
         currentPlayer: state.game.currentPlayer == 0 ? 1 : 0,
@@ -69,8 +60,7 @@ class TicTacToeGameEvent extends Event with _$TicTacToeGameEvent {
     required int location,
   }) = _TicTacToeGameEvent;
   const TicTacToeGameEvent._();
-  factory TicTacToeGameEvent.fromJson(Map<String, dynamic> map) =>
-      _$TicTacToeGameEventFromJson(map);
+  factory TicTacToeGameEvent.fromJson(Map<String, dynamic> map) => _$TicTacToeGameEventFromJson(map);
   @override
   GameType get type => 'tictactoe';
 }
@@ -101,23 +91,20 @@ class TicTacToeGame extends Game with _$TicTacToeGame {
     required int currentPlayer,
     @Default('tictactoe') String type,
   }) = _TicTacToeGame;
-  factory TicTacToeGame.fromJson(Map<String, dynamic> map) =>
-      _$TicTacToeGameFromJson(map);
+  factory TicTacToeGame.fromJson(Map<String, dynamic> map) => _$TicTacToeGameFromJson(map);
   const TicTacToeGame._();
 
-  TicTacToeGame _next(TicTacToeGameEvent event, GameConfig config) =>
-      TicTacToeGame(
+  TicTacToeGame _next(TicTacToeGameEvent event, GameConfig config) => TicTacToeGame(
         currentPlayer: currentPlayer == 0 ? 1 : 0,
         board: board.replace(event.location, currentPlayer),
       );
 
   @override
-  bool get roundOver => winner != null;
+  bool roundOver(GenericGame g, GameConfig c) => winner != null;
   @override
-  bool gameOver(GenericGame g) => g.round == 10;
+  bool gameOver(GenericGame g, GameConfig c) => g.round == c.rounds;
 
-  bool canMove(int player, int location) =>
-      location >= 0 && location < 9 && board[location] == null;
+  bool canMove(int player, int location) => location >= 0 && location < 9 && board[location] == null;
 
   Winner? get winner => isWinner(0)
       ? Winner.p1
@@ -128,8 +115,7 @@ class TicTacToeGame extends Game with _$TicTacToeGame {
               : null;
 
   bool isWinner(int player) {
-    if (winningLocationCombinations
-        .any((comb) => comb.every((loc) => board[loc] == player))) {
+    if (winningLocationCombinations.any((comb) => comb.every((loc) => board[loc] == player))) {
       return true;
     }
     return false;
@@ -137,12 +123,7 @@ class TicTacToeGame extends Game with _$TicTacToeGame {
 
   bool isLoser(int player) => isWinner(player == 0 ? 1 : 0);
 
-  IList<int> get availableLocations => board
-      .asMap()
-      .entries
-      .where((e) => e.value == null)
-      .map((e) => e.key)
-      .toIList();
+  IList<int> get availableLocations => board.asMap().entries.where((e) => e.value == null).map((e) => e.key).toIList();
 
   static IList<IList<int>> winningLocationCombinations = [
     [0, 1, 2],
