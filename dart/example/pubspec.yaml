@@ -9,14 +9,14 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  game_scaffold_dart: any
-  game_scaffold_games: any
-  riverpod: ^3.0.0-dev.3
+  game_scaffold_dart: 0.4.1
+  game_scaffold_games: 0.4.1
+  riverpod: ^2.5.1
 
 dev_dependencies:
-  build_runner: ^2.4.8
-  dartdoc: ^8.0.5
-  test: ^1.25.2
+  build_runner: ^2.4.12
+  dartdoc: ^8.0.13
+  test: ^1.25.8
 
 dependency_overrides:
   riverpod_analyzer_utils:

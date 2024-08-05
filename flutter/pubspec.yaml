@@ -9,18 +9,18 @@ environment:
 
 dependencies:
   collection: ^1.18.0
-  firebase_dart: ^1.1.2
+  firebase_dart: ^1.1.4
   flutter:
     sdk: flutter
   flutter_hooks: ^0.20.5
-  flutter_riverpod: ^2.4.10
-  game_scaffold_dart: ^0.5.0-dev
-  hooks_riverpod: ^2.4.10
+  flutter_riverpod: ^2.5.1
+  game_scaffold_dart: ^0.4.1
+  hooks_riverpod: ^2.5.1
   logging: ^1.2.0
-  riverpod: ^2.5.0
+  riverpod: ^2.5.1
 
 dev_dependencies:
-  dartdoc: ^8.0.5
+  dartdoc: ^8.0.13
   flutter_test:
     sdk: flutter
   game_scaffold_games: ^0.5.0-dev

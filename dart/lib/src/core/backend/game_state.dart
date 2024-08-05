@@ -165,7 +165,7 @@ final class BackendGameEngine extends _$BackendGameEngine {
 GameCode generateGameID(List<String> avoidList) {
   var gameID = '';
   while (gameID.length != 4 || avoidList.contains(gameID)) {
-    gameID = ('BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle()).join().substring(0, 4);
+    gameID = ('1234567890BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle()).join().substring(0, 4);
   }
   return gameID;
 }
