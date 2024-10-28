@@ -26,6 +26,7 @@ final class OnDeviceRoundServiceProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'onDeviceRoundServiceProvider',
           isAutoDispose: true,
           dependencies: const <ProviderOrFamily>[currentPlayerIDProvider],
@@ -109,6 +110,7 @@ final class OnDeviceGameServiceProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'onDeviceGameServiceProvider',
           isAutoDispose: true,
           dependencies: const <ProviderOrFamily>[],
@@ -159,7 +161,7 @@ final class OnDeviceGameServiceProvider
 }
 
 String _$onDeviceGameServiceHash() =>
-    r'a6fc21c27580cfe7f502432bd207d07e7ffbc4ee';
+    r'b44296eea8d420fdfc05cc6bae13c132977b346d';
 
 abstract class _$OnDeviceGameService extends $Notifier<void> {
   void build();

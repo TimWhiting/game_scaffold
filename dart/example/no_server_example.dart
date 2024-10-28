@@ -3,11 +3,10 @@
 import 'dart:io';
 
 import 'package:game_scaffold_dart/game_scaffold_dart.dart';
-import 'package:game_scaffold_games/games.dart';
 
 // ignore_for_file: avoid_print
 Future<void> main(List<String> arguments) async {
-  registerTicTacToe();
+  TicTacToeGame.register();
   final rootProvider = ProviderContainer();
   final p1Ref = ProviderContainer(
     parent: rootProvider,

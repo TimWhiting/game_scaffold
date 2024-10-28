@@ -26,6 +26,7 @@ final class CurrentPlayerIDProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'currentPlayerIDProvider',
           isAutoDispose: true,
           dependencies: const <ProviderOrFamily>[],
@@ -98,6 +99,7 @@ final class SingleConfigProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'singleConfigProvider',
           isAutoDispose: true,
           dependencies: null,
@@ -169,6 +171,7 @@ final class RemoteUriProvider extends $NotifierProvider<RemoteUri, Uri> {
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'remoteUriProvider',
           isAutoDispose: true,
           dependencies: null,
@@ -244,6 +247,7 @@ final class ServiceTypeNotifierProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'serviceTypeNotifierProvider',
           isAutoDispose: false,
           dependencies: null,
@@ -314,6 +318,7 @@ final class AllServiceTypesProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'allServiceTypesProvider',
           isAutoDispose: true,
           dependencies: null,
@@ -393,6 +398,7 @@ final class GameServiceFamilyProvider
       )? create})
       : _createCb = create,
         super(
+          retry: null,
           name: r'gameServiceFamilyProvider',
           isAutoDispose: true,
           dependencies: null,
@@ -473,6 +479,7 @@ String _$gameServiceFamilyHash() => r'138d8093499caf616694865ee5ec9a4e192b716b';
 final class GameServiceFamilyFamily extends Family {
   const GameServiceFamilyFamily._()
       : super(
+          retry: null,
           name: r'gameServiceFamilyProvider',
           dependencies: const <ProviderOrFamily>[
             onDeviceGameServiceProvider,
@@ -535,6 +542,7 @@ final class GameServiceProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'gameServiceProvider',
           isAutoDispose: true,
           dependencies: const <ProviderOrFamily>[
@@ -638,6 +646,7 @@ final class PlayerNameProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'playerNameProvider',
           isAutoDispose: true,
           dependencies: const <ProviderOrFamily>[gameInfoProvider],
@@ -726,6 +735,7 @@ final class CodeProvider extends $FunctionalProvider<GameCode, GameCode>
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'codeProvider',
           isAutoDispose: true,
           dependencies: const <ProviderOrFamily>[gameInfoProvider],
@@ -818,6 +828,7 @@ final class ConfigProvider extends $FunctionalProvider<GameConfig, GameConfig>
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'configProvider',
           isAutoDispose: true,
           dependencies: const <ProviderOrFamily>[gameInfoProvider],

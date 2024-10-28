@@ -23,6 +23,7 @@ final class BackendPlayerLobbyProvider
       )? create})
       : _createCb = create,
         super(
+          retry: null,
           name: r'backendPlayerLobbyProvider',
           isAutoDispose: true,
           dependencies: null,
@@ -102,6 +103,7 @@ String _$backendPlayerLobbyHash() =>
 final class BackendPlayerLobbyFamily extends Family {
   const BackendPlayerLobbyFamily._()
       : super(
+          retry: null,
           name: r'backendPlayerLobbyProvider',
           dependencies: const <ProviderOrFamily>[backendLobbyProvider],
           allTransitiveDependencies: const <ProviderOrFamily>[
@@ -157,6 +159,7 @@ final class BackendErrorProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'backendErrorProvider',
           isAutoDispose: false,
           dependencies: const <ProviderOrFamily>[backendGameEngineProvider],
@@ -236,6 +239,7 @@ final class BackendGameStateProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'backendGameStateProvider',
           isAutoDispose: false,
           dependencies: const <ProviderOrFamily>[backendGameEngineProvider],
@@ -312,6 +316,7 @@ final class BackendLobbyProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'backendLobbyProvider',
           isAutoDispose: false,
           dependencies: null,
@@ -387,6 +392,7 @@ final class BackendGameEngineProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'backendGameEngineProvider',
           isAutoDispose: false,
           dependencies: const <ProviderOrFamily>[backendLobbyProvider],
@@ -440,7 +446,7 @@ final class BackendGameEngineProvider
       $NotifierProviderElement(this, pointer);
 }
 
-String _$backendGameEngineHash() => r'd0309c011901c7fbb3553eb8136a7d21d2b2298f';
+String _$backendGameEngineHash() => r'26a92a741e62b5dc38e157b704257ec78dcdfd32';
 
 abstract class _$BackendGameEngine extends $Notifier<NextStateOrError> {
   NextStateOrError build();

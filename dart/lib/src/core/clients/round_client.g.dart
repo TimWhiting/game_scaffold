@@ -21,6 +21,7 @@ final class RoundInfoProvider extends $FunctionalProvider<RoundInfo, RoundInfo>
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'roundInfoProvider',
           isAutoDispose: true,
           dependencies: const <ProviderOrFamily>[
@@ -115,6 +116,7 @@ final class RoundClientProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'roundClientProvider',
           isAutoDispose: true,
           dependencies: const <ProviderOrFamily>[
@@ -206,6 +208,7 @@ final class MultiplayerRoundClientProvider
       MultiplayerRoundClient Function()? create})
       : _createCb = create,
         super(
+          retry: null,
           name: r'multiplayerRoundClientProvider',
           isAutoDispose: true,
           dependencies: null,
@@ -297,11 +300,12 @@ final class MultiplayerRoundClientProvider
 }
 
 String _$multiplayerRoundClientHash() =>
-    r'86c28fcbe5dfd798d7ddbce06cdb612725529ff9';
+    r'1828fb2fe261198d39a2499b5405264cff784d5a';
 
 final class MultiplayerRoundClientFamily extends Family {
   const MultiplayerRoundClientFamily._()
       : super(
+          retry: null,
           name: r'multiplayerRoundClientProvider',
           dependencies: const <ProviderOrFamily>[
             singleConfigProvider,

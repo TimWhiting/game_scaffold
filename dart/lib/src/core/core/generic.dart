@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'core.dart';
@@ -5,111 +6,6 @@ import 'core.dart';
 part 'generic.freezed.dart';
 part 'generic.g.dart';
 
-/// Represents a generic game, with common fields that can be manipulated by
-/// common [GenericEvent]s
-///
-/// Includes
-/// * List of [players]
-/// * The [time] of the last game update
-/// * The current [status]
-/// * The current [round]
-@freezed
-class GenericGame with _$GenericGame {
-  const factory GenericGame({
-    required DateTime time,
-    required GameStatus status,
-    required int round,
-    @Default(IListConst([])) IList<Player> players,
-    @Default(IListConst([])) IList<PlayerID> readyPlayers,
-  }) = _GenericGame;
-  const GenericGame._();
-
-  factory GenericGame.fromJson(Map<String, dynamic> map) =>
-      _$GenericGameFromJson(map);
-
-  /// Creates a default initialized game with [players]
-  factory GenericGame.start(IList<Player> players) => GenericGame(
-        players: players,
-        readyPlayers: <PlayerID>[].lock,
-        time: DateTime.now(),
-        status: GameStatus.started,
-        round: 0,
-      );
-
-  /// Gets whether the game is over
-  bool get gameOver => status == GameStatus.finished;
-
-  /// Gets whether the round is over
-  bool get roundOver => status == GameStatus.betweenRounds;
-
-  /// Returns a copy of the [GenericGame] with the time updated to the current time
-  GenericGame updateTime() => copyWith(time: DateTime.now());
-
-  /// Returns a copy of the [GenericGame] with the [round] incremented,
-  /// [status] set to [GameStatus.started]
-  GenericGame finishRound() =>
-      copyWith(round: round + 1, status: GameStatus.started);
-
-  /// Returns a copy of the [GenericGame] with the [status] updated to [status]
-  GenericGame updateStatus(GameStatus status) => copyWith(status: status);
-
-  /// Shuffles the player list
-  GenericGame shufflePlayers() => copyWith(players: players.shuffle());
-
-  /// Clears the list of ready players
-  GenericGame clearReadyPlayers() => copyWith(readyPlayers: <PlayerID>[].lock);
-
-  /// Adds a ready player to the list
-  GenericGame addReadyPlayer(PlayerID player) =>
-      copyWith(readyPlayers: readyPlayers.add(player));
-}
-
-/// A [GenericEvent] that is handled by the Generic server implementation
-/// rather than handling it differently in each game implementation
-@freezed
-class GenericEvent extends Event with _$GenericEvent {
-  const GenericEvent._();
-
-  /// Signals that [player] is ready for the next round
-  const factory GenericEvent.readyNextRound(String player,
-      {@Default('generic') String type}) = _GenericReadyNextRoundEvent;
-
-  factory GenericEvent.fromJson(Map<String, dynamic> map) =>
-      _$GenericEventFromJson(map);
-
-  static void register() {
-    GameRegistry.register(GameFunctionsGeneric());
-  }
-}
-
-final class GameFunctionsGeneric extends GameFunctions {
-  @override
-  Game fromJson(JsonMap json) => throw UnimplementedError();
-
-  @override
-  Event fromJsonE(JsonMap json) => GenericEvent.fromJson(json);
-
-  @override
-  GameName get gameName => 'Generic';
-
-  @override
-  GameType get gameType => 'generic';
-
-  @override
-  GameState<Event, Game> initialState(
-          GameConfig config, IList<Player> players) =>
-      throw UnimplementedError();
-
-  @override
-  NextState<Event, Game> next(covariant GameState<Event, Game> state,
-          GameConfig config, covariant PlayerEvent<Event> event) =>
-      throw UnimplementedError();
-
-  @override
-  GameState<Event, Game> nextRound(
-          covariant GameState<Event, Game> state, GameConfig config) =>
-      throw UnimplementedError();
-}
 
 /// Represents the current status of the game as seen by the client
 enum GameStatus {

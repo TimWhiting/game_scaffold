@@ -22,6 +22,7 @@ final class GameInfoProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'gameInfoProvider',
           isAutoDispose: true,
           dependencies: const <ProviderOrFamily>[
@@ -107,6 +108,7 @@ final class GameInfoClientProvider
         super(
           from: null,
           argument: null,
+          retry: null,
           name: r'gameInfoClientProvider',
           isAutoDispose: true,
           dependencies: const <ProviderOrFamily>[
@@ -189,6 +191,7 @@ final class MultiplayerGameClientProvider
       MultiplayerGameClient Function()? create})
       : _createCb = create,
         super(
+          retry: null,
           name: r'multiplayerGameClientProvider',
           isAutoDispose: true,
           dependencies: null,
@@ -279,6 +282,7 @@ String _$multiplayerGameClientHash() =>
 final class MultiplayerGameClientFamily extends Family {
   const MultiplayerGameClientFamily._()
       : super(
+          retry: null,
           name: r'multiplayerGameClientProvider',
           dependencies: const <ProviderOrFamily>[
             singleConfigProvider,

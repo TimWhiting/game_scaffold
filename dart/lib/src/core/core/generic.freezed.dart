@@ -14,484 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-GenericGame _$GenericGameFromJson(Map<String, dynamic> json) {
-  return _GenericGame.fromJson(json);
-}
-
-/// @nodoc
-mixin _$GenericGame {
-  DateTime get time => throw _privateConstructorUsedError;
-  GameStatus get status => throw _privateConstructorUsedError;
-  int get round => throw _privateConstructorUsedError;
-  IList<Player> get players => throw _privateConstructorUsedError;
-  IList<String> get readyPlayers => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $GenericGameCopyWith<GenericGame> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $GenericGameCopyWith<$Res> {
-  factory $GenericGameCopyWith(
-          GenericGame value, $Res Function(GenericGame) then) =
-      _$GenericGameCopyWithImpl<$Res, GenericGame>;
-  @useResult
-  $Res call(
-      {DateTime time,
-      GameStatus status,
-      int round,
-      IList<Player> players,
-      IList<String> readyPlayers});
-}
-
-/// @nodoc
-class _$GenericGameCopyWithImpl<$Res, $Val extends GenericGame>
-    implements $GenericGameCopyWith<$Res> {
-  _$GenericGameCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? time = null,
-    Object? status = null,
-    Object? round = null,
-    Object? players = null,
-    Object? readyPlayers = null,
-  }) {
-    return _then(_value.copyWith(
-      time: null == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as GameStatus,
-      round: null == round
-          ? _value.round
-          : round // ignore: cast_nullable_to_non_nullable
-              as int,
-      players: null == players
-          ? _value.players
-          : players // ignore: cast_nullable_to_non_nullable
-              as IList<Player>,
-      readyPlayers: null == readyPlayers
-          ? _value.readyPlayers
-          : readyPlayers // ignore: cast_nullable_to_non_nullable
-              as IList<String>,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$GenericGameImplCopyWith<$Res>
-    implements $GenericGameCopyWith<$Res> {
-  factory _$$GenericGameImplCopyWith(
-          _$GenericGameImpl value, $Res Function(_$GenericGameImpl) then) =
-      __$$GenericGameImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {DateTime time,
-      GameStatus status,
-      int round,
-      IList<Player> players,
-      IList<String> readyPlayers});
-}
-
-/// @nodoc
-class __$$GenericGameImplCopyWithImpl<$Res>
-    extends _$GenericGameCopyWithImpl<$Res, _$GenericGameImpl>
-    implements _$$GenericGameImplCopyWith<$Res> {
-  __$$GenericGameImplCopyWithImpl(
-      _$GenericGameImpl _value, $Res Function(_$GenericGameImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? time = null,
-    Object? status = null,
-    Object? round = null,
-    Object? players = null,
-    Object? readyPlayers = null,
-  }) {
-    return _then(_$GenericGameImpl(
-      time: null == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as GameStatus,
-      round: null == round
-          ? _value.round
-          : round // ignore: cast_nullable_to_non_nullable
-              as int,
-      players: null == players
-          ? _value.players
-          : players // ignore: cast_nullable_to_non_nullable
-              as IList<Player>,
-      readyPlayers: null == readyPlayers
-          ? _value.readyPlayers
-          : readyPlayers // ignore: cast_nullable_to_non_nullable
-              as IList<String>,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$GenericGameImpl extends _GenericGame {
-  const _$GenericGameImpl(
-      {required this.time,
-      required this.status,
-      required this.round,
-      this.players = const IListConst([]),
-      this.readyPlayers = const IListConst([])})
-      : super._();
-
-  factory _$GenericGameImpl.fromJson(Map<String, dynamic> json) =>
-      _$$GenericGameImplFromJson(json);
-
-  @override
-  final DateTime time;
-  @override
-  final GameStatus status;
-  @override
-  final int round;
-  @override
-  @JsonKey()
-  final IList<Player> players;
-  @override
-  @JsonKey()
-  final IList<String> readyPlayers;
-
-  @override
-  String toString() {
-    return 'GenericGame(time: $time, status: $status, round: $round, players: $players, readyPlayers: $readyPlayers)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GenericGameImpl &&
-            (identical(other.time, time) || other.time == time) &&
-            (identical(other.status, status) || other.status == status) &&
-            (identical(other.round, round) || other.round == round) &&
-            const DeepCollectionEquality().equals(other.players, players) &&
-            const DeepCollectionEquality()
-                .equals(other.readyPlayers, readyPlayers));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      time,
-      status,
-      round,
-      const DeepCollectionEquality().hash(players),
-      const DeepCollectionEquality().hash(readyPlayers));
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$GenericGameImplCopyWith<_$GenericGameImpl> get copyWith =>
-      __$$GenericGameImplCopyWithImpl<_$GenericGameImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$GenericGameImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _GenericGame extends GenericGame {
-  const factory _GenericGame(
-      {required final DateTime time,
-      required final GameStatus status,
-      required final int round,
-      final IList<Player> players,
-      final IList<String> readyPlayers}) = _$GenericGameImpl;
-  const _GenericGame._() : super._();
-
-  factory _GenericGame.fromJson(Map<String, dynamic> json) =
-      _$GenericGameImpl.fromJson;
-
-  @override
-  DateTime get time;
-  @override
-  GameStatus get status;
-  @override
-  int get round;
-  @override
-  IList<Player> get players;
-  @override
-  IList<String> get readyPlayers;
-  @override
-  @JsonKey(ignore: true)
-  _$$GenericGameImplCopyWith<_$GenericGameImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-GenericEvent _$GenericEventFromJson(Map<String, dynamic> json) {
-  return _GenericReadyNextRoundEvent.fromJson(json);
-}
-
-/// @nodoc
-mixin _$GenericEvent {
-  String get player => throw _privateConstructorUsedError;
-  String get type => throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String player, String type) readyNextRound,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String player, String type)? readyNextRound,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String player, String type)? readyNextRound,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GenericReadyNextRoundEvent value) readyNextRound,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GenericReadyNextRoundEvent value)? readyNextRound,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $GenericEventCopyWith<GenericEvent> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $GenericEventCopyWith<$Res> {
-  factory $GenericEventCopyWith(
-          GenericEvent value, $Res Function(GenericEvent) then) =
-      _$GenericEventCopyWithImpl<$Res, GenericEvent>;
-  @useResult
-  $Res call({String player, String type});
-}
-
-/// @nodoc
-class _$GenericEventCopyWithImpl<$Res, $Val extends GenericEvent>
-    implements $GenericEventCopyWith<$Res> {
-  _$GenericEventCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? player = null,
-    Object? type = null,
-  }) {
-    return _then(_value.copyWith(
-      player: null == player
-          ? _value.player
-          : player // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$GenericReadyNextRoundEventImplCopyWith<$Res>
-    implements $GenericEventCopyWith<$Res> {
-  factory _$$GenericReadyNextRoundEventImplCopyWith(
-          _$GenericReadyNextRoundEventImpl value,
-          $Res Function(_$GenericReadyNextRoundEventImpl) then) =
-      __$$GenericReadyNextRoundEventImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String player, String type});
-}
-
-/// @nodoc
-class __$$GenericReadyNextRoundEventImplCopyWithImpl<$Res>
-    extends _$GenericEventCopyWithImpl<$Res, _$GenericReadyNextRoundEventImpl>
-    implements _$$GenericReadyNextRoundEventImplCopyWith<$Res> {
-  __$$GenericReadyNextRoundEventImplCopyWithImpl(
-      _$GenericReadyNextRoundEventImpl _value,
-      $Res Function(_$GenericReadyNextRoundEventImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? player = null,
-    Object? type = null,
-  }) {
-    return _then(_$GenericReadyNextRoundEventImpl(
-      null == player
-          ? _value.player
-          : player // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$GenericReadyNextRoundEventImpl extends _GenericReadyNextRoundEvent {
-  const _$GenericReadyNextRoundEventImpl(this.player, {this.type = 'generic'})
-      : super._();
-
-  factory _$GenericReadyNextRoundEventImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$GenericReadyNextRoundEventImplFromJson(json);
-
-  @override
-  final String player;
-  @override
-  @JsonKey()
-  final String type;
-
-  @override
-  String toString() {
-    return 'GenericEvent.readyNextRound(player: $player, type: $type)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GenericReadyNextRoundEventImpl &&
-            (identical(other.player, player) || other.player == player) &&
-            (identical(other.type, type) || other.type == type));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, player, type);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$GenericReadyNextRoundEventImplCopyWith<_$GenericReadyNextRoundEventImpl>
-      get copyWith => __$$GenericReadyNextRoundEventImplCopyWithImpl<
-          _$GenericReadyNextRoundEventImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String player, String type) readyNextRound,
-  }) {
-    return readyNextRound(player, type);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String player, String type)? readyNextRound,
-  }) {
-    return readyNextRound?.call(player, type);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String player, String type)? readyNextRound,
-    required TResult orElse(),
-  }) {
-    if (readyNextRound != null) {
-      return readyNextRound(player, type);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(_GenericReadyNextRoundEvent value) readyNextRound,
-  }) {
-    return readyNextRound(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GenericReadyNextRoundEvent value)? readyNextRound,
-  }) {
-    return readyNextRound?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GenericReadyNextRoundEvent value)? readyNextRound,
-    required TResult orElse(),
-  }) {
-    if (readyNextRound != null) {
-      return readyNextRound(this);
-    }
-    return orElse();
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$GenericReadyNextRoundEventImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _GenericReadyNextRoundEvent extends GenericEvent {
-  const factory _GenericReadyNextRoundEvent(final String player,
-      {final String type}) = _$GenericReadyNextRoundEventImpl;
-  const _GenericReadyNextRoundEvent._() : super._();
-
-  factory _GenericReadyNextRoundEvent.fromJson(Map<String, dynamic> json) =
-      _$GenericReadyNextRoundEventImpl.fromJson;
-
-  @override
-  String get player;
-  @override
-  String get type;
-  @override
-  @JsonKey(ignore: true)
-  _$$GenericReadyNextRoundEventImplCopyWith<_$GenericReadyNextRoundEventImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
 GameConfig _$GameConfigFromJson(Map<String, dynamic> json) {
   return _GameConfig.fromJson(json);
 }
@@ -508,8 +30,12 @@ mixin _$GameConfig {
   bool get autoStart => throw _privateConstructorUsedError;
   Map<String, Object?> get options => throw _privateConstructorUsedError;
 
+  /// Serializes this GameConfig to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of GameConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $GameConfigCopyWith<GameConfig> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -542,6 +68,8 @@ class _$GameConfigCopyWithImpl<$Res, $Val extends GameConfig>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of GameConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -624,6 +152,8 @@ class __$$GameConfigImplCopyWithImpl<$Res>
       _$GameConfigImpl _value, $Res Function(_$GameConfigImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of GameConfig
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -754,7 +284,7 @@ class _$GameConfigImpl extends _GameConfig {
             const DeepCollectionEquality().equals(other._options, _options));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -768,7 +298,9 @@ class _$GameConfigImpl extends _GameConfig {
       autoStart,
       const DeepCollectionEquality().hash(_options));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GameConfig
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$GameConfigImplCopyWith<_$GameConfigImpl> get copyWith =>
@@ -816,8 +348,11 @@ abstract class _GameConfig extends GameConfig {
   bool get autoStart;
   @override
   Map<String, Object?> get options;
+
+  /// Create a copy of GameConfig
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GameConfigImplCopyWith<_$GameConfigImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -835,8 +370,12 @@ mixin _$GameInfo {
   GameConfig get config => throw _privateConstructorUsedError;
   GameStatus get status => throw _privateConstructorUsedError;
 
+  /// Serializes this GameInfo to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of GameInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $GameInfoCopyWith<GameInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -867,6 +406,8 @@ class _$GameInfoCopyWithImpl<$Res, $Val extends GameInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of GameInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -905,6 +446,8 @@ class _$GameInfoCopyWithImpl<$Res, $Val extends GameInfo>
     ) as $Val);
   }
 
+  /// Create a copy of GameInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $GameConfigCopyWith<$Res> get config {
@@ -942,6 +485,8 @@ class __$$GameInfoImplCopyWithImpl<$Res>
       _$GameInfoImpl _value, $Res Function(_$GameInfoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of GameInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1026,7 +571,7 @@ class _$GameInfoImpl implements _GameInfo {
             (identical(other.status, status) || other.status == status));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -1037,7 +582,9 @@ class _$GameInfoImpl implements _GameInfo {
       config,
       status);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GameInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$GameInfoImplCopyWith<_$GameInfoImpl> get copyWith =>
@@ -1075,8 +622,11 @@ abstract class _GameInfo implements GameInfo {
   GameConfig get config;
   @override
   GameStatus get status;
+
+  /// Create a copy of GameInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GameInfoImplCopyWith<_$GameInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1092,8 +642,12 @@ mixin _$Lobby {
   GameStatus get gameStatus => throw _privateConstructorUsedError;
   ISet<Player> get players => throw _privateConstructorUsedError;
 
+  /// Serializes this Lobby to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Lobby
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LobbyCopyWith<Lobby> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -1121,6 +675,8 @@ class _$LobbyCopyWithImpl<$Res, $Val extends Lobby>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Lobby
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1149,6 +705,8 @@ class _$LobbyCopyWithImpl<$Res, $Val extends Lobby>
     ) as $Val);
   }
 
+  /// Create a copy of Lobby
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $GameConfigCopyWith<$Res> get config {
@@ -1183,6 +741,8 @@ class __$$LobbyImplCopyWithImpl<$Res>
       _$LobbyImpl _value, $Res Function(_$LobbyImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Lobby
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1251,12 +811,14 @@ class _$LobbyImpl implements _Lobby {
             const DeepCollectionEquality().equals(other.players, players));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, code, config, gameStatus,
       const DeepCollectionEquality().hash(players));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Lobby
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LobbyImplCopyWith<_$LobbyImpl> get copyWith =>
@@ -1287,8 +849,11 @@ abstract class _Lobby implements Lobby {
   GameStatus get gameStatus;
   @override
   ISet<Player> get players;
+
+  /// Create a copy of Lobby
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LobbyImplCopyWith<_$LobbyImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

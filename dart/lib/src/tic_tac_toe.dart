@@ -1,14 +1,17 @@
-// ignore: unnecessary_import
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:game_scaffold_dart/game_scaffold_dart.dart';
-part 'tic_tac_toe.freezed.dart';
-part 'tic_tac_toe.g.dart';
+
+import 'core/core/core.dart';
 
 @EventGenerics(type: 'TicTacToe')
 sealed class TicTacToeEvent implements Event {
-  factory TicTacToeEvent({required int location}); // Adds required playerId
-  // Generated TicTacToeEvent.readyNextRound
+  const TicTacToeEvent();
+  external factory TicTacToeEvent.basic({required int location, required PlayerID playerID});
+}
+
+void main(){
+  final res = TicTacToeEvent.readyNextRound(playerID: '');
+  print(res);
 }
 
 enum Winner {
@@ -28,15 +31,28 @@ enum Winner {
           : 0.5;
 }
 
-@GameGenerics(type: 'TicTacToe', name: "Tic Tac Toe")
+// No per player info
+@PlayerGenerics()
+sealed class TicTacToePlayer implements GamePlayer<TicTacToeEvent> {}
+
 class TicTacToeGame implements Game<TicTacToeEvent> {
-  final IList<int?> board
+  MaybeError<TicTacToeGame> nextRound(TicTacToeRound round, GameConfig config) =>
+    TicTacToeRound.start(players, round.currentPlayerIndex == 0 ? 1 : 0).success;
+  @override
+  bool isOver(TicTacToeRound round, GameConfig config) => this.round == config.rounds; 
+}
 
-  factory TicTacToeGame(Players players) => TicTacToeGame.start(
-      board: <int?>[for (var i = 0; i < 9; i++) null].lock
+@RoundGenerics(type: 'TicTacToe', name: "Tic Tac Toe")
+class TicTacToeRound implements GameRound<TicTacToeEvent> {
+  factory TicTacToeRound.start(IMap<PlayerID, PlayerName> players, int currentPlayerIndex) => 
+    TicTacToeRound(
+      board: <int?>[for (var i = 0; i < 9; i++) null].lock, 
+      players: {for (final MapEntry(key: id, value: n) in players.entries) TicTacToePlayer(id: id, name: n)},
+      currentPlayerIndex: currentPlayerIndex,
     );
-
-  MaybeError<TicTacToeGame> next(TicTacToeGameEvent event, GameConfig config) {
+ 
+  final IList<int?> board
+  MaybeError<TicTacToeGame> next(TicTacToeEvent event, GameConfig config) {
     if (event.player != currentPlayer) {
       return this.error('Not your turn'); // TODO: Generic check.
     }
@@ -48,22 +64,11 @@ class TicTacToeGame implements Game<TicTacToeEvent> {
         board: board.replace(event.location, currentPlayer),
       ).success;
   }
-  MaybeError<TicTacToeGame> nextRound(GameConfig config) =>
-    TicTacToeGame(
-      board: <int?>[for (var i = 0; i < 9; i++) null].lock,
-      currentPlayer: state.game.currentPlayer == 0 ? 1 : 0,
-    ).success;
-  
-
   @override
-  bool checkRoundOver(GameConfig c) => winner != null;
+  bool isOver(GameConfig c) => winner != null;
   @override
-  bool checkGameOver(GameConfig c) => round == c.rounds;
-  @override
-  Rewards calculateRoundRewards(GameConfig c) => [winner.p1Points, winner.p2Points];
-  bool canMove(int player, int location) => location >= 0 && location < 9 && board[location] == null;
-
-  late final Winner? winner = isWinner(0)
+  Rewards rewards(GameConfig c) => {winner.p1Points, winner.p2Points};
+   late final Winner? winner = isWinner(0)
       ? Winner.p1
       : isWinner(1)
           ? Winner.p2
@@ -89,4 +94,5 @@ class TicTacToeGame implements Game<TicTacToeEvent> {
     [0, 4, 8],
     [2, 4, 6]
   ].map((l) => l.lock).toIList();
+  bool canMove(int player, int location) => location >= 0 && location < 9 && board[location] == null;
 }

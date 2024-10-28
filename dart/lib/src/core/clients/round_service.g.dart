@@ -22,6 +22,7 @@ final class RoundServiceProvider<T extends RoundService>
       )? create})
       : _createCb = create,
         super(
+          retry: null,
           name: r'roundServiceProvider',
           isAutoDispose: true,
           dependencies: null,
@@ -116,6 +117,7 @@ String _$roundServiceHash() => r'1703436a0acb445b90bcb259d6776960d1eb0389';
 final class RoundServiceFamily extends Family {
   const RoundServiceFamily._()
       : super(
+          retry: null,
           name: r'roundServiceProvider',
           dependencies: const <ProviderOrFamily>[onDeviceRoundServiceProvider],
           allTransitiveDependencies: const <ProviderOrFamily>[

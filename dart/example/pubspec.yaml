@@ -10,7 +10,6 @@ environment:
 
 dependencies:
   game_scaffold_dart: 0.4.1
-  game_scaffold_games: 0.4.1
   riverpod: ^2.5.1
 
 dev_dependencies:

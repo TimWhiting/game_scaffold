@@ -21,10 +21,12 @@ mixin _$RoundInfo {
   String get code => throw _privateConstructorUsedError;
   String get playerName => throw _privateConstructorUsedError;
   GameInfo? get lobby => throw _privateConstructorUsedError;
-  GameState<Event, Game>? get game => throw _privateConstructorUsedError;
+  GameState? get game => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RoundInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $RoundInfoCopyWith<RoundInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -39,7 +41,7 @@ abstract class $RoundInfoCopyWith<$Res> {
       String code,
       String playerName,
       GameInfo? lobby,
-      GameState<Event, Game>? game,
+      GameState? game,
       String? error});
 
   $GameInfoCopyWith<$Res>? get lobby;
@@ -55,6 +57,8 @@ class _$RoundInfoCopyWithImpl<$Res, $Val extends RoundInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of RoundInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -85,7 +89,7 @@ class _$RoundInfoCopyWithImpl<$Res, $Val extends RoundInfo>
       game: freezed == game
           ? _value.game
           : game // ignore: cast_nullable_to_non_nullable
-              as GameState<Event, Game>?,
+              as GameState?,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -93,6 +97,8 @@ class _$RoundInfoCopyWithImpl<$Res, $Val extends RoundInfo>
     ) as $Val);
   }
 
+  /// Create a copy of RoundInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $GameInfoCopyWith<$Res>? get lobby {
@@ -119,7 +125,7 @@ abstract class _$$RoundInfoImplCopyWith<$Res>
       String code,
       String playerName,
       GameInfo? lobby,
-      GameState<Event, Game>? game,
+      GameState? game,
       String? error});
 
   @override
@@ -134,6 +140,8 @@ class __$$RoundInfoImplCopyWithImpl<$Res>
       _$RoundInfoImpl _value, $Res Function(_$RoundInfoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RoundInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -164,7 +172,7 @@ class __$$RoundInfoImplCopyWithImpl<$Res>
       game: freezed == game
           ? _value.game
           : game // ignore: cast_nullable_to_non_nullable
-              as GameState<Event, Game>?,
+              as GameState?,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -194,7 +202,7 @@ class _$RoundInfoImpl extends _RoundInfo {
   @override
   final GameInfo? lobby;
   @override
-  final GameState<Event, Game>? game;
+  final GameState? game;
   @override
   final String? error;
 
@@ -213,15 +221,17 @@ class _$RoundInfoImpl extends _RoundInfo {
             (identical(other.playerName, playerName) ||
                 other.playerName == playerName) &&
             (identical(other.lobby, lobby) || other.lobby == lobby) &&
-            (identical(other.game, game) || other.game == game) &&
+            const DeepCollectionEquality().equals(other.game, game) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, service, code, playerName, lobby, game, error);
+  int get hashCode => Object.hash(runtimeType, service, code, playerName, lobby,
+      const DeepCollectionEquality().hash(game), error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RoundInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$RoundInfoImplCopyWith<_$RoundInfoImpl> get copyWith =>
@@ -233,7 +243,7 @@ abstract class _RoundInfo extends RoundInfo {
       {required final String code,
       required final String playerName,
       final GameInfo? lobby,
-      final GameState<Event, Game>? game,
+      final GameState? game,
       final String? error}) = _$RoundInfoImpl;
   const _RoundInfo._() : super._();
 
@@ -247,11 +257,14 @@ abstract class _RoundInfo extends RoundInfo {
   @override
   GameInfo? get lobby;
   @override
-  GameState<Event, Game>? get game;
+  GameState? get game;
   @override
   String? get error;
+
+  /// Create a copy of RoundInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RoundInfoImplCopyWith<_$RoundInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

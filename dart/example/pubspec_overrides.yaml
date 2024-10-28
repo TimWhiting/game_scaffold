@@ -2,8 +2,6 @@
 dependency_overrides:
   game_scaffold_dart:
     path: ../
-  game_scaffold_games:
-    path: ../../games
   riverpod_analyzer_utils:
     git:
       url: https://github.com/rrousselgit/riverpod
