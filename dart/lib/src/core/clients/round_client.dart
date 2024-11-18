@@ -50,7 +50,7 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
     }
   }
   final PlayerID multiplayerID;
-  final StateNotifierProviderRef ref;
+  final Ref ref;
 
   void connect(RoundService service) {
     service.connect().map((conn) {
