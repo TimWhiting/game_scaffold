@@ -25,4 +25,16 @@ dev_dependencies:
     sdk: flutter
   game_scaffold_games: ^0.5.0-dev
 
+dependency_overrides:
+  firebase_dart:
+    git: 
+      url: git@github.com:TimWhiting/firebase_dart
+      path: packages/firebase_dart
+      ref: develop
+  firebase_dart_flutter:
+    git: 
+      url: git@github.com:TimWhiting/firebase_dart
+      path: packages/firebase_dart_flutter
+      ref: develop
+
 flutter: null
