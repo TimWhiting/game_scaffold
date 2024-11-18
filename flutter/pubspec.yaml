@@ -28,12 +28,12 @@ dev_dependencies:
 dependency_overrides:
   firebase_dart:
     git: 
-      url: git@github.com:TimWhiting/firebase_dart
+      url: https://www.github.com/TimWhiting/firebase_dart
       path: packages/firebase_dart
       ref: develop
   firebase_dart_flutter:
     git: 
-      url: git@github.com:TimWhiting/firebase_dart
+      url: https://www.github.com/TimWhiting/firebase_dart
       path: packages/firebase_dart_flutter
       ref: develop
 

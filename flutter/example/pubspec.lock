@@ -117,10 +117,10 @@ packages:
     dependency: transitive
     description:
       name: fast_immutable_collections
-      sha256: c3c73f4f989d3302066e4ec94e6ec73b5dc872592d02194f49f1352d64126b8c
+      sha256: e5e27788db94c5f1046585566a5cf63a8139a0d743cf9fdcab7ae7b0c3701a4a
       url: "https://pub.dev"
     source: hosted
-    version: "10.2.4"
+    version: "11.0.0"
   file:
     dependency: transitive
     description:
@@ -133,10 +133,10 @@ packages:
     dependency: transitive
     description:
       name: firebase_dart
-      sha256: ac50536c0346a41ebcd47e656ea10bfbcc101213528551293ff2729d3d1c718a
+      sha256: "7c84aa695bd583e1289f73a179cf319dd3e84290f3400e796670c4f73bd089f3"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.2"
+    version: "1.2.3"
   firebaseapis:
     dependency: transitive
     description:
