@@ -149,14 +149,11 @@ class GameState<E extends Event, T extends Game> {
         'generic': generic.toJson(),
       };
 
-  factory GameState.fromJson(JsonMap json) {
-    print(json['game']);
-    return GameState(
-      game: GameRegistry.gameFromJson(json['game'] as JsonMap),
-      rewards: json['rewards'] as List<double>? ?? [],
-      generic: GenericGame.fromJson(json['generic'] as JsonMap),
-    );
-  }
+  factory GameState.fromJson(JsonMap json) => GameState(
+        game: GameRegistry.gameFromJson(json['game'] as JsonMap),
+        rewards: json['rewards'] as List<double>? ?? [],
+        generic: GenericGame.fromJson(json['generic'] as JsonMap),
+      );
 
   GameState<E, T> updateReward(List<double> Function(List<double>) update) =>
       copyWith(rewards: update(rewards));
