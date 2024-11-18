@@ -41,13 +41,9 @@ final allServiceTypes = StateProvider<List<ServiceType>>(
 
 /// Provides the [GameService] for each service id
 final gameServiceFamily = Provider.family<GameService, ServiceType>(
-  (ref, serviceType) {
-    switch (serviceType) {
-      case OnDeviceService:
-        return ref.watch(onDeviceGameService);
-      default:
-        throw UnsupportedError('Unsupported service type');
-    }
+  (ref, serviceType) => switch (serviceType) {
+    OnDeviceService => ref.watch(onDeviceGameService),
+    _ => throw UnsupportedError('Unsupported service type')
   },
   name: 'GameServiceFamily',
   dependencies: [onDeviceGameService, playerIDProvider],
@@ -61,13 +57,9 @@ final gameService = Provider<GameService>(
 
 /// Provides a [RoundService] for the service with the specified id
 final roundServiceFamily = Provider.family<RoundService, ServiceType>(
-  (ref, serviceType) {
-    switch (serviceType) {
-      case OnDeviceService:
-        return ref.watch(onDeviceRoundService);
-      default:
-        throw UnsupportedError('Unsupported service type');
-    }
+  (ref, serviceType) => switch (serviceType) {
+    OnDeviceService => ref.watch(onDeviceRoundService),
+    _ => throw UnsupportedError('Unsupported service type')
   },
   name: 'RoundServiceFamily',
   dependencies: [onDeviceRoundService, playerIDProvider],
