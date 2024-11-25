@@ -111,7 +111,7 @@ final onDeviceRoundService = Provider<RoundService>((ref) {
 /// Warning implementation not complete or tested yet
 class OnDeviceGameService extends GameService {
   OnDeviceGameService(this.ref) : super();
-  final ProviderRef ref;
+  final Ref ref;
   static final games = <GameCode, LocalGame>{};
   @override
   Future<String> createGame(PlayerID playerID, GameConfig config) async {

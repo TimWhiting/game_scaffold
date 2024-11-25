@@ -228,19 +228,15 @@ class GameNavigator extends HookConsumerWidget {
             ),
           )
           .toList(),
-      onPopPage: (route, p) {
-        navigationLogger.info('Popping route ${route.settings.arguments}');
-        final status = route.settings.arguments as String?;
+      onDidRemovePage: (route) {
+        navigationLogger.info('Popping route ${route.arguments}');
+        final status = route.arguments as String?;
         if (status == 'lobby' || status == 'started') {
           // ignore: unused_result
           ref.read(roundClientProvider).exitGame();
-          route.didPop(null);
-          return true;
         } else if (status == 'connected') {
           ref.read(gameService).disconnect();
-          return true;
         }
-        return false;
       },
     );
   }

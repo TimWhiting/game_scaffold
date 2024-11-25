@@ -1,2 +1,4 @@
 /.dart_tool
 **/melos*.iml
+.flutter-plugins
+.flutter-plugins-dependencies

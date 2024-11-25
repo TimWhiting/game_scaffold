@@ -16,8 +16,7 @@ void main() {
 
   testGame<TicTacToeGameEvent, TicTacToeGame>(
     'TicTacToe',
-    config: const GameConfig(
-        gameType: 'tictactoe', rounds: 3, customNames: false, maxPlayers: 2),
+    config: const GameConfig(gameType: 'tictactoe', rounds: 3, maxPlayers: 2),
     players: [
       const Player('0'),
       const Player('1'),

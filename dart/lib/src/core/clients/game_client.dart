@@ -39,7 +39,7 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
     connect(service);
   }
   final PlayerID multiplayerID;
-  final StateNotifierProviderRef ref;
+  final Ref ref;
 
   void exitGame() {
     state = state.copyWith(config: null, code: null);

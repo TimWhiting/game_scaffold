@@ -3,7 +3,27 @@ homepage: https://www.github.com/TimWhiting/game_scaffold
 publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.5.0 <4.0.0"
 
 dev_dependencies:
   melos: ^6.2.0
+
+workspace:
+  - dart
+  - games
+  - flutter
+  - test
+  - dart/example
+  - flutter/example
+
+dependency_overrides:
+  firebase_dart:
+    git: 
+      url: https://www.github.com/TimWhiting/firebase_dart
+      path: packages/firebase_dart
+      ref: develop
+  firebase_dart_flutter:
+    git: 
+      url: https://www.github.com/TimWhiting/firebase_dart
+      path: packages/firebase_dart_flutter
+      ref: develop

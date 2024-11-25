@@ -6,7 +6,9 @@ publish_to: none
 homepage: https://github.com/TimWhiting/game_scaffold
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.5.0 <4.0.0"
+
+resolution: workspace
 
 dependencies:
   game_scaffold_dart: any
@@ -17,9 +19,3 @@ dev_dependencies:
   build_runner: ^2.4.13
   dartdoc: ^8.3.0
   test: ^1.25.8
-
-dependency_overrides:
-  game_scaffold_dart:
-    path: ../
-  game_scaffold_games:
-    path: ../../games

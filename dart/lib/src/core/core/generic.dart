@@ -80,13 +80,13 @@ class GenericEvent extends Event with _$GenericEvent {
   const GenericEvent._();
 
   /// Signals that [player] is ready for the next round
-  const factory GenericEvent.readyNextRound(String player, {@Default('generic') String type}) =
-      _GenericReadyNextRoundEvent;
+  const factory GenericEvent.readyNextRound(String player,
+      {@Default('generic') String type}) = _GenericReadyNextRoundEvent;
 
   factory GenericEvent.fromJson(Map<String, dynamic> map) =>
       _$GenericEventFromJson(map);
-  
-  static void register(){
+
+  static void register() {
     GameRegistry.register(GameFunctionsGeneric());
   }
 }
@@ -96,7 +96,7 @@ class GameFunctionsGeneric extends GameFunctions {
   Game fromJson(JsonMap json) => throw UnimplementedError();
 
   @override
-  Event fromJsonE(JsonMap json)  => GenericEvent.fromJson(json);
+  Event fromJsonE(JsonMap json) => GenericEvent.fromJson(json);
 
   @override
   GameName get gameName => 'Generic';
@@ -105,14 +105,19 @@ class GameFunctionsGeneric extends GameFunctions {
   GameType get gameType => 'generic';
 
   @override
-  GameState<Event, Game> initialState(GameConfig config, IList<Player> players) => throw UnimplementedError();
+  GameState<Event, Game> initialState(
+          GameConfig config, IList<Player> players) =>
+      throw UnimplementedError();
 
   @override
-  NextState<Event, Game> next(covariant GameState<Event, Game> state, GameConfig config, covariant PlayerEvent<Event> event) => throw UnimplementedError();
+  NextState<Event, Game> next(covariant GameState<Event, Game> state,
+          GameConfig config, covariant PlayerEvent<Event> event) =>
+      throw UnimplementedError();
 
   @override
-  GameState<Event, Game> nextRound(covariant GameState<Event, Game> state, GameConfig config) => throw UnimplementedError();
-
+  GameState<Event, Game> nextRound(
+          covariant GameState<Event, Game> state, GameConfig config) =>
+      throw UnimplementedError();
 }
 
 /// Represents the current status of the game as seen by the client
@@ -180,9 +185,9 @@ class GameInfo with _$GameInfo {
 class Lobby with _$Lobby {
   const factory Lobby({
     required GameCode code,
-    @Default(ISetConst({})) ISet<Player> players,
     required GameConfig config,
     required GameStatus gameStatus,
+    @Default(ISetConst({})) ISet<Player> players,
   }) = _Lobby;
   factory Lobby.fromJson(Map<String, dynamic> map) => _$LobbyFromJson(map);
 }

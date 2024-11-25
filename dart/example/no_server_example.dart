@@ -20,7 +20,6 @@ Future<void> main(List<String> arguments) async {
   rootProvider.read(serviceType.notifier).state = OnDeviceService;
   const config = GameConfig(
     adminID: '0',
-    customNames: false,
     gameType: 'tictactoe',
     rounds: 2,
     maxPlayers: 2,
