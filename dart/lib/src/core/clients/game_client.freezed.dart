@@ -12,7 +12,7 @@ part of 'game_client.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$GameClientInfo {
@@ -23,7 +23,9 @@ mixin _$GameClientInfo {
   GameConfig? get config => throw _privateConstructorUsedError;
   IList<GameInfo>? get games => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GameClientInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $GameClientInfoCopyWith<GameClientInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -54,6 +56,8 @@ class _$GameClientInfoCopyWithImpl<$Res, $Val extends GameClientInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of GameClientInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -87,6 +91,8 @@ class _$GameClientInfoCopyWithImpl<$Res, $Val extends GameClientInfo>
     ) as $Val);
   }
 
+  /// Create a copy of GameClientInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $GameConfigCopyWith<$Res>? get config {
@@ -101,11 +107,11 @@ class _$GameClientInfoCopyWithImpl<$Res, $Val extends GameClientInfo>
 }
 
 /// @nodoc
-abstract class _$$_GameClientInfoCopyWith<$Res>
+abstract class _$$GameClientInfoImplCopyWith<$Res>
     implements $GameClientInfoCopyWith<$Res> {
-  factory _$$_GameClientInfoCopyWith(
-          _$_GameClientInfo value, $Res Function(_$_GameClientInfo) then) =
-      __$$_GameClientInfoCopyWithImpl<$Res>;
+  factory _$$GameClientInfoImplCopyWith(_$GameClientInfoImpl value,
+          $Res Function(_$GameClientInfoImpl) then) =
+      __$$GameClientInfoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -120,13 +126,15 @@ abstract class _$$_GameClientInfoCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_GameClientInfoCopyWithImpl<$Res>
-    extends _$GameClientInfoCopyWithImpl<$Res, _$_GameClientInfo>
-    implements _$$_GameClientInfoCopyWith<$Res> {
-  __$$_GameClientInfoCopyWithImpl(
-      _$_GameClientInfo _value, $Res Function(_$_GameClientInfo) _then)
+class __$$GameClientInfoImplCopyWithImpl<$Res>
+    extends _$GameClientInfoCopyWithImpl<$Res, _$GameClientInfoImpl>
+    implements _$$GameClientInfoImplCopyWith<$Res> {
+  __$$GameClientInfoImplCopyWithImpl(
+      _$GameClientInfoImpl _value, $Res Function(_$GameClientInfoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of GameClientInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -136,7 +144,7 @@ class __$$_GameClientInfoCopyWithImpl<$Res>
     Object? config = freezed,
     Object? games = freezed,
   }) {
-    return _then(_$_GameClientInfo(
+    return _then(_$GameClientInfoImpl(
       freezed == service
           ? _value.service
           : service // ignore: cast_nullable_to_non_nullable
@@ -163,8 +171,8 @@ class __$$_GameClientInfoCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_GameClientInfo extends _GameClientInfo {
-  const _$_GameClientInfo(@protected this.service,
+class _$GameClientInfoImpl extends _GameClientInfo {
+  const _$GameClientInfoImpl(@protected this.service,
       {this.code, this.playerName, this.config, this.games})
       : super._();
 
@@ -186,10 +194,10 @@ class _$_GameClientInfo extends _GameClientInfo {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_GameClientInfo &&
+            other is _$GameClientInfoImpl &&
             (identical(other.service, service) || other.service == service) &&
             (identical(other.code, code) || other.code == code) &&
             (identical(other.playerName, playerName) ||
@@ -202,11 +210,14 @@ class _$_GameClientInfo extends _GameClientInfo {
   int get hashCode => Object.hash(runtimeType, service, code, playerName,
       config, const DeepCollectionEquality().hash(games));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GameClientInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$_GameClientInfoCopyWith<_$_GameClientInfo> get copyWith =>
-      __$$_GameClientInfoCopyWithImpl<_$_GameClientInfo>(this, _$identity);
+  _$$GameClientInfoImplCopyWith<_$GameClientInfoImpl> get copyWith =>
+      __$$GameClientInfoImplCopyWithImpl<_$GameClientInfoImpl>(
+          this, _$identity);
 }
 
 abstract class _GameClientInfo extends GameClientInfo {
@@ -214,7 +225,7 @@ abstract class _GameClientInfo extends GameClientInfo {
       {final String? code,
       final String? playerName,
       final GameConfig? config,
-      final IList<GameInfo>? games}) = _$_GameClientInfo;
+      final IList<GameInfo>? games}) = _$GameClientInfoImpl;
   const _GameClientInfo._() : super._();
 
   @override
@@ -228,8 +239,11 @@ abstract class _GameClientInfo extends GameClientInfo {
   GameConfig? get config;
   @override
   IList<GameInfo>? get games;
+
+  /// Create a copy of GameClientInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
-  _$$_GameClientInfoCopyWith<_$_GameClientInfo> get copyWith =>
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$GameClientInfoImplCopyWith<_$GameClientInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

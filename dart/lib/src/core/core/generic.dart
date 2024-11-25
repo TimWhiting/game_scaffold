@@ -150,7 +150,7 @@ class GameConfig with _$GameConfig {
     @Default(false) bool customNames,
     @Default(15) int rounds,
     @Default(1) int minPlayers,
-    @Default(10) int maxPlayers,
+    @Default(20) int maxPlayers,
     @Default(true) bool autoStart,
     @Default({}) Map<String, Object?> options,
   }) = _GameConfig;
