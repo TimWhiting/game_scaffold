@@ -221,23 +221,70 @@ class GameNavigator extends HookConsumerWidget {
     return Navigator(
       pages: pages.entries
           .map(
-            (entry) => MaterialPage(
+            (entry) => NoAnimationPage(
               key: ValueKey(entry.key),
               child: entry.value,
               arguments: entry.key,
             ),
           )
           .toList(),
-      onDidRemovePage: (route) {
-        navigationLogger.info('Popping route ${route.arguments}');
-        final status = route.arguments as String?;
+      onPopPage: (route, result) {
+        navigationLogger.info('Popping route ${route.settings.arguments}');
+        final status = route.settings.arguments as String?;
         if (status == 'lobby' || status == 'started') {
           // ignore: unused_result
-          ref.read(roundClientProvider).exitGame();
+          Future.delayed(const Duration(milliseconds: 1),
+              () => ref.read(roundClientProvider).exitGame());
+          return true;
         } else if (status == 'connected') {
           ref.read(gameService).disconnect();
+          return true;
         }
+        return false;
       },
     );
   }
+}
+
+class NoAnimationPage<T> extends Page<T> {
+  const NoAnimationPage(
+      {required this.child, required super.key, required super.arguments});
+
+  final Widget child;
+
+  @override
+  Route<T> createRoute(BuildContext context) =>
+      NoAnimationPageRoute<T>(page: this);
+}
+
+class NoAnimationPageRoute<T> extends PageRoute<T> {
+  NoAnimationPageRoute({required NoAnimationPage<T> page})
+      : super(settings: page);
+
+  // This is what causes the bug - using Duration(milliseconds: 1) works okay
+  @override
+  Duration get transitionDuration => Duration.zero;
+  @override
+  Duration get reverseTransitionDuration => const Duration(microseconds: 1);
+
+  NoAnimationPage<T> get _page => settings as NoAnimationPage<T>;
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation) =>
+      _page.child;
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation, Widget child) =>
+      child;
+
+  @override
+  bool get maintainState => false;
+
+  @override
+  Color? get barrierColor => null;
+
+  @override
+  String? get barrierLabel => null;
 }
