@@ -173,20 +173,17 @@ class GameNavigator extends HookConsumerWidget {
     required this.connected,
     required this.lobby,
     required this.game,
-    Widget? disconnected,
-    Widget? betweenRounds,
-    Widget? gameOver,
-    Key? key,
-  })  : disconnected = disconnected ?? connected,
-        betweenRounds = betweenRounds ?? game,
-        gameOver = gameOver ?? game,
-        super(key: key);
-  final Widget disconnected;
+    this.disconnected,
+    this.betweenRounds,
+    this.gameOver,
+    super.key,
+  });
+  final Widget? disconnected;
   final Widget connected;
   final Widget lobby;
   final Widget game;
-  final Widget betweenRounds;
-  final Widget gameOver;
+  final Widget? betweenRounds;
+  final Widget? gameOver;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -220,35 +217,36 @@ class GameNavigator extends HookConsumerWidget {
 
     return Navigator(
       pages: pages.entries
-          .map(
-            (entry) => NoAnimationPage(
-              key: ValueKey(entry.key),
-              child: entry.value,
-              arguments: entry.key,
-            ),
-          )
+          .map((entry) {
+            if (entry.value == null) {
+              return null;
+            } else {
+              return NoAnimationPage(
+                  key: ValueKey(entry.key),
+                  child: entry.value!,
+                  onPopInvoked: (pop, result) {
+                    if (entry.key == 'lobby' || entry.key == 'started') {
+                      ref.read(roundClientProvider).exitGame();
+                    } else if (entry.key == 'connected') {
+                      ref.read(gameService).disconnect();
+                    }
+                  });
+            }
+          })
+          .whereType<NoAnimationPage>()
           .toList(),
-      onPopPage: (route, result) {
-        navigationLogger.info('Popping route ${route.settings.arguments}');
-        final status = route.settings.arguments as String?;
-        if (status == 'lobby' || status == 'started') {
-          // ignore: unused_result
-          Future.delayed(const Duration(milliseconds: 1),
-              () => ref.read(roundClientProvider).exitGame());
-          return true;
-        } else if (status == 'connected') {
-          ref.read(gameService).disconnect();
-          return true;
-        }
-        return false;
-      },
+      onDidRemovePage: (p) {},
     );
   }
 }
 
 class NoAnimationPage<T> extends Page<T> {
-  const NoAnimationPage(
-      {required this.child, required super.key, required super.arguments});
+  const NoAnimationPage({
+    required this.child,
+    required super.key,
+    required super.onPopInvoked,
+    super.canPop = false,
+  });
 
   final Widget child;
 
