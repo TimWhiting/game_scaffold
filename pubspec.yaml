@@ -27,3 +27,33 @@ dependency_overrides:
       url: https://www.github.com/TimWhiting/firebase_dart
       path: packages/firebase_dart_flutter
       ref: develop
+  riverpod:
+    git: 
+      url: https://www.github.com/rrousselGit/riverpod
+      path: packages/riverpod
+      ref: dev
+  riverpod_annotation:
+    git: 
+      url: https://www.github.com/rrousselGit/riverpod
+      path: packages/riverpod_annotation
+      ref: dev
+  riverpod_generator:
+    git: 
+      url: https://www.github.com/rrousselGit/riverpod
+      path: packages/riverpod_generator
+      ref: dev
+  riverpod_analyzer_utils:
+    git: 
+      url: https://www.github.com/rrousselGit/riverpod
+      path: packages/riverpod_analyzer_utils
+      ref: dev
+  flutter_riverpod:
+    git: 
+      url: https://www.github.com/rrousselGit/riverpod
+      path: packages/flutter_riverpod
+      ref: dev
+  hooks_riverpod:
+    git: 
+      url: https://www.github.com/rrousselGit/riverpod
+      path: packages/hooks_riverpod
+      ref: dev

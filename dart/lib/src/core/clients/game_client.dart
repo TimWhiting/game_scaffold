@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod/legacy.dart';
 import '../../../game_scaffold_dart.dart';
 part 'game_client.freezed.dart';
 
@@ -57,7 +58,7 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
           code: state.code,
         );
         fetchOldGames();
-        ref.listen(singleConfig, (_, value) {
+        ref.listen<GameConfig>(singleConfig, (_, value) {
           setGameConfig(value);
         });
         ref.onDispose(service.disconnect);

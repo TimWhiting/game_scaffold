@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod/legacy.dart';
 import '../../../game_scaffold_dart.dart';
 
 part 'round_client.freezed.dart';

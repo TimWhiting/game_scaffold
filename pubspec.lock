@@ -347,19 +347,19 @@ packages:
     description:
       path: "packages/firebase_dart"
       ref: develop
-      resolved-ref: "1c42d4d7a1f5bace74bae797a55fd6a37996ab4b"
+      resolved-ref: "95ce30dcfecaff5d2d0601296ae26c86fb3b378c"
       url: "https://www.github.com/TimWhiting/firebase_dart"
     source: git
-    version: "1.1.5"
+    version: "1.2.3"
   firebase_dart_flutter:
     dependency: "direct overridden"
     description:
       path: "packages/firebase_dart_flutter"
       ref: develop
-      resolved-ref: "1c42d4d7a1f5bace74bae797a55fd6a37996ab4b"
+      resolved-ref: "95ce30dcfecaff5d2d0601296ae26c86fb3b378c"
       url: "https://www.github.com/TimWhiting/firebase_dart"
     source: git
-    version: "1.1.5"
+    version: "1.1.10"
   firebaseapis:
     dependency: transitive
     description:
@@ -427,13 +427,14 @@ packages:
     source: hosted
     version: "0.20.5"
   flutter_riverpod:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: flutter_riverpod
-      sha256: "9532ee6db4a943a1ed8383072a2e3eeda041db5657cdf6d2acecf3c21ecbe7e1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.6.1"
+      path: "packages/flutter_riverpod"
+      ref: dev
+      resolved-ref: e79523a396e254086904dfb1f639ff3068c69c86
+      url: "https://www.github.com/rrousselGit/riverpod"
+    source: git
+    version: "3.0.0-dev.3"
   flutter_secure_storage:
     dependency: transitive
     description:
@@ -594,13 +595,14 @@ packages:
     source: hosted
     version: "2.2.3"
   hooks_riverpod:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: hooks_riverpod
-      sha256: "70bba33cfc5670c84b796e6929c54b8bc5be7d0fe15bb28c2560500b9ad06966"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.6.1"
+      path: "packages/hooks_riverpod"
+      ref: dev
+      resolved-ref: e79523a396e254086904dfb1f639ff3068c69c86
+      url: "https://www.github.com/rrousselGit/riverpod"
+    source: git
+    version: "3.0.0-dev.3"
   html:
     dependency: transitive
     description:
@@ -834,10 +836,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: c464428172cb986b758c6d1724c603097febb8fb855aa265aeecc9280c294d4a
+      sha256: "8c4967f8b7cb46dc914e178daa29813d83ae502e0529d7b0478330616a691ef7"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.12"
+    version: "2.2.14"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -975,45 +977,49 @@ packages:
     source: hosted
     version: "3.2.2"
   riverpod:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: riverpod
-      sha256: "59062512288d3056b2321804332a13ffdd1bf16df70dcc8e506e411280a72959"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.6.1"
+      path: "packages/riverpod"
+      ref: dev
+      resolved-ref: e79523a396e254086904dfb1f639ff3068c69c86
+      url: "https://www.github.com/rrousselGit/riverpod"
+    source: git
+    version: "3.0.0-dev.3"
   riverpod_analyzer_utils:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: riverpod_analyzer_utils
-      sha256: c6b8222b2b483cb87ae77ad147d6408f400c64f060df7a225b127f4afef4f8c8
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.8"
+      path: "packages/riverpod_analyzer_utils"
+      ref: dev
+      resolved-ref: e79523a396e254086904dfb1f639ff3068c69c86
+      url: "https://www.github.com/rrousselGit/riverpod"
+    source: git
+    version: "1.0.0-dev.1"
   riverpod_annotation:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: riverpod_annotation
-      sha256: e14b0bf45b71326654e2705d462f21b958f987087be850afd60578fcd502d1b8
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.6.1"
+      path: "packages/riverpod_annotation"
+      ref: dev
+      resolved-ref: e79523a396e254086904dfb1f639ff3068c69c86
+      url: "https://www.github.com/rrousselGit/riverpod"
+    source: git
+    version: "3.0.0-dev.3"
   riverpod_generator:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: riverpod_generator
-      sha256: "63546d70952015f0981361636bf8f356d9cfd9d7f6f0815e3c07789a41233188"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.6.3"
+      path: "packages/riverpod_generator"
+      ref: dev
+      resolved-ref: e79523a396e254086904dfb1f639ff3068c69c86
+      url: "https://www.github.com/rrousselGit/riverpod"
+    source: git
+    version: "3.0.0-dev.11"
   rxdart:
     dependency: transitive
     description:
       name: rxdart
-      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
+      sha256: "5c3004a4a8dbb94bd4bf5412a4def4acdaa12e12f269737a5751369e12d1a962"
       url: "https://pub.dev"
     source: hosted
-    version: "0.27.7"
+    version: "0.28.0"
   shelf:
     dependency: transitive
     description:
@@ -1415,10 +1421,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "84ba388638ed7a8cb3445a320c8273136ab2631cd5f2c57888335504ddab1bc2"
+      sha256: "8b338d4486ab3fbc0ba0db9f9b4f5239b6697fcee427939a40e720cbb9ee0a69"
       url: "https://pub.dev"
     source: hosted
-    version: "5.8.0"
+    version: "5.9.0"
   win32_registry:
     dependency: transitive
     description:

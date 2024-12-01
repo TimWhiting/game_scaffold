@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
+import 'package:riverpod/legacy.dart';
 import 'package:riverpod/riverpod.dart';
 import '../core.dart';
 import 'clients.dart';
