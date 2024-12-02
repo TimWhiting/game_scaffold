@@ -6,7 +6,7 @@ import '../../../game_scaffold_dart.dart';
 
 part 'round_client.freezed.dart';
 
-final roundInfoProvider = Provider<RoundInfo>(
+final roundInfoProvider = Provider.autoDispose<RoundInfo>(
   (ref) =>
       ref.watch(multiplayerRoundClientProvider(ref.watch(playerIDProvider))),
   dependencies: [
@@ -15,7 +15,7 @@ final roundInfoProvider = Provider<RoundInfo>(
   ],
 );
 
-final roundClientProvider = Provider<MultiplayerRoundClient>(
+final roundClientProvider = Provider.autoDispose<MultiplayerRoundClient>(
   (ref) => ref.watch(
       multiplayerRoundClientProvider(ref.watch(playerIDProvider)).notifier),
   dependencies: [
@@ -25,7 +25,7 @@ final roundClientProvider = Provider<MultiplayerRoundClient>(
 );
 
 final multiplayerRoundClientProvider =
-    StateNotifierProvider.family<MultiplayerRoundClient, RoundInfo, PlayerID>(
+    StateNotifierProvider.autoDispose.family<MultiplayerRoundClient, RoundInfo, PlayerID>(
   MultiplayerRoundClient.new,
   dependencies: [
     singleConfig,

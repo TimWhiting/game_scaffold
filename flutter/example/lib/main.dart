@@ -174,13 +174,14 @@ class GameWidget extends HookConsumerWidget {
     ref.listen<String?>(roundInfoProvider.select((i) => i.error),
         (prevError, error) {
       if (error != prevError && error != null && error.isNotEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => 
         showDialog(
           context: context,
           builder: (c) => Dialog(
             backgroundColor: Colors.white,
             child: Text(error.toString()),
           ),
-        );
+        ));
       }
     });
     if (gameState.game == null) {
