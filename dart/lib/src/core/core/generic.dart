@@ -14,7 +14,7 @@ part 'generic.g.dart';
 /// * The current [status]
 /// * The current [round]
 @freezed
-class GenericGame with _$GenericGame {
+sealed class GenericGame with _$GenericGame {
   const factory GenericGame({
     required DateTime time,
     required GameStatus status,
@@ -76,12 +76,12 @@ class GenericGame with _$GenericGame {
 /// A [GenericEvent] that is handled by the Generic server implementation
 /// rather than handling it differently in each game implementation
 @freezed
-class GenericEvent extends Event with _$GenericEvent {
+sealed class GenericEvent extends Event with _$GenericEvent {
   const GenericEvent._();
 
   /// Signals that [player] is ready for the next round
   const factory GenericEvent.readyNextRound(String player,
-      {@Default('generic') String type}) = _GenericReadyNextRoundEvent;
+      {@Default('generic') String type}) = ReadyNextRound;
 
   factory GenericEvent.fromJson(Map<String, dynamic> map) =>
       _$GenericEventFromJson(map);
@@ -142,7 +142,7 @@ enum GameStatus {
 /// compatible form
 // @Freezed(genericArgumentFactories: true)
 @freezed
-class GameConfig with _$GameConfig {
+sealed class GameConfig with _$GameConfig {
   const factory GameConfig({
     required GameType gameType,
     PlayerID? adminID,
@@ -168,7 +168,7 @@ class GameConfig with _$GameConfig {
 /// * The [player]'s id in the game
 /// * Whether the player is the [creator] of the game
 @freezed
-class GameInfo with _$GameInfo {
+sealed class GameInfo with _$GameInfo {
   const factory GameInfo({
     required GameCode gameID,
     required IList<PlayerName> players,
@@ -182,7 +182,7 @@ class GameInfo with _$GameInfo {
 }
 
 @freezed
-class Lobby with _$Lobby {
+sealed class Lobby with _$Lobby {
   const factory Lobby({
     required GameCode code,
     required GameConfig config,

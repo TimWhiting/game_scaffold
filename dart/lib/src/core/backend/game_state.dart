@@ -138,22 +138,20 @@ class GameStateNotifier extends StateNotifier<GameState> {
       final game = gameState;
       final e = event.event;
       if (e is GenericEvent) {
-        state = e.maybeWhen(readyNextRound: (e,_) {
-          final newState = game.updateGeneric((g) => g.addReadyPlayer(e));
-          if (newState.readyPlayers.length == game.players.length) {
-            return game
-                .nextRound(gameConfig)
-                .state
-                .updateGeneric((g) => g.clearReadyPlayers());
-          }
-          return newState;
-        }, orElse: () {
-          errorNotifier.state = GameError(
-            message: 'General Event not implemented yet $event',
-            player: 'Player',
-          );
-          return game;
-        });
+        switch (e) {
+          case ReadyNextRound(:final player):
+            final newState =
+                game.updateGeneric((g) => g.addReadyPlayer(player));
+            if (newState.readyPlayers.length == game.players.length) {
+              state = game
+                  .nextRound(gameConfig)
+                  .state
+                  .updateGeneric((g) => g.clearReadyPlayers());
+              break;
+            }
+            state = newState;
+            break;
+        }
       } else {
         final next = game.next(event, gameConfig);
         if (next.error != null) {

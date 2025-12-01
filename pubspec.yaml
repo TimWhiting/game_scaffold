@@ -3,10 +3,10 @@ homepage: https://www.github.com/TimWhiting/game_scaffold
 publish_to: none
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.10.0 <4.0.0"
 
 dev_dependencies:
-  melos: ^6.2.0
+  melos: ^7.3.0
 
 workspace:
   - dart
@@ -17,43 +17,13 @@ workspace:
   - flutter/example
 
 dependency_overrides:
-  firebase_dart:
-    git: 
-      url: https://www.github.com/TimWhiting/firebase_dart
-      path: packages/firebase_dart
-      ref: develop
-  firebase_dart_flutter:
-    git: 
-      url: https://www.github.com/TimWhiting/firebase_dart
-      path: packages/firebase_dart_flutter
-      ref: develop
-  riverpod:
-    git: 
-      url: https://www.github.com/rrousselGit/riverpod
-      path: packages/riverpod
-      ref: dev
-  riverpod_annotation:
-    git: 
-      url: https://www.github.com/rrousselGit/riverpod
-      path: packages/riverpod_annotation
-      ref: dev
-  riverpod_generator:
-    git: 
-      url: https://www.github.com/rrousselGit/riverpod
-      path: packages/riverpod_generator
-      ref: dev
-  riverpod_analyzer_utils:
-    git: 
-      url: https://www.github.com/rrousselGit/riverpod
-      path: packages/riverpod_analyzer_utils
-      ref: dev
-  flutter_riverpod:
-    git: 
-      url: https://www.github.com/rrousselGit/riverpod
-      path: packages/flutter_riverpod
-      ref: dev
-  hooks_riverpod:
-    git: 
-      url: https://www.github.com/rrousselGit/riverpod
-      path: packages/hooks_riverpod
-      ref: dev
+  # firebase_dart:
+  #   git: 
+  #     url: https://www.github.com/TimWhiting/firebase_dart
+  #     path: packages/firebase_dart
+  #     ref: develop
+  # firebase_dart_flutter:
+  #   git: 
+  #     url: https://www.github.com/TimWhiting/firebase_dart
+  #     path: packages/firebase_dart_flutter
+  #     ref: develop

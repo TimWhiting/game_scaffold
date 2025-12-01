@@ -224,31 +224,38 @@ class GameNavigator extends HookConsumerWidget {
             (entry) => NoAnimationPage(
               key: ValueKey(entry.key),
               child: entry.value,
-              arguments: entry.key,
+              canPop: entry.key == 'lobby' ||
+                  entry.key == 'started' ||
+                  entry.key == 'connected',
+              onPopInvoked: (didPop, result) {
+                if (didPop) {
+                  if (entry.key == 'lobby' || entry.key == 'started') {
+                    print('Exiting game');
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => ref.read(roundClientProvider).exitGame(),
+                    );
+                  } else if (entry.key == 'connected') {
+                    print('Disconnecting');
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => ref.read(gameService).disconnect(),
+                    );
+                  }
+                }
+              },
             ),
           )
           .toList(),
-      onPopPage: (route, result) {
-        navigationLogger.info('Popping route ${route.settings.arguments}');
-        final status = route.settings.arguments as String?;
-        if (status == 'lobby' || status == 'started') {
-          // ignore: unused_result
-          Future.delayed(const Duration(milliseconds: 1),
-              () => ref.read(roundClientProvider).exitGame());
-          return true;
-        } else if (status == 'connected') {
-          ref.read(gameService).disconnect();
-          return true;
-        }
-        return false;
-      },
+      onDidRemovePage: (_) {},
     );
   }
 }
 
 class NoAnimationPage<T> extends Page<T> {
   const NoAnimationPage(
-      {required this.child, required super.key, required super.arguments});
+      {required this.child,
+      required super.key,
+      required super.canPop,
+      required super.onPopInvoked});
 
   final Widget child;
 

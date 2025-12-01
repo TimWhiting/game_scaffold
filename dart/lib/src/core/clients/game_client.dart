@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/legacy.dart';
+
 import '../../../game_scaffold_dart.dart';
+
 part 'game_client.freezed.dart';
 
 final gameInfoProvider = Provider<GameClientInfo>(
@@ -104,7 +106,7 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
 }
 
 @freezed
-class GameClientInfo with _$GameClientInfo {
+sealed class GameClientInfo with _$GameClientInfo {
   const factory GameClientInfo(
     @protected GameService? service, {
     String? code,

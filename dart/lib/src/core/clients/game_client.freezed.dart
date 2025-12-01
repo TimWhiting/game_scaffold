@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,32 +10,54 @@ part of 'game_client.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$GameClientInfo {
   @protected
-  GameService? get service => throw _privateConstructorUsedError;
-  String? get code => throw _privateConstructorUsedError;
-  String? get playerName => throw _privateConstructorUsedError;
-  GameConfig? get config => throw _privateConstructorUsedError;
-  IList<GameInfo>? get games => throw _privateConstructorUsedError;
+  GameService? get service;
+  String? get code;
+  PlayerName? get playerName;
+  GameConfig? get config;
+  IList<GameInfo>? get games;
 
   /// Create a copy of GameClientInfo
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
   $GameClientInfoCopyWith<GameClientInfo> get copyWith =>
-      throw _privateConstructorUsedError;
+      _$GameClientInfoCopyWithImpl<GameClientInfo>(
+          this as GameClientInfo, _$identity);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is GameClientInfo &&
+            (identical(other.service, service) || other.service == service) &&
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.playerName, playerName) ||
+                other.playerName == playerName) &&
+            (identical(other.config, config) || other.config == config) &&
+            const DeepCollectionEquality().equals(other.games, games));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, service, code, playerName,
+      config, const DeepCollectionEquality().hash(games));
+
+  @override
+  String toString() {
+    return 'GameClientInfo(service: $service, code: $code, playerName: $playerName, config: $config, games: $games)';
+  }
 }
 
 /// @nodoc
-abstract class $GameClientInfoCopyWith<$Res> {
+abstract mixin class $GameClientInfoCopyWith<$Res> {
   factory $GameClientInfoCopyWith(
-          GameClientInfo value, $Res Function(GameClientInfo) then) =
-      _$GameClientInfoCopyWithImpl<$Res, GameClientInfo>;
+          GameClientInfo value, $Res Function(GameClientInfo) _then) =
+      _$GameClientInfoCopyWithImpl;
   @useResult
   $Res call(
       {@protected GameService? service,
@@ -47,14 +70,12 @@ abstract class $GameClientInfoCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$GameClientInfoCopyWithImpl<$Res, $Val extends GameClientInfo>
+class _$GameClientInfoCopyWithImpl<$Res>
     implements $GameClientInfoCopyWith<$Res> {
-  _$GameClientInfoCopyWithImpl(this._value, this._then);
+  _$GameClientInfoCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final GameClientInfo _self;
+  final $Res Function(GameClientInfo) _then;
 
   /// Create a copy of GameClientInfo
   /// with the given fields replaced by the non-null parameter values.
@@ -67,28 +88,28 @@ class _$GameClientInfoCopyWithImpl<$Res, $Val extends GameClientInfo>
     Object? config = freezed,
     Object? games = freezed,
   }) {
-    return _then(_value.copyWith(
+    return _then(_self.copyWith(
       service: freezed == service
-          ? _value.service
+          ? _self.service
           : service // ignore: cast_nullable_to_non_nullable
               as GameService?,
       code: freezed == code
-          ? _value.code
+          ? _self.code
           : code // ignore: cast_nullable_to_non_nullable
               as String?,
       playerName: freezed == playerName
-          ? _value.playerName
+          ? _self.playerName!
           : playerName // ignore: cast_nullable_to_non_nullable
               as String?,
       config: freezed == config
-          ? _value.config
+          ? _self.config
           : config // ignore: cast_nullable_to_non_nullable
               as GameConfig?,
       games: freezed == games
-          ? _value.games
+          ? _self.games
           : games // ignore: cast_nullable_to_non_nullable
               as IList<GameInfo>?,
-    ) as $Val);
+    ));
   }
 
   /// Create a copy of GameClientInfo
@@ -96,83 +117,20 @@ class _$GameClientInfoCopyWithImpl<$Res, $Val extends GameClientInfo>
   @override
   @pragma('vm:prefer-inline')
   $GameConfigCopyWith<$Res>? get config {
-    if (_value.config == null) {
+    if (_self.config == null) {
       return null;
     }
 
-    return $GameConfigCopyWith<$Res>(_value.config!, (value) {
-      return _then(_value.copyWith(config: value) as $Val);
+    return $GameConfigCopyWith<$Res>(_self.config!, (value) {
+      return _then(_self.copyWith(config: value));
     });
   }
 }
 
 /// @nodoc
-abstract class _$$GameClientInfoImplCopyWith<$Res>
-    implements $GameClientInfoCopyWith<$Res> {
-  factory _$$GameClientInfoImplCopyWith(_$GameClientInfoImpl value,
-          $Res Function(_$GameClientInfoImpl) then) =
-      __$$GameClientInfoImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {@protected GameService? service,
-      String? code,
-      String? playerName,
-      GameConfig? config,
-      IList<GameInfo>? games});
 
-  @override
-  $GameConfigCopyWith<$Res>? get config;
-}
-
-/// @nodoc
-class __$$GameClientInfoImplCopyWithImpl<$Res>
-    extends _$GameClientInfoCopyWithImpl<$Res, _$GameClientInfoImpl>
-    implements _$$GameClientInfoImplCopyWith<$Res> {
-  __$$GameClientInfoImplCopyWithImpl(
-      _$GameClientInfoImpl _value, $Res Function(_$GameClientInfoImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of GameClientInfo
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? service = freezed,
-    Object? code = freezed,
-    Object? playerName = freezed,
-    Object? config = freezed,
-    Object? games = freezed,
-  }) {
-    return _then(_$GameClientInfoImpl(
-      freezed == service
-          ? _value.service
-          : service // ignore: cast_nullable_to_non_nullable
-              as GameService?,
-      code: freezed == code
-          ? _value.code
-          : code // ignore: cast_nullable_to_non_nullable
-              as String?,
-      playerName: freezed == playerName
-          ? _value.playerName
-          : playerName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      config: freezed == config
-          ? _value.config
-          : config // ignore: cast_nullable_to_non_nullable
-              as GameConfig?,
-      games: freezed == games
-          ? _value.games
-          : games // ignore: cast_nullable_to_non_nullable
-              as IList<GameInfo>?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$GameClientInfoImpl extends _GameClientInfo {
-  const _$GameClientInfoImpl(@protected this.service,
+class _GameClientInfo extends GameClientInfo {
+  const _GameClientInfo(@protected this.service,
       {this.code, this.playerName, this.config, this.games})
       : super._();
 
@@ -188,16 +146,19 @@ class _$GameClientInfoImpl extends _GameClientInfo {
   @override
   final IList<GameInfo>? games;
 
+  /// Create a copy of GameClientInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String toString() {
-    return 'GameClientInfo(service: $service, code: $code, playerName: $playerName, config: $config, games: $games)';
-  }
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$GameClientInfoCopyWith<_GameClientInfo> get copyWith =>
+      __$GameClientInfoCopyWithImpl<_GameClientInfo>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GameClientInfoImpl &&
+            other is _GameClientInfo &&
             (identical(other.service, service) || other.service == service) &&
             (identical(other.code, code) || other.code == code) &&
             (identical(other.playerName, playerName) ||
@@ -210,40 +171,87 @@ class _$GameClientInfoImpl extends _GameClientInfo {
   int get hashCode => Object.hash(runtimeType, service, code, playerName,
       config, const DeepCollectionEquality().hash(games));
 
+  @override
+  String toString() {
+    return 'GameClientInfo(service: $service, code: $code, playerName: $playerName, config: $config, games: $games)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$GameClientInfoCopyWith<$Res>
+    implements $GameClientInfoCopyWith<$Res> {
+  factory _$GameClientInfoCopyWith(
+          _GameClientInfo value, $Res Function(_GameClientInfo) _then) =
+      __$GameClientInfoCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {@protected GameService? service,
+      String? code,
+      String? playerName,
+      GameConfig? config,
+      IList<GameInfo>? games});
+
+  @override
+  $GameConfigCopyWith<$Res>? get config;
+}
+
+/// @nodoc
+class __$GameClientInfoCopyWithImpl<$Res>
+    implements _$GameClientInfoCopyWith<$Res> {
+  __$GameClientInfoCopyWithImpl(this._self, this._then);
+
+  final _GameClientInfo _self;
+  final $Res Function(_GameClientInfo) _then;
+
   /// Create a copy of GameClientInfo
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$GameClientInfoImplCopyWith<_$GameClientInfoImpl> get copyWith =>
-      __$$GameClientInfoImplCopyWithImpl<_$GameClientInfoImpl>(
-          this, _$identity);
-}
-
-abstract class _GameClientInfo extends GameClientInfo {
-  const factory _GameClientInfo(@protected final GameService? service,
-      {final String? code,
-      final String? playerName,
-      final GameConfig? config,
-      final IList<GameInfo>? games}) = _$GameClientInfoImpl;
-  const _GameClientInfo._() : super._();
-
-  @override
-  @protected
-  GameService? get service;
-  @override
-  String? get code;
-  @override
-  String? get playerName;
-  @override
-  GameConfig? get config;
-  @override
-  IList<GameInfo>? get games;
+  $Res call({
+    Object? service = freezed,
+    Object? code = freezed,
+    Object? playerName = freezed,
+    Object? config = freezed,
+    Object? games = freezed,
+  }) {
+    return _then(_GameClientInfo(
+      freezed == service
+          ? _self.service
+          : service // ignore: cast_nullable_to_non_nullable
+              as GameService?,
+      code: freezed == code
+          ? _self.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
+      playerName: freezed == playerName
+          ? _self.playerName
+          : playerName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      config: freezed == config
+          ? _self.config
+          : config // ignore: cast_nullable_to_non_nullable
+              as GameConfig?,
+      games: freezed == games
+          ? _self.games
+          : games // ignore: cast_nullable_to_non_nullable
+              as IList<GameInfo>?,
+    ));
+  }
 
   /// Create a copy of GameClientInfo
   /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$GameClientInfoImplCopyWith<_$GameClientInfoImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  @pragma('vm:prefer-inline')
+  $GameConfigCopyWith<$Res>? get config {
+    if (_self.config == null) {
+      return null;
+    }
+
+    return $GameConfigCopyWith<$Res>(_self.config!, (value) {
+      return _then(_self.copyWith(config: value));
+    });
+  }
 }
+
+// dart format on

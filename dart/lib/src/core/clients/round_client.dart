@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/legacy.dart';
+
 import '../../../game_scaffold_dart.dart';
 
 part 'round_client.freezed.dart';
@@ -24,8 +25,8 @@ final roundClientProvider = Provider.autoDispose<MultiplayerRoundClient>(
   ],
 );
 
-final multiplayerRoundClientProvider =
-    StateNotifierProvider.autoDispose.family<MultiplayerRoundClient, RoundInfo, PlayerID>(
+final multiplayerRoundClientProvider = StateNotifierProvider.autoDispose
+    .family<MultiplayerRoundClient, RoundInfo, PlayerID>(
   MultiplayerRoundClient.new,
   dependencies: [
     singleConfig,
@@ -107,15 +108,15 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
   Future<bool> newRound() =>
       service((c) => c.newRound(multiplayerID, state.code));
 
-  Future<bool> exitGame() {
-    final result = service((c) => c.exitGame(multiplayerID, state.code));
+  Future<bool> exitGame() async {
+    final result = await state.service?.exitGame(multiplayerID, state.code);
     ref.read(multiplayerGameClientProvider(multiplayerID).notifier).exitGame();
-    return result;
+    return result ?? true;
   }
 }
 
 @freezed
-class RoundInfo with _$RoundInfo {
+sealed class RoundInfo with _$RoundInfo {
   const factory RoundInfo(
     @protected RoundService? service, {
     required String code,

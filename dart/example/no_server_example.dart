@@ -109,6 +109,7 @@ Future<void> loop(
     print(error.error);
     print('!!!!!!!!!!!');
     print('');
+    loop(state, playerContainers);
   }
 }
 

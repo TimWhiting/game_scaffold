@@ -6,8 +6,7 @@ part of 'generic.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$GenericGameImpl _$$GenericGameImplFromJson(Map<String, dynamic> json) =>
-    _$GenericGameImpl(
+_GenericGame _$GenericGameFromJson(Map<String, dynamic> json) => _GenericGame(
       time: DateTime.parse(json['time'] as String),
       status: $enumDecode(_$GameStatusEnumMap, json['status']),
       round: (json['round'] as num).toInt(),
@@ -21,7 +20,7 @@ _$GenericGameImpl _$$GenericGameImplFromJson(Map<String, dynamic> json) =>
               json['readyPlayers'], (value) => value as String),
     );
 
-Map<String, dynamic> _$$GenericGameImplToJson(_$GenericGameImpl instance) =>
+Map<String, dynamic> _$GenericGameToJson(_GenericGame instance) =>
     <String, dynamic>{
       'time': instance.time.toIso8601String(),
       'status': _$GameStatusEnumMap[instance.status]!,
@@ -41,22 +40,19 @@ const _$GameStatusEnumMap = {
   GameStatus.finished: 'finished',
 };
 
-_$GenericReadyNextRoundEventImpl _$$GenericReadyNextRoundEventImplFromJson(
-        Map<String, dynamic> json) =>
-    _$GenericReadyNextRoundEventImpl(
+ReadyNextRound _$ReadyNextRoundFromJson(Map<String, dynamic> json) =>
+    ReadyNextRound(
       json['player'] as String,
       type: json['type'] as String? ?? 'generic',
     );
 
-Map<String, dynamic> _$$GenericReadyNextRoundEventImplToJson(
-        _$GenericReadyNextRoundEventImpl instance) =>
+Map<String, dynamic> _$ReadyNextRoundToJson(ReadyNextRound instance) =>
     <String, dynamic>{
       'player': instance.player,
       'type': instance.type,
     };
 
-_$GameConfigImpl _$$GameConfigImplFromJson(Map<String, dynamic> json) =>
-    _$GameConfigImpl(
+_GameConfig _$GameConfigFromJson(Map<String, dynamic> json) => _GameConfig(
       gameType: json['gameType'] as String,
       adminID: json['adminID'] as String?,
       nameSet: $enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ??
@@ -69,7 +65,7 @@ _$GameConfigImpl _$$GameConfigImplFromJson(Map<String, dynamic> json) =>
       options: json['options'] as Map<String, dynamic>? ?? const {},
     );
 
-Map<String, dynamic> _$$GameConfigImplToJson(_$GameConfigImpl instance) =>
+Map<String, dynamic> _$GameConfigToJson(_GameConfig instance) =>
     <String, dynamic>{
       'gameType': instance.gameType,
       'adminID': instance.adminID,
@@ -86,8 +82,7 @@ const _$NameSetEnumMap = {
   NameSet.basic: 'basic',
 };
 
-_$GameInfoImpl _$$GameInfoImplFromJson(Map<String, dynamic> json) =>
-    _$GameInfoImpl(
+_GameInfo _$GameInfoFromJson(Map<String, dynamic> json) => _GameInfo(
       gameID: json['gameID'] as String,
       players:
           IList<String>.fromJson(json['players'], (value) => value as String),
@@ -97,8 +92,7 @@ _$GameInfoImpl _$$GameInfoImplFromJson(Map<String, dynamic> json) =>
       status: $enumDecode(_$GameStatusEnumMap, json['status']),
     );
 
-Map<String, dynamic> _$$GameInfoImplToJson(_$GameInfoImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$GameInfoToJson(_GameInfo instance) => <String, dynamic>{
       'gameID': instance.gameID,
       'players': instance.players.toJson(
         (value) => value,
@@ -109,7 +103,7 @@ Map<String, dynamic> _$$GameInfoImplToJson(_$GameInfoImpl instance) =>
       'status': _$GameStatusEnumMap[instance.status]!,
     };
 
-_$LobbyImpl _$$LobbyImplFromJson(Map<String, dynamic> json) => _$LobbyImpl(
+_Lobby _$LobbyFromJson(Map<String, dynamic> json) => _Lobby(
       code: json['code'] as String,
       config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
       gameStatus: $enumDecode(_$GameStatusEnumMap, json['gameStatus']),
@@ -119,8 +113,7 @@ _$LobbyImpl _$$LobbyImplFromJson(Map<String, dynamic> json) => _$LobbyImpl(
               (value) => Player.fromJson(value as Map<String, dynamic>)),
     );
 
-Map<String, dynamic> _$$LobbyImplToJson(_$LobbyImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$LobbyToJson(_Lobby instance) => <String, dynamic>{
       'code': instance.code,
       'config': instance.config.toJson(),
       'gameStatus': _$GameStatusEnumMap[instance.gameStatus]!,
