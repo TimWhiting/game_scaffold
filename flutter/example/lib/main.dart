@@ -18,35 +18,36 @@ void main() {
   registerTicTacToe();
   Logger.root.clearListeners();
   Logger.root.level = Level.FINE;
-  Logger.root.onRecord.listen((record) =>
-      // ignore: avoid_print
-      print('[${record.level}] ${record.loggerName}: ${record.message}'));
-  runApp(ProviderScope(
-    overrides: [
-      serviceType.overrideWith((ref) => OnDeviceService),
-    ],
-    child: const TicTacToeApp(),
-  ));
+  Logger.root.onRecord.listen(
+    (record) =>
+        // ignore: avoid_print
+        print('[${record.level}] ${record.loggerName}: ${record.message}'),
+  );
+  runApp(
+    ProviderScope(
+      overrides: [serviceType.overrideWith((ref) => OnDeviceService)],
+      child: const TicTacToeApp(),
+    ),
+  );
 }
 
 class TicTacToeApp extends StatelessWidget {
   const TicTacToeApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData.dark().copyWith(
-          primaryColor: Colors.blueGrey,
-        ),
-        home: const TicTacToeWidget(),
-      );
+    title: 'Flutter Demo',
+    theme: ThemeData.dark().copyWith(primaryColor: Colors.blueGrey),
+    home: const TicTacToeWidget(),
+  );
 }
 
 class TicTacToeWidget extends StatelessWidget {
   const TicTacToeWidget({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) => MaterialApp(
-          home: Scaffold(
-        body: Row(children: [
+    home: Scaffold(
+      body: Row(
+        children: [
           Expanded(
             child: ProviderScope(
               overrides: [playerIDProvider.overrideWithValue('0')],
@@ -60,8 +61,10 @@ class TicTacToeWidget extends StatelessWidget {
               child: const Player(),
             ),
           ),
-        ]),
-      ));
+        ],
+      ),
+    ),
+  );
 }
 
 class Player extends HookConsumerWidget {
@@ -69,10 +72,10 @@ class Player extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => const GameNavigator(
-        connected: CreateOrJoinWidget(),
-        lobby: LobbyWidget(),
-        game: GameWidget(),
-      );
+    connected: CreateOrJoinWidget(),
+    lobby: LobbyWidget(),
+    game: GameWidget(),
+  );
 }
 
 class CreateOrJoinWidget extends HookConsumerWidget {
@@ -96,12 +99,14 @@ class CreateOrJoinWidget extends HookConsumerWidget {
               ElevatedButton(
                 key: Key('Create Game Button $playerID'),
                 onPressed: () async {
-                  gameClient.setGameConfig(const GameConfig(
-                    adminID: '0',
-                    gameType: 'tictactoe',
-                    rounds: 2,
-                    maxPlayers: 2,
-                  ));
+                  gameClient.setGameConfig(
+                    const GameConfig(
+                      adminID: '0',
+                      gameType: 'tictactoe',
+                      rounds: 2,
+                      maxPlayers: 2,
+                    ),
+                  );
                   await gameClient.createGame();
                   await gameClient.joinGame();
                 },
@@ -113,8 +118,9 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                 height: 30,
                 child: TextField(
                   textAlignVertical: TextAlignVertical.center,
-                  decoration:
-                      const InputDecoration(hintText: 'Enter Game Code'),
+                  decoration: const InputDecoration(
+                    hintText: 'Enter Game Code',
+                  ),
                   onChanged: gameClient.setGameCode,
                 ),
               ),
@@ -122,7 +128,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
               ElevatedButton(
                 onPressed: gameClient.joinGame,
                 child: const Text('Join Game'),
-              )
+              ),
             ],
             if (allGames != null)
               for (final info in allGames)
@@ -132,7 +138,8 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                     await gameClient.joinGame();
                   },
                   child: Text(
-                      'Started Game: ${info.gameID}, Players: ${info.players}'),
+                    'Started Game: ${info.gameID}, Players: ${info.players}',
+                  ),
                 ),
           ],
         ),
@@ -149,16 +156,18 @@ class LobbyWidget extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-        child: Column(children: [
-          const SizedBox(height: 40),
-          const Text('Lobby'),
-          Text('$lobby'),
-          if (lobby?.creator ?? false)
-            ElevatedButton(
-              onPressed: () => ref.read(roundClientProvider).startGame(),
-              child: const Text('Start Game'),
-            ),
-        ]),
+        child: Column(
+          children: [
+            const SizedBox(height: 40),
+            const Text('Lobby'),
+            Text('$lobby'),
+            if (lobby?.creator ?? false)
+              ElevatedButton(
+                onPressed: () => ref.read(roundClientProvider).startGame(),
+                child: const Text('Start Game'),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -171,17 +180,19 @@ class GameWidget extends HookConsumerWidget {
     final gameState = ref.watch(roundInfoProvider);
     final gameStatus = gameState.status;
     final playerID = ref.watch(playerIDProvider);
-    ref.listen<String?>(roundInfoProvider.select((i) => i.error),
-        (prevError, error) {
-      if (error != prevError && error != null && error.isNotEmpty) {
-        WidgetsBinding.instance.addPostFrameCallback((_) => 
-        showDialog(
-          context: context,
-          builder: (c) => Dialog(
-            backgroundColor: Colors.white,
-            child: Text(error.toString()),
+    ref.listen<RoundInfo>(roundInfoProvider, (prevState, state) {
+      if (state.error != prevState?.error &&
+          state.error != null &&
+          state.error!.isNotEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => showDialog(
+            context: context,
+            builder: (c) => Dialog(
+              backgroundColor: Colors.white,
+              child: Text(state.error.toString()),
+            ),
           ),
-        ));
+        );
       }
     });
     if (gameState.game == null) {
@@ -206,9 +217,13 @@ class GameWidget extends HookConsumerWidget {
                     GestureDetector(
                       key: Key('$playerID square $r $c'),
                       onTap: () async {
-                        final _ = await ref.read(roundClientProvider).sendEvent(
+                        final _ = await ref
+                            .read(roundClientProvider)
+                            .sendEvent(
                               TicTacToeGameEvent(
-                                  player: player, location: r * 3 + c),
+                                player: player,
+                                location: r * 3 + c,
+                              ),
                             );
                       },
                       child: ColoredBox(
@@ -219,9 +234,7 @@ class GameWidget extends HookConsumerWidget {
                           color: Colors.white,
                           margin: const EdgeInsets.all(1),
                           child: Center(
-                            child: Text(
-                              g.game.board.xOrO(player, r * 3 + c),
-                            ),
+                            child: Text(g.game.board.xOrO(player, r * 3 + c)),
                           ),
                         ),
                       ),

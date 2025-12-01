@@ -6,32 +6,28 @@ part of 'tic_tac_toe.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_TicTacToeGameEvent _$$_TicTacToeGameEventFromJson(
-        Map<String, dynamic> json) =>
-    _$_TicTacToeGameEvent(
-      player: json['player'] as int,
-      location: json['location'] as int,
+_TicTacToeGameEvent _$TicTacToeGameEventFromJson(Map<String, dynamic> json) =>
+    _TicTacToeGameEvent(
+      player: (json['player'] as num).toInt(),
+      location: (json['location'] as num).toInt(),
     );
 
-Map<String, dynamic> _$$_TicTacToeGameEventToJson(
-        _$_TicTacToeGameEvent instance) =>
-    <String, dynamic>{
-      'player': instance.player,
-      'location': instance.location,
-    };
+Map<String, dynamic> _$TicTacToeGameEventToJson(_TicTacToeGameEvent instance) =>
+    <String, dynamic>{'player': instance.player, 'location': instance.location};
 
-_$_TicTacToeGame _$$_TicTacToeGameFromJson(Map<String, dynamic> json) =>
-    _$_TicTacToeGame(
-      board: IList<int?>.fromJson(json['board'], (value) => value as int?),
-      currentPlayer: json['currentPlayer'] as int,
+_TicTacToeGame _$TicTacToeGameFromJson(Map<String, dynamic> json) =>
+    _TicTacToeGame(
+      board: IList<int?>.fromJson(
+        json['board'],
+        (value) => (value as num?)?.toInt(),
+      ),
+      currentPlayer: (json['currentPlayer'] as num).toInt(),
       type: json['type'] as String? ?? 'tictactoe',
     );
 
-Map<String, dynamic> _$$_TicTacToeGameToJson(_$_TicTacToeGame instance) =>
+Map<String, dynamic> _$TicTacToeGameToJson(_TicTacToeGame instance) =>
     <String, dynamic>{
-      'board': instance.board.toJson(
-        (value) => value,
-      ),
+      'board': instance.board.toJson((value) => value),
       'currentPlayer': instance.currentPlayer,
       'type': instance.type,
     };

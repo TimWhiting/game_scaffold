@@ -20,17 +20,22 @@ class TTTFunctions extends GameFunctions<TicTacToeGameEvent, TicTacToeGame> {
   String get gameType => 'tictactoe';
   @override
   GameState<TicTacToeGameEvent, TicTacToeGame> initialState(
-          GameConfig config, IList<Player> players) =>
-      GameState(
-        game: TicTacToeGame(
-            board: <int?>[for (var i = 0; i < 9; i++) null].lock,
-            currentPlayer: 0),
-        generic: GenericGame.start(players),
-        rewards: <double>[0, 0],
-      );
+    GameConfig config,
+    IList<Player> players,
+  ) => GameState(
+    game: TicTacToeGame(
+      board: <int?>[for (var i = 0; i < 9; i++) null].lock,
+      currentPlayer: 0,
+    ),
+    generic: GenericGame.start(players),
+    rewards: <double>[0, 0],
+  );
   @override
-  NextState<TicTacToeGameEvent, TicTacToeGame> next(GameState state,
-      GameConfig config, PlayerEvent<TicTacToeGameEvent> event) {
+  NextState<TicTacToeGameEvent, TicTacToeGame> next(
+    GameState state,
+    GameConfig config,
+    PlayerEvent<TicTacToeGameEvent> event,
+  ) {
     final st = state.cast<TicTacToeGameEvent, TicTacToeGame>();
     final game = st.game;
     if (event.event.player != game.currentPlayer) {
@@ -44,7 +49,8 @@ class TTTFunctions extends GameFunctions<TicTacToeGameEvent, TicTacToeGame> {
     if (winner != null) {
       return st
           .updateGame(n.copyWith(currentPlayer: game.currentPlayer))
-          .addReward([winner.p1Points, winner.p2Points]).success;
+          .addReward([winner.p1Points, winner.p2Points])
+          .success;
     }
     return st.updateGame(n).success;
   }
@@ -52,15 +58,17 @@ class TTTFunctions extends GameFunctions<TicTacToeGameEvent, TicTacToeGame> {
   @override
   TTTGameState nextRound(GameState state, GameConfig config) {
     final st = state.cast<TicTacToeGameEvent, TicTacToeGame>();
-    return st.updateGame(TicTacToeGame(
-      board: <int?>[for (var i = 0; i < 9; i++) null].lock,
-      currentPlayer: st.game.currentPlayer == 0 ? 1 : 0,
-    ));
+    return st.updateGame(
+      TicTacToeGame(
+        board: <int?>[for (var i = 0; i < 9; i++) null].lock,
+        currentPlayer: st.game.currentPlayer == 0 ? 1 : 0,
+      ),
+    );
   }
 }
 
 @freezed
-class TicTacToeGameEvent extends Event with _$TicTacToeGameEvent {
+abstract class TicTacToeGameEvent extends Event with _$TicTacToeGameEvent {
   const factory TicTacToeGameEvent({
     required int player,
     required int location,
@@ -80,19 +88,19 @@ enum Winner {
   double get p1Points => this == p1
       ? 1.0
       : this == p2
-          ? 0.0
-          : 0.5;
+      ? 0.0
+      : 0.5;
   double get p2Points => this == p2
       ? 1.0
       : this == p1
-          ? 0.0
-          : 0.5;
+      ? 0.0
+      : 0.5;
 }
 
 typedef TTTGameState = GameState<TicTacToeGameEvent, TicTacToeGame>;
 
 @freezed
-class TicTacToeGame extends Game with _$TicTacToeGame {
+abstract class TicTacToeGame extends Game with _$TicTacToeGame {
   const factory TicTacToeGame({
     required IList<int?> board,
     required int currentPlayer,
@@ -119,14 +127,15 @@ class TicTacToeGame extends Game with _$TicTacToeGame {
   Winner? get winner => isWinner(0)
       ? Winner.p1
       : isWinner(1)
-          ? Winner.p2
-          : board.every((e) => e != null)
-              ? Winner.tie
-              : null;
+      ? Winner.p2
+      : board.every((e) => e != null)
+      ? Winner.tie
+      : null;
 
   bool isWinner(int player) {
-    if (winningLocationCombinations
-        .any((comb) => comb.every((loc) => board[loc] == player))) {
+    if (winningLocationCombinations.any(
+      (comb) => comb.every((loc) => board[loc] == player),
+    )) {
       return true;
     }
     return false;
@@ -149,6 +158,6 @@ class TicTacToeGame extends Game with _$TicTacToeGame {
     [1, 4, 7],
     [2, 5, 8],
     [0, 4, 8],
-    [2, 4, 6]
+    [2, 4, 6],
   ].map((l) => l.lock).toIList();
 }

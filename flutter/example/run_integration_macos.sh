@@ -1,1 +1,1 @@
-flutter drive --enable-experiment=records --driver integration_test/driver.dart --target integration_test/app_test.dart -d macos
+flutter drive --driver integration_test/driver.dart --target integration_test/app_test.dart -d macos
