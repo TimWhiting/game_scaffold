@@ -132,6 +132,70 @@ enum GameStatus {
   finished,
 }
 
+/// Extension methods for [GameStatus] to query phase state and provide readable names.
+///
+/// These methods allow you to safely check the current game phase and understand
+/// what operations are valid in each phase.
+///
+/// Example:
+/// ```dart
+/// if (gameState.status.canSendEvents) {
+///   // Safe to send game events
+/// }
+/// ```
+extension GamePhaseQueries on GameStatus {
+  /// Whether events can be sent in this phase.
+  ///
+  /// Returns `true` for [started] and [betweenRounds] phases where players can
+  /// perform actions. Returns `false` for [lobby] (game not started) and [finished]
+  /// (game over).
+  bool get canSendEvents => this == GameStatus.started || this == GameStatus.betweenRounds;
+
+  /// Whether the game round is actively playing.
+  ///
+  /// Returns `true` only for [started] phase. Useful for rendering active game UI.
+  bool get isPlaying => this == GameStatus.started;
+
+  /// Whether we're waiting for player readiness between rounds.
+  ///
+  /// Returns `true` only for [betweenRounds] phase. Useful for showing "waiting for
+  /// players" UI or displaying round results.
+  bool get isWaitingForReady => this == GameStatus.betweenRounds;
+
+  /// Whether the game has not started yet.
+  ///
+  /// Returns `true` only for [lobby] phase. Useful for showing lobby/join UI.
+  bool get isLobby => this == GameStatus.lobby;
+
+  /// Whether the game is over.
+  ///
+  /// Returns `true` only for [finished] phase. Useful for showing final results.
+  bool get isFinished => this == GameStatus.finished;
+
+  /// Human-readable name for this phase.
+  ///
+  /// Useful for logging, debugging, and user-facing messages:
+  /// ```dart
+  /// logger.info('Game phase: ${gameState.status.phaseName}');
+  /// ```
+  String get phaseName => switch (this) {
+    GameStatus.lobby => 'Lobby',
+    GameStatus.started => 'Playing',
+    GameStatus.betweenRounds => 'Between Rounds',
+    GameStatus.finished => 'Finished',
+  };
+
+  /// Description of what players should do in this phase.
+  ///
+  /// Useful for tooltips or help text in the UI.
+  String get phaseDescription => switch (this) {
+    GameStatus.lobby => 'Waiting for the game to start',
+    GameStatus.started => 'Game is active - send moves or actions',
+    GameStatus.betweenRounds => 'Round is over - signal readiness for next round',
+    GameStatus.finished => 'Game is complete',
+  };
+}
+
 /// Some general config parameters for a game of [gameType]
 ///
 /// Custom options can be added to the [options] map, but must be in a json

@@ -1,11 +1,9 @@
-// ignore_for_file: avoid_classes_with_only_static_members
-
 import 'dart:io';
 
 import 'package:characters/characters.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod/legacy.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:riverpod/src/providers/provider.dart';
 
 import '../core.dart';
 
@@ -36,25 +34,26 @@ class BackendProviders {
     name: 'BackendLobby',
   );
 
-  static final playerLobby = Provider.family<GameInfo?, PlayerID>(
-    (ref, player) {
-      final l = ref.watch(lobby);
-      final pls = l.players;
-      if (pls.any((p) => p.id == player)) {
-        return GameInfo(
-          config: l.config,
-          gameID: l.code,
-          status: l.gameStatus,
-          player: pls.firstWhere((p) => p.id == player).name,
-          creator: player == l.config.adminID,
-          players: pls.map((p) => p.name).toIList(),
-        );
-      }
-      return null;
-    },
-    name: 'BackendPlayerLobby',
-    dependencies: [lobby],
-  );
+  static final ProviderFamily<GameInfo?, PlayerID> playerLobby =
+      Provider.family<GameInfo?, PlayerID>(
+        (ref, player) {
+          final l = ref.watch(lobby);
+          final pls = l.players;
+          if (pls.any((p) => p.id == player)) {
+            return GameInfo(
+              config: l.config,
+              gameID: l.code,
+              status: l.gameStatus,
+              player: pls.firstWhere((p) => p.id == player).name,
+              creator: player == l.config.adminID,
+              players: pls.map((p) => p.name).toIList(),
+            );
+          }
+          return null;
+        },
+        name: 'BackendPlayerLobby',
+        dependencies: [lobby],
+      );
 
   /// Provides the [GameStateNotifier] based on the [GameConfig] from [lobby]'s config
   static final state = StateNotifierProvider<GameStateNotifier, GameState>(
@@ -80,7 +79,7 @@ class BackendProviders {
 }
 
 class LobbyNotifier extends StateNotifier<Lobby> {
-  LobbyNotifier(Lobby lobby) : super(lobby);
+  LobbyNotifier(super.lobby);
 
   void addPlayer(Player player) {
     state = state.copyWith(players: state.players.add(player));
@@ -138,11 +137,14 @@ class GameStateNotifier extends StateNotifier<GameState> {
           case ReadyNextRound(:final player):
             final newState = game.updateGeneric((g) => g.addReadyPlayer(player));
             if (newState.readyPlayers.length == game.players.length) {
-              state = game.nextRound(gameConfig).state.updateGeneric((g) => g.clearReadyPlayers());
+              state = game
+                  .nextRound(gameConfig)
+                  .state
+                  .updateGeneric((g) => g.clearReadyPlayers())
+                  .updateStatus();
               break;
             }
-            state = newState;
-            break;
+            state = newState.updateStatus();
         }
       } else {
         final next = game.next(event, gameConfig);
@@ -150,7 +152,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
           errorNotifier.state = next.error;
           error = true;
         }
-        state = next.state;
+        state = next.state.updateStatus();
       }
 
       if (error) {

@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_cast, avoid_annotating_with_dynamic
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_cast
 
 import 'package:state_notifier/state_notifier.dart';
 
@@ -104,7 +104,7 @@ class GameError {
   const GameError({required this.message, required this.player});
   JsonMap toJson() => {'message': message, 'player': player};
   factory GameError.fromJson(JsonMap json) =>
-      GameError(message: json['message'] as String, player: json['player'] as PlayerID);
+      GameError(message: json['message']! as String, player: json['player']! as PlayerID);
 }
 
 /// A error notifier that lets the client clear the error
@@ -138,9 +138,9 @@ class GameState<E extends Event, T extends Game> {
   JsonMap toJson() => {'game': game.toJson(), 'rewards': rewards, 'generic': generic.toJson()};
 
   factory GameState.fromJson(JsonMap json) => GameState(
-    game: GameRegistry.gameFromJson(json['game'] as JsonMap),
+    game: GameRegistry.gameFromJson(json['game']! as JsonMap),
     rewards: json['rewards'] as List<double>? ?? [],
-    generic: GenericGame.fromJson(json['generic'] as JsonMap),
+    generic: GenericGame.fromJson(json['generic']! as JsonMap),
   );
 
   GameState<E, T> updateReward(List<double> Function(List<double>) update) =>
@@ -153,6 +153,29 @@ class GameState<E extends Event, T extends Game> {
 
   GameState<E, T> addReward(List<double> rewards) => copyWith(rewards: rewards + this.rewards);
 
+  /// Explicitly detects and applies phase transitions based on current game state.
+  ///
+  /// This is the single source of truth for phase transitions. Call this after
+  /// any game logic that might change the game state:
+  ///
+  /// ```dart
+  /// // After processing a game event:
+  /// var newState = gameState.updateGame(nextGame).updateGeneric((g) => g.copyWith(...));
+  /// newState = newState.updateStatus(); // ← ALWAYS call this last
+  ///
+  /// // After round completion:
+  /// var nextRound = gameState.nextRound(config);
+  /// nextRound = nextRound.updateStatus();
+  /// ```
+  ///
+  /// The method checks:
+  /// - If game is over (`game.gameOver()`) → [GameStatus.finished]
+  /// - Else if round is over (`game.roundOver`) → [GameStatus.betweenRounds]
+  /// - Otherwise keeps current status
+  ///
+  /// **Important**: This must be called explicitly, not automatically. This ensures
+  /// phase transitions are visible in code and debuggable. Implicit transitions hide
+  /// important game flow decisions.
   GameState<E, T> updateStatus() => updateGeneric(
     (g) => g.copyWith(
       status: game.gameOver(g)
