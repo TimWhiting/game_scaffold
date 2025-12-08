@@ -18,12 +18,7 @@ Future<void> main(List<String> arguments) async {
     overrides: [playerIDProvider.overrideWithValue('1')],
   );
   rootProvider.read(serviceType.notifier).state = OnDeviceService;
-  const config = GameConfig(
-    adminID: '0',
-    gameType: 'tictactoe',
-    rounds: 2,
-    maxPlayers: 2,
-  );
+  const config = GameConfig(adminID: '0', gameType: 'tictactoe', rounds: 2, maxPlayers: 2);
 
   final p1Client = p1Ref.listen(gameClientProvider, (_, __) {});
   final p2Client = p2Ref.listen(gameClientProvider, (_, __) {});
@@ -45,8 +40,7 @@ Future<void> main(List<String> arguments) async {
 
   late ProviderSubscription sub;
   p2Ref.listen<RoundInfo>(fireImmediately: true, roundInfoProvider, (_, __) {});
-  sub = p1Ref.listen<RoundInfo>(fireImmediately: true, roundInfoProvider,
-      (last, value) async {
+  sub = p1Ref.listen<RoundInfo>(fireImmediately: true, roundInfoProvider, (last, value) async {
     print(value);
     if (value.game == null) {
       return;
@@ -55,8 +49,7 @@ Future<void> main(List<String> arguments) async {
       sub.close();
       return;
     }
-    final gameState =
-        value.game! as GameState<TicTacToeGameEvent, TicTacToeGame>;
+    final gameState = value.game! as GameState<TicTacToeGameEvent, TicTacToeGame>;
     print(gameState.status);
     if (gameState.gameOver || gameState.roundOver) {
       print('Round Over');
@@ -97,8 +90,7 @@ Future<void> loop(
     location = command!.split(',').map(int.tryParse).toList();
   } while (location.any((l) => l == null));
 
-  final event = TicTacToeGameEvent(
-      player: player, location: location[0]! * 3 + location[1]!);
+  final event = TicTacToeGameEvent(player: player, location: location[0]! * 3 + location[1]!);
   await playerContainers[player]!.read(roundClientProvider).sendEvent(event);
 
   await Future.delayed(const Duration(milliseconds: 100));
@@ -119,8 +111,8 @@ void printStateAndAction(GameState<TicTacToeGameEvent, TicTacToeGame> state) {
   String strFor(int index) => gameState.board[index] == 0
       ? 'X'
       : gameState.board[index] == 1
-          ? '0'
-          : ' ';
+      ? '0'
+      : ' ';
   String row(int startIndex) =>
       '${strFor(startIndex)}|${strFor(startIndex + 1)}|${strFor(startIndex + 2)}';
   print('State: ');

@@ -24,26 +24,25 @@ sealed class GenericGame with _$GenericGame {
   }) = _GenericGame;
   const GenericGame._();
 
-  factory GenericGame.fromJson(Map<String, dynamic> map) =>
-      _$GenericGameFromJson(map);
+  factory GenericGame.fromJson(Map<String, dynamic> map) => _$GenericGameFromJson(map);
 
   /// Creates a default initialized game with [players]
   factory GenericGame.start(IList<Player> players) => GenericGame(
-        players: players.toIList(),
-        readyPlayers: <PlayerID>[].lock,
-        time: DateTime.now(),
-        status: GameStatus.started,
-        round: 0,
-      );
+    players: players.toIList(),
+    readyPlayers: <PlayerID>[].lock,
+    time: DateTime.now(),
+    status: GameStatus.started,
+    round: 0,
+  );
 
   /// Creates a default initialized game where the first player is chosen at random
   factory GenericGame.startRandom(IList<Player> players) => GenericGame(
-        players: players,
-        readyPlayers: <PlayerID>[].lock,
-        time: DateTime.now(),
-        status: GameStatus.started,
-        round: 0,
-      );
+    players: players,
+    readyPlayers: <PlayerID>[].lock,
+    time: DateTime.now(),
+    status: GameStatus.started,
+    round: 0,
+  );
 
   /// Gets whether the game is over
   bool get gameOver => status == GameStatus.finished;
@@ -56,8 +55,7 @@ sealed class GenericGame with _$GenericGame {
 
   /// Returns a copy of the [GenericGame] with the [round] incremented,
   /// [status] set to [GameStatus.started]
-  GenericGame finishRound() =>
-      copyWith(round: round + 1, status: GameStatus.started);
+  GenericGame finishRound() => copyWith(round: round + 1, status: GameStatus.started);
 
   /// Returns a copy of the [GenericGame] with the [status] updated to [status]
   GenericGame updateStatus(GameStatus status) => copyWith(status: status);
@@ -69,8 +67,7 @@ sealed class GenericGame with _$GenericGame {
   GenericGame clearReadyPlayers() => copyWith(readyPlayers: <PlayerID>[].lock);
 
   /// Adds a ready player to the list
-  GenericGame addReadyPlayer(PlayerID player) =>
-      copyWith(readyPlayers: readyPlayers.add(player));
+  GenericGame addReadyPlayer(PlayerID player) => copyWith(readyPlayers: readyPlayers.add(player));
 }
 
 /// A [GenericEvent] that is handled by the Generic server implementation
@@ -80,11 +77,10 @@ sealed class GenericEvent extends Event with _$GenericEvent {
   const GenericEvent._();
 
   /// Signals that [player] is ready for the next round
-  const factory GenericEvent.readyNextRound(String player,
-      {@Default('generic') String type}) = ReadyNextRound;
+  const factory GenericEvent.readyNextRound(String player, {@Default('generic') String type}) =
+      ReadyNextRound;
 
-  factory GenericEvent.fromJson(Map<String, dynamic> map) =>
-      _$GenericEventFromJson(map);
+  factory GenericEvent.fromJson(Map<String, dynamic> map) => _$GenericEventFromJson(map);
 
   static void register() {
     GameRegistry.register(GameFunctionsGeneric());
@@ -105,18 +101,18 @@ class GameFunctionsGeneric extends GameFunctions {
   GameType get gameType => 'generic';
 
   @override
-  GameState<Event, Game> initialState(
-          GameConfig config, IList<Player> players) =>
+  GameState<Event, Game> initialState(GameConfig config, IList<Player> players) =>
       throw UnimplementedError();
 
   @override
-  NextState<Event, Game> next(covariant GameState<Event, Game> state,
-          GameConfig config, covariant PlayerEvent<Event> event) =>
-      throw UnimplementedError();
+  NextState<Event, Game> next(
+    covariant GameState<Event, Game> state,
+    GameConfig config,
+    covariant PlayerEvent<Event> event,
+  ) => throw UnimplementedError();
 
   @override
-  GameState<Event, Game> nextRound(
-          covariant GameState<Event, Game> state, GameConfig config) =>
+  GameState<Event, Game> nextRound(covariant GameState<Event, Game> state, GameConfig config) =>
       throw UnimplementedError();
 }
 
@@ -155,8 +151,7 @@ sealed class GameConfig with _$GameConfig {
     @Default({}) Map<String, Object?> options,
   }) = _GameConfig;
   const GameConfig._();
-  factory GameConfig.fromJson(Map<String, Object?> map) =>
-      _$GameConfigFromJson(map);
+  factory GameConfig.fromJson(Map<String, Object?> map) => _$GameConfigFromJson(map);
 }
 
 /// An object to provide info about a particular game to the client
@@ -177,8 +172,7 @@ sealed class GameInfo with _$GameInfo {
     required GameConfig config,
     required GameStatus status,
   }) = _GameInfo;
-  factory GameInfo.fromJson(Map<String, dynamic> map) =>
-      _$GameInfoFromJson(map);
+  factory GameInfo.fromJson(Map<String, dynamic> map) => _$GameInfoFromJson(map);
 }
 
 @freezed

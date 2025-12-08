@@ -31,11 +31,7 @@ abstract class GameService {
   Future<IList<GameInfo>> getGames(PlayerID playerID);
 
   /// Registers the client with the game server
-  Future<PlayerName?> joinGame(
-    PlayerID playerID,
-    GameCode code,
-    PlayerName name,
-  );
+  Future<PlayerName?> joinGame(PlayerID playerID, GameCode code, PlayerName name);
 
   /// Disposes of the [GameService] (i.e. disconnects from the server)
   void dispose() {

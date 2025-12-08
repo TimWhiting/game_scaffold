@@ -28,7 +28,9 @@ void testGame<E extends Event, T extends Game>(
 
     for (final p in players) {
       ref[p.id] = ProviderContainer(
-          parent: root, overrides: [playerIDProvider.overrideWithValue(p.id)]);
+        parent: root,
+        overrides: [playerIDProvider.overrideWithValue(p.id)],
+      );
       g[p.id] = ref[p.id]!.listen(gameClientProvider, (previous, next) {});
     }
     g[players.first.id]!.read().setGameConfig(config);
@@ -83,7 +85,9 @@ class GameTester<E extends Event, T extends Game> {
   /// });
   /// ```
   void event(
-      PlayerEvent<E> event, Function(GameState<E, T>, GameError?) outcome) {
+    PlayerEvent<E> event,
+    Function(GameState<E, T>, GameError?) outcome,
+  ) {
     backendContainer.read(BackendProviders.state.notifier).handleEvent(event);
 
     final g = game;
@@ -116,9 +120,14 @@ class GameTester<E extends Event, T extends Game> {
   /// the round has advanced
   void nextRound(Function(GameState<E, T>) expectation) {
     for (final p in _players) {
-      backendContainer.read(BackendProviders.state.notifier).handleEvent(
-          PlayerEvent(
-              event: GenericEvent.readyNextRound(p.id), playerId: p.id));
+      backendContainer
+          .read(BackendProviders.state.notifier)
+          .handleEvent(
+            PlayerEvent(
+              event: GenericEvent.readyNextRound(p.id),
+              playerId: p.id,
+            ),
+          );
     }
 
     expectation(game);

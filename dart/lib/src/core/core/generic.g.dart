@@ -18,20 +18,16 @@ _GenericGame _$GenericGameFromJson(Map<String, dynamic> json) => _GenericGame(
         ),
   readyPlayers: json['readyPlayers'] == null
       ? const IListConst([])
-      : IList<String>.fromJson(
-          json['readyPlayers'],
-          (value) => value as String,
-        ),
+      : IList<String>.fromJson(json['readyPlayers'], (value) => value as String),
 );
 
-Map<String, dynamic> _$GenericGameToJson(_GenericGame instance) =>
-    <String, dynamic>{
-      'time': instance.time.toIso8601String(),
-      'status': _$GameStatusEnumMap[instance.status]!,
-      'round': instance.round,
-      'players': instance.players.toJson((value) => value.toJson()),
-      'readyPlayers': instance.readyPlayers.toJson((value) => value),
-    };
+Map<String, dynamic> _$GenericGameToJson(_GenericGame instance) => <String, dynamic>{
+  'time': instance.time.toIso8601String(),
+  'status': _$GameStatusEnumMap[instance.status]!,
+  'round': instance.round,
+  'players': instance.players.toJson((value) => value.toJson()),
+  'readyPlayers': instance.readyPlayers.toJson((value) => value),
+};
 
 const _$GameStatusEnumMap = {
   GameStatus.lobby: 'lobby',
@@ -41,19 +37,17 @@ const _$GameStatusEnumMap = {
 };
 
 ReadyNextRound _$ReadyNextRoundFromJson(Map<String, dynamic> json) =>
-    ReadyNextRound(
-      json['player'] as String,
-      type: json['type'] as String? ?? 'generic',
-    );
+    ReadyNextRound(json['player'] as String, type: json['type'] as String? ?? 'generic');
 
-Map<String, dynamic> _$ReadyNextRoundToJson(ReadyNextRound instance) =>
-    <String, dynamic>{'player': instance.player, 'type': instance.type};
+Map<String, dynamic> _$ReadyNextRoundToJson(ReadyNextRound instance) => <String, dynamic>{
+  'player': instance.player,
+  'type': instance.type,
+};
 
 _GameConfig _$GameConfigFromJson(Map<String, dynamic> json) => _GameConfig(
   gameType: json['gameType'] as String,
   adminID: json['adminID'] as String?,
-  nameSet:
-      $enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ?? NameSet.basic,
+  nameSet: $enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ?? NameSet.basic,
   customNames: json['customNames'] as bool? ?? false,
   rounds: (json['rounds'] as num?)?.toInt() ?? 15,
   minPlayers: (json['minPlayers'] as num?)?.toInt() ?? 1,
@@ -62,18 +56,17 @@ _GameConfig _$GameConfigFromJson(Map<String, dynamic> json) => _GameConfig(
   options: json['options'] as Map<String, dynamic>? ?? const {},
 );
 
-Map<String, dynamic> _$GameConfigToJson(_GameConfig instance) =>
-    <String, dynamic>{
-      'gameType': instance.gameType,
-      'adminID': instance.adminID,
-      'nameSet': _$NameSetEnumMap[instance.nameSet]!,
-      'customNames': instance.customNames,
-      'rounds': instance.rounds,
-      'minPlayers': instance.minPlayers,
-      'maxPlayers': instance.maxPlayers,
-      'autoStart': instance.autoStart,
-      'options': instance.options,
-    };
+Map<String, dynamic> _$GameConfigToJson(_GameConfig instance) => <String, dynamic>{
+  'gameType': instance.gameType,
+  'adminID': instance.adminID,
+  'nameSet': _$NameSetEnumMap[instance.nameSet]!,
+  'customNames': instance.customNames,
+  'rounds': instance.rounds,
+  'minPlayers': instance.minPlayers,
+  'maxPlayers': instance.maxPlayers,
+  'autoStart': instance.autoStart,
+  'options': instance.options,
+};
 
 const _$NameSetEnumMap = {NameSet.basic: 'basic'};
 

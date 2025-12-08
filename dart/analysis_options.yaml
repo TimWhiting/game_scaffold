@@ -10,8 +10,9 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
-#   exclude:
-#     - path/to/excluded/files/**
+
+formatter: 
+  page_width: 100
 
 linter:
   rules:

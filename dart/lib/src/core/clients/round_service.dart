@@ -14,15 +14,11 @@ abstract class RoundService {
   Future<bool> exitGame(PlayerID playerID, GameCode code);
 
   /// Sends [event] to the game server
-  Future<bool> sendEvent<E extends Event>(
-      PlayerID playerID, GameCode code, E event);
+  Future<bool> sendEvent<E extends Event>(PlayerID playerID, GameCode code, E event);
 
   /// Sends a new round event to the game server
-  Future<bool> newRound(PlayerID playerID, GameCode code) => sendEvent(
-        playerID,
-        code,
-        GenericEvent.readyNextRound(playerID),
-      );
+  Future<bool> newRound(PlayerID playerID, GameCode code) =>
+      sendEvent(playerID, code, GenericEvent.readyNextRound(playerID));
 
   Stream<GameState> gameStream(PlayerID playerID, GameCode code);
   Stream<GameError> errorStream(PlayerID playerID, GameCode code);

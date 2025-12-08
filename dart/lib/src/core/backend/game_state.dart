@@ -63,10 +63,7 @@ class BackendProviders {
       return GameStateNotifier(
         l.config,
         l.code,
-        GameRegistry.initialState(
-          l.config,
-          l.players.toIList(),
-        ),
+        GameRegistry.initialState(l.config, l.players.toIList()),
         ref.read(error.notifier),
       );
     },
@@ -104,10 +101,9 @@ class LobbyNotifier extends StateNotifier<Lobby> {
 
 /// A [StateNotifier] that handles events for a particular game, delegating to the game's implementation for non generic events
 class GameStateNotifier extends StateNotifier<GameState> {
-  GameStateNotifier(
-      this.gameConfig, this.code, GameState initialState, this.errorNotifier)
-      : _gameStateLogger = Logger('GameStateNotifier $code'),
-        super(initialState);
+  GameStateNotifier(this.gameConfig, this.code, GameState initialState, this.errorNotifier)
+    : _gameStateLogger = Logger('GameStateNotifier $code'),
+      super(initialState);
 
   final StateController<GameError?> errorNotifier;
 
@@ -140,13 +136,9 @@ class GameStateNotifier extends StateNotifier<GameState> {
       if (e is GenericEvent) {
         switch (e) {
           case ReadyNextRound(:final player):
-            final newState =
-                game.updateGeneric((g) => g.addReadyPlayer(player));
+            final newState = game.updateGeneric((g) => g.addReadyPlayer(player));
             if (newState.readyPlayers.length == game.players.length) {
-              state = game
-                  .nextRound(gameConfig)
-                  .state
-                  .updateGeneric((g) => g.clearReadyPlayers());
+              state = game.nextRound(gameConfig).state.updateGeneric((g) => g.clearReadyPlayers());
               break;
             }
             state = newState;
@@ -176,9 +168,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
 GameCode generateGameID(List<String> avoidList) {
   var gameID = '';
   while (gameID.length != 4 || avoidList.contains(gameID)) {
-    gameID = ('BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle())
-        .join()
-        .substring(0, 4);
+    gameID = ('BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle()).join().substring(0, 4);
   }
   return gameID;
 }

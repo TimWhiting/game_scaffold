@@ -11,8 +11,7 @@ import 'package:logging/logging.dart';
 
 @visibleForTesting
 bool multiplayerOverride = false;
-bool get multiplayerTest =>
-    const bool.fromEnvironment('MULTIPLAYER_TEST') || multiplayerOverride;
+bool get multiplayerTest => const bool.fromEnvironment('MULTIPLAYER_TEST') || multiplayerOverride;
 
 final navigationLogger = Logger('GameNavigator');
 final isDesktop = !(kIsWeb || isMobile);
@@ -20,19 +19,14 @@ final isMobile = Platform.isAndroid || Platform.isIOS;
 final List<GlobalKey> apps = [GlobalKey(debugLabel: 'Player 0')];
 
 class MultiPlayerWidget extends HookConsumerWidget {
-  const MultiPlayerWidget({
-    required this.app,
-    required this.code,
-    this.additionalOptions,
-    Key? key,
-  }) : super(key: key);
+  const MultiPlayerWidget({required this.app, required this.code, this.additionalOptions, Key? key})
+    : super(key: key);
   final String? code;
   final Widget Function(int, String?, Key) app;
   final Widget? additionalOptions;
 
   static const addPlayerKey = ValueKey('addPlayer');
-  static ValueKey<String> getPlayerNumberKey(int index) =>
-      ValueKey('playerNumber$index');
+  static ValueKey<String> getPlayerNumberKey(int index) => ValueKey('playerNumber$index');
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,10 +48,7 @@ class MultiPlayerWidget extends HookConsumerWidget {
                     )
                   : IndexedStack(
                       index: currentApp.value,
-                      children: [
-                        for (var i = 0; i < apps.length; i++)
-                          app(i, code, apps[i])
-                      ],
+                      children: [for (var i = 0; i < apps.length; i++) app(i, code, apps[i])],
                     ),
             ),
             Row(
@@ -93,16 +84,12 @@ class MultiPlayerWidget extends HookConsumerWidget {
                               onPressed: () {
                                 numPlayers.value++;
                                 final id = apps.length;
-                                apps.add(
-                                  GlobalKey(debugLabel: 'Player $id'),
-                                );
+                                apps.add(GlobalKey(debugLabel: 'Player $id'));
                               },
                             ),
                           ],
                           IconButton(
-                            icon: lock.value
-                                ? const Icon(Icons.lock_open)
-                                : const Icon(Icons.lock),
+                            icon: lock.value ? const Icon(Icons.lock_open) : const Icon(Icons.lock),
                             onPressed: () {
                               lock.value = !lock.value;
                             },
@@ -124,15 +111,13 @@ class MultiPlayerWidget extends HookConsumerWidget {
                           DropdownButton<ServiceType>(
                             value: ref.watch(serviceType),
                             items: [
-                              for (final backendType
-                                  in ref.watch(allServiceTypes))
+                              for (final backendType in ref.watch(allServiceTypes))
                                 DropdownMenuItem<ServiceType>(
                                   value: backendType,
                                   child: Text(backendType),
                                 ),
                             ],
-                            onChanged: (v) =>
-                                ref.read(serviceType.notifier).state = v!,
+                            onChanged: (v) => ref.read(serviceType.notifier).state = v!,
                           ),
                           const SizedBox(width: 20),
                           if (additionalOptions != null) ...[
@@ -145,16 +130,12 @@ class MultiPlayerWidget extends HookConsumerWidget {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       );
     } else {
-      return app(
-        0,
-        code,
-        apps[0],
-      );
+      return app(0, code, apps[0]);
     }
   }
 
@@ -162,9 +143,7 @@ class MultiPlayerWidget extends HookConsumerWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(StringProperty('code', code));
-    properties.add(
-        ObjectFlagProperty<Widget Function(int p1, String? p2, Key p3)>.has(
-            'app', app));
+    properties.add(ObjectFlagProperty<Widget Function(int p1, String? p2, Key p3)>.has('app', app));
   }
 }
 
@@ -177,10 +156,10 @@ class GameNavigator extends HookConsumerWidget {
     Widget? betweenRounds,
     Widget? gameOver,
     Key? key,
-  })  : disconnected = disconnected ?? connected,
-        betweenRounds = betweenRounds ?? game,
-        gameOver = gameOver ?? game,
-        super(key: key);
+  }) : disconnected = disconnected ?? connected,
+       betweenRounds = betweenRounds ?? game,
+       gameOver = gameOver ?? game,
+       super(key: key);
   final Widget disconnected;
   final Widget connected;
   final Widget lobby;
@@ -191,16 +170,14 @@ class GameNavigator extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final conn = ref.watch(gameInfoProvider.select((r) => r.connected));
-    final inGame =
-        ref.watch(gameInfoProvider.select((r) => r.code?.isNotEmpty ?? false));
+    final inGame = ref.watch(gameInfoProvider.select((r) => r.code?.isNotEmpty ?? false));
     GameStatus? gameStatus;
     if (inGame) {
       gameStatus = ref.watch(roundInfoProvider.select((r) => r.status));
     }
     final pages = {'disconnected': disconnected};
 
-    navigationLogger.info(
-        'PlayerID: ${ref.read(playerIDProvider)} gameStatus: $gameStatus');
+    navigationLogger.info('PlayerID: ${ref.read(playerIDProvider)} gameStatus: $gameStatus');
 
     if (conn) {
       pages['connected'] = connected;
@@ -224,9 +201,7 @@ class GameNavigator extends HookConsumerWidget {
             (entry) => NoAnimationPage(
               key: ValueKey(entry.key),
               child: entry.value,
-              canPop: entry.key == 'lobby' ||
-                  entry.key == 'started' ||
-                  entry.key == 'connected',
+              canPop: entry.key == 'lobby' || entry.key == 'started' || entry.key == 'connected',
               onPopInvoked: (didPop, result) {
                 if (didPop) {
                   if (entry.key == 'lobby' || entry.key == 'started') {
@@ -251,22 +226,21 @@ class GameNavigator extends HookConsumerWidget {
 }
 
 class NoAnimationPage<T> extends Page<T> {
-  const NoAnimationPage(
-      {required this.child,
-      required super.key,
-      required super.canPop,
-      required super.onPopInvoked});
+  const NoAnimationPage({
+    required this.child,
+    required super.key,
+    required super.canPop,
+    required super.onPopInvoked,
+  });
 
   final Widget child;
 
   @override
-  Route<T> createRoute(BuildContext context) =>
-      NoAnimationPageRoute<T>(page: this);
+  Route<T> createRoute(BuildContext context) => NoAnimationPageRoute<T>(page: this);
 }
 
 class NoAnimationPageRoute<T> extends PageRoute<T> {
-  NoAnimationPageRoute({required NoAnimationPage<T> page})
-      : super(settings: page);
+  NoAnimationPageRoute({required NoAnimationPage<T> page}) : super(settings: page);
 
   // This is what causes the bug - using Duration(milliseconds: 1) works okay
   @override
@@ -277,14 +251,19 @@ class NoAnimationPageRoute<T> extends PageRoute<T> {
   NoAnimationPage<T> get _page => settings as NoAnimationPage<T>;
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-          Animation<double> secondaryAnimation) =>
-      _page.child;
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) => _page.child;
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-          Animation<double> secondaryAnimation, Widget child) =>
-      child;
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) => child;
 
   @override
   bool get maintainState => false;

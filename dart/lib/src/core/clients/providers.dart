@@ -14,11 +14,7 @@ final defaultAddress = Uri.parse('http://localhost:0');
 /// Provides the player id for a particular section of the widget tree
 ///
 /// This is so that a multiplayer game within the same app can be played
-final playerIDProvider = Provider<PlayerID>(
-  (ref) => '',
-  name: 'PlayerID',
-  dependencies: const [],
-);
+final playerIDProvider = Provider<PlayerID>((ref) => '', name: 'PlayerID', dependencies: const []);
 
 /// Allows one config to write all players' configs
 final singleConfig = StateProvider<GameConfig>(
@@ -28,8 +24,10 @@ final singleConfig = StateProvider<GameConfig>(
 );
 
 /// The provider that controls which game server address to connect to
-final remoteUriProvider = StateProvider<GameAddress>((ref) => defaultAddress, 
-  dependencies: const [],);
+final remoteUriProvider = StateProvider<GameAddress>(
+  (ref) => defaultAddress,
+  dependencies: const [],
+);
 
 /// The provider that controls the [RoundService] and [GameService]
 /// implementation to use
@@ -49,7 +47,7 @@ final allServiceTypes = StateProvider<List<ServiceType>>(
 final gameServiceFamily = Provider.autoDispose.family<GameService, ServiceType>(
   (ref, serviceType) => switch (serviceType) {
     OnDeviceService => ref.watch(onDeviceGameService),
-    _ => throw UnsupportedError('Unsupported service type')
+    _ => throw UnsupportedError('Unsupported service type'),
   },
   name: 'GameServiceFamily',
   dependencies: [onDeviceGameService, playerIDProvider],
@@ -65,7 +63,7 @@ final gameService = Provider.autoDispose<GameService>(
 final roundServiceFamily = Provider.autoDispose.family<RoundService, ServiceType>(
   (ref, serviceType) => switch (serviceType) {
     OnDeviceService => ref.watch(onDeviceRoundService),
-    _ => throw UnsupportedError('Unsupported service type')
+    _ => throw UnsupportedError('Unsupported service type'),
   },
   name: 'RoundServiceFamily',
   dependencies: [onDeviceRoundService, playerIDProvider],
@@ -94,8 +92,7 @@ class GameProviders {
 
   /// Provides the way to configure the game for starting
   static final config = Provider.autoDispose(
-    (ref) => ref.watch(gameInfoProvider
-        .select((c) => c.config ?? const GameConfig(gameType: ''))),
+    (ref) => ref.watch(gameInfoProvider.select((c) => c.config ?? const GameConfig(gameType: ''))),
     dependencies: [gameInfoProvider],
   );
 }
