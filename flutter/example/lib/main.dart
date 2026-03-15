@@ -100,12 +100,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                 key: Key('Create Game Button $playerID'),
                 onPressed: () async {
                   gameClient.setGameConfig(
-                    const GameConfig(
-                      adminID: '0',
-                      gameType: 'tictactoe',
-                      rounds: 2,
-                      maxPlayers: 2,
-                    ),
+                    const GameConfig(adminID: '0', gameType: 'tictactoe', rounds: 2, maxPlayers: 2),
                   );
                   await gameClient.createGame();
                   await gameClient.joinGame();
@@ -118,17 +113,12 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                 height: 30,
                 child: TextField(
                   textAlignVertical: TextAlignVertical.center,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter Game Code',
-                  ),
+                  decoration: const InputDecoration(hintText: 'Enter Game Code'),
                   onChanged: gameClient.setGameCode,
                 ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: gameClient.joinGame,
-                child: const Text('Join Game'),
-              ),
+              ElevatedButton(onPressed: gameClient.joinGame, child: const Text('Join Game')),
             ],
             if (allGames != null)
               for (final info in allGames)
@@ -137,9 +127,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
                     gameClient.setGameCode(info.gameID);
                     await gameClient.joinGame();
                   },
-                  child: Text(
-                    'Started Game: ${info.gameID}, Players: ${info.players}',
-                  ),
+                  child: Text('Started Game: ${info.gameID}, Players: ${info.players}'),
                 ),
           ],
         ),
@@ -181,16 +169,12 @@ class GameWidget extends HookConsumerWidget {
     final gameStatus = gameState.status;
     final playerID = ref.watch(playerIDProvider);
     ref.listen<RoundInfo>(roundInfoProvider, (prevState, state) {
-      if (state.error != prevState?.error &&
-          state.error != null &&
-          state.error!.isNotEmpty) {
+      if (state.error != prevState?.error && state.error != null && state.error!.isNotEmpty) {
         WidgetsBinding.instance.addPostFrameCallback(
           (_) => showDialog(
             context: context,
-            builder: (c) => Dialog(
-              backgroundColor: Colors.white,
-              child: Text(state.error.toString()),
-            ),
+            builder: (c) =>
+                Dialog(backgroundColor: Colors.white, child: Text(state.error.toString())),
           ),
         );
       }
@@ -219,12 +203,7 @@ class GameWidget extends HookConsumerWidget {
                       onTap: () async {
                         final _ = await ref
                             .read(roundClientProvider)
-                            .sendEvent(
-                              TicTacToeGameEvent(
-                                player: player,
-                                location: r * 3 + c,
-                              ),
-                            );
+                            .sendEvent(TicTacToeGameEvent(player: player, location: r * 3 + c));
                       },
                       child: ColoredBox(
                         color: Colors.black,
@@ -233,16 +212,13 @@ class GameWidget extends HookConsumerWidget {
                           height: 20,
                           color: Colors.white,
                           margin: const EdgeInsets.all(1),
-                          child: Center(
-                            child: Text(g.game.board.xOrO(player, r * 3 + c)),
-                          ),
+                          child: Center(child: Text(g.game.board.xOrO(player, r * 3 + c))),
                         ),
                       ),
                     ),
                 ],
               ),
-            if (gameStatus == GameStatus.betweenRounds &&
-                !g.readyPlayers.contains(playerID)) ...[
+            if (gameStatus == GameStatus.betweenRounds && !g.readyPlayers.contains(playerID)) ...[
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
