@@ -10,8 +10,6 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
-  enable-experiment:
-    - macros
 
 linter:
   rules:

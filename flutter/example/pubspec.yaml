@@ -6,7 +6,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+3
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.13.0 <4.0.0"
   flutter: ">=3.24.0 <4.0.0"
   
 resolution: workspace
@@ -14,11 +14,11 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  flutter_hooks: ^0.20.5
-  flutter_riverpod: ^2.6.1
+  flutter_hooks: ^0.21.3
+  flutter_riverpod: ^3.4.2
   game_scaffold: any
   game_scaffold_games: any
-  hooks_riverpod: ^2.6.1
+  hooks_riverpod: ^3.4.2
   logging: ^1.3.0
 
 dev_dependencies:
