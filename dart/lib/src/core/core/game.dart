@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unnecessary_cast, avoid_annotating_with_dynamic
 
-import 'package:riverpod/riverpod.dart';
+import 'package:riverpod/legacy.dart';
 
 import 'core.dart';
 
@@ -16,16 +16,14 @@ class NextStateOrError<E extends Event, T extends Game> {
   final GameError? error;
 }
 
-typedef NextState<E extends Event, T extends Game>
-    = MaybeError<GameState<E, T>>;
+typedef NextState<E extends Event, T extends Game> = MaybeError<GameState<E, T>>;
 
 class PlayerEvent<E extends Event> {
   PlayerEvent({required this.playerId, required this.event});
   final String playerId;
   final E event;
 
-  PlayerEvent<X> cast<X extends Event>() =>
-      PlayerEvent(playerId: playerId, event: event as X);
+  PlayerEvent<X> cast<X extends Event>() => PlayerEvent(playerId: playerId, event: event as X);
 }
 
 class MaybeError<T> {
@@ -39,15 +37,11 @@ extension MaybeErrorX<T> on MaybeError<T> {
   String get error => $1!;
   bool get hasError => $1 != null;
   bool get hasValue => $0 != null;
-  X when<X>(
-          {required X Function(T) value, required X Function(String) error}) =>
+  X when<X>({required X Function(T) value, required X Function(String) error}) =>
       hasError ? error($1!) : value($0 as T);
-  MaybeError<X> map<X>(X Function(T) v) =>
-      $0 != null ? MaybeError(v($0 as T), $1) : this as MaybeError<X>;
-  MaybeError<T> mapError(String Function(String) e) =>
-      $1 != null ? MaybeError($0, e($1!)) : this;
-  MaybeError<X> flatMap<X>(MaybeError<X> Function(T) map) =>
-      hasError ? this as MaybeError<X> : map(value);
+  MaybeError<X> map<X>(X Function(T) v) => $0 != null ? MaybeError(v($0 as T), $1) : this as MaybeError<X>;
+  MaybeError<T> mapError(String Function(String) e) => $1 != null ? MaybeError($0, e($1!)) : this;
+  MaybeError<X> flatMap<X>(MaybeError<X> Function(T) map) => hasError ? this as MaybeError<X> : map(value);
 }
 
 extension ToMaybeError<T> on T {
@@ -56,8 +50,7 @@ extension ToMaybeError<T> on T {
 }
 
 extension PlayerX<E extends Event> on E {
-  PlayerEvent<E> player(PlayerID playerId) =>
-      PlayerEvent(playerId: playerId, event: this);
+  PlayerEvent<E> player(PlayerID playerId) => PlayerEvent(playerId: playerId, event: this);
 }
 
 abstract class Game {
@@ -79,8 +72,7 @@ abstract class GameRegistry {
   static final Map<GameType, GameFunctions> _functions = {};
   static GameFunctions _fromType(GameType type) => _functions[type]!;
 
-  static void register<E extends Event, T extends Game>(
-      GameFunctions<E, T> functions) {
+  static void register<E extends Event, T extends Game>(GameFunctions<E, T> functions) {
     final type = functions.gameType;
     _functions[type] = functions;
   }
@@ -90,8 +82,7 @@ abstract class GameRegistry {
     return _fromType(type).fromJson(json) as T;
   }
 
-  static GameFunctions<E, T> functions<E extends Event, T extends Game>(
-          GameType gameType) =>
+  static GameFunctions<E, T> functions<E extends Event, T extends Game>(GameType gameType) =>
       _fromType(gameType) as GameFunctions<E, T>;
 
   static E eventFromJson<E>(JsonMap json) {
@@ -99,8 +90,7 @@ abstract class GameRegistry {
     return _fromType(type).fromJsonE(json) as E;
   }
 
-  static String typeName(GameState state) =>
-      GameRegistry._functions[state.game.type]!.gameType;
+  static String typeName(GameState state) => GameRegistry._functions[state.game.type]!.gameType;
 
   static GameState initialState(GameConfig config, IList<Player> iList) =>
       _fromType(config.gameType).initialState(config, iList);
@@ -111,8 +101,8 @@ class GameError {
   final PlayerID player;
   const GameError({required this.message, required this.player});
   JsonMap toJson() => {'message': message, 'player': player};
-  factory GameError.fromJson(JsonMap json) => GameError(
-      message: json['message'] as String, player: json['player'] as PlayerID);
+  factory GameError.fromJson(JsonMap json) =>
+      GameError(message: json['message'] as String, player: json['player'] as PlayerID);
 }
 
 /// A error notifier that lets the client clear the error
@@ -143,35 +133,32 @@ class GameState<E extends Event, T extends Game> {
   final Rewards rewards;
   final GenericGame generic;
 
-  JsonMap toJson() => {
-        'game': game.toJson(),
-        'rewards': rewards,
-        'generic': generic.toJson(),
-      };
+  JsonMap toJson() => {'game': game.toJson(), 'rewards': rewards, 'generic': generic.toJson()};
 
   factory GameState.fromJson(JsonMap json) => GameState(
-        game: GameRegistry.gameFromJson(json['game'] as JsonMap),
-        rewards: json['rewards'] as List<double>? ?? [],
-        generic: GenericGame.fromJson(json['generic'] as JsonMap),
-      );
+    game: GameRegistry.gameFromJson(json['game'] as JsonMap),
+    rewards: json['rewards'] as List<double>? ?? [],
+    generic: GenericGame.fromJson(json['generic'] as JsonMap),
+  );
 
-  GameState<E, T> updateReward(List<double> Function(List<double>) update) =>
-      copyWith(rewards: update(rewards));
+  GameState<E, T> updateReward(List<double> Function(List<double>) update) => copyWith(rewards: update(rewards));
 
   GameState<E, T> updateGame(T g) => copyWith(game: g);
 
   GameState<E, T> updateGeneric(GenericGame Function(GenericGame) update) =>
       copyWith(generic: update(generic), rewards: rewards);
 
-  GameState<E, T> addReward(List<double> rewards) =>
-      copyWith(rewards: rewards + this.rewards);
+  GameState<E, T> addReward(List<double> rewards) => copyWith(rewards: rewards + this.rewards);
 
-  GameState<E, T> updateStatus() => updateGeneric((g) => g.copyWith(
+  GameState<E, T> updateStatus() => updateGeneric(
+    (g) => g.copyWith(
       status: game.gameOver(g)
           ? GameStatus.finished
           : game.roundOver
-              ? GameStatus.betweenRounds
-              : g.status));
+          ? GameStatus.betweenRounds
+          : g.status,
+    ),
+  );
 
   /// Gets an unmodifiable list of players that are a part of this game
   IList<Player> get players => generic.players;
@@ -194,56 +181,44 @@ class GameState<E extends Event, T extends Game> {
   /// Gets the players who are ready for the next round
   IList<PlayerID> get readyPlayers => generic.readyPlayers;
 
-  PlayerIndex nextPlayerIndex(PlayerIndex currentPlayer) =>
-      (currentPlayer + 1) % generic.players.length;
-  Player playerFromIndex(PlayerIndex currentPlayer) =>
-      generic.players[currentPlayer];
+  PlayerIndex nextPlayerIndex(PlayerIndex currentPlayer) => (currentPlayer + 1) % generic.players.length;
+  Player playerFromIndex(PlayerIndex currentPlayer) => generic.players[currentPlayer];
   Player player(PlayerID id) => players.firstWhere((p) => p.id == id);
   PlayerName playerName(PlayerID playerID) => player(playerID).name;
-  PlayerIndex playerIndex(PlayerID playerID) =>
-      players.indexWhere((p) => p.id == playerID);
+  PlayerIndex playerIndex(PlayerID playerID) => players.indexWhere((p) => p.id == playerID);
 
   NextStateOrError next(PlayerEvent event, GameConfig config) {
-    final next =
-        GameRegistry.functions(config.gameType).next(this, config, event);
+    final next = GameRegistry.functions(config.gameType).next(this, config, event);
     if (next.hasError) {
       return NextStateOrError(
-          state: this,
-          error: GameError(message: next.error, player: event.playerId));
+        state: this,
+        error: GameError(message: next.error, player: event.playerId),
+      );
     }
     return NextStateOrError(
-        state: copyWith(game: next.value.game as T?)
-            .updateStatus()
-            .updateGeneric((g) => g.copyWith(time: DateTime.now())),
-        error: null);
+      state: copyWith(game: next.value.game as T?)
+          .updateStatus()
+          .updateGeneric((g) => g.copyWith(time: DateTime.now())),
+      error: null,
+    );
   }
 
   NextStateOrError nextRound(GameConfig config) {
-    final next =
-        GameRegistry.functions(config.gameType).nextRound(this, config);
+    final next = GameRegistry.functions(config.gameType).nextRound(this, config);
     return NextStateOrError(
-        state: next.copyWith(generic: next.generic.finishRound().updateTime())
-            as GameState,
-        error: null);
+      state: next.copyWith(generic: next.generic.finishRound().updateTime()) as GameState,
+      error: null,
+    );
   }
 
-  GameState<E, T> copyWith({
-    T? game,
-    Rewards? rewards,
-    GenericGame? generic,
-  }) =>
-      GameState<E, T>(
-        game: game ?? this.game,
-        rewards: rewards ?? this.rewards,
-        generic: generic ?? this.generic,
-      );
+  GameState<E, T> copyWith({T? game, Rewards? rewards, GenericGame? generic}) =>
+      GameState<E, T>(game: game ?? this.game, rewards: rewards ?? this.rewards, generic: generic ?? this.generic);
 }
 
 abstract class GameFunctions<E extends Event, T extends Game> {
   GameFunctions();
   GameState<E, T> initialState(GameConfig config, IList<Player> players);
-  NextState<E, T> next(covariant GameState state, GameConfig config,
-      covariant PlayerEvent event);
+  NextState<E, T> next(covariant GameState state, GameConfig config, covariant PlayerEvent event);
   GameState<E, T> nextRound(covariant GameState state, GameConfig config);
   T fromJson(JsonMap json);
   E fromJsonE(JsonMap json);

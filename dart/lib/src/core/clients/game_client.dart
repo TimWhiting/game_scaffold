@@ -1,39 +1,28 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:riverpod/legacy.dart';
+
 import '../../../game_scaffold_dart.dart';
+
 part 'game_client.freezed.dart';
 
 final gameInfoProvider = Provider<GameClientInfo>(
-  (ref) =>
-      ref.watch(multiplayerGameClientProvider(ref.watch(playerIDProvider))),
-  dependencies: [
-    multiplayerGameClientProvider,
-    playerIDProvider,
-  ],
+  (ref) => ref.watch(multiplayerGameClientProvider(ref.watch(playerIDProvider))),
+  dependencies: [multiplayerGameClientProvider, playerIDProvider],
 );
 
 final gameClientProvider = Provider<MultiplayerGameClient>(
-  (ref) => ref.watch(
-      multiplayerGameClientProvider(ref.watch(playerIDProvider)).notifier),
-  dependencies: [
-    multiplayerGameClientProvider,
-    playerIDProvider,
-  ],
+  (ref) => ref.watch(multiplayerGameClientProvider(ref.watch(playerIDProvider)).notifier),
+  dependencies: [multiplayerGameClientProvider, playerIDProvider],
 );
 
-final multiplayerGameClientProvider = StateNotifierProvider.family<
-    MultiplayerGameClient, GameClientInfo, PlayerID>(
+final multiplayerGameClientProvider = StateNotifierProvider.family<MultiplayerGameClient, GameClientInfo, PlayerID>(
   MultiplayerGameClient.new,
-  dependencies: [
-    singleConfig,
-    gameService,
-  ],
+  dependencies: [singleConfig, gameService],
   name: 'MultiplayerGameClient',
 );
 
 class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
-  @override
-  MultiplayerGameClient(this.ref, this.multiplayerID)
-      : super(const GameClientInfo(null)) {
+  MultiplayerGameClient(this.ref, this.multiplayerID) : super(const GameClientInfo(null)) {
     final service = ref.watch(gameService);
 
     connect(service);
@@ -69,15 +58,12 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
     }).toList();
   }
 
-  T service<T>(T Function(GameService) service) => state.connected
-      ? service(state.service!)
-      : throw Exception('Not connected');
+  T service<T>(T Function(GameService) service) =>
+      state.connected ? service(state.service!) : throw Exception('Not connected');
 
   void setGameCode(GameCode code) => state = state.copyWith(code: code);
-  void setPlayerName(PlayerName playerName) =>
-      state = state.copyWith(playerName: playerName);
-  void setGameConfig(GameConfig config) =>
-      state = state.copyWith(config: config);
+  void setPlayerName(PlayerName playerName) => state = state.copyWith(playerName: playerName);
+  void setGameConfig(GameConfig config) => state = state.copyWith(config: config);
   void fetchOldGames() {
     service((c) async {
       state = state.copyWith(games: await c.getGames(multiplayerID));
@@ -85,25 +71,23 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
   }
 
   Future<GameCode> createGame() async {
-    final code =
-        await service((c) => c.createGame(multiplayerID, state.config!));
+    final code = await service((c) => c.createGame(multiplayerID, state.config!));
     setGameCode(code);
     return code;
   }
 
-  Future<PlayerName?> joinGame() => service(
-      (c) => c.joinGame(multiplayerID, state.code!, state.playerName ?? ''));
+  Future<PlayerName?> joinGame() => service((c) => c.joinGame(multiplayerID, state.code!, state.playerName ?? ''));
 
   Future<bool> deleteGame(GameCode code) => service((c) async {
-        final result = await c.deleteGame(multiplayerID, code);
-        state = state.copyWith(code: null, games: null);
-        fetchOldGames();
-        return result;
-      });
+    final result = await c.deleteGame(multiplayerID, code);
+    state = state.copyWith(code: null, games: null);
+    fetchOldGames();
+    return result;
+  });
 }
 
 @freezed
-class GameClientInfo with _$GameClientInfo {
+sealed class GameClientInfo with _$GameClientInfo {
   const factory GameClientInfo(
     @protected GameService? service, {
     String? code,

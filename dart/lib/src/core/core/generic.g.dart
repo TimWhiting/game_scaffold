@@ -6,32 +6,31 @@ part of 'generic.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$GenericGameImpl _$$GenericGameImplFromJson(Map<String, dynamic> json) =>
-    _$GenericGameImpl(
-      time: DateTime.parse(json['time'] as String),
-      status: $enumDecode(_$GameStatusEnumMap, json['status']),
-      round: (json['round'] as num).toInt(),
-      players: json['players'] == null
-          ? const IListConst([])
-          : IList<Player>.fromJson(json['players'],
-              (value) => Player.fromJson(value as Map<String, dynamic>)),
-      readyPlayers: json['readyPlayers'] == null
-          ? const IListConst([])
-          : IList<String>.fromJson(
-              json['readyPlayers'], (value) => value as String),
-    );
+_GenericGame _$GenericGameFromJson(Map<String, dynamic> json) => _GenericGame(
+  time: DateTime.parse(json['time'] as String),
+  status: $enumDecode(_$GameStatusEnumMap, json['status']),
+  round: (json['round'] as num).toInt(),
+  players: json['players'] == null
+      ? const IListConst([])
+      : IList<Player>.fromJson(
+          json['players'],
+          (value) => Player.fromJson(value as Map<String, dynamic>),
+        ),
+  readyPlayers: json['readyPlayers'] == null
+      ? const IListConst([])
+      : IList<String>.fromJson(
+          json['readyPlayers'],
+          (value) => value as String,
+        ),
+);
 
-Map<String, dynamic> _$$GenericGameImplToJson(_$GenericGameImpl instance) =>
+Map<String, dynamic> _$GenericGameToJson(_GenericGame instance) =>
     <String, dynamic>{
       'time': instance.time.toIso8601String(),
       'status': _$GameStatusEnumMap[instance.status]!,
       'round': instance.round,
-      'players': instance.players.toJson(
-        (value) => value.toJson(),
-      ),
-      'readyPlayers': instance.readyPlayers.toJson(
-        (value) => value,
-      ),
+      'players': instance.players.toJson((value) => value.toJson()),
+      'readyPlayers': instance.readyPlayers.toJson((value) => value),
     };
 
 const _$GameStatusEnumMap = {
@@ -41,35 +40,31 @@ const _$GameStatusEnumMap = {
   GameStatus.finished: 'finished',
 };
 
-_$GenericReadyNextRoundEventImpl _$$GenericReadyNextRoundEventImplFromJson(
-        Map<String, dynamic> json) =>
-    _$GenericReadyNextRoundEventImpl(
-      json['player'] as String,
-      type: json['type'] as String? ?? 'generic',
-    );
+_GenericReadyNextRoundEvent _$GenericReadyNextRoundEventFromJson(
+  Map<String, dynamic> json,
+) => _GenericReadyNextRoundEvent(
+  json['player'] as String,
+  type: json['type'] as String? ?? 'generic',
+);
 
-Map<String, dynamic> _$$GenericReadyNextRoundEventImplToJson(
-        _$GenericReadyNextRoundEventImpl instance) =>
-    <String, dynamic>{
-      'player': instance.player,
-      'type': instance.type,
-    };
+Map<String, dynamic> _$GenericReadyNextRoundEventToJson(
+  _GenericReadyNextRoundEvent instance,
+) => <String, dynamic>{'player': instance.player, 'type': instance.type};
 
-_$GameConfigImpl _$$GameConfigImplFromJson(Map<String, dynamic> json) =>
-    _$GameConfigImpl(
-      gameType: json['gameType'] as String,
-      adminID: json['adminID'] as String?,
-      nameSet: $enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ??
-          NameSet.basic,
-      customNames: json['customNames'] as bool? ?? false,
-      rounds: (json['rounds'] as num?)?.toInt() ?? 15,
-      minPlayers: (json['minPlayers'] as num?)?.toInt() ?? 1,
-      maxPlayers: (json['maxPlayers'] as num?)?.toInt() ?? 20,
-      autoStart: json['autoStart'] as bool? ?? true,
-      options: json['options'] as Map<String, dynamic>? ?? const {},
-    );
+_GameConfig _$GameConfigFromJson(Map<String, dynamic> json) => _GameConfig(
+  gameType: json['gameType'] as String,
+  adminID: json['adminID'] as String?,
+  nameSet:
+      $enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ?? NameSet.basic,
+  customNames: json['customNames'] as bool? ?? false,
+  rounds: (json['rounds'] as num?)?.toInt() ?? 15,
+  minPlayers: (json['minPlayers'] as num?)?.toInt() ?? 1,
+  maxPlayers: (json['maxPlayers'] as num?)?.toInt() ?? 20,
+  autoStart: json['autoStart'] as bool? ?? true,
+  options: json['options'] as Map<String, dynamic>? ?? const {},
+);
 
-Map<String, dynamic> _$$GameConfigImplToJson(_$GameConfigImpl instance) =>
+Map<String, dynamic> _$GameConfigToJson(_GameConfig instance) =>
     <String, dynamic>{
       'gameType': instance.gameType,
       'adminID': instance.adminID,
@@ -82,49 +77,41 @@ Map<String, dynamic> _$$GameConfigImplToJson(_$GameConfigImpl instance) =>
       'options': instance.options,
     };
 
-const _$NameSetEnumMap = {
-  NameSet.basic: 'basic',
+const _$NameSetEnumMap = {NameSet.basic: 'basic'};
+
+_GameInfo _$GameInfoFromJson(Map<String, dynamic> json) => _GameInfo(
+  gameID: json['gameID'] as String,
+  players: IList<String>.fromJson(json['players'], (value) => value as String),
+  player: json['player'] as String,
+  creator: json['creator'] as bool,
+  config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
+  status: $enumDecode(_$GameStatusEnumMap, json['status']),
+);
+
+Map<String, dynamic> _$GameInfoToJson(_GameInfo instance) => <String, dynamic>{
+  'gameID': instance.gameID,
+  'players': instance.players.toJson((value) => value),
+  'player': instance.player,
+  'creator': instance.creator,
+  'config': instance.config.toJson(),
+  'status': _$GameStatusEnumMap[instance.status]!,
 };
 
-_$GameInfoImpl _$$GameInfoImplFromJson(Map<String, dynamic> json) =>
-    _$GameInfoImpl(
-      gameID: json['gameID'] as String,
-      players:
-          IList<String>.fromJson(json['players'], (value) => value as String),
-      player: json['player'] as String,
-      creator: json['creator'] as bool,
-      config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
-      status: $enumDecode(_$GameStatusEnumMap, json['status']),
-    );
+_Lobby _$LobbyFromJson(Map<String, dynamic> json) => _Lobby(
+  code: json['code'] as String,
+  config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
+  gameStatus: $enumDecode(_$GameStatusEnumMap, json['gameStatus']),
+  players: json['players'] == null
+      ? const ISetConst({})
+      : ISet<Player>.fromJson(
+          json['players'],
+          (value) => Player.fromJson(value as Map<String, dynamic>),
+        ),
+);
 
-Map<String, dynamic> _$$GameInfoImplToJson(_$GameInfoImpl instance) =>
-    <String, dynamic>{
-      'gameID': instance.gameID,
-      'players': instance.players.toJson(
-        (value) => value,
-      ),
-      'player': instance.player,
-      'creator': instance.creator,
-      'config': instance.config.toJson(),
-      'status': _$GameStatusEnumMap[instance.status]!,
-    };
-
-_$LobbyImpl _$$LobbyImplFromJson(Map<String, dynamic> json) => _$LobbyImpl(
-      code: json['code'] as String,
-      config: GameConfig.fromJson(json['config'] as Map<String, dynamic>),
-      gameStatus: $enumDecode(_$GameStatusEnumMap, json['gameStatus']),
-      players: json['players'] == null
-          ? const ISetConst({})
-          : ISet<Player>.fromJson(json['players'],
-              (value) => Player.fromJson(value as Map<String, dynamic>)),
-    );
-
-Map<String, dynamic> _$$LobbyImplToJson(_$LobbyImpl instance) =>
-    <String, dynamic>{
-      'code': instance.code,
-      'config': instance.config.toJson(),
-      'gameStatus': _$GameStatusEnumMap[instance.gameStatus]!,
-      'players': instance.players.toJson(
-        (value) => value.toJson(),
-      ),
-    };
+Map<String, dynamic> _$LobbyToJson(_Lobby instance) => <String, dynamic>{
+  'code': instance.code,
+  'config': instance.config.toJson(),
+  'gameStatus': _$GameStatusEnumMap[instance.gameStatus]!,
+  'players': instance.players.toJson((value) => value.toJson()),
+};

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:characters/characters.dart';
 import 'package:logging/logging.dart';
+import 'package:riverpod/legacy.dart';
 import 'package:riverpod/riverpod.dart';
 
 import '../core.dart';
@@ -62,10 +63,7 @@ class BackendProviders {
       return GameStateNotifier(
         l.config,
         l.code,
-        GameRegistry.initialState(
-          l.config,
-          l.players.toIList(),
-        ),
+        GameRegistry.initialState(l.config, l.players.toIList()),
         ref.read(error.notifier),
       );
     },
@@ -74,11 +72,7 @@ class BackendProviders {
   );
 
   /// Provides the [GameErrorNotifier] to keep track of errors of a game
-  static final error = StateProvider<GameError?>(
-    (ref) => null,
-    name: 'BackendGameError',
-    dependencies: const [],
-  );
+  static final error = StateProvider<GameError?>((ref) => null, name: 'BackendGameError', dependencies: const []);
 }
 
 class LobbyNotifier extends StateNotifier<Lobby> {
@@ -103,10 +97,9 @@ class LobbyNotifier extends StateNotifier<Lobby> {
 
 /// A [StateNotifier] that handles events for a particular game, delegating to the game's implementation for non generic events
 class GameStateNotifier extends StateNotifier<GameState> {
-  GameStateNotifier(
-      this.gameConfig, this.code, GameState initialState, this.errorNotifier)
-      : _gameStateLogger = Logger('GameStateNotifier $code'),
-        super(initialState);
+  GameStateNotifier(this.gameConfig, this.code, GameState initialState, this.errorNotifier)
+    : _gameStateLogger = Logger('GameStateNotifier $code'),
+      super(initialState);
 
   final StateController<GameError?> errorNotifier;
 
@@ -137,22 +130,19 @@ class GameStateNotifier extends StateNotifier<GameState> {
       final game = gameState;
       final e = event.event;
       if (e is GenericEvent) {
-        state = e.maybeWhen(readyNextRound: (e,_) {
-          final newState = game.updateGeneric((g) => g.addReadyPlayer(e));
-          if (newState.readyPlayers.length == game.players.length) {
-            return game
-                .nextRound(gameConfig)
-                .state
-                .updateGeneric((g) => g.clearReadyPlayers());
-          }
-          return newState;
-        }, orElse: () {
-          errorNotifier.state = GameError(
-            message: 'General Event not implemented yet $event',
-            player: 'Player',
-          );
-          return game;
-        });
+        state = e.maybeWhen(
+          readyNextRound: (e, _) {
+            final newState = game.updateGeneric((g) => g.addReadyPlayer(e));
+            if (newState.readyPlayers.length == game.players.length) {
+              return game.nextRound(gameConfig).state.updateGeneric((g) => g.clearReadyPlayers());
+            }
+            return newState;
+          },
+          orElse: () {
+            errorNotifier.state = GameError(message: 'General Event not implemented yet $event', player: 'Player');
+            return game;
+          },
+        );
       } else {
         final next = game.next(event, gameConfig);
         if (next.error != null) {
@@ -177,9 +167,7 @@ class GameStateNotifier extends StateNotifier<GameState> {
 GameCode generateGameID(List<String> avoidList) {
   var gameID = '';
   while (gameID.length != 4 || avoidList.contains(gameID)) {
-    gameID = ('BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle())
-        .join()
-        .substring(0, 4);
+    gameID = ('BCDFGHJKLMNPQRSTVWXZ'.characters.toList()..shuffle()).join().substring(0, 4);
   }
   return gameID;
 }
