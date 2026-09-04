@@ -73,7 +73,7 @@ sealed class GenericGame with _$GenericGame {
 /// A [GenericEvent] that is handled by the Generic server implementation
 /// rather than handling it differently in each game implementation
 @freezed
-sealed class GenericEvent extends Event with _$GenericEvent {
+abstract class GenericEvent extends Event with _$GenericEvent {
   const GenericEvent._();
 
   /// Signals that [player] is ready for the next round

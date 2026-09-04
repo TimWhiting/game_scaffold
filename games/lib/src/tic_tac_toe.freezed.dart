@@ -122,10 +122,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _TicTacToeGameEvent():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -184,10 +181,7 @@ return $default(_that.player,_that.location);case _:
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int player,  int location)  $default,) {final _that = this;
 switch (_that) {
 case _TicTacToeGameEvent():
-return $default(_that.player,_that.location);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.player,_that.location);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -396,10 +390,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _TicTacToeGame():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -458,10 +449,7 @@ return $default(_that.board,_that.currentPlayer,_that.type);case _:
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( IList<int?> board,  int currentPlayer,  String type)  $default,) {final _that = this;
 switch (_that) {
 case _TicTacToeGame():
-return $default(_that.board,_that.currentPlayer,_that.type);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.board,_that.currentPlayer,_that.type);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///

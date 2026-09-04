@@ -125,10 +125,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _GenericGame():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -187,10 +184,7 @@ return $default(_that.time,_that.status,_that.round,_that.players,_that.readyPla
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime time,  GameStatus status,  int round,  IList<Player> players,  IList<PlayerID> readyPlayers)  $default,) {final _that = this;
 switch (_that) {
 case _GenericGame():
-return $default(_that.time,_that.status,_that.round,_that.players,_that.readyPlayers);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.time,_that.status,_that.round,_that.players,_that.readyPlayers);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -361,8 +355,10 @@ class _$GenericEventCopyWithImpl<$Res>
 /// Create a copy of GenericEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? player = null,Object? type = null,}) {
-  return _then(GenericEvent._(
-
+  return _then(_self.copyWith(
+player: null == player ? _self.player : player // ignore: cast_nullable_to_non_nullable
+as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -689,10 +685,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _GameConfig():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -751,10 +744,7 @@ return $default(_that.gameType,_that.adminID,_that.nameSet,_that.customNames,_th
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( GameType gameType,  PlayerID? adminID,  NameSet nameSet,  bool customNames,  int rounds,  int minPlayers,  int maxPlayers,  bool autoStart,  Map<String, Object?> options)  $default,) {final _that = this;
 switch (_that) {
 case _GameConfig():
-return $default(_that.gameType,_that.adminID,_that.nameSet,_that.customNames,_that.rounds,_that.minPlayers,_that.maxPlayers,_that.autoStart,_that.options);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.gameType,_that.adminID,_that.nameSet,_that.customNames,_that.rounds,_that.minPlayers,_that.maxPlayers,_that.autoStart,_that.options);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -995,10 +985,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _GameInfo():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -1057,10 +1044,7 @@ return $default(_that.gameID,_that.players,_that.player,_that.creator,_that.conf
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( GameCode gameID,  IList<PlayerName> players,  PlayerName player,  bool creator,  GameConfig config,  GameStatus status)  $default,) {final _that = this;
 switch (_that) {
 case _GameInfo():
-return $default(_that.gameID,_that.players,_that.player,_that.creator,_that.config,_that.status);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.gameID,_that.players,_that.player,_that.creator,_that.config,_that.status);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -1296,10 +1280,7 @@ return $default(_that);case _:
 final _that = this;
 switch (_that) {
 case _Lobby():
-return $default(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -1358,10 +1339,7 @@ return $default(_that.code,_that.config,_that.gameStatus,_that.players);case _:
 @optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( GameCode code,  GameConfig config,  GameStatus gameStatus,  ISet<Player> players)  $default,) {final _that = this;
 switch (_that) {
 case _Lobby():
-return $default(_that.code,_that.config,_that.gameStatus,_that.players);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return $default(_that.code,_that.config,_that.gameStatus,_that.players);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
