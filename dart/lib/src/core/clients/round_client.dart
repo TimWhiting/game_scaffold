@@ -40,35 +40,37 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
   final Ref ref;
 
   void connect(RoundService service) {
-    unawaited(service.connect().map((conn) {
-      if (conn && mounted) {
-        state = state.copyWith(service: service);
-        StreamSubscription<GameError>? error;
-        StreamSubscription<GameState>? round;
-        final lobby = service.gameLobby(multiplayerID, state.code).listen((e) {
-          if (e.status == GameStatus.started && error == null && round == null) {
-            error = service.errorStream(multiplayerID, state.code).listen((e) {
-              state = state.copyWith(error: e.message);
-            });
-            round = service.gameStream(multiplayerID, state.code).listen((e) {
-              state = state.copyWith(game: e);
-            });
-          }
-          state = state.copyWith(lobby: e);
-        });
+    unawaited(
+      service.connect().map((conn) {
+        if (conn && mounted) {
+          state = state.copyWith(service: service);
+          StreamSubscription<GameError>? error;
+          StreamSubscription<GameState>? round;
+          final lobby = service.gameLobby(multiplayerID, state.code).listen((e) {
+            if (e.status == GameStatus.started && error == null && round == null) {
+              error = service.errorStream(multiplayerID, state.code).listen((e) {
+                state = state.copyWith(error: e.message);
+              });
+              round = service.gameStream(multiplayerID, state.code).listen((e) {
+                state = state.copyWith(game: e);
+              });
+            }
+            state = state.copyWith(lobby: e);
+          });
 
-        ref.onDispose(() {
-          service.disconnect().ignore();
-          lobby.cancel().ignore();
-          error?.cancel().ignore();
-          round?.cancel().ignore();
-        });
-      } else {
-        if (mounted) {
-          state = state.copyWith(service: null);
+          ref.onDispose(() {
+            service.disconnect().ignore();
+            lobby.cancel().ignore();
+            error?.cancel().ignore();
+            round?.cancel().ignore();
+          });
+        } else {
+          if (mounted) {
+            state = state.copyWith(service: null);
+          }
         }
-      }
-    }).toList());
+      }).toList(),
+    );
   }
 
   T service<T>(T Function(RoundService) service) =>

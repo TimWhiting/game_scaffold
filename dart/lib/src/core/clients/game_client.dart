@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/legacy.dart';
 
@@ -37,26 +38,28 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
   }
 
   void connect(GameService service) {
-    unawaited(service.connect().map((conn) {
-      if (conn) {
-        state = GameClientInfo(
-          service,
-          playerName: state.playerName,
-          config: state.config,
-          games: state.games,
-          code: state.code,
-        );
-        fetchOldGames();
-        ref.listen(singleConfig, (_, value) {
-          setGameConfig(value);
-        });
-        ref.onDispose(service.disconnect);
-      } else {
-        if (mounted) {
-          state = state.copyWith(service: null);
+    unawaited(
+      service.connect().map((conn) {
+        if (conn) {
+          state = GameClientInfo(
+            service,
+            playerName: state.playerName,
+            config: state.config,
+            games: state.games,
+            code: state.code,
+          );
+          fetchOldGames();
+          ref.listen(singleConfig, (_, value) {
+            setGameConfig(value);
+          });
+          ref.onDispose(service.disconnect);
+        } else {
+          if (mounted) {
+            state = state.copyWith(service: null);
+          }
         }
-      }
-    }).toList());
+      }).toList(),
+    );
   }
 
   T service<T>(T Function(GameService) service) =>
@@ -66,9 +69,11 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
   void setPlayerName(PlayerName playerName) => state = state.copyWith(playerName: playerName);
   void setGameConfig(GameConfig config) => state = state.copyWith(config: config);
   void fetchOldGames() {
-    unawaited(service((c) async {
-      state = state.copyWith(games: await c.getGames(multiplayerID));
-    }));
+    unawaited(
+      service((c) async {
+        state = state.copyWith(games: await c.getGames(multiplayerID));
+      }),
+    );
   }
 
   Future<GameCode> createGame() async {

@@ -18,31 +18,23 @@ class OnDeviceRoundService extends RoundService {
   Stream<GameState> gameStream(PlayerID playerID, GameCode code) async* {
     logger.info('Watching backend $playerID $code');
     final backendReader = OnDeviceGameService.games[code]?.container;
-    if (backendReader == null ||
-        backendReader.read(BackendProviders.lobby).gameStatus ==
-            GameStatus.lobby) {
+    if (backendReader == null || backendReader.read(BackendProviders.lobby).gameStatus == GameStatus.lobby) {
       return;
     }
     final ss = StreamController<GameState>();
-    backendReader.listen<GameState>(
-      BackendProviders.state,
-      (prev, curr) => ss.add(curr),
-    );
+    backendReader.listen<GameState>(BackendProviders.state, (prev, curr) => ss.add(curr));
     yield backendReader.read(BackendProviders.state);
     yield* ss.stream;
     await ss.close();
   }
 
   @override
-  Future<bool> sendEvent<E extends Event>(
-      PlayerID playerID, GameCode code, E event) async {
+  Future<bool> sendEvent<E extends Event>(PlayerID playerID, GameCode code, E event) async {
     final backendReader = OnDeviceGameService.games[code]!.container;
     // If the gameClient is initializing
     // we cannot edit the backend provider synchronously
     await Future.delayed(const Duration(microseconds: 1));
-    final result = backendReader
-        .read(BackendProviders.state.notifier)
-        .handleEvent(event.player(playerID));
+    final result = backendReader.read(BackendProviders.state.notifier).handleEvent(event.player(playerID));
     return result;
   }
 
@@ -52,15 +44,11 @@ class OnDeviceRoundService extends RoundService {
 
     final backendReader = OnDeviceGameService.games[code]?.container;
 
-    backendReader?.listen<GameError?>(
-      fireImmediately: true,
-      BackendProviders.error,
-      (prev, curr) {
-        if (curr != null && curr.player == playerID) {
-          ss.add(curr);
-        }
-      },
-    );
+    backendReader?.listen<GameError?>(fireImmediately: true, BackendProviders.error, (prev, curr) {
+      if (curr != null && curr.player == playerID) {
+        ss.add(curr);
+      }
+    });
     yield* ss.stream;
     await ss.close();
   }
@@ -82,15 +70,12 @@ class OnDeviceRoundService extends RoundService {
       return;
     }
 
-    backend.listen<GameInfo?>(
-      BackendProviders.playerLobby(playerID),
-      (prev, curr) {
-        // ignore: prefer_foreach
-        if (curr != null) {
-          ss.add(curr);
-        }
-      },
-    );
+    backend.listen<GameInfo?>(BackendProviders.playerLobby(playerID), (prev, curr) {
+      // ignore: prefer_foreach
+      if (curr != null) {
+        ss.add(curr);
+      }
+    });
     final curr = backend.read(BackendProviders.playerLobby(playerID));
     if (curr != null) {
       yield curr;
@@ -137,8 +122,7 @@ class OnDeviceGameService extends GameService {
   }
 
   @override
-  Future<String?> joinGame(
-      PlayerID playerID, GameCode code, PlayerName name) async {
+  Future<String?> joinGame(PlayerID playerID, GameCode code, PlayerName name) async {
     final backendReader = OnDeviceGameService.games[code]!.container.read;
 
     final notifier = backendReader(BackendProviders.lobby.notifier);
@@ -159,10 +143,7 @@ class OnDeviceGameService extends GameService {
   @override
   Future<IList<GameInfo>> getGames(PlayerID playerID) async {
     final gms = games.values.where(
-      (g) => g.container
-          .read(BackendProviders.lobby)
-          .players
-          .any((p) => p.id == playerID),
+      (g) => g.container.read(BackendProviders.lobby).players.any((p) => p.id == playerID),
     );
     return [
       for (final g in gms)
@@ -170,18 +151,10 @@ class OnDeviceGameService extends GameService {
           config: g.container.read(BackendProviders.lobby).config,
           status: g.container.read(BackendProviders.lobby).gameStatus,
           gameID: g.gameCode,
-          player: g.container
-              .read(BackendProviders.lobby)
-              .players
-              .firstWhere((p) => p.id == playerID)
-              .name,
-          players: g.container
-              .read(BackendProviders.lobby)
-              .players
-              .map((p) => p.name)
-              .toIList(),
+          player: g.container.read(BackendProviders.lobby).players.firstWhere((p) => p.id == playerID).name,
+          players: g.container.read(BackendProviders.lobby).players.map((p) => p.name).toIList(),
           creator: g.creator == playerID,
-        )
+        ),
     ].lock;
   }
 }

@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// dart format width=80
+
 part of 'tic_tac_toe.dart';
 
 // **************************************************************************

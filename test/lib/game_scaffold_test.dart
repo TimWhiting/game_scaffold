@@ -27,8 +27,7 @@ void testGame<E extends Event, T extends Game>(
     root.read(serviceType.notifier).state = OnDeviceService;
 
     for (final p in players) {
-      ref[p.id] = ProviderContainer(
-          parent: root, overrides: [playerIDProvider.overrideWithValue(p.id)]);
+      ref[p.id] = ProviderContainer(parent: root, overrides: [playerIDProvider.overrideWithValue(p.id)]);
       g[p.id] = ref[p.id]!.listen(gameClientProvider, (previous, next) {});
     }
     g[players.first.id]!.read().setGameConfig(config);
@@ -40,8 +39,7 @@ void testGame<E extends Event, T extends Game>(
       r[p.id] = ref[p.id]!.listen(roundClientProvider, (previous, next) {});
     }
 
-    if (ref[players.first.id]!.read(roundInfoProvider).status !=
-        GameStatus.started) {
+    if (ref[players.first.id]!.read(roundInfoProvider).status != GameStatus.started) {
       await r[players.first.id]!.read().startGame();
     }
     final tester = GameTester<E, T>(ref, players, code);
@@ -67,8 +65,7 @@ class GameTester<E extends Event, T extends Game> {
 
   final List<Player> _players;
   final GameCode code;
-  late final ProviderContainer backendContainer =
-      OnDeviceGameService.games[code]!.container;
+  late final ProviderContainer backendContainer = OnDeviceGameService.games[code]!.container;
   final Map<PlayerID, ProviderContainer> readers;
   GameError? _lastError;
   ProviderSubscription? sub;
@@ -82,8 +79,7 @@ class GameTester<E extends Event, T extends Game> {
   ///   expect(game.players.size, 2);
   /// });
   /// ```
-  void event(
-      PlayerEvent<E> event, Function(GameState<E, T>, GameError?) outcome) {
+  void event(PlayerEvent<E> event, Function(GameState<E, T>, GameError?) outcome) {
     backendContainer.read(BackendProviders.state.notifier).handleEvent(event);
 
     final g = game;
@@ -103,9 +99,7 @@ class GameTester<E extends Event, T extends Game> {
   /// Returns the current game state
   ///
   /// If testing the outcome of an event prefer using [event]
-  GameState<E, T> get game =>
-      backendContainer.read(BackendProviders.state.notifier).gameState
-          as GameState<E, T>;
+  GameState<E, T> get game => backendContainer.read(BackendProviders.state.notifier).gameState as GameState<E, T>;
 
   /// Returns the current error state
   ///
@@ -116,9 +110,9 @@ class GameTester<E extends Event, T extends Game> {
   /// the round has advanced
   void nextRound(Function(GameState<E, T>) expectation) {
     for (final p in _players) {
-      backendContainer.read(BackendProviders.state.notifier).handleEvent(
-          PlayerEvent(
-              event: GenericEvent.readyNextRound(p.id), playerId: p.id));
+      backendContainer
+          .read(BackendProviders.state.notifier)
+          .handleEvent(PlayerEvent(event: GenericEvent.readyNextRound(p.id), playerId: p.id));
     }
 
     expectation(game);

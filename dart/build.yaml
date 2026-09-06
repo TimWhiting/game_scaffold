@@ -4,3 +4,10 @@ targets:
       json_serializable:
         options:
           explicit_to_json: true
+      # source_gen formats generated output at 80 columns and offers no
+      # page-width option. Emitting dart_style's width directive makes
+      # `dart format` agree with the generator, so the two stop fighting over
+      # these files (see README > Formatting).
+      source_gen|combining_builder:
+        options:
+          preamble: "// dart format width=80"
