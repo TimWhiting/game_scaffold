@@ -55,7 +55,7 @@ class OnDeviceRoundService extends RoundService {
     backendReader?.listen<GameError?>(
       fireImmediately: true,
       BackendProviders.error,
-      (prev, curr) async {
+      (prev, curr) {
         if (curr != null && curr.player == playerID) {
           ss.add(curr);
         }
@@ -84,7 +84,7 @@ class OnDeviceRoundService extends RoundService {
 
     backend.listen<GameInfo?>(
       BackendProviders.playerLobby(playerID),
-      (prev, curr) async {
+      (prev, curr) {
         // ignore: prefer_foreach
         if (curr != null) {
           ss.add(curr);

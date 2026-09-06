@@ -21,10 +21,11 @@ dependencies:
   hooks_riverpod: ^3.3.2
   logging: ^1.3.0
 
+  stack_trace: any
 dev_dependencies:
-  integration_test:
-    sdk: flutter
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
 
 flutter:

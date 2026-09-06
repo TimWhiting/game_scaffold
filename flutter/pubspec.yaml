@@ -22,9 +22,9 @@ dependencies:
   riverpod: ^3.3.2
 
 dev_dependencies:
+  dartdoc: any
   flutter_test:
     sdk: flutter
-  dartdoc: any
   game_scaffold_games: ^0.5.0-dev
 
 flutter: null

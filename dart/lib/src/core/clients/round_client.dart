@@ -40,7 +40,7 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
   final Ref ref;
 
   void connect(RoundService service) {
-    service.connect().map((conn) {
+    unawaited(service.connect().map((conn) {
       if (conn && mounted) {
         state = state.copyWith(service: service);
         StreamSubscription<GameError>? error;
@@ -58,17 +58,17 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
         });
 
         ref.onDispose(() {
-          service.disconnect();
-          lobby.cancel();
-          error?.cancel();
-          round?.cancel();
+          service.disconnect().ignore();
+          lobby.cancel().ignore();
+          error?.cancel().ignore();
+          round?.cancel().ignore();
         });
       } else {
         if (mounted) {
           state = state.copyWith(service: null);
         }
       }
-    }).toList();
+    }).toList());
   }
 
   T service<T>(T Function(RoundService) service) =>

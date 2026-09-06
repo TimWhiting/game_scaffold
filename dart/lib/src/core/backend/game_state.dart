@@ -76,7 +76,7 @@ class BackendProviders {
 }
 
 class LobbyNotifier extends StateNotifier<Lobby> {
-  LobbyNotifier(Lobby lobby) : super(lobby);
+  LobbyNotifier(super.lobby);
 
   void addPlayer(Player player) {
     state = state.copyWith(players: state.players.add(player));

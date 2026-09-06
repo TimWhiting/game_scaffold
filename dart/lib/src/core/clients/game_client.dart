@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod/legacy.dart';
 
@@ -36,7 +37,7 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
   }
 
   void connect(GameService service) {
-    service.connect().map((conn) {
+    unawaited(service.connect().map((conn) {
       if (conn) {
         state = GameClientInfo(
           service,
@@ -55,7 +56,7 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
           state = state.copyWith(service: null);
         }
       }
-    }).toList();
+    }).toList());
   }
 
   T service<T>(T Function(GameService) service) =>
@@ -65,9 +66,9 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
   void setPlayerName(PlayerName playerName) => state = state.copyWith(playerName: playerName);
   void setGameConfig(GameConfig config) => state = state.copyWith(config: config);
   void fetchOldGames() {
-    service((c) async {
+    unawaited(service((c) async {
       state = state.copyWith(games: await c.getGames(multiplayerID));
-    });
+    }));
   }
 
   Future<GameCode> createGame() async {

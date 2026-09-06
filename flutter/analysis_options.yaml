@@ -7,6 +7,10 @@
 #   rules:
 #     - camel_case_types
 analyzer:
+  errors:
+    # freezed generates `@override` on constructor parameters; this is
+    # expected and vetoed upstream. https://github.com/rrousselGit/freezed
+    invalid_annotation_target: ignore
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
@@ -19,7 +23,6 @@ linter:
     - always_declare_return_types
     - always_put_control_body_on_new_line
     - always_put_required_named_parameters_first
-    - always_require_non_null_named_parameters
     # - always_specify_types
     # - always_use_package_imports
     - annotate_overrides
@@ -39,16 +42,12 @@ linter:
     - avoid_init_to_null
     - avoid_js_rounded_ints
     - avoid_multiple_declarations_per_line
-    - avoid_null_checks_in_equality_operators
     - avoid_positional_boolean_parameters
     - avoid_print
-    - avoid_private_typedef_functions
     - avoid_redundant_argument_values
     # - avoid_relative_lib_imports
     - avoid_renaming_method_parameters
     - avoid_return_types_on_setters
-    - avoid_returning_null
-    - avoid_returning_null_for_future
     - avoid_returning_null_for_void
     - avoid_returning_this
     - avoid_setters_without_getters
@@ -85,26 +84,21 @@ linter:
     # - flutter_style_todos
     - hash_and_equals
     - implementation_imports
-    - iterable_contains_unrelated_type
     - join_return_with_assignment
     - leading_newlines_in_multiline_strings
     - library_names
     - library_prefixes
     - library_private_types_in_public_api
-    # - lines_longer_than_80_chars
-    - list_remove_unrelated_type
     - literal_only_boolean_expressions
     - missing_whitespace_between_adjacent_strings
     - no_adjacent_strings_in_list
     - no_default_cases
     - no_duplicate_case_values
     - no_logic_in_create_state
-    - no_runtimeType_toString
     - non_constant_identifier_names
     - null_check_on_nullable_type_parameter
     - null_closures
     - omit_local_variable_types
-    - one_member_abstracts
     - only_throw_errors
     - overridden_fields
     - package_names
@@ -164,7 +158,6 @@ linter:
     - type_annotate_public_apis
     - type_init_formals
     - unawaited_futures
-    - unnecessary_await_in_return
     - unnecessary_brace_in_string_interps
     - unnecessary_const
     # - unnecessary_final
@@ -183,11 +176,9 @@ linter:
     - unnecessary_string_interpolations
     - unnecessary_this
     - unrelated_type_equality_checks
-    - unsafe_html
     - use_build_context_synchronously
     - use_full_hex_values_for_flutter_colors
     - use_function_type_syntax_for_parameters
-    - use_if_null_to_convert_nulls_to_bools
     - use_is_even_rather_than_modulo
     - use_key_in_widget_constructors
     - use_late_for_private_fields_and_variables
@@ -199,3 +190,60 @@ linter:
     - use_to_and_as_if_applicable
     - valid_regexps
     - void_checks
+    - annotate_redeclares
+    - avoid_final_parameters
+    - avoid_futureor_void
+    - collection_methods_unrelated_type
+    - combinators_ordering
+    - conditional_uri_does_not_exist
+    - dangling_library_doc_comments
+    - depend_on_referenced_packages
+    - deprecated_member_use_from_same_package
+    - discarded_futures
+    - eol_at_end_of_file
+    - implicit_call_tearoffs
+    - implicit_reopen
+    - initialize_in_field_declaration
+    - invalid_case_patterns
+    - invalid_runtime_check_with_js_interop_types
+    - library_annotations
+    - missing_code_block_language_in_doc_comment
+    - no_dynamic_casts
+    - no_leading_underscores_for_library_prefixes
+    - no_leading_underscores_for_local_identifiers
+    - no_literal_bool_comparisons
+    - no_runtimetype_tostring
+    - no_self_assignments
+    - no_wildcard_variable_uses
+    - remove_deprecations_in_breaking_versions
+    - require_trailing_commas
+    - secure_pubspec_urls
+    - simple_directive_paths
+    - simplify_variable_pattern
+    - sized_box_shrink_expand
+    - switch_on_type
+    - type_literal_in_constant_pattern
+    - unintended_html_in_doc_comment
+    - unnecessary_async
+    - unnecessary_breaks
+    - unnecessary_constructor_name
+    - unnecessary_late
+    - unnecessary_library_directive
+    - unnecessary_null_aware_operator_on_extension_on_nullable
+    - unnecessary_primary_constructor_body
+    - unnecessary_unawaited
+    - unreachable_from_main
+    - unsafe_variance
+    - use_colored_box
+    - use_declaring_parameters
+    - use_enums
+    - use_null_aware_elements
+    - use_string_in_part_of_directives
+    - use_super_parameters
+    - use_test_throws_matchers
+    - use_truncating_division
+    - var_with_no_type_annotation
+
+# Match the formatting the codebase already uses.
+formatter:
+  page_width: 120

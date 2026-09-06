@@ -33,7 +33,7 @@ abstract class RoundService {
 
   /// Disposes of the [RoundService] (i.e. disconnects from the server)
   void dispose() {
-    sc.close();
+    sc.close().ignore();
   }
 
   /// Connects to the backend

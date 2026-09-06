@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:game_scaffold/game_scaffold.dart';
 import 'package:game_scaffold_games/games.dart';
@@ -30,7 +31,7 @@ void main() {
 }
 
 class TicTacToeApp extends StatelessWidget {
-  const TicTacToeApp({Key? key}) : super(key: key);
+  const TicTacToeApp({super.key});
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: 'Flutter Demo',
@@ -42,7 +43,7 @@ class TicTacToeApp extends StatelessWidget {
 }
 
 class TicTacToeWidget extends StatelessWidget {
-  const TicTacToeWidget({Key? key}) : super(key: key);
+  const TicTacToeWidget({super.key});
   @override
   Widget build(BuildContext context) => MaterialApp(
           home: Scaffold(
@@ -65,7 +66,7 @@ class TicTacToeWidget extends StatelessWidget {
 }
 
 class Player extends HookConsumerWidget {
-  const Player({Key? key}) : super(key: key);
+  const Player({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => const GameNavigator(
@@ -76,7 +77,7 @@ class Player extends HookConsumerWidget {
 }
 
 class CreateOrJoinWidget extends HookConsumerWidget {
-  const CreateOrJoinWidget({Key? key}) : super(key: key);
+  const CreateOrJoinWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -142,7 +143,7 @@ class CreateOrJoinWidget extends HookConsumerWidget {
 }
 
 class LobbyWidget extends HookConsumerWidget {
-  const LobbyWidget({Key? key}) : super(key: key);
+  const LobbyWidget({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lobby = ref.watch(roundInfoProvider).lobby;
@@ -165,7 +166,7 @@ class LobbyWidget extends HookConsumerWidget {
 }
 
 class GameWidget extends HookConsumerWidget {
-  const GameWidget({Key? key}) : super(key: key);
+  const GameWidget({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(roundInfoProvider);
@@ -174,13 +175,13 @@ class GameWidget extends HookConsumerWidget {
     ref.listen<String?>(roundInfoProvider.select((i) => i.error),
         (prevError, error) {
       if (error != prevError && error != null && error.isNotEmpty) {
-        showDialog(
+        unawaited(showDialog(
           context: context,
           builder: (c) => Dialog(
             backgroundColor: Colors.white,
             child: Text(error.toString()),
           ),
-        );
+        ));
       }
     });
     if (gameState.game == null) {

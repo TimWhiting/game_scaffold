@@ -24,8 +24,8 @@ class MultiPlayerWidget extends HookConsumerWidget {
     required this.app,
     required this.code,
     this.additionalOptions,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   final String? code;
   final Widget Function(int, String?, Key) app;
   final Widget? additionalOptions;
@@ -176,11 +176,10 @@ class GameNavigator extends HookConsumerWidget {
     Widget? disconnected,
     Widget? betweenRounds,
     Widget? gameOver,
-    Key? key,
+    super.key,
   })  : disconnected = disconnected ?? connected,
         betweenRounds = betweenRounds ?? game,
-        gameOver = gameOver ?? game,
-        super(key: key);
+        gameOver = gameOver ?? game;
   final Widget disconnected;
   final Widget connected;
   final Widget lobby;
@@ -237,7 +236,7 @@ class GameNavigator extends HookConsumerWidget {
               () => ref.read(roundClientProvider).exitGame());
           return true;
         } else if (status == 'connected') {
-          ref.read(gameService).disconnect();
+          ref.read(gameService).disconnect().ignore();
           return true;
         }
         return false;
