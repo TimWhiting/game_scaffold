@@ -30,8 +30,13 @@ abstract class GameService {
   /// Gets a list of games on the server
   Future<IList<GameInfo>> getGames(PlayerID playerID);
 
-  /// Registers the client with the game server
-  Future<PlayerName?> joinGame(PlayerID playerID, GameCode code, PlayerName name);
+  /// Registers the client with the game server.
+  ///
+  /// Returns the joined player's name, or an error message explaining why the
+  /// join was refused — a name already taken in that game, for instance. The
+  /// message is written for a player to read and is surfaced in the UI, so it
+  /// must not be a bare status code.
+  Future<MaybeError<PlayerName>> joinGame(PlayerID playerID, GameCode code, PlayerName name);
 
   /// Disposes of the [GameService] (i.e. disconnects from the server)
   void dispose() {

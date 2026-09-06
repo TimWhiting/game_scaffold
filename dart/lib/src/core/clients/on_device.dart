@@ -122,11 +122,24 @@ class OnDeviceGameService extends GameService {
   }
 
   @override
-  Future<String?> joinGame(PlayerID playerID, GameCode code, PlayerName name) async {
+  Future<MaybeError<PlayerName>> joinGame(PlayerID playerID, GameCode code, PlayerName name) async {
     final backendReader = OnDeviceGameService.games[code]!.container.read;
 
     final notifier = backendReader(BackendProviders.lobby.notifier);
     await Future.delayed(const Duration(microseconds: 1));
+
+    // Same rule the server enforces: players are told apart by name in the UI,
+    // so two players cannot share one. Compared case-insensitively and trimmed.
+    // An empty name carries no identity, so there is nothing to confuse; clients
+    // may join before a name is chosen.
+    final requestedName = name.trim().toLowerCase();
+    final existing = backendReader(BackendProviders.lobby).players;
+    if (requestedName.isNotEmpty &&
+        !existing.any((p) => p.id == playerID) &&
+        existing.any((p) => p.name.trim().toLowerCase() == requestedName)) {
+      return MaybeError(null, 'Someone in this game is already called "$name". Pick a different name.');
+    }
+
     notifier.addPlayer(Player(playerID, name: name));
     await Future.delayed(const Duration(microseconds: 1));
 
@@ -137,7 +150,7 @@ class OnDeviceGameService extends GameService {
       notifier.start();
     }
 
-    return name;
+    return name.success;
   }
 
   @override

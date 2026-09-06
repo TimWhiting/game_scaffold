@@ -76,6 +76,12 @@ class GameProviders {
     dependencies: [gameInfoProvider],
   );
 
+  /// Why the last join attempt was refused, or null if none was.
+  static final joinError = Provider(
+    (ref) => ref.watch(gameInfoProvider.select((c) => c.joinError)),
+    dependencies: [gameInfoProvider],
+  );
+
   /// Provides the way to configure the game for starting
   static final config = Provider(
     (ref) => ref.watch(gameInfoProvider.select((c) => c.config ?? const GameConfig(gameType: ''))),

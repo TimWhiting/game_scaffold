@@ -15,7 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$GameClientInfo {
 
-@protected GameService? get service; String? get code; PlayerName? get playerName; GameConfig? get config; IList<GameInfo>? get games;
+@protected GameService? get service; String? get code; PlayerName? get playerName; GameConfig? get config; IList<GameInfo>? get games;/// Why the last join attempt was refused, in words meant for a player.
+/// Null when the last attempt succeeded or none has been made.
+ String? get joinError;
 /// Create a copy of GameClientInfo
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,20 +29,20 @@ $GameClientInfoCopyWith<GameClientInfo> get copyWith => _$GameClientInfoCopyWith
 @override
 bool operator ==(Object other) {
   final _this = this as GameClientInfo;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameClientInfo&&(identical(other.service, _this.service) || other.service == _this.service)&&(identical(other.code, _this.code) || other.code == _this.code)&&(identical(other.playerName, _this.playerName) || other.playerName == _this.playerName)&&(identical(other.config, _this.config) || other.config == _this.config)&&const DeepCollectionEquality().equals(other.games, _this.games));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameClientInfo&&(identical(other.service, _this.service) || other.service == _this.service)&&(identical(other.code, _this.code) || other.code == _this.code)&&(identical(other.playerName, _this.playerName) || other.playerName == _this.playerName)&&(identical(other.config, _this.config) || other.config == _this.config)&&const DeepCollectionEquality().equals(other.games, _this.games)&&(identical(other.joinError, _this.joinError) || other.joinError == _this.joinError));
 }
 
 
 @override
 int get hashCode {
   final _this = this as GameClientInfo;
-  return Object.hash(runtimeType,_this.service,_this.code,_this.playerName,_this.config,const DeepCollectionEquality().hash(_this.games));
+  return Object.hash(runtimeType,_this.service,_this.code,_this.playerName,_this.config,const DeepCollectionEquality().hash(_this.games),_this.joinError);
 }
 
 @override
 String toString() {
   final _this = this as GameClientInfo;
-  return 'GameClientInfo(service: ${_this.service}, code: ${_this.code}, playerName: ${_this.playerName}, config: ${_this.config}, games: ${_this.games})';
+  return 'GameClientInfo(service: ${_this.service}, code: ${_this.code}, playerName: ${_this.playerName}, config: ${_this.config}, games: ${_this.games}, joinError: ${_this.joinError})';
 }
 
 
@@ -51,7 +53,7 @@ abstract mixin class $GameClientInfoCopyWith<$Res>  {
   factory $GameClientInfoCopyWith(GameClientInfo value, $Res Function(GameClientInfo) _then) = _$GameClientInfoCopyWithImpl;
 @useResult
 $Res call({
-@protected GameService? service, String? code, PlayerName? playerName, GameConfig? config, IList<GameInfo>? games
+@protected GameService? service, String? code, PlayerName? playerName, GameConfig? config, IList<GameInfo>? games, String? joinError
 });
 
 
@@ -68,14 +70,15 @@ class _$GameClientInfoCopyWithImpl<$Res>
 
 /// Create a copy of GameClientInfo
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? service = freezed,Object? code = freezed,Object? playerName = freezed,Object? config = freezed,Object? games = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? service = freezed,Object? code = freezed,Object? playerName = freezed,Object? config = freezed,Object? games = freezed,Object? joinError = freezed,}) {
   return _then(GameClientInfo(
 freezed == service ? _self.service : service // ignore: cast_nullable_to_non_nullable
 as GameService?,code: freezed == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
 as String?,playerName: freezed == playerName ? _self.playerName : playerName // ignore: cast_nullable_to_non_nullable
 as PlayerName?,config: freezed == config ? _self.config : config // ignore: cast_nullable_to_non_nullable
 as GameConfig?,games: freezed == games ? _self.games : games // ignore: cast_nullable_to_non_nullable
-as IList<GameInfo>?,
+as IList<GameInfo>?,joinError: freezed == joinError ? _self.joinError : joinError // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of GameClientInfo
@@ -169,10 +172,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@protected  GameService? service,  String? code,  PlayerName? playerName,  GameConfig? config,  IList<GameInfo>? games)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@protected  GameService? service,  String? code,  PlayerName? playerName,  GameConfig? config,  IList<GameInfo>? games,  String? joinError)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GameClientInfo() when $default != null:
-return $default(_that.service,_that.code,_that.playerName,_that.config,_that.games);case _:
+return $default(_that.service,_that.code,_that.playerName,_that.config,_that.games,_that.joinError);case _:
   return orElse();
 
 }
@@ -190,10 +193,10 @@ return $default(_that.service,_that.code,_that.playerName,_that.config,_that.gam
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@protected  GameService? service,  String? code,  PlayerName? playerName,  GameConfig? config,  IList<GameInfo>? games)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@protected  GameService? service,  String? code,  PlayerName? playerName,  GameConfig? config,  IList<GameInfo>? games,  String? joinError)  $default,) {final _that = this;
 switch (_that) {
 case _GameClientInfo():
-return $default(_that.service,_that.code,_that.playerName,_that.config,_that.games);}
+return $default(_that.service,_that.code,_that.playerName,_that.config,_that.games,_that.joinError);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -207,10 +210,10 @@ return $default(_that.service,_that.code,_that.playerName,_that.config,_that.gam
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@protected  GameService? service,  String? code,  PlayerName? playerName,  GameConfig? config,  IList<GameInfo>? games)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@protected  GameService? service,  String? code,  PlayerName? playerName,  GameConfig? config,  IList<GameInfo>? games,  String? joinError)?  $default,) {final _that = this;
 switch (_that) {
 case _GameClientInfo() when $default != null:
-return $default(_that.service,_that.code,_that.playerName,_that.config,_that.games);case _:
+return $default(_that.service,_that.code,_that.playerName,_that.config,_that.games,_that.joinError);case _:
   return null;
 
 }
@@ -222,7 +225,7 @@ return $default(_that.service,_that.code,_that.playerName,_that.config,_that.gam
 
 
 class _GameClientInfo extends GameClientInfo {
-  const _GameClientInfo(@protected this.service, {this.code, this.playerName, this.config, this.games}): super._();
+  const _GameClientInfo(@protected this.service, {this.code, this.playerName, this.config, this.games, this.joinError}): super._();
   
 
 @override@protected final  GameService? service;
@@ -230,6 +233,9 @@ class _GameClientInfo extends GameClientInfo {
 @override final  PlayerName? playerName;
 @override final  GameConfig? config;
 @override final  IList<GameInfo>? games;
+/// Why the last join attempt was refused, in words meant for a player.
+/// Null when the last attempt succeeded or none has been made.
+@override final  String? joinError;
 
 /// Create a copy of GameClientInfo
 /// with the given fields replaced by the non-null parameter values.
@@ -241,18 +247,18 @@ _$GameClientInfoCopyWith<_GameClientInfo> get copyWith => __$GameClientInfoCopyW
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameClientInfo&&(identical(other.service, service) || other.service == service)&&(identical(other.code, code) || other.code == code)&&(identical(other.playerName, playerName) || other.playerName == playerName)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other.games, games));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameClientInfo&&(identical(other.service, service) || other.service == service)&&(identical(other.code, code) || other.code == code)&&(identical(other.playerName, playerName) || other.playerName == playerName)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other.games, games)&&(identical(other.joinError, joinError) || other.joinError == joinError));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,service,code,playerName,config,const DeepCollectionEquality().hash(games));
+    return Object.hash(runtimeType,service,code,playerName,config,const DeepCollectionEquality().hash(games),joinError);
 }
 
 @override
 String toString() {
-    return 'GameClientInfo(service: $service, code: $code, playerName: $playerName, config: $config, games: $games)';
+    return 'GameClientInfo(service: $service, code: $code, playerName: $playerName, config: $config, games: $games, joinError: $joinError)';
 }
 
 
@@ -263,7 +269,7 @@ abstract mixin class _$GameClientInfoCopyWith<$Res> implements $GameClientInfoCo
   factory _$GameClientInfoCopyWith(_GameClientInfo value, $Res Function(_GameClientInfo) _then) = __$GameClientInfoCopyWithImpl;
 @override @useResult
 $Res call({
-@protected GameService? service, String? code, PlayerName? playerName, GameConfig? config, IList<GameInfo>? games
+@protected GameService? service, String? code, PlayerName? playerName, GameConfig? config, IList<GameInfo>? games, String? joinError
 });
 
 
@@ -280,14 +286,15 @@ class __$GameClientInfoCopyWithImpl<$Res>
 
 /// Create a copy of GameClientInfo
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? service = freezed,Object? code = freezed,Object? playerName = freezed,Object? config = freezed,Object? games = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? service = freezed,Object? code = freezed,Object? playerName = freezed,Object? config = freezed,Object? games = freezed,Object? joinError = freezed,}) {
   return _then(_GameClientInfo(
 freezed == service ? _self.service : service // ignore: cast_nullable_to_non_nullable
 as GameService?,code: freezed == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
 as String?,playerName: freezed == playerName ? _self.playerName : playerName // ignore: cast_nullable_to_non_nullable
 as PlayerName?,config: freezed == config ? _self.config : config // ignore: cast_nullable_to_non_nullable
 as GameConfig?,games: freezed == games ? _self.games : games // ignore: cast_nullable_to_non_nullable
-as IList<GameInfo>?,
+as IList<GameInfo>?,joinError: freezed == joinError ? _self.joinError : joinError // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

@@ -82,7 +82,15 @@ class MultiplayerGameClient extends StateNotifier<GameClientInfo> {
     return code;
   }
 
-  Future<PlayerName?> joinGame() => service((c) => c.joinGame(multiplayerID, state.code!, state.playerName ?? ''));
+  /// Joins the game in [state.code], recording [GameClientInfo.joinError] when
+  /// the server refuses so the UI can explain why.
+  Future<MaybeError<PlayerName>> joinGame() => service((c) async {
+    final result = await c.joinGame(multiplayerID, state.code!, state.playerName ?? '');
+    if (mounted) {
+      state = state.copyWith(joinError: result.hasError ? result.error : null);
+    }
+    return result;
+  });
 
   Future<bool> deleteGame(GameCode code) => service((c) async {
     final result = await c.deleteGame(multiplayerID, code);
@@ -100,6 +108,10 @@ sealed class GameClientInfo with _$GameClientInfo {
     PlayerName? playerName,
     GameConfig? config,
     IList<GameInfo>? games,
+
+    /// Why the last join attempt was refused, in words meant for a player.
+    /// Null when the last attempt succeeded or none has been made.
+    String? joinError,
   }) = _GameClientInfo;
   const GameClientInfo._();
   bool get connected => service != null;

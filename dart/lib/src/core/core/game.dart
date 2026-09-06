@@ -39,9 +39,12 @@ extension MaybeErrorX<T> on MaybeError<T> {
   bool get hasValue => $0 != null;
   X when<X>({required X Function(T) value, required X Function(String) error}) =>
       hasError ? error($1!) : value($0 as T);
-  MaybeError<X> map<X>(X Function(T) v) => $0 != null ? MaybeError(v($0 as T), $1) : this as MaybeError<X>;
+  // On the error path there is no value to convert, so a new MaybeError<X> is
+  // built rather than casting `this`: `MaybeError<A> as MaybeError<B>` throws
+  // whenever the type argument actually changes.
+  MaybeError<X> map<X>(X Function(T) v) => $0 != null ? MaybeError(v($0 as T), $1) : MaybeError<X>(null, $1);
   MaybeError<T> mapError(String Function(String) e) => $1 != null ? MaybeError($0, e($1!)) : this;
-  MaybeError<X> flatMap<X>(MaybeError<X> Function(T) map) => hasError ? this as MaybeError<X> : map(value);
+  MaybeError<X> flatMap<X>(MaybeError<X> Function(T) map) => hasError ? MaybeError<X>(null, $1) : map(value);
 }
 
 extension ToMaybeError<T> on T {
