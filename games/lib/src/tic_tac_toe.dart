@@ -17,6 +17,10 @@ class TTTFunctions extends GameFunctions<TicTacToeGameEvent, TicTacToeGame> {
   String get gameName => 'Tic Tac Toe';
   @override
   String get gameType => 'tictactoe';
+
+  /// Unused: this game does not end on a round count.
+  @override
+  int get defaultRounds => 1;
   @override
   GameState<TicTacToeGameEvent, TicTacToeGame> initialState(GameConfig config, IList<Player> players) => GameState(
     game: TicTacToeGame(board: <int?>[for (var i = 0; i < 9; i++) null].lock, currentPlayer: 0),

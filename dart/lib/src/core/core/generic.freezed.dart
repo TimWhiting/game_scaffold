@@ -16,7 +16,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$GenericGame {
 
- DateTime get time; GameStatus get status; int get round; IList<Player> get players; IList<PlayerID> get readyPlayers;
+ DateTime get time; GameStatus get status; int get round;/// How many rounds this game runs for. Seeded by [GameRegistry.initialState]
+/// from `GameConfig.rounds`, falling back to the game's own default.
+ int get totalRounds; IList<Player> get players; IList<PlayerID> get readyPlayers;
 /// Create a copy of GenericGame
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,20 +32,20 @@ $GenericGameCopyWith<GenericGame> get copyWith => _$GenericGameCopyWithImpl<Gene
 @override
 bool operator ==(Object other) {
   final _this = this as GenericGame;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GenericGame&&(identical(other.time, _this.time) || other.time == _this.time)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.round, _this.round) || other.round == _this.round)&&const DeepCollectionEquality().equals(other.players, _this.players)&&const DeepCollectionEquality().equals(other.readyPlayers, _this.readyPlayers));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GenericGame&&(identical(other.time, _this.time) || other.time == _this.time)&&(identical(other.status, _this.status) || other.status == _this.status)&&(identical(other.round, _this.round) || other.round == _this.round)&&(identical(other.totalRounds, _this.totalRounds) || other.totalRounds == _this.totalRounds)&&const DeepCollectionEquality().equals(other.players, _this.players)&&const DeepCollectionEquality().equals(other.readyPlayers, _this.readyPlayers));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as GenericGame;
-  return Object.hash(runtimeType,_this.time,_this.status,_this.round,const DeepCollectionEquality().hash(_this.players),const DeepCollectionEquality().hash(_this.readyPlayers));
+  return Object.hash(runtimeType,_this.time,_this.status,_this.round,_this.totalRounds,const DeepCollectionEquality().hash(_this.players),const DeepCollectionEquality().hash(_this.readyPlayers));
 }
 
 @override
 String toString() {
   final _this = this as GenericGame;
-  return 'GenericGame(time: ${_this.time}, status: ${_this.status}, round: ${_this.round}, players: ${_this.players}, readyPlayers: ${_this.readyPlayers})';
+  return 'GenericGame(time: ${_this.time}, status: ${_this.status}, round: ${_this.round}, totalRounds: ${_this.totalRounds}, players: ${_this.players}, readyPlayers: ${_this.readyPlayers})';
 }
 
 
@@ -54,7 +56,7 @@ abstract mixin class $GenericGameCopyWith<$Res>  {
   factory $GenericGameCopyWith(GenericGame value, $Res Function(GenericGame) _then) = _$GenericGameCopyWithImpl;
 @useResult
 $Res call({
- DateTime time, GameStatus status, int round, IList<Player> players, IList<PlayerID> readyPlayers
+ DateTime time, GameStatus status, int round, int totalRounds, IList<Player> players, IList<PlayerID> readyPlayers
 });
 
 
@@ -71,11 +73,12 @@ class _$GenericGameCopyWithImpl<$Res>
 
 /// Create a copy of GenericGame
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? time = null,Object? status = null,Object? round = null,Object? players = null,Object? readyPlayers = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? time = null,Object? status = null,Object? round = null,Object? totalRounds = null,Object? players = null,Object? readyPlayers = null,}) {
   return _then(GenericGame(
 time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as GameStatus,round: null == round ? _self.round : round // ignore: cast_nullable_to_non_nullable
+as int,totalRounds: null == totalRounds ? _self.totalRounds : totalRounds // ignore: cast_nullable_to_non_nullable
 as int,players: null == players ? _self.players : players // ignore: cast_nullable_to_non_nullable
 as IList<Player>,readyPlayers: null == readyPlayers ? _self.readyPlayers : readyPlayers // ignore: cast_nullable_to_non_nullable
 as IList<PlayerID>,
@@ -160,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime time,  GameStatus status,  int round,  IList<Player> players,  IList<PlayerID> readyPlayers)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime time,  GameStatus status,  int round,  int totalRounds,  IList<Player> players,  IList<PlayerID> readyPlayers)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GenericGame() when $default != null:
-return $default(_that.time,_that.status,_that.round,_that.players,_that.readyPlayers);case _:
+return $default(_that.time,_that.status,_that.round,_that.totalRounds,_that.players,_that.readyPlayers);case _:
   return orElse();
 
 }
@@ -181,10 +184,10 @@ return $default(_that.time,_that.status,_that.round,_that.players,_that.readyPla
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime time,  GameStatus status,  int round,  IList<Player> players,  IList<PlayerID> readyPlayers)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime time,  GameStatus status,  int round,  int totalRounds,  IList<Player> players,  IList<PlayerID> readyPlayers)  $default,) {final _that = this;
 switch (_that) {
 case _GenericGame():
-return $default(_that.time,_that.status,_that.round,_that.players,_that.readyPlayers);}
+return $default(_that.time,_that.status,_that.round,_that.totalRounds,_that.players,_that.readyPlayers);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -198,10 +201,10 @@ return $default(_that.time,_that.status,_that.round,_that.players,_that.readyPla
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime time,  GameStatus status,  int round,  IList<Player> players,  IList<PlayerID> readyPlayers)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime time,  GameStatus status,  int round,  int totalRounds,  IList<Player> players,  IList<PlayerID> readyPlayers)?  $default,) {final _that = this;
 switch (_that) {
 case _GenericGame() when $default != null:
-return $default(_that.time,_that.status,_that.round,_that.players,_that.readyPlayers);case _:
+return $default(_that.time,_that.status,_that.round,_that.totalRounds,_that.players,_that.readyPlayers);case _:
   return null;
 
 }
@@ -213,12 +216,15 @@ return $default(_that.time,_that.status,_that.round,_that.players,_that.readyPla
 @JsonSerializable()
 
 class _GenericGame extends GenericGame {
-  const _GenericGame({required this.time, required this.status, required this.round, this.players = const IListConst([]), this.readyPlayers = const IListConst([])}): super._();
+  const _GenericGame({required this.time, required this.status, required this.round, this.totalRounds = 1, this.players = const IListConst([]), this.readyPlayers = const IListConst([])}): super._();
   factory _GenericGame.fromJson(Map<String, dynamic> json) => _$GenericGameFromJson(json);
 
 @override final  DateTime time;
 @override final  GameStatus status;
 @override final  int round;
+/// How many rounds this game runs for. Seeded by [GameRegistry.initialState]
+/// from `GameConfig.rounds`, falling back to the game's own default.
+@override@JsonKey() final  int totalRounds;
 @override@JsonKey() final  IList<Player> players;
 @override@JsonKey() final  IList<PlayerID> readyPlayers;
 
@@ -235,18 +241,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _GenericGame&&(identical(other.time, time) || other.time == time)&&(identical(other.status, status) || other.status == status)&&(identical(other.round, round) || other.round == round)&&const DeepCollectionEquality().equals(other.players, players)&&const DeepCollectionEquality().equals(other.readyPlayers, readyPlayers));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _GenericGame&&(identical(other.time, time) || other.time == time)&&(identical(other.status, status) || other.status == status)&&(identical(other.round, round) || other.round == round)&&(identical(other.totalRounds, totalRounds) || other.totalRounds == totalRounds)&&const DeepCollectionEquality().equals(other.players, players)&&const DeepCollectionEquality().equals(other.readyPlayers, readyPlayers));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,time,status,round,const DeepCollectionEquality().hash(players),const DeepCollectionEquality().hash(readyPlayers));
+    return Object.hash(runtimeType,time,status,round,totalRounds,const DeepCollectionEquality().hash(players),const DeepCollectionEquality().hash(readyPlayers));
 }
 
 @override
 String toString() {
-    return 'GenericGame(time: $time, status: $status, round: $round, players: $players, readyPlayers: $readyPlayers)';
+    return 'GenericGame(time: $time, status: $status, round: $round, totalRounds: $totalRounds, players: $players, readyPlayers: $readyPlayers)';
 }
 
 
@@ -257,7 +263,7 @@ abstract mixin class _$GenericGameCopyWith<$Res> implements $GenericGameCopyWith
   factory _$GenericGameCopyWith(_GenericGame value, $Res Function(_GenericGame) _then) = __$GenericGameCopyWithImpl;
 @override @useResult
 $Res call({
- DateTime time, GameStatus status, int round, IList<Player> players, IList<PlayerID> readyPlayers
+ DateTime time, GameStatus status, int round, int totalRounds, IList<Player> players, IList<PlayerID> readyPlayers
 });
 
 
@@ -274,11 +280,12 @@ class __$GenericGameCopyWithImpl<$Res>
 
 /// Create a copy of GenericGame
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? time = null,Object? status = null,Object? round = null,Object? players = null,Object? readyPlayers = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? time = null,Object? status = null,Object? round = null,Object? totalRounds = null,Object? players = null,Object? readyPlayers = null,}) {
   return _then(_GenericGame(
 time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as GameStatus,round: null == round ? _self.round : round // ignore: cast_nullable_to_non_nullable
+as int,totalRounds: null == totalRounds ? _self.totalRounds : totalRounds // ignore: cast_nullable_to_non_nullable
 as int,players: null == players ? _self.players : players // ignore: cast_nullable_to_non_nullable
 as IList<Player>,readyPlayers: null == readyPlayers ? _self.readyPlayers : readyPlayers // ignore: cast_nullable_to_non_nullable
 as IList<PlayerID>,
@@ -572,7 +579,8 @@ as String,
 /// @nodoc
 mixin _$GameConfig {
 
- GameType get gameType; PlayerID? get adminID; NameSet get nameSet; bool get customNames; int get rounds; int get minPlayers; int get maxPlayers; bool get autoStart; Map<String, Object?> get options;
+ GameType get gameType; PlayerID? get adminID; NameSet get nameSet; bool get customNames;/// Null means "use the game's own default" — see [GameFunctions.defaultRounds].
+ int? get rounds; int get minPlayers; int get maxPlayers; bool get autoStart; Map<String, Object?> get options;
 /// Create a copy of GameConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -610,7 +618,7 @@ abstract mixin class $GameConfigCopyWith<$Res>  {
   factory $GameConfigCopyWith(GameConfig value, $Res Function(GameConfig) _then) = _$GameConfigCopyWithImpl;
 @useResult
 $Res call({
- GameType gameType, PlayerID? adminID, NameSet nameSet, bool customNames, int rounds, int minPlayers, int maxPlayers, bool autoStart, Map<String, Object?> options
+ GameType gameType, PlayerID? adminID, NameSet nameSet, bool customNames, int? rounds, int minPlayers, int maxPlayers, bool autoStart, Map<String, Object?> options
 });
 
 
@@ -627,14 +635,14 @@ class _$GameConfigCopyWithImpl<$Res>
 
 /// Create a copy of GameConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? gameType = null,Object? adminID = freezed,Object? nameSet = null,Object? customNames = null,Object? rounds = null,Object? minPlayers = null,Object? maxPlayers = null,Object? autoStart = null,Object? options = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? gameType = null,Object? adminID = freezed,Object? nameSet = null,Object? customNames = null,Object? rounds = freezed,Object? minPlayers = null,Object? maxPlayers = null,Object? autoStart = null,Object? options = null,}) {
   return _then(GameConfig(
 gameType: null == gameType ? _self.gameType : gameType // ignore: cast_nullable_to_non_nullable
 as GameType,adminID: freezed == adminID ? _self.adminID : adminID // ignore: cast_nullable_to_non_nullable
 as PlayerID?,nameSet: null == nameSet ? _self.nameSet : nameSet // ignore: cast_nullable_to_non_nullable
 as NameSet,customNames: null == customNames ? _self.customNames : customNames // ignore: cast_nullable_to_non_nullable
-as bool,rounds: null == rounds ? _self.rounds : rounds // ignore: cast_nullable_to_non_nullable
-as int,minPlayers: null == minPlayers ? _self.minPlayers : minPlayers // ignore: cast_nullable_to_non_nullable
+as bool,rounds: freezed == rounds ? _self.rounds : rounds // ignore: cast_nullable_to_non_nullable
+as int?,minPlayers: null == minPlayers ? _self.minPlayers : minPlayers // ignore: cast_nullable_to_non_nullable
 as int,maxPlayers: null == maxPlayers ? _self.maxPlayers : maxPlayers // ignore: cast_nullable_to_non_nullable
 as int,autoStart: null == autoStart ? _self.autoStart : autoStart // ignore: cast_nullable_to_non_nullable
 as bool,options: null == options ? _self.options : options // ignore: cast_nullable_to_non_nullable
@@ -720,7 +728,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( GameType gameType,  PlayerID? adminID,  NameSet nameSet,  bool customNames,  int rounds,  int minPlayers,  int maxPlayers,  bool autoStart,  Map<String, Object?> options)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( GameType gameType,  PlayerID? adminID,  NameSet nameSet,  bool customNames,  int? rounds,  int minPlayers,  int maxPlayers,  bool autoStart,  Map<String, Object?> options)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GameConfig() when $default != null:
 return $default(_that.gameType,_that.adminID,_that.nameSet,_that.customNames,_that.rounds,_that.minPlayers,_that.maxPlayers,_that.autoStart,_that.options);case _:
@@ -741,7 +749,7 @@ return $default(_that.gameType,_that.adminID,_that.nameSet,_that.customNames,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( GameType gameType,  PlayerID? adminID,  NameSet nameSet,  bool customNames,  int rounds,  int minPlayers,  int maxPlayers,  bool autoStart,  Map<String, Object?> options)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( GameType gameType,  PlayerID? adminID,  NameSet nameSet,  bool customNames,  int? rounds,  int minPlayers,  int maxPlayers,  bool autoStart,  Map<String, Object?> options)  $default,) {final _that = this;
 switch (_that) {
 case _GameConfig():
 return $default(_that.gameType,_that.adminID,_that.nameSet,_that.customNames,_that.rounds,_that.minPlayers,_that.maxPlayers,_that.autoStart,_that.options);}
@@ -758,7 +766,7 @@ return $default(_that.gameType,_that.adminID,_that.nameSet,_that.customNames,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( GameType gameType,  PlayerID? adminID,  NameSet nameSet,  bool customNames,  int rounds,  int minPlayers,  int maxPlayers,  bool autoStart,  Map<String, Object?> options)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( GameType gameType,  PlayerID? adminID,  NameSet nameSet,  bool customNames,  int? rounds,  int minPlayers,  int maxPlayers,  bool autoStart,  Map<String, Object?> options)?  $default,) {final _that = this;
 switch (_that) {
 case _GameConfig() when $default != null:
 return $default(_that.gameType,_that.adminID,_that.nameSet,_that.customNames,_that.rounds,_that.minPlayers,_that.maxPlayers,_that.autoStart,_that.options);case _:
@@ -773,14 +781,15 @@ return $default(_that.gameType,_that.adminID,_that.nameSet,_that.customNames,_th
 @JsonSerializable()
 
 class _GameConfig extends GameConfig {
-  const _GameConfig({required this.gameType, this.adminID, this.nameSet = NameSet.basic, this.customNames = false, this.rounds = 15, this.minPlayers = 1, this.maxPlayers = 20, this.autoStart = true,  Map<String, Object?> options = const {}}): _options = options,super._();
+  const _GameConfig({required this.gameType, this.adminID, this.nameSet = NameSet.basic, this.customNames = false, this.rounds, this.minPlayers = 1, this.maxPlayers = 20, this.autoStart = true,  Map<String, Object?> options = const {}}): _options = options,super._();
   factory _GameConfig.fromJson(Map<String, dynamic> json) => _$GameConfigFromJson(json);
 
 @override final  GameType gameType;
 @override final  PlayerID? adminID;
 @override@JsonKey() final  NameSet nameSet;
 @override@JsonKey() final  bool customNames;
-@override@JsonKey() final  int rounds;
+/// Null means "use the game's own default" — see [GameFunctions.defaultRounds].
+@override final  int? rounds;
 @override@JsonKey() final  int minPlayers;
 @override@JsonKey() final  int maxPlayers;
 @override@JsonKey() final  bool autoStart;
@@ -827,7 +836,7 @@ abstract mixin class _$GameConfigCopyWith<$Res> implements $GameConfigCopyWith<$
   factory _$GameConfigCopyWith(_GameConfig value, $Res Function(_GameConfig) _then) = __$GameConfigCopyWithImpl;
 @override @useResult
 $Res call({
- GameType gameType, PlayerID? adminID, NameSet nameSet, bool customNames, int rounds, int minPlayers, int maxPlayers, bool autoStart, Map<String, Object?> options
+ GameType gameType, PlayerID? adminID, NameSet nameSet, bool customNames, int? rounds, int minPlayers, int maxPlayers, bool autoStart, Map<String, Object?> options
 });
 
 
@@ -844,14 +853,14 @@ class __$GameConfigCopyWithImpl<$Res>
 
 /// Create a copy of GameConfig
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? gameType = null,Object? adminID = freezed,Object? nameSet = null,Object? customNames = null,Object? rounds = null,Object? minPlayers = null,Object? maxPlayers = null,Object? autoStart = null,Object? options = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? gameType = null,Object? adminID = freezed,Object? nameSet = null,Object? customNames = null,Object? rounds = freezed,Object? minPlayers = null,Object? maxPlayers = null,Object? autoStart = null,Object? options = null,}) {
   return _then(_GameConfig(
 gameType: null == gameType ? _self.gameType : gameType // ignore: cast_nullable_to_non_nullable
 as GameType,adminID: freezed == adminID ? _self.adminID : adminID // ignore: cast_nullable_to_non_nullable
 as PlayerID?,nameSet: null == nameSet ? _self.nameSet : nameSet // ignore: cast_nullable_to_non_nullable
 as NameSet,customNames: null == customNames ? _self.customNames : customNames // ignore: cast_nullable_to_non_nullable
-as bool,rounds: null == rounds ? _self.rounds : rounds // ignore: cast_nullable_to_non_nullable
-as int,minPlayers: null == minPlayers ? _self.minPlayers : minPlayers // ignore: cast_nullable_to_non_nullable
+as bool,rounds: freezed == rounds ? _self.rounds : rounds // ignore: cast_nullable_to_non_nullable
+as int?,minPlayers: null == minPlayers ? _self.minPlayers : minPlayers // ignore: cast_nullable_to_non_nullable
 as int,maxPlayers: null == maxPlayers ? _self.maxPlayers : maxPlayers // ignore: cast_nullable_to_non_nullable
 as int,autoStart: null == autoStart ? _self.autoStart : autoStart // ignore: cast_nullable_to_non_nullable
 as bool,options: null == options ? _self._options : options // ignore: cast_nullable_to_non_nullable

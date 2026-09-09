@@ -95,8 +95,12 @@ abstract class GameRegistry {
 
   static String typeName(GameState state) => GameRegistry._functions[state.game.type]!.gameType;
 
-  static GameState initialState(GameConfig config, IList<Player> iList) =>
-      _fromType(config.gameType).initialState(config, iList);
+  static GameState initialState(GameConfig config, IList<Player> iList) {
+    final functions = _fromType(config.gameType);
+    return functions
+        .initialState(config, iList)
+        .updateGeneric((g) => g.copyWith(totalRounds: config.rounds ?? functions.defaultRounds));
+  }
 }
 
 class GameError {
@@ -227,4 +231,7 @@ abstract class GameFunctions<E extends Event, T extends Game> {
   E fromJsonE(JsonMap json);
   GameType get gameType;
   GameName get gameName;
+
+  /// Rounds this game runs for when the config does not say.
+  int get defaultRounds;
 }

@@ -12,6 +12,7 @@ _GenericGame _$GenericGameFromJson(Map<String, dynamic> json) => _GenericGame(
   time: DateTime.parse(json['time'] as String),
   status: $enumDecode(_$GameStatusEnumMap, json['status']),
   round: (json['round'] as num).toInt(),
+  totalRounds: (json['totalRounds'] as num?)?.toInt() ?? 1,
   players: json['players'] == null
       ? const IListConst([])
       : IList<Player>.fromJson(
@@ -31,6 +32,7 @@ Map<String, dynamic> _$GenericGameToJson(_GenericGame instance) =>
       'time': instance.time.toIso8601String(),
       'status': _$GameStatusEnumMap[instance.status]!,
       'round': instance.round,
+      'totalRounds': instance.totalRounds,
       'players': instance.players.toJson((value) => value.toJson()),
       'readyPlayers': instance.readyPlayers.toJson((value) => value),
     };
@@ -59,7 +61,7 @@ _GameConfig _$GameConfigFromJson(Map<String, dynamic> json) => _GameConfig(
   nameSet:
       $enumDecodeNullable(_$NameSetEnumMap, json['nameSet']) ?? NameSet.basic,
   customNames: json['customNames'] as bool? ?? false,
-  rounds: (json['rounds'] as num?)?.toInt() ?? 15,
+  rounds: (json['rounds'] as num?)?.toInt(),
   minPlayers: (json['minPlayers'] as num?)?.toInt() ?? 1,
   maxPlayers: (json['maxPlayers'] as num?)?.toInt() ?? 20,
   autoStart: json['autoStart'] as bool? ?? true,

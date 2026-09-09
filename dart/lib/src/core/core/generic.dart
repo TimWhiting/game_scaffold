@@ -19,6 +19,10 @@ sealed class GenericGame with _$GenericGame {
     required DateTime time,
     required GameStatus status,
     required int round,
+
+    /// How many rounds this game runs for. Seeded by [GameRegistry.initialState]
+    /// from `GameConfig.rounds`, falling back to the game's own default.
+    @Default(1) int totalRounds,
     @Default(IListConst([])) IList<Player> players,
     @Default(IListConst([])) IList<PlayerID> readyPlayers,
   }) = _GenericGame;
@@ -100,6 +104,10 @@ class GameFunctionsGeneric extends GameFunctions {
   @override
   GameType get gameType => 'generic';
 
+  /// Unused: this game does not end on a round count.
+  @override
+  int get defaultRounds => 1;
+
   @override
   GameState<Event, Game> initialState(GameConfig config, IList<Player> players) => throw UnimplementedError();
 
@@ -143,7 +151,9 @@ sealed class GameConfig with _$GameConfig {
     PlayerID? adminID,
     @Default(NameSet.basic) NameSet nameSet,
     @Default(false) bool customNames,
-    @Default(15) int rounds,
+
+    /// Null means "use the game's own default" — see [GameFunctions.defaultRounds].
+    int? rounds,
     @Default(1) int minPlayers,
     @Default(20) int maxPlayers,
     @Default(true) bool autoStart,
