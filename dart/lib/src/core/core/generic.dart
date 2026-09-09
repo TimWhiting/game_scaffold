@@ -22,7 +22,15 @@ sealed class GenericGame with _$GenericGame {
 
     /// How many rounds this game runs for. Seeded by [GameRegistry.initialState]
     /// from `GameConfig.rounds`, falling back to the game's own default.
-    @Default(1) int totalRounds,
+    /// How many rounds this game runs, or null if nothing has said.
+    ///
+    /// Null rather than a number, because there is no round count that is right
+    /// for every game, and a plausible-looking default is worse than an absent
+    /// one: it was 1, so a Glum state stored before this field existed - or one
+    /// built by a game's own initialState rather than through
+    /// [GameRegistry.initialState] - ended the game after a single round.
+    /// A reader must say what its own default is.
+    int? totalRounds,
     @Default(IListConst([])) IList<Player> players,
     @Default(IListConst([])) IList<PlayerID> readyPlayers,
   }) = _GenericGame;

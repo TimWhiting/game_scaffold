@@ -18,7 +18,15 @@ mixin _$GenericGame {
 
  DateTime get time; GameStatus get status; int get round;/// How many rounds this game runs for. Seeded by [GameRegistry.initialState]
 /// from `GameConfig.rounds`, falling back to the game's own default.
- int get totalRounds; IList<Player> get players; IList<PlayerID> get readyPlayers;
+/// How many rounds this game runs, or null if nothing has said.
+///
+/// Null rather than a number, because there is no round count that is right
+/// for every game, and a plausible-looking default is worse than an absent
+/// one: it was 1, so a Glum state stored before this field existed - or one
+/// built by a game's own initialState rather than through
+/// [GameRegistry.initialState] - ended the game after a single round.
+/// A reader must say what its own default is.
+ int? get totalRounds; IList<Player> get players; IList<PlayerID> get readyPlayers;
 /// Create a copy of GenericGame
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -56,7 +64,7 @@ abstract mixin class $GenericGameCopyWith<$Res>  {
   factory $GenericGameCopyWith(GenericGame value, $Res Function(GenericGame) _then) = _$GenericGameCopyWithImpl;
 @useResult
 $Res call({
- DateTime time, GameStatus status, int round, int totalRounds, IList<Player> players, IList<PlayerID> readyPlayers
+ DateTime time, GameStatus status, int round, int? totalRounds, IList<Player> players, IList<PlayerID> readyPlayers
 });
 
 
@@ -73,13 +81,13 @@ class _$GenericGameCopyWithImpl<$Res>
 
 /// Create a copy of GenericGame
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? time = null,Object? status = null,Object? round = null,Object? totalRounds = null,Object? players = null,Object? readyPlayers = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? time = null,Object? status = null,Object? round = null,Object? totalRounds = freezed,Object? players = null,Object? readyPlayers = null,}) {
   return _then(GenericGame(
 time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as GameStatus,round: null == round ? _self.round : round // ignore: cast_nullable_to_non_nullable
-as int,totalRounds: null == totalRounds ? _self.totalRounds : totalRounds // ignore: cast_nullable_to_non_nullable
-as int,players: null == players ? _self.players : players // ignore: cast_nullable_to_non_nullable
+as int,totalRounds: freezed == totalRounds ? _self.totalRounds : totalRounds // ignore: cast_nullable_to_non_nullable
+as int?,players: null == players ? _self.players : players // ignore: cast_nullable_to_non_nullable
 as IList<Player>,readyPlayers: null == readyPlayers ? _self.readyPlayers : readyPlayers // ignore: cast_nullable_to_non_nullable
 as IList<PlayerID>,
   ));
@@ -163,7 +171,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime time,  GameStatus status,  int round,  int totalRounds,  IList<Player> players,  IList<PlayerID> readyPlayers)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateTime time,  GameStatus status,  int round,  int? totalRounds,  IList<Player> players,  IList<PlayerID> readyPlayers)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GenericGame() when $default != null:
 return $default(_that.time,_that.status,_that.round,_that.totalRounds,_that.players,_that.readyPlayers);case _:
@@ -184,7 +192,7 @@ return $default(_that.time,_that.status,_that.round,_that.totalRounds,_that.play
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime time,  GameStatus status,  int round,  int totalRounds,  IList<Player> players,  IList<PlayerID> readyPlayers)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateTime time,  GameStatus status,  int round,  int? totalRounds,  IList<Player> players,  IList<PlayerID> readyPlayers)  $default,) {final _that = this;
 switch (_that) {
 case _GenericGame():
 return $default(_that.time,_that.status,_that.round,_that.totalRounds,_that.players,_that.readyPlayers);}
@@ -201,7 +209,7 @@ return $default(_that.time,_that.status,_that.round,_that.totalRounds,_that.play
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime time,  GameStatus status,  int round,  int totalRounds,  IList<Player> players,  IList<PlayerID> readyPlayers)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateTime time,  GameStatus status,  int round,  int? totalRounds,  IList<Player> players,  IList<PlayerID> readyPlayers)?  $default,) {final _that = this;
 switch (_that) {
 case _GenericGame() when $default != null:
 return $default(_that.time,_that.status,_that.round,_that.totalRounds,_that.players,_that.readyPlayers);case _:
@@ -216,7 +224,7 @@ return $default(_that.time,_that.status,_that.round,_that.totalRounds,_that.play
 @JsonSerializable()
 
 class _GenericGame extends GenericGame {
-  const _GenericGame({required this.time, required this.status, required this.round, this.totalRounds = 1, this.players = const IListConst([]), this.readyPlayers = const IListConst([])}): super._();
+  const _GenericGame({required this.time, required this.status, required this.round, this.totalRounds, this.players = const IListConst([]), this.readyPlayers = const IListConst([])}): super._();
   factory _GenericGame.fromJson(Map<String, dynamic> json) => _$GenericGameFromJson(json);
 
 @override final  DateTime time;
@@ -224,7 +232,15 @@ class _GenericGame extends GenericGame {
 @override final  int round;
 /// How many rounds this game runs for. Seeded by [GameRegistry.initialState]
 /// from `GameConfig.rounds`, falling back to the game's own default.
-@override@JsonKey() final  int totalRounds;
+/// How many rounds this game runs, or null if nothing has said.
+///
+/// Null rather than a number, because there is no round count that is right
+/// for every game, and a plausible-looking default is worse than an absent
+/// one: it was 1, so a Glum state stored before this field existed - or one
+/// built by a game's own initialState rather than through
+/// [GameRegistry.initialState] - ended the game after a single round.
+/// A reader must say what its own default is.
+@override final  int? totalRounds;
 @override@JsonKey() final  IList<Player> players;
 @override@JsonKey() final  IList<PlayerID> readyPlayers;
 
@@ -263,7 +279,7 @@ abstract mixin class _$GenericGameCopyWith<$Res> implements $GenericGameCopyWith
   factory _$GenericGameCopyWith(_GenericGame value, $Res Function(_GenericGame) _then) = __$GenericGameCopyWithImpl;
 @override @useResult
 $Res call({
- DateTime time, GameStatus status, int round, int totalRounds, IList<Player> players, IList<PlayerID> readyPlayers
+ DateTime time, GameStatus status, int round, int? totalRounds, IList<Player> players, IList<PlayerID> readyPlayers
 });
 
 
@@ -280,13 +296,13 @@ class __$GenericGameCopyWithImpl<$Res>
 
 /// Create a copy of GenericGame
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? time = null,Object? status = null,Object? round = null,Object? totalRounds = null,Object? players = null,Object? readyPlayers = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? time = null,Object? status = null,Object? round = null,Object? totalRounds = freezed,Object? players = null,Object? readyPlayers = null,}) {
   return _then(_GenericGame(
 time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as GameStatus,round: null == round ? _self.round : round // ignore: cast_nullable_to_non_nullable
-as int,totalRounds: null == totalRounds ? _self.totalRounds : totalRounds // ignore: cast_nullable_to_non_nullable
-as int,players: null == players ? _self.players : players // ignore: cast_nullable_to_non_nullable
+as int,totalRounds: freezed == totalRounds ? _self.totalRounds : totalRounds // ignore: cast_nullable_to_non_nullable
+as int?,players: null == players ? _self.players : players // ignore: cast_nullable_to_non_nullable
 as IList<Player>,readyPlayers: null == readyPlayers ? _self.readyPlayers : readyPlayers // ignore: cast_nullable_to_non_nullable
 as IList<PlayerID>,
   ));

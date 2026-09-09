@@ -12,7 +12,7 @@ _GenericGame _$GenericGameFromJson(Map<String, dynamic> json) => _GenericGame(
   time: DateTime.parse(json['time'] as String),
   status: $enumDecode(_$GameStatusEnumMap, json['status']),
   round: (json['round'] as num).toInt(),
-  totalRounds: (json['totalRounds'] as num?)?.toInt() ?? 1,
+  totalRounds: (json['totalRounds'] as num?)?.toInt(),
   players: json['players'] == null
       ? const IListConst([])
       : IList<Player>.fromJson(
