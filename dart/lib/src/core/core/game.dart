@@ -97,10 +97,30 @@ abstract class GameRegistry {
 
   static GameState initialState(GameConfig config, IList<Player> iList) {
     final functions = _fromType(config.gameType);
+    if (iList.length < functions.minPlayers) {
+      throw TooFewPlayers(config.gameType, iList.length, functions.minPlayers);
+    }
     return functions
         .initialState(config, iList)
         .updateGeneric((g) => g.copyWith(totalRounds: config.rounds ?? functions.defaultRounds));
   }
+
+  /// The fewest players [gameType] can be played with.
+  static int minPlayers(GameType gameType) => _fromType(gameType).minPlayers;
+}
+
+/// Thrown when a game is started with too few players to be playable.
+class TooFewPlayers implements Exception {
+  const TooFewPlayers(this.gameType, this.given, this.required);
+
+  final GameType gameType;
+  final int given;
+  final int required;
+
+  @override
+  String toString() =>
+      '$gameType needs at least $required players, but was started with $given. '
+      'It cannot be played alone.';
 }
 
 class GameError {
@@ -234,4 +254,12 @@ abstract class GameFunctions<E extends Event, T extends Game> {
 
   /// Rounds this game runs for when the config does not say.
   int get defaultRounds;
+
+  /// The fewest players this game can be played with at all.
+  ///
+  /// Not a lobby preference: some games are structurally impossible alone -
+  /// Fireworks is cooperative with hidden information, Glum is about going out
+  /// before someone else - and [GameRegistry.initialState] refuses to build
+  /// one, so no caller can bypass it.
+  int get minPlayers => 1;
 }
