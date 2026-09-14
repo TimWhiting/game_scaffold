@@ -199,6 +199,12 @@ sealed class Lobby with _$Lobby {
     required GameConfig config,
     required GameStatus gameStatus,
     @Default(ISetConst({})) ISet<Player> players,
+
+    /// When the lobby was opened, so one that nobody ever started can be swept
+    /// up. Nullable because lobbies written before this field existed have no
+    /// value - and because a lobby is the one thing here with no game state to
+    /// take a time from.
+    DateTime? createdAt,
   }) = _Lobby;
   factory Lobby.fromJson(Map<String, dynamic> map) => _$LobbyFromJson(map);
 }

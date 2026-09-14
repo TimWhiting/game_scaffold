@@ -111,6 +111,9 @@ _Lobby _$LobbyFromJson(Map<String, dynamic> json) => _Lobby(
           json['players'],
           (value) => Player.fromJson(value as Map<String, dynamic>),
         ),
+  createdAt: json['createdAt'] == null
+      ? null
+      : DateTime.parse(json['createdAt'] as String),
 );
 
 Map<String, dynamic> _$LobbyToJson(_Lobby instance) => <String, dynamic>{
@@ -118,4 +121,5 @@ Map<String, dynamic> _$LobbyToJson(_Lobby instance) => <String, dynamic>{
   'config': instance.config.toJson(),
   'gameStatus': _$GameStatusEnumMap[instance.gameStatus]!,
   'players': instance.players.toJson((value) => value.toJson()),
+  'createdAt': instance.createdAt?.toIso8601String(),
 };

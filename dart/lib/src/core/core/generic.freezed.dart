@@ -1188,7 +1188,11 @@ $GameConfigCopyWith<$Res> get config {
 /// @nodoc
 mixin _$Lobby {
 
- GameCode get code; GameConfig get config; GameStatus get gameStatus; ISet<Player> get players;
+ GameCode get code; GameConfig get config; GameStatus get gameStatus; ISet<Player> get players;/// When the lobby was opened, so one that nobody ever started can be swept
+/// up. Nullable because lobbies written before this field existed have no
+/// value - and because a lobby is the one thing here with no game state to
+/// take a time from.
+ DateTime? get createdAt;
 /// Create a copy of Lobby
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1202,20 +1206,20 @@ $LobbyCopyWith<Lobby> get copyWith => _$LobbyCopyWithImpl<Lobby>(this as Lobby, 
 @override
 bool operator ==(Object other) {
   final _this = this as Lobby;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Lobby&&(identical(other.code, _this.code) || other.code == _this.code)&&(identical(other.config, _this.config) || other.config == _this.config)&&(identical(other.gameStatus, _this.gameStatus) || other.gameStatus == _this.gameStatus)&&const DeepCollectionEquality().equals(other.players, _this.players));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Lobby&&(identical(other.code, _this.code) || other.code == _this.code)&&(identical(other.config, _this.config) || other.config == _this.config)&&(identical(other.gameStatus, _this.gameStatus) || other.gameStatus == _this.gameStatus)&&const DeepCollectionEquality().equals(other.players, _this.players)&&(identical(other.createdAt, _this.createdAt) || other.createdAt == _this.createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as Lobby;
-  return Object.hash(runtimeType,_this.code,_this.config,_this.gameStatus,const DeepCollectionEquality().hash(_this.players));
+  return Object.hash(runtimeType,_this.code,_this.config,_this.gameStatus,const DeepCollectionEquality().hash(_this.players),_this.createdAt);
 }
 
 @override
 String toString() {
   final _this = this as Lobby;
-  return 'Lobby(code: ${_this.code}, config: ${_this.config}, gameStatus: ${_this.gameStatus}, players: ${_this.players})';
+  return 'Lobby(code: ${_this.code}, config: ${_this.config}, gameStatus: ${_this.gameStatus}, players: ${_this.players}, createdAt: ${_this.createdAt})';
 }
 
 
@@ -1226,7 +1230,7 @@ abstract mixin class $LobbyCopyWith<$Res>  {
   factory $LobbyCopyWith(Lobby value, $Res Function(Lobby) _then) = _$LobbyCopyWithImpl;
 @useResult
 $Res call({
- GameCode code, GameConfig config, GameStatus gameStatus, ISet<Player> players
+ GameCode code, GameConfig config, GameStatus gameStatus, ISet<Player> players, DateTime? createdAt
 });
 
 
@@ -1243,13 +1247,14 @@ class _$LobbyCopyWithImpl<$Res>
 
 /// Create a copy of Lobby
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? code = null,Object? config = null,Object? gameStatus = null,Object? players = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? code = null,Object? config = null,Object? gameStatus = null,Object? players = null,Object? createdAt = freezed,}) {
   return _then(Lobby(
 code: null == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
 as GameCode,config: null == config ? _self.config : config // ignore: cast_nullable_to_non_nullable
 as GameConfig,gameStatus: null == gameStatus ? _self.gameStatus : gameStatus // ignore: cast_nullable_to_non_nullable
 as GameStatus,players: null == players ? _self.players : players // ignore: cast_nullable_to_non_nullable
-as ISet<Player>,
+as ISet<Player>,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 /// Create a copy of Lobby
@@ -1340,10 +1345,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( GameCode code,  GameConfig config,  GameStatus gameStatus,  ISet<Player> players)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( GameCode code,  GameConfig config,  GameStatus gameStatus,  ISet<Player> players,  DateTime? createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Lobby() when $default != null:
-return $default(_that.code,_that.config,_that.gameStatus,_that.players);case _:
+return $default(_that.code,_that.config,_that.gameStatus,_that.players,_that.createdAt);case _:
   return orElse();
 
 }
@@ -1361,10 +1366,10 @@ return $default(_that.code,_that.config,_that.gameStatus,_that.players);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( GameCode code,  GameConfig config,  GameStatus gameStatus,  ISet<Player> players)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( GameCode code,  GameConfig config,  GameStatus gameStatus,  ISet<Player> players,  DateTime? createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _Lobby():
-return $default(_that.code,_that.config,_that.gameStatus,_that.players);}
+return $default(_that.code,_that.config,_that.gameStatus,_that.players,_that.createdAt);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -1378,10 +1383,10 @@ return $default(_that.code,_that.config,_that.gameStatus,_that.players);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( GameCode code,  GameConfig config,  GameStatus gameStatus,  ISet<Player> players)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( GameCode code,  GameConfig config,  GameStatus gameStatus,  ISet<Player> players,  DateTime? createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Lobby() when $default != null:
-return $default(_that.code,_that.config,_that.gameStatus,_that.players);case _:
+return $default(_that.code,_that.config,_that.gameStatus,_that.players,_that.createdAt);case _:
   return null;
 
 }
@@ -1393,13 +1398,18 @@ return $default(_that.code,_that.config,_that.gameStatus,_that.players);case _:
 @JsonSerializable()
 
 class _Lobby implements Lobby {
-  const _Lobby({required this.code, required this.config, required this.gameStatus, this.players = const ISetConst({})});
+  const _Lobby({required this.code, required this.config, required this.gameStatus, this.players = const ISetConst({}), this.createdAt});
   factory _Lobby.fromJson(Map<String, dynamic> json) => _$LobbyFromJson(json);
 
 @override final  GameCode code;
 @override final  GameConfig config;
 @override final  GameStatus gameStatus;
 @override@JsonKey() final  ISet<Player> players;
+/// When the lobby was opened, so one that nobody ever started can be swept
+/// up. Nullable because lobbies written before this field existed have no
+/// value - and because a lobby is the one thing here with no game state to
+/// take a time from.
+@override final  DateTime? createdAt;
 
 /// Create a copy of Lobby
 /// with the given fields replaced by the non-null parameter values.
@@ -1414,18 +1424,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Lobby&&(identical(other.code, code) || other.code == code)&&(identical(other.config, config) || other.config == config)&&(identical(other.gameStatus, gameStatus) || other.gameStatus == gameStatus)&&const DeepCollectionEquality().equals(other.players, players));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Lobby&&(identical(other.code, code) || other.code == code)&&(identical(other.config, config) || other.config == config)&&(identical(other.gameStatus, gameStatus) || other.gameStatus == gameStatus)&&const DeepCollectionEquality().equals(other.players, players)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,code,config,gameStatus,const DeepCollectionEquality().hash(players));
+    return Object.hash(runtimeType,code,config,gameStatus,const DeepCollectionEquality().hash(players),createdAt);
 }
 
 @override
 String toString() {
-    return 'Lobby(code: $code, config: $config, gameStatus: $gameStatus, players: $players)';
+    return 'Lobby(code: $code, config: $config, gameStatus: $gameStatus, players: $players, createdAt: $createdAt)';
 }
 
 
@@ -1436,7 +1446,7 @@ abstract mixin class _$LobbyCopyWith<$Res> implements $LobbyCopyWith<$Res> {
   factory _$LobbyCopyWith(_Lobby value, $Res Function(_Lobby) _then) = __$LobbyCopyWithImpl;
 @override @useResult
 $Res call({
- GameCode code, GameConfig config, GameStatus gameStatus, ISet<Player> players
+ GameCode code, GameConfig config, GameStatus gameStatus, ISet<Player> players, DateTime? createdAt
 });
 
 
@@ -1453,13 +1463,14 @@ class __$LobbyCopyWithImpl<$Res>
 
 /// Create a copy of Lobby
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? code = null,Object? config = null,Object? gameStatus = null,Object? players = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? code = null,Object? config = null,Object? gameStatus = null,Object? players = null,Object? createdAt = freezed,}) {
   return _then(_Lobby(
 code: null == code ? _self.code : code // ignore: cast_nullable_to_non_nullable
 as GameCode,config: null == config ? _self.config : config // ignore: cast_nullable_to_non_nullable
 as GameConfig,gameStatus: null == gameStatus ? _self.gameStatus : gameStatus // ignore: cast_nullable_to_non_nullable
 as GameStatus,players: null == players ? _self.players : players // ignore: cast_nullable_to_non_nullable
-as ISet<Player>,
+as ISet<Player>,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
