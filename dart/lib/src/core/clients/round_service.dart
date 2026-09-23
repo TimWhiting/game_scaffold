@@ -26,7 +26,13 @@ abstract class RoundService {
   Stream<GameInfo> gameLobby(PlayerID playerID, GameCode code);
 
   /// Sends a start request to the game server
-  Future<bool> startGame(PlayerID playerID, GameCode code);
+  /// Starts the game, or returns why it could not be started.
+  ///
+  /// The reason travels back rather than being swallowed: refusing to start is
+  /// almost always something the player can fix - too few people, or a game
+  /// already under way - and a dead button with no explanation is the worst
+  /// way to say so.
+  Future<MaybeError<String>> startGame(PlayerID playerID, GameCode code);
 
   /// Disposes of the [RoundService] (i.e. disconnects from the server)
   void dispose() {

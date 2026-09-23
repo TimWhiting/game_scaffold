@@ -80,7 +80,9 @@ class MultiplayerRoundClient extends StateNotifier<RoundInfo> {
     state = state.copyWith(error: null);
   }
 
-  Future<bool> startGame() async => state.connected && await service((c) => c.startGame(multiplayerID, state.code));
+  Future<MaybeError<String>> startGame() async => state.connected
+      ? await service((c) => c.startGame(multiplayerID, state.code))
+      : MaybeError(null, 'Not connected to the game');
 
   Future<bool> sendEvent<E extends Event>(E e) => service((c) => c.sendEvent(multiplayerID, state.code, e));
 

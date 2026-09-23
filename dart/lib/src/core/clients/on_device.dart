@@ -54,12 +54,12 @@ class OnDeviceRoundService extends RoundService {
   }
 
   @override
-  Future<bool> startGame(PlayerID playerID, GameCode code) async {
+  Future<MaybeError<String>> startGame(PlayerID playerID, GameCode code) async {
     final backendReader = OnDeviceGameService.games[code]!.container.read;
     final notifier = backendReader(BackendProviders.lobby.notifier);
     await Future.delayed(const Duration(microseconds: 1));
     notifier.start();
-    return true;
+    return MaybeError('started', null);
   }
 
   @override
